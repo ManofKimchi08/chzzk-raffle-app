@@ -16,6 +16,7 @@
       --chzzk-green-glow: rgba(0, 255, 163, 0.35);
       --accent-purple: #7928ca;
       --accent-pink: #ff0080;
+      --accent-blue: #0070f3;
       --text-main: #f1f5f9;
       --text-sub: #94a3b8;
       --border-color: #232a3b;
@@ -41,7 +42,7 @@
     }
 
     .container {
-      max-width: 1280px;
+      max-width: 1360px;
       margin: 0 auto;
       padding: 24px;
     }
@@ -117,11 +118,11 @@
     /* Main Layout */
     .grid {
       display: grid;
-      grid-template-columns: 360px 1fr;
+      grid-template-columns: 420px 1fr;
       gap: 24px;
     }
 
-    @media (max-width: 992px) {
+    @media (max-width: 1024px) {
       .grid {
         grid-template-columns: 1fr;
       }
@@ -159,7 +160,7 @@
       margin-bottom: 6px;
     }
 
-    input[type="text"], input[type="number"] {
+    input[type="text"], input[type="number"], select {
       width: 100%;
       background: #0f172a;
       border: 1px solid var(--border-color);
@@ -171,9 +172,47 @@
       transition: all 0.2s;
     }
 
-    input:focus {
+    input:focus, select:focus {
       border-color: var(--chzzk-green);
       box-shadow: 0 0 0 3px var(--chzzk-green-glow);
+    }
+
+    /* Checkbox & Switch controls */
+    .toggle-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #0f172a;
+      border: 1px solid var(--border-color);
+      padding: 10px 14px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+
+    .toggle-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sub-filter-box {
+      background: #080a0f;
+      border: 1px solid var(--border-color);
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .inline-inputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
     }
 
     .btn {
@@ -234,7 +273,7 @@
     /* Stats Grid */
     .stats-container {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 12px;
       margin-bottom: 20px;
     }
@@ -248,7 +287,7 @@
     }
 
     .stat-value {
-      font-size: 26px;
+      font-size: 24px;
       font-weight: 800;
       color: var(--chzzk-green);
       font-family: 'Outfit', sans-serif;
@@ -287,7 +326,7 @@
 
     /* Live Chat Feed */
     .chat-feed {
-      height: 180px;
+      height: 160px;
       background: #080a0f;
       border: 1px solid var(--border-color);
       border-radius: 10px;
@@ -328,10 +367,40 @@
       margin-left: auto;
     }
 
+    /* Badges */
+    .badge-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 600;
+      margin-right: 4px;
+    }
+
+    .badge-sub {
+      background: rgba(121, 40, 202, 0.25);
+      color: #d8b4fe;
+      border: 1px solid rgba(121, 40, 202, 0.4);
+    }
+
+    .badge-follow {
+      background: rgba(0, 255, 163, 0.15);
+      color: var(--chzzk-green);
+      border: 1px solid rgba(0, 255, 163, 0.3);
+    }
+
+    .badge-tier {
+      background: rgba(255, 0, 128, 0.2);
+      color: #f472b6;
+      border: 1px solid rgba(255, 0, 128, 0.4);
+    }
+
     /* Winner Area & Animation */
     .winner-overlay {
       position: relative;
-      min-height: 240px;
+      min-height: 200px;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -350,7 +419,7 @@
     }
 
     .lottery-roll {
-      font-size: 32px;
+      font-size: 30px;
       font-weight: 800;
       font-family: 'Outfit', sans-serif;
       background: linear-gradient(135deg, var(--chzzk-green), var(--accent-pink));
@@ -399,7 +468,7 @@
     }
 
     .table-container {
-      max-height: 380px;
+      max-height: 400px;
       overflow-y: auto;
       border: 1px solid var(--border-color);
       border-radius: 12px;
@@ -410,7 +479,7 @@
       width: 100%;
       border-collapse: collapse;
       text-align: left;
-      font-size: 14px;
+      font-size: 13px;
     }
 
     th {
@@ -438,12 +507,6 @@
       color: var(--chzzk-green);
       font-family: 'Outfit', sans-serif;
     }
-
-    .user-hash {
-      font-size: 11px;
-      color: var(--text-sub);
-      font-family: monospace;
-    }
   </style>
 </head>
 <body>
@@ -461,7 +524,7 @@
     </header>
 
     <div class="grid">
-      <!-- Left Panel: Setup & Control -->
+      <!-- Left Panel: Setup & Advanced Filters -->
       <div class="panel">
         <div class="panel-title">📡 방송 연결 설정</div>
         
@@ -482,10 +545,46 @@
 
         <hr style="border-color: var(--border-color); margin: 20px 0;">
 
-        <div class="panel-title">🎁 추첨 설정</div>
+        <div class="panel-title">🎯 팔로우 & 구독 상세 필터 설정</div>
+
+        <!-- Follow Filters -->
+        <div class="toggle-row">
+          <span class="toggle-label">❤️ 팔로워 전용 추첨</span>
+          <input type="checkbox" id="followOnlyToggle" style="width: 18px; height: 18px; cursor: pointer;">
+        </div>
+        <div class="sub-filter-box" id="followFilterBox" style="display: none;">
+          <label>최소 팔로우 기간 (일 단위)</label>
+          <input type="number" id="minFollowDays" value="0" min="0" placeholder="0 = 전체 팔로워, 30 = 30일 이상 팔로워">
+        </div>
+
+        <!-- Subscription Filters -->
+        <div class="toggle-row">
+          <span class="toggle-label">⭐️ 구독자 전용 추첨</span>
+          <input type="checkbox" id="subOnlyToggle" style="width: 18px; height: 18px; cursor: pointer;">
+        </div>
+        <div class="sub-filter-box" id="subFilterBox" style="display: none;">
+          <div class="inline-inputs">
+            <div>
+              <label>최소 구독 개월 수</label>
+              <input type="number" id="minSubMonths" value="0" min="0" placeholder="예: 3 (3개월 이상)">
+            </div>
+            <div>
+              <label>구독 티어 필터</label>
+              <select id="subTierSelect">
+                <option value="0">모든 티어 (1~2티어)</option>
+                <option value="1">1티어 이상</option>
+                <option value="2">2티어 전용</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <hr style="border-color: var(--border-color); margin: 20px 0;">
+
+        <div class="panel-title">🎁 추첨 설정 및 실행</div>
 
         <div class="form-group">
-          <label>당첨 인원 수 (최대 1,000명+)</label>
+          <label>당첨 인원 수 (최대 5,000명+)</label>
           <input type="number" id="winnerCount" value="10" min="1" max="5000">
           <div class="chip-group">
             <div class="chip" onclick="setWinners(1)">1명</div>
@@ -497,13 +596,13 @@
           </div>
         </div>
 
-        <button id="drawBtn" class="btn btn-draw" disabled>🎉 수백명 추첨하기</button>
+        <button id="drawBtn" class="btn btn-draw" disabled>🎉 조건에 맞는 시청자 추첨하기</button>
 
         <hr style="border-color: var(--border-color); margin: 20px 0;">
 
         <div class="panel-title">💬 실시간 채팅 감시</div>
         <div class="chat-feed" id="chatFeed">
-          <div style="color: #64748b; text-align: center; margin-top: 60px;">방송 연결 후 채팅이 이곳에 표시됩니다.</div>
+          <div style="color: #64748b; text-align: center; margin-top: 50px;">방송 연결 후 채팅이 이곳에 표시됩니다.</div>
         </div>
       </div>
 
@@ -511,12 +610,16 @@
       <div class="panel">
         <div class="stats-container">
           <div class="stat-card">
-            <div class="stat-label">유일 참여자 (중복제거)</div>
+            <div class="stat-label">총 참여자 (전체)</div>
             <div class="stat-value" id="participantCount">0</div>
           </div>
           <div class="stat-card">
-            <div class="stat-label">총 수집 채팅 수</div>
-            <div class="stat-value" id="totalChatCount">0</div>
+            <div class="stat-label">필터 적용 유효응모자</div>
+            <div class="stat-value" id="filteredCount" style="color: var(--accent-pink);">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">구독자 / 팔로워 수</div>
+            <div class="stat-value" id="subFollowStat" style="font-size: 16px; margin-top: 10px;">0 / 0</div>
           </div>
           <div class="stat-card">
             <div class="stat-label">시청자 수</div>
@@ -526,7 +629,7 @@
 
         <div id="winnerOverlay" class="winner-overlay">
           <div id="rollText" class="lottery-roll">대기 중</div>
-          <div id="subRollText" style="color: var(--text-sub); font-size: 14px;">참여자를 모은 뒤 '추첨하기' 버튼을 눌러주세요.</div>
+          <div id="subRollText" style="color: var(--text-sub); font-size: 14px;">참여자를 모은 뒤 필터 조건을 설정하고 '추첨하기'를 눌러주세요.</div>
         </div>
 
         <div class="winners-header">
@@ -542,11 +645,11 @@
           <table>
             <thead>
               <tr>
-                <th style="width: 60px;">순위</th>
+                <th style="width: 50px;">순위</th>
                 <th>닉네임</th>
+                <th>배지 (팔로우/구독 상태)</th>
                 <th>채팅 내용</th>
                 <th>참여 시간</th>
-                <th>고유 식별자</th>
               </tr>
             </thead>
             <tbody id="winnersTableBody">
@@ -567,7 +670,7 @@
     // State management
     let ws = null;
     let isConnected = false;
-    let participants = new Map(); // hashId -> { nickname, msg, time }
+    let participants = new Map(); // hashId -> participant Object
     let chatLogCount = 0;
     let drawnWinners = [];
     let pingInterval = null;
@@ -581,7 +684,8 @@
     const statusDot = document.getElementById('statusDot');
     const statusText = document.getElementById('statusText');
     const participantCountEl = document.getElementById('participantCount');
-    const totalChatCountEl = document.getElementById('totalChatCount');
+    const filteredCountEl = document.getElementById('filteredCount');
+    const subFollowStatEl = document.getElementById('subFollowStat');
     const viewersCountEl = document.getElementById('viewersCount');
     const chatFeed = document.getElementById('chatFeed');
     const winnerOverlay = document.getElementById('winnerOverlay');
@@ -590,6 +694,30 @@
     const winnersTableBody = document.getElementById('winnersTableBody');
     const exportBtn = document.getElementById('exportBtn');
     const drawnWinnerCountEl = document.getElementById('drawnWinnerCount');
+
+    // Advanced Filter Elements
+    const followOnlyToggle = document.getElementById('followOnlyToggle');
+    const followFilterBox = document.getElementById('followFilterBox');
+    const minFollowDays = document.getElementById('minFollowDays');
+
+    const subOnlyToggle = document.getElementById('subOnlyToggle');
+    const subFilterBox = document.getElementById('subFilterBox');
+    const minSubMonths = document.getElementById('minSubMonths');
+    const subTierSelect = document.getElementById('subTierSelect');
+
+    followOnlyToggle.addEventListener('change', () => {
+      followFilterBox.style.display = followOnlyToggle.checked ? 'block' : 'none';
+      updateFilteredStats();
+    });
+
+    subOnlyToggle.addEventListener('change', () => {
+      subFilterBox.style.display = subOnlyToggle.checked ? 'block' : 'none';
+      updateFilteredStats();
+    });
+
+    minFollowDays.addEventListener('input', updateFilteredStats);
+    minSubMonths.addEventListener('input', updateFilteredStats);
+    subTierSelect.addEventListener('change', updateFilteredStats);
 
     function setWinners(n) {
       document.getElementById('winnerCount').value = n;
@@ -615,7 +743,6 @@
       setStatus('connecting', '치지직 방송 정보 요청 중...');
 
       try {
-        // Fetch API info via local python proxy
         const res = await fetch(`/api/chzzk/?channelId=${channelId}`);
         const data = await res.json();
 
@@ -631,11 +758,9 @@
 
         setStatus('connecting', '웹소켓 연결 중...');
 
-        // Connect WebSocket
         ws = new WebSocket('wss://kr-ss1.chat.naver.com/chat');
 
         ws.onopen = () => {
-          // Handshake cmd 100
           const connectPayload = {
             ver: "2",
             cmd: 100,
@@ -651,7 +776,6 @@
           };
           ws.send(JSON.stringify(connectPayload));
 
-          // Start Heartbeat Ping (cmd 0)
           pingInterval = setInterval(() => {
             if (ws && ws.readyState === WebSocket.OPEN) {
               ws.send(JSON.stringify({ ver: "2", cmd: 0 }));
@@ -672,7 +796,6 @@
               return;
             }
 
-            // Chat message array
             if (Array.isArray(msg.bdy)) {
               msg.bdy.forEach(item => {
                 if (item.profile && item.uid) {
@@ -726,7 +849,6 @@
 
     function processChatMessage(item) {
       chatLogCount++;
-      totalChatCountEl.innerText = chatLogCount.toLocaleString();
 
       let profileData = {};
       try {
@@ -743,30 +865,104 @@
         return;
       }
 
+      const sp = profileData.streamingProperty || {};
+      const subInfo = sp.subscription || null;
+      const followInfo = sp.follower || sp.following || sp.followDate || null;
+      
+      const isSubscriber = !!subInfo;
+      const subMonth = subInfo ? (subInfo.accumulativeMonth || 1) : 0;
+      const subTier = subInfo ? (subInfo.tier || 1) : 0;
+
+      const isFollower = !!(followInfo || (profileData.viewerBadges && profileData.viewerBadges.some(b => b.badge && b.badge.badgeId && b.badge.badgeId.includes('fan'))));
+      
+      let followDays = 0;
+      if (followInfo) {
+        let followDateStr = typeof followInfo === 'string' ? followInfo : (followInfo.followDate || followInfo.createdDate);
+        if (followDateStr) {
+          const fTime = new Date(followDateStr).getTime();
+          if (!isNaN(fTime)) {
+            followDays = Math.floor((Date.now() - fTime) / (1000 * 60 * 60 * 24));
+          }
+        }
+      }
+
       const now = new Date().toLocaleTimeString('ko-KR');
 
-      // Add to unique participants
       if (!participants.has(uid)) {
         participants.set(uid, {
           nickname: nickname,
           msg: msgText,
           time: now,
-          uid: uid
+          uid: uid,
+          isSubscriber: isSubscriber,
+          subMonth: subMonth,
+          subTier: subTier,
+          isFollower: isFollower,
+          followDays: followDays
         });
-        participantCountEl.innerText = participants.size.toLocaleString();
-        if (participants.size > 0) {
-          drawBtn.disabled = false;
-        }
+
+        updateFilteredStats();
       }
 
-      // Add to chat feed UI
-      addChatToFeed(nickname, msgText, now);
+      addChatToFeed(nickname, msgText, now, isSubscriber, isFollower);
     }
 
-    function addChatToFeed(nickname, msg, time) {
+    function getEligibleParticipants() {
+      const all = Array.from(participants.values());
+      
+      const isFollowOnly = followOnlyToggle.checked;
+      const reqFollowDays = parseInt(minFollowDays.value) || 0;
+
+      const isSubOnly = subOnlyToggle.checked;
+      const reqSubMonths = parseInt(minSubMonths.value) || 0;
+      const reqSubTier = parseInt(subTierSelect.value) || 0;
+
+      return all.filter(p => {
+        // Follow Filter
+        if (isFollowOnly) {
+          if (!p.isFollower) return false;
+          if (reqFollowDays > 0 && p.followDays < reqFollowDays) return false;
+        }
+
+        // Subscription Filter
+        if (isSubOnly) {
+          if (!p.isSubscriber) return false;
+          if (reqSubMonths > 0 && p.subMonth < reqSubMonths) return false;
+          if (reqSubTier > 0 && p.subTier < reqSubTier) return false;
+        }
+
+        return true;
+      });
+    }
+
+    function updateFilteredStats() {
+      participantCountEl.innerText = participants.size.toLocaleString();
+
+      let subCount = 0;
+      let followCount = 0;
+      participants.forEach(p => {
+        if (p.isSubscriber) subCount++;
+        if (p.isFollower) followCount++;
+      });
+
+      subFollowStatEl.innerText = `${subCount.toLocaleString()}명 / ${followCount.toLocaleString()}명`;
+
+      const eligible = getEligibleParticipants();
+      filteredCountEl.innerText = eligible.length.toLocaleString();
+
+      drawBtn.disabled = (eligible.length === 0);
+    }
+
+    function addChatToFeed(nickname, msg, time, isSub, isFollow) {
       const div = document.createElement('div');
       div.className = 'chat-item';
+
+      let badgesHtml = '';
+      if (isSub) badgesHtml += `<span class="badge-tag badge-sub">⭐ 구독자</span>`;
+      if (isFollow) badgesHtml += `<span class="badge-tag badge-follow">❤️ 팔로워</span>`;
+
       div.innerHTML = `
+        ${badgesHtml}
         <span class="chat-nick">${escapeHtml(nickname)}</span>
         <span class="chat-msg">${escapeHtml(msg)}</span>
         <span class="chat-time">${time}</span>
@@ -785,45 +981,46 @@
       });
     }
 
-    // Mega Draw Execution
+    // Draw Execution
     drawBtn.addEventListener('click', () => {
-      const totalAvailable = participants.size;
-      if (totalAvailable === 0) {
-        alert('추첨할 참여자가 없습니다. 먼저 채팅 수집을 진행해주세요!');
+      const eligibleList = getEligibleParticipants();
+      const totalEligible = eligibleList.length;
+
+      if (totalEligible === 0) {
+        alert('설정한 필터 조건에 부합하는 참여자가 없습니다.');
         return;
       }
 
       const countNeeded = parseInt(document.getElementById('winnerCount').value) || 1;
-      const actualWinnerCount = Math.min(countNeeded, totalAvailable);
+      const actualWinnerCount = Math.min(countNeeded, totalEligible);
 
       drawBtn.disabled = true;
       winnerOverlay.classList.add('drawing');
-      rollText.innerText = "🎲 수백 명 일괄 추첨 진행 중...";
-      subRollText.innerText = `${totalAvailable.toLocaleString()}명의 참여자 중 ${actualWinnerCount.toLocaleString()}명을 공정하게 셔플 추첨합니다.`;
+      rollText.innerText = "🎲 필터 조건에 맞춰 추첨 진행 중...";
+      subRollText.innerText = `유효 응모자 ${totalEligible.toLocaleString()}명 중 ${actualWinnerCount.toLocaleString()}명을 공정하게 추첨합니다.`;
 
-      const list = Array.from(participants.values());
       let rollCounter = 0;
 
       const rollTimer = setInterval(() => {
         rollCounter++;
-        const sampleNick = list[Math.floor(Math.random() * list.length)].nickname;
+        const sampleNick = eligibleList[Math.floor(Math.random() * eligibleList.length)].nickname;
         rollText.innerText = `추첨 중... [${sampleNick}]`;
 
         if (rollCounter > 20) {
           clearInterval(rollTimer);
 
-          // Fisher-Yates shuffle algorithm for perfect unbiased random sampling
-          for (let i = list.length - 1; i > 0; i--) {
+          // Fisher-Yates shuffle algorithm
+          for (let i = eligibleList.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            [list[i], list[j]] = [list[j], list[i]];
+            [eligibleList[i], eligibleList[j]] = [eligibleList[j], eligibleList[i]];
           }
 
-          drawnWinners = list.slice(0, actualWinnerCount);
+          drawnWinners = eligibleList.slice(0, actualWinnerCount);
           renderWinnersTable(drawnWinners);
 
           winnerOverlay.classList.remove('drawing');
           rollText.innerText = `🎉 총 ${actualWinnerCount.toLocaleString()}명 추첨 완료!`;
-          subRollText.innerText = `아래 명단에서 당첨자를 확인하거나 엑셀 파일로 다운로드하세요.`;
+          subRollText.innerText = `필터를 통과한 당첨자 명단을 확인하고 엑셀로 다운로드하세요.`;
           exportBtn.disabled = false;
           drawBtn.disabled = false;
         }
@@ -840,13 +1037,24 @@
       }
 
       winners.forEach((w, index) => {
+        let badgesHtml = '';
+        if (w.isSubscriber) {
+          badgesHtml += `<span class="badge-tag badge-sub">⭐ 구독 (${w.subMonth}개월)</span>`;
+          if (w.subTier > 0) badgesHtml += `<span class="badge-tag badge-tier">${w.subTier}티어</span>`;
+        }
+        if (w.isFollower) {
+          const fDaysText = w.followDays > 0 ? ` (${w.followDays}일째)` : '';
+          badgesHtml += `<span class="badge-tag badge-follow">❤️ 팔로워${fDaysText}</span>`;
+        }
+        if (!badgesHtml) badgesHtml = `<span style="color: var(--text-sub); font-size: 11px;">일반 시청자</span>`;
+
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td><span class="rank-num">${index + 1}</span></td>
           <td style="font-weight: 700;">${escapeHtml(w.nickname)}</td>
+          <td>${badgesHtml}</td>
           <td style="color: #cbd5e1;">${escapeHtml(w.msg)}</td>
           <td style="font-size: 12px; color: var(--text-sub);">${w.time}</td>
-          <td><span class="user-hash">${w.uid.substring(0, 12)}...</span></td>
         `;
         winnersTableBody.appendChild(tr);
       });
@@ -863,11 +1071,13 @@
     exportBtn.addEventListener('click', () => {
       if (drawnWinners.length === 0) return;
 
-      let csvContent = "\uFEFF순위,닉네임,채팅내용,참여시간,고유식별자(UID)\n";
+      let csvContent = "\uFEFF순위,닉네임,구독여부,구독개월,구독티어,팔로우여부,팔로우일수,채팅내용,참여시간,고유식별자(UID)\n";
       drawnWinners.forEach((w, idx) => {
         const safeNick = `"${w.nickname.replace(/"/g, '""')}"`;
         const safeMsg = `"${w.msg.replace(/"/g, '""')}"`;
-        csvContent += `${idx + 1},${safeNick},${safeMsg},${w.time},${w.uid}\n`;
+        const isSubStr = w.isSubscriber ? "구독자" : "미구독";
+        const isFollowStr = w.isFollower ? "팔로워" : "미팔로우";
+        csvContent += `${idx + 1},${safeNick},${isSubStr},${w.subMonth},${w.subTier}티어,${isFollowStr},${w.followDays}일,${safeMsg},${w.time},${w.uid}\n`;
       });
 
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -875,7 +1085,7 @@
       const a = document.createElement('a');
       const dateStr = new Date().toISOString().slice(0,19).replace(/[^0-9]/g, "");
       a.href = url;
-      a.download = `chzzk_winners_${dateStr}.csv`;
+      a.download = `chzzk_filtered_winners_${dateStr}.csv`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -888,9 +1098,10 @@
         drawnWinners = [];
         chatLogCount = 0;
         participantCountEl.innerText = '0';
-        totalChatCountEl.innerText = '0';
+        filteredCountEl.innerText = '0';
+        subFollowStatEl.innerText = '0명 / 0명';
         drawnWinnerCountEl.innerText = '0';
-        chatFeed.innerHTML = '<div style="color: #64748b; text-align: center; margin-top: 60px;">초기화되었습니다.</div>';
+        chatFeed.innerHTML = '<div style="color: #64748b; text-align: center; margin-top: 50px;">초기화되었습니다.</div>';
         rollText.innerText = '대기 중';
         subRollText.innerText = "참여자를 모은 뒤 '추첨하기' 버튼을 눌러주세요.";
         winnersTableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-sub); padding: 40px 0;">아직 추첨 결과가 없습니다.</td></tr>';
