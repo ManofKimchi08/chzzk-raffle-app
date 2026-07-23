@@ -269,7 +269,7 @@
     .btn-draw {
       background: linear-gradient(135deg, #7928ca, #ff0080);
       color: #fff;
-      font-size: 18px;
+      font-size: 17px;
       padding: 16px;
       box-shadow: 0 4px 20px rgba(121, 40, 202, 0.4);
     }
@@ -277,6 +277,18 @@
     .btn-draw:hover {
       transform: scale(1.02);
       box-shadow: 0 6px 24px rgba(255, 0, 128, 0.5);
+    }
+
+    .delibird-icon {
+      height: 32px;
+      width: auto;
+      vertical-align: middle;
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
+      transition: transform 0.2s ease;
+    }
+
+    .btn-draw:hover .delibird-icon {
+      transform: rotate(-10deg) scale(1.15);
     }
 
     .btn:disabled {
@@ -411,12 +423,6 @@
       background: rgba(255, 0, 128, 0.2);
       color: #f472b6;
       border: 1px solid rgba(255, 0, 128, 0.4);
-    }
-
-    .badge-recent {
-      background: rgba(0, 112, 243, 0.2);
-      color: #60a5fa;
-      border: 1px solid rgba(0, 112, 243, 0.4);
     }
 
     /* Winner Area & Animation */
@@ -555,6 +561,11 @@
           <input type="text" id="channelInput" placeholder="https://chzzk.naver.com/live/채널ID 또는 채널ID" value="1ad5aa0f6c6741b072528fad5e5e76b1">
         </div>
 
+        <div class="toggle-row" style="margin-bottom: 16px;">
+          <span class="toggle-label">📜 과거 채팅 수집 포함 (접속 전 100개 채팅 복구)</span>
+          <input type="checkbox" id="includeHistoryToggle" checked style="width: 18px; height: 18px; cursor: pointer;">
+        </div>
+
         <div class="form-group">
           <label>참여 키워드 (공백시 모든 채팅 수집)</label>
           <input type="text" id="keywordInput" placeholder="예: !추첨, !참여">
@@ -569,7 +580,7 @@
         </div>
 
         <div class="form-group" style="display: flex; gap: 8px;">
-          <button id="connectBtn" class="btn btn-primary">수집 시작 (과거 채팅 포함)</button>
+          <button id="connectBtn" class="btn btn-primary">수집 시작</button>
           <button id="disconnectBtn" class="btn btn-danger" style="display: none;">중단</button>
         </div>
 
@@ -626,7 +637,10 @@
           </div>
         </div>
 
-        <button id="drawBtn" class="btn btn-draw" disabled>🎉 조건에 맞는 시청자 추첨하기</button>
+        <button id="drawBtn" class="btn btn-draw" disabled>
+          <img src="delibird.png" alt="Delibird" class="delibird-icon">
+          조건에 맞는 시청자 추첨하기
+        </button>
 
         <hr style="border-color: var(--border-color); margin: 20px 0;">
 
@@ -649,7 +663,7 @@
           </div>
           <div class="stat-card">
             <div class="stat-label">구독자 / 팔로워 수</div>
-            <div class="stat-value" id="subFollowStat" style="font-size: 16px; margin-top: 10px;">0 / 0</div>
+            <div class="stat-value" id="subFollowStat" style="font-size: 16px; margin-top: 10px;">0명 / 0명</div>
           </div>
           <div class="stat-card">
             <div class="stat-label">시청자 수</div>
@@ -658,7 +672,10 @@
         </div>
 
         <div id="winnerOverlay" class="winner-overlay">
-          <div id="rollText" class="lottery-roll">대기 중</div>
+          <div id="rollText" class="lottery-roll">
+            <img src="delibird.png" alt="Delibird" style="height: 36px; vertical-align: middle; margin-right: 8px;">
+            대기 중
+          </div>
           <div id="subRollText" style="color: var(--text-sub); font-size: 14px;">참여자를 모은 뒤 필터 조건을 설정하고 '추첨하기'를 눌러주세요.</div>
         </div>
 
@@ -716,6 +733,7 @@
 
     // Elements
     const channelInput = document.getElementById('channelInput');
+    const includeHistoryToggle = document.getElementById('includeHistoryToggle');
     const keywordInput = document.getElementById('keywordInput');
     const connectBtn = document.getElementById('connectBtn');
     const disconnectBtn = document.getElementById('disconnectBtn');
@@ -874,21 +892,24 @@
           if (msg.cmd === 10100) {
             isConnected = true;
             reconnectAttempts = 0;
-            setStatus('connected', `방송에 실시간 연결됨 (과거 채팅 수집 중)`);
+            const historyText = includeHistoryToggle.checked ? " (과거 채팅 포함)" : "";
+            setStatus('connected', `방송에 실시간 연결됨${historyText}`);
             connectBtn.style.display = 'none';
             disconnectBtn.style.display = 'inline-flex';
             channelInput.disabled = true;
 
-            // Step 2: Request Recent Chat History (cmd 5101) - Fixes historical chat collection!
-            const recentReq = {
-              ver: "2",
-              cmd: 5101,
-              svcid: "game",
-              cid: currentChatChannelId,
-              bdy: { recentCount: 100 },
-              tid: 2
-            };
-            ws.send(JSON.stringify(recentReq));
+            // Optional Historical Chat Retrieval (cmd 5101)
+            if (includeHistoryToggle.checked) {
+              const recentReq = {
+                ver: "2",
+                cmd: 5101,
+                svcid: "game",
+                cid: currentChatChannelId,
+                bdy: { recentCount: 100 },
+                tid: 2
+              };
+              ws.send(JSON.stringify(recentReq));
+            }
             return;
           }
 
@@ -928,7 +949,6 @@
       };
     }
 
-    // Polling live-detail every 30s to handle stream restarts & chatChannelId updates
     function startLiveStatusPolling() {
       if (liveStatusPollingInterval) clearInterval(liveStatusPollingInterval);
       liveStatusPollingInterval = setInterval(async () => {
@@ -940,12 +960,10 @@
             viewersCountEl.innerText = data.concurrentUserCount.toLocaleString();
           }
 
-          // If chatChannelId updated due to stream restart, update seamlessly!
           if (data.chatChannelId && data.chatChannelId !== currentChatChannelId) {
-            console.log('chatChannelId changed:', currentChatChannelId, '->', data.chatChannelId);
             currentChatChannelId = data.chatChannelId;
             currentAccessToken = data.accessToken;
-            if (ws) ws.close(); // Trigger reconnect to new chatChannelId
+            if (ws) ws.close();
           }
         } catch (e) {
           console.error('Live polling err:', e);
@@ -1046,16 +1064,14 @@
       const reqSubTier = parseInt(subTierSelect.value) || 0;
 
       return all.filter(p => {
-        // Keyword Matching Check (Fixes !추첨 vs !추첨하지마)
+        // Keyword Matching Check
         if (targetKeyword) {
           if (matchMode === 'exact') {
-            // Exact word match
             const words = p.msg.trim().split(/\s+/);
             if (!words.includes(targetKeyword) && p.msg.trim() !== targetKeyword) {
               return false;
             }
           } else {
-            // Partial match
             if (!p.msg.includes(targetKeyword)) return false;
           }
         }
@@ -1138,7 +1154,7 @@
 
       drawBtn.disabled = true;
       winnerOverlay.classList.add('drawing');
-      rollText.innerText = "🎲 필터 조건에 맞춰 추첨 진행 중...";
+      rollText.innerHTML = `<img src="delibird.png" alt="Delibird" class="delibird-icon" style="height: 36px;"> 필터 조건에 맞춰 추첨 진행 중...`;
       subRollText.innerText = `유효 응모자 ${totalEligible.toLocaleString()}명 중 ${actualWinnerCount.toLocaleString()}명을 공정하게 추첨합니다.`;
 
       let rollCounter = 0;
@@ -1146,7 +1162,7 @@
       const rollTimer = setInterval(() => {
         rollCounter++;
         const sampleNick = eligibleList[Math.floor(Math.random() * eligibleList.length)].nickname;
-        rollText.innerText = `추첨 중... [${sampleNick}]`;
+        rollText.innerHTML = `<img src="delibird.png" alt="Delibird" class="delibird-icon" style="height: 36px;"> 추첨 중... [${sampleNick}]`;
 
         if (rollCounter > 20) {
           clearInterval(rollTimer);
@@ -1161,7 +1177,7 @@
           renderWinnersTable(drawnWinners);
 
           winnerOverlay.classList.remove('drawing');
-          rollText.innerText = `🎉 총 ${actualWinnerCount.toLocaleString()}명 추첨 완료!`;
+          rollText.innerHTML = `<img src="delibird.png" alt="Delibird" class="delibird-icon" style="height: 36px;"> 🎉 총 ${actualWinnerCount.toLocaleString()}명 추첨 완료!`;
           subRollText.innerText = `필터를 통과한 당첨자 명단을 확인하고 엑셀로 다운로드하세요.`;
           exportBtn.disabled = false;
           drawBtn.disabled = false;
@@ -1244,7 +1260,7 @@
         subFollowStatEl.innerText = '0명 / 0명';
         drawnWinnerCountEl.innerText = '0';
         chatFeed.innerHTML = '<div style="color: #64748b; text-align: center; margin-top: 50px;">초기화되었습니다.</div>';
-        rollText.innerText = '대기 중';
+        rollText.innerHTML = `<img src="delibird.png" alt="Delibird" style="height: 36px; vertical-align: middle; margin-right: 8px;"> 대기 중`;
         subRollText.innerText = "참여자를 모은 뒤 '추첨하기' 버튼을 눌러주세요.";
         winnersTableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-sub); padding: 40px 0;">아직 추첨 결과가 없습니다.</td></tr>';
         exportBtn.disabled = true;
