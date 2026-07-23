@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>치지직 대규모 시청자 추첨 시스템 | Chzzk Mega Raffle</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0a0c10;
+      --bg-card: #121620;
+      --bg-card-hover: #1a202c;
+      --chzzk-green: #00ffa3;
+      --chzzk-green-glow: rgba(0, 255, 163, 0.35);
+      --accent-purple: #7928ca;
+      --accent-pink: #ff0080;
+      --text-main: #f1f5f9;
+      --text-sub: #94a3b8;
+      --border-color: #232a3b;
+      --danger: #ff4757;
+      --warning: #ffa502;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Pretendard', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(0, 255, 163, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(121, 40, 202, 0.08) 0%, transparent 40%);
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 24px;
+    }
+
+    .logo-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-badge {
+      background: linear-gradient(135deg, var(--chzzk-green), #00b894);
+      color: #000;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 14px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      letter-spacing: 1px;
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 700;
+      background: linear-gradient(to right, #ffffff, #cbd5e1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: #1e293b;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #64748b;
+    }
+
+    .status-dot.connected {
+      background: var(--chzzk-green);
+      box-shadow: 0 0 10px var(--chzzk-green);
+    }
+
+    .status-dot.connecting {
+      background: var(--warning);
+      animation: pulse 1s infinite alternate;
+    }
+
+    @keyframes pulse {
+      from { opacity: 0.4; }
+      to { opacity: 1; }
+    }
+
+    /* Main Layout */
+    .grid {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 992px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Card Panels */
+    .panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .panel-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #f8fafc;
+    }
+
+    /* Form Controls */
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-sub);
+      margin-bottom: 6px;
+    }
+
+    input[type="text"], input[type="number"] {
+      width: 100%;
+      background: #0f172a;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    input:focus {
+      border-color: var(--chzzk-green);
+      box-shadow: 0 0 0 3px var(--chzzk-green-glow);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--chzzk-green), #00d26a);
+      color: #000;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px var(--chzzk-green-glow);
+    }
+
+    .btn-danger {
+      background: rgba(255, 71, 87, 0.15);
+      color: var(--danger);
+      border: 1px solid rgba(255, 71, 87, 0.3);
+    }
+
+    .btn-danger:hover {
+      background: rgba(255, 71, 87, 0.25);
+    }
+
+    .btn-draw {
+      background: linear-gradient(135deg, #7928ca, #ff0080);
+      color: #fff;
+      font-size: 18px;
+      padding: 16px;
+      box-shadow: 0 4px 20px rgba(121, 40, 202, 0.4);
+    }
+
+    .btn-draw:hover {
+      transform: scale(1.02);
+      box-shadow: 0 6px 24px rgba(255, 0, 128, 0.5);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    /* Stats Grid */
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: #0f172a;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--chzzk-green);
+      font-family: 'Outfit', sans-serif;
+      margin-top: 4px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    /* Preset Chips */
+    .chip-group {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .chip {
+      background: #1e293b;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .chip:hover {
+      border-color: var(--chzzk-green);
+      color: var(--chzzk-green);
+    }
+
+    /* Live Chat Feed */
+    .chat-feed {
+      height: 180px;
+      background: #080a0f;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 12px;
+      overflow-y: auto;
+      font-size: 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .chat-item {
+      display: flex;
+      gap: 8px;
+      align-items: baseline;
+      animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .chat-nick {
+      font-weight: 700;
+      color: var(--chzzk-green);
+      white-space: nowrap;
+    }
+
+    .chat-msg {
+      color: #cbd5e1;
+      word-break: break-all;
+    }
+
+    .chat-time {
+      font-size: 11px;
+      color: #475569;
+      margin-left: auto;
+    }
+
+    /* Winner Area & Animation */
+    .winner-overlay {
+      position: relative;
+      min-height: 240px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border: 2px dashed var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      background: rgba(15, 23, 42, 0.6);
+      transition: all 0.3s;
+    }
+
+    .winner-overlay.drawing {
+      border-color: var(--accent-pink);
+      box-shadow: inset 0 0 30px rgba(255, 0, 128, 0.2);
+    }
+
+    .lottery-roll {
+      font-size: 32px;
+      font-weight: 800;
+      font-family: 'Outfit', sans-serif;
+      background: linear-gradient(135deg, var(--chzzk-green), var(--accent-pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+
+    /* Winners Table */
+    .winners-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      margin-top: 24px;
+    }
+
+    .winners-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-sm {
+      padding: 8px 14px;
+      font-size: 13px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: #1e293b;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .btn-sm:hover {
+      background: #334155;
+    }
+
+    .btn-excel {
+      background: #107c41;
+      border-color: #107c41;
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .btn-excel:hover {
+      background: #159a52;
+    }
+
+    .table-container {
+      max-height: 380px;
+      overflow-y: auto;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: #0f172a;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    th {
+      background: #1e293b;
+      padding: 12px 16px;
+      font-weight: 600;
+      color: var(--text-sub);
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-main);
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .rank-num {
+      font-weight: 800;
+      color: var(--chzzk-green);
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .user-hash {
+      font-size: 11px;
+      color: var(--text-sub);
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <div class="logo-group">
+        <div class="logo-badge">CHZZK</div>
+        <h1>치지직 대규모 시청자 추첨 시스템</h1>
+      </div>
+      <div class="status-badge">
+        <div id="statusDot" class="status-dot"></div>
+        <span id="statusText">연결 대기 중</span>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- Left Panel: Setup & Control -->
+      <div class="panel">
+        <div class="panel-title">📡 방송 연결 설정</div>
+        
+        <div class="form-group">
+          <label>치지직 방송 URL 또는 채널 ID</label>
+          <input type="text" id="channelInput" placeholder="https://chzzk.naver.com/live/채널ID 또는 채널ID" value="1ad5aa0f6c6741b072528fad5e5e76b1">
+        </div>
+
+        <div class="form-group">
+          <label>참여 키워드 (공백시 모든 채팅 수집)</label>
+          <input type="text" id="keywordInput" placeholder="예: !추첨, !참여">
+        </div>
+
+        <div class="form-group" style="display: flex; gap: 8px;">
+          <button id="connectBtn" class="btn btn-primary">수집 시작</button>
+          <button id="disconnectBtn" class="btn btn-danger" style="display: none;">중단</button>
+        </div>
+
+        <hr style="border-color: var(--border-color); margin: 20px 0;">
+
+        <div class="panel-title">🎁 추첨 설정</div>
+
+        <div class="form-group">
+          <label>당첨 인원 수 (최대 1,000명+)</label>
+          <input type="number" id="winnerCount" value="10" min="1" max="5000">
+          <div class="chip-group">
+            <div class="chip" onclick="setWinners(1)">1명</div>
+            <div class="chip" onclick="setWinners(10)">10명</div>
+            <div class="chip" onclick="setWinners(50)">50명</div>
+            <div class="chip" onclick="setWinners(100)">100명</div>
+            <div class="chip" onclick="setWinners(300)">300명</div>
+            <div class="chip" onclick="setWinners(500)">500명</div>
+          </div>
+        </div>
+
+        <button id="drawBtn" class="btn btn-draw" disabled>🎉 수백명 추첨하기</button>
+
+        <hr style="border-color: var(--border-color); margin: 20px 0;">
+
+        <div class="panel-title">💬 실시간 채팅 감시</div>
+        <div class="chat-feed" id="chatFeed">
+          <div style="color: #64748b; text-align: center; margin-top: 60px;">방송 연결 후 채팅이 이곳에 표시됩니다.</div>
+        </div>
+      </div>
+
+      <!-- Right Panel: Winners & Stats -->
+      <div class="panel">
+        <div class="stats-container">
+          <div class="stat-card">
+            <div class="stat-label">유일 참여자 (중복제거)</div>
+            <div class="stat-value" id="participantCount">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">총 수집 채팅 수</div>
+            <div class="stat-value" id="totalChatCount">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">시청자 수</div>
+            <div class="stat-value" id="viewersCount">0</div>
+          </div>
+        </div>
+
+        <div id="winnerOverlay" class="winner-overlay">
+          <div id="rollText" class="lottery-roll">대기 중</div>
+          <div id="subRollText" style="color: var(--text-sub); font-size: 14px;">참여자를 모은 뒤 '추첨하기' 버튼을 눌러주세요.</div>
+        </div>
+
+        <div class="winners-header">
+          <div class="panel-title" style="margin-bottom: 0;">🏆 당첨자 명단 (<span id="drawnWinnerCount">0</span>명)</div>
+          <div class="winners-actions">
+            <input type="text" id="searchInput" placeholder="닉네임 검색..." style="width: 150px; padding: 6px 10px; font-size: 12px;">
+            <button id="exportBtn" class="btn-sm btn-excel" disabled>📊 엑셀 다운로드</button>
+            <button id="resetBtn" class="btn-sm btn-danger">초기화</button>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 60px;">순위</th>
+                <th>닉네임</th>
+                <th>채팅 내용</th>
+                <th>참여 시간</th>
+                <th>고유 식별자</th>
+              </tr>
+            </thead>
+            <tbody id="winnersTableBody">
+              <tr>
+                <td colspan="5" style="text-align: center; color: var(--text-sub); padding: 40px 0;">
+                  아직 추첨 결과가 없습니다.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // State management
+    let ws = null;
+    let isConnected = false;
+    let participants = new Map(); // hashId -> { nickname, msg, time }
+    let chatLogCount = 0;
+    let drawnWinners = [];
+    let pingInterval = null;
+
+    // Elements
+    const channelInput = document.getElementById('channelInput');
+    const keywordInput = document.getElementById('keywordInput');
+    const connectBtn = document.getElementById('connectBtn');
+    const disconnectBtn = document.getElementById('disconnectBtn');
+    const drawBtn = document.getElementById('drawBtn');
+    const statusDot = document.getElementById('statusDot');
+    const statusText = document.getElementById('statusText');
+    const participantCountEl = document.getElementById('participantCount');
+    const totalChatCountEl = document.getElementById('totalChatCount');
+    const viewersCountEl = document.getElementById('viewersCount');
+    const chatFeed = document.getElementById('chatFeed');
+    const winnerOverlay = document.getElementById('winnerOverlay');
+    const rollText = document.getElementById('rollText');
+    const subRollText = document.getElementById('subRollText');
+    const winnersTableBody = document.getElementById('winnersTableBody');
+    const exportBtn = document.getElementById('exportBtn');
+    const drawnWinnerCountEl = document.getElementById('drawnWinnerCount');
+
+    function setWinners(n) {
+      document.getElementById('winnerCount').value = n;
+    }
+
+    function extractChannelId(input) {
+      input = input.trim();
+      if (input.includes('chzzk.naver.com/live/')) {
+        const match = input.match(/live\/([a-zA-Z0-9]+)/);
+        if (match) return match[1];
+      }
+      return input;
+    }
+
+    // Connect to Chzzk Live Chat
+    connectBtn.addEventListener('click', async () => {
+      const channelId = extractChannelId(channelInput.value);
+      if (!channelId) {
+        alert('올바른 치지직 채널 ID 또는 URL을 입력해주세요.');
+        return;
+      }
+
+      setStatus('connecting', '치지직 방송 정보 요청 중...');
+
+      try {
+        // Fetch API info via local python proxy
+        const res = await fetch(`/api/chzzk/?channelId=${channelId}`);
+        const data = await res.json();
+
+        if (data.error) {
+          alert('오류: ' + data.error);
+          setStatus('disconnected', '연결 실패');
+          return;
+        }
+
+        viewersCountEl.innerText = data.concurrentUserCount ? data.concurrentUserCount.toLocaleString() : '0';
+        const chatChannelId = data.chatChannelId;
+        const accessToken = data.accessToken;
+
+        setStatus('connecting', '웹소켓 연결 중...');
+
+        // Connect WebSocket
+        ws = new WebSocket('wss://kr-ss1.chat.naver.com/chat');
+
+        ws.onopen = () => {
+          // Handshake cmd 100
+          const connectPayload = {
+            ver: "2",
+            cmd: 100,
+            svcid: "game",
+            cid: chatChannelId,
+            bdy: {
+              accTkn: accessToken,
+              auth: "READ",
+              devType: 2001,
+              uid: null
+            },
+            tid: 1
+          };
+          ws.send(JSON.stringify(connectPayload));
+
+          // Start Heartbeat Ping (cmd 0)
+          pingInterval = setInterval(() => {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+              ws.send(JSON.stringify({ ver: "2", cmd: 0 }));
+            }
+          }, 20000);
+        };
+
+        ws.onmessage = (event) => {
+          try {
+            const msg = JSON.parse(event.data);
+
+            if (msg.cmd === 10100) {
+              isConnected = true;
+              setStatus('connected', `${data.channelName || '치지직'} 방송에 연결됨`);
+              connectBtn.style.display = 'none';
+              disconnectBtn.style.display = 'inline-flex';
+              channelInput.disabled = true;
+              return;
+            }
+
+            // Chat message array
+            if (Array.isArray(msg.bdy)) {
+              msg.bdy.forEach(item => {
+                if (item.profile && item.uid) {
+                  processChatMessage(item);
+                }
+              });
+            }
+          } catch (e) {
+            console.error('WS Parse Error:', e);
+          }
+        };
+
+        ws.onclose = () => {
+          cleanupWS();
+          setStatus('disconnected', '연결이 종료되었습니다');
+        };
+
+        ws.onerror = (err) => {
+          console.error('WS Error:', err);
+          cleanupWS();
+          setStatus('disconnected', '연결 오류 발생');
+        };
+
+      } catch (err) {
+        alert('서버통신 오류: ' + err.message);
+        setStatus('disconnected', '오류 발생');
+      }
+    });
+
+    disconnectBtn.addEventListener('click', () => {
+      cleanupWS();
+      setStatus('disconnected', '수집 중단됨');
+    });
+
+    function cleanupWS() {
+      if (pingInterval) clearInterval(pingInterval);
+      if (ws) {
+        ws.close();
+        ws = null;
+      }
+      isConnected = false;
+      connectBtn.style.display = 'inline-flex';
+      disconnectBtn.style.display = 'none';
+      channelInput.disabled = false;
+    }
+
+    function setStatus(type, text) {
+      statusDot.className = 'status-dot ' + type;
+      statusText.innerText = text;
+    }
+
+    function processChatMessage(item) {
+      chatLogCount++;
+      totalChatCountEl.innerText = chatLogCount.toLocaleString();
+
+      let profileData = {};
+      try {
+        profileData = JSON.parse(item.profile);
+      } catch (e) {}
+
+      const nickname = profileData.nickname || item.uid.substring(0, 8);
+      const msgText = item.msg || profileData.msg || '';
+      const uid = item.uid;
+      const targetKeyword = keywordInput.value.trim();
+
+      // Keyword filter check
+      if (targetKeyword && !msgText.includes(targetKeyword)) {
+        return;
+      }
+
+      const now = new Date().toLocaleTimeString('ko-KR');
+
+      // Add to unique participants
+      if (!participants.has(uid)) {
+        participants.set(uid, {
+          nickname: nickname,
+          msg: msgText,
+          time: now,
+          uid: uid
+        });
+        participantCountEl.innerText = participants.size.toLocaleString();
+        if (participants.size > 0) {
+          drawBtn.disabled = false;
+        }
+      }
+
+      // Add to chat feed UI
+      addChatToFeed(nickname, msgText, now);
+    }
+
+    function addChatToFeed(nickname, msg, time) {
+      const div = document.createElement('div');
+      div.className = 'chat-item';
+      div.innerHTML = `
+        <span class="chat-nick">${escapeHtml(nickname)}</span>
+        <span class="chat-msg">${escapeHtml(msg)}</span>
+        <span class="chat-time">${time}</span>
+      `;
+      chatFeed.appendChild(div);
+
+      if (chatFeed.children.length > 50) {
+        chatFeed.removeChild(chatFeed.firstChild);
+      }
+      chatFeed.scrollTop = chatFeed.scrollHeight;
+    }
+
+    function escapeHtml(text) {
+      return text.replace(/[&<>"']/g, function(m) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
+      });
+    }
+
+    // Mega Draw Execution
+    drawBtn.addEventListener('click', () => {
+      const totalAvailable = participants.size;
+      if (totalAvailable === 0) {
+        alert('추첨할 참여자가 없습니다. 먼저 채팅 수집을 진행해주세요!');
+        return;
+      }
+
+      const countNeeded = parseInt(document.getElementById('winnerCount').value) || 1;
+      const actualWinnerCount = Math.min(countNeeded, totalAvailable);
+
+      drawBtn.disabled = true;
+      winnerOverlay.classList.add('drawing');
+      rollText.innerText = "🎲 수백 명 일괄 추첨 진행 중...";
+      subRollText.innerText = `${totalAvailable.toLocaleString()}명의 참여자 중 ${actualWinnerCount.toLocaleString()}명을 공정하게 셔플 추첨합니다.`;
+
+      const list = Array.from(participants.values());
+      let rollCounter = 0;
+
+      const rollTimer = setInterval(() => {
+        rollCounter++;
+        const sampleNick = list[Math.floor(Math.random() * list.length)].nickname;
+        rollText.innerText = `추첨 중... [${sampleNick}]`;
+
+        if (rollCounter > 20) {
+          clearInterval(rollTimer);
+
+          // Fisher-Yates shuffle algorithm for perfect unbiased random sampling
+          for (let i = list.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [list[i], list[j]] = [list[j], list[i]];
+          }
+
+          drawnWinners = list.slice(0, actualWinnerCount);
+          renderWinnersTable(drawnWinners);
+
+          winnerOverlay.classList.remove('drawing');
+          rollText.innerText = `🎉 총 ${actualWinnerCount.toLocaleString()}명 추첨 완료!`;
+          subRollText.innerText = `아래 명단에서 당첨자를 확인하거나 엑셀 파일로 다운로드하세요.`;
+          exportBtn.disabled = false;
+          drawBtn.disabled = false;
+        }
+      }, 80);
+    });
+
+    function renderWinnersTable(winners) {
+      drawnWinnerCountEl.innerText = winners.length.toLocaleString();
+      winnersTableBody.innerHTML = '';
+
+      if (winners.length === 0) {
+        winnersTableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-sub); padding: 40px 0;">당첨자가 없습니다.</td></tr>`;
+        return;
+      }
+
+      winners.forEach((w, index) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><span class="rank-num">${index + 1}</span></td>
+          <td style="font-weight: 700;">${escapeHtml(w.nickname)}</td>
+          <td style="color: #cbd5e1;">${escapeHtml(w.msg)}</td>
+          <td style="font-size: 12px; color: var(--text-sub);">${w.time}</td>
+          <td><span class="user-hash">${w.uid.substring(0, 12)}...</span></td>
+        `;
+        winnersTableBody.appendChild(tr);
+      });
+    }
+
+    // Search filter
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase();
+      const filtered = drawnWinners.filter(w => w.nickname.toLowerCase().includes(q) || w.msg.toLowerCase().includes(q));
+      renderWinnersTable(filtered);
+    });
+
+    // CSV Download
+    exportBtn.addEventListener('click', () => {
+      if (drawnWinners.length === 0) return;
+
+      let csvContent = "\uFEFF순위,닉네임,채팅내용,참여시간,고유식별자(UID)\n";
+      drawnWinners.forEach((w, idx) => {
+        const safeNick = `"${w.nickname.replace(/"/g, '""')}"`;
+        const safeMsg = `"${w.msg.replace(/"/g, '""')}"`;
+        csvContent += `${idx + 1},${safeNick},${safeMsg},${w.time},${w.uid}\n`;
+      });
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const dateStr = new Date().toISOString().slice(0,19).replace(/[^0-9]/g, "");
+      a.href = url;
+      a.download = `chzzk_winners_${dateStr}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    });
+
+    // Reset button
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      if (confirm('수집된 참여자 및 당첨자 명단을 초기화하시겠습니까?')) {
+        participants.clear();
+        drawnWinners = [];
+        chatLogCount = 0;
+        participantCountEl.innerText = '0';
+        totalChatCountEl.innerText = '0';
+        drawnWinnerCountEl.innerText = '0';
+        chatFeed.innerHTML = '<div style="color: #64748b; text-align: center; margin-top: 60px;">초기화되었습니다.</div>';
+        rollText.innerText = '대기 중';
+        subRollText.innerText = "참여자를 모은 뒤 '추첨하기' 버튼을 눌러주세요.";
+        winnersTableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-sub); padding: 40px 0;">아직 추첨 결과가 없습니다.</td></tr>';
+        exportBtn.disabled = true;
+        drawBtn.disabled = true;
+      }
+    });
+  </script>
+</body>
+</html>
