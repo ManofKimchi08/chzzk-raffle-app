@@ -827,6 +827,7 @@
 
     let currentChannelId = '';
     let currentChatChannelId = '';
+    let currentChannelName = '';
     let currentAccessToken = '';
 
     let participants = new Map(); // uid -> participant Object
@@ -1064,6 +1065,7 @@
           return;
         }
 
+        currentChannelName = data.channelName || '';
         viewersCountEl.innerText = data.concurrentUserCount ? data.concurrentUserCount.toLocaleString() : '0';
         currentChatChannelId = data.chatChannelId;
         currentAccessToken = data.accessToken;
@@ -1116,8 +1118,8 @@
           if (msg.cmd === 10100) {
             isConnected = true;
             reconnectAttempts = 0;
-            const historyText = includeHistoryToggle.checked ? " (과거 채팅 포함)" : "";
-            setStatus('connected', `방송에 실시간 연결됨${historyText}`);
+            const streamerPrefix = currentChannelName ? `[${currentChannelName}] ` : '';
+            setStatus('connected', `${streamerPrefix}방송 연결됨`);
             connectBtn.style.display = 'none';
             disconnectBtn.style.display = 'inline-flex';
             channelInput.disabled = true;
