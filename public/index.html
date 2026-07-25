@@ -138,7 +138,7 @@
     /* Main Layout */
     .grid {
       display: grid;
-      grid-template-columns: 440px 1fr;
+      grid-template-columns: 460px 1fr;
       gap: 24px;
     }
 
@@ -189,7 +189,7 @@
       border-radius: 10px;
       padding: 12px 14px;
       color: #fff;
-      font-size: 14px;
+      font-size: 13px;
       outline: none;
       transition: all 0.2s;
     }
@@ -624,7 +624,7 @@
 
         <hr style="border-color: var(--border-color); margin: 20px 0;">
 
-        <!-- Duplicate Prevention & Exclusion Panel (Dual Verification: UID + Nickname) -->
+        <!-- Duplicate Prevention & Exclusion Panel (Splitted Table Layout) -->
         <div class="panel-title">🚫 다회차 중복 당첨 방지 및 제외 설정</div>
 
         <div class="toggle-row">
@@ -633,7 +633,7 @@
         </div>
 
         <div class="toggle-row">
-          <span class="toggle-label">📂 과거 당첨자 엑셀/CSV 업로드 제외 (고유 ID & 닉네임 교차 검증)</span>
+          <span class="toggle-label">📂 과거 당첨자 엑셀/CSV 업로드 제외</span>
           <input type="checkbox" id="fileExcludeToggle" style="width: 18px; height: 18px; cursor: pointer;">
         </div>
         <div class="sub-filter-box" id="fileExcludeBox" style="display: none;">
@@ -648,12 +648,23 @@
         </div>
 
         <div class="toggle-row">
-          <span class="toggle-label">✏️ 수동 제외 (고유 ID 또는 닉네임 직접 입력)</span>
+          <span class="toggle-label">✏️ 수동 직접 제외 (닉네임 / 고유 ID 표 분리 입력)</span>
           <input type="checkbox" id="manualExcludeToggle" style="width: 18px; height: 18px; cursor: pointer;">
         </div>
         <div class="sub-filter-box" id="manualExcludeBox" style="display: none;">
-          <label>제외할 닉네임 또는 고유 ID (줄바꿈/콤마 구분)</label>
-          <textarea id="manualExcludeTextarea" rows="3" placeholder="예: 닉네임1&#10;57e3d8afa8b7b0cc7e430847e7733f68&#10;닉네임2"></textarea>
+          <div class="inline-inputs">
+            <div>
+              <label style="color: #cbd5e1; font-weight: 700;">👤 제외할 닉네임 목록</label>
+              <textarea id="manualExcludeNickTextarea" rows="4" placeholder="예: 닉네임1&#10;닉네임2&#10;닉네임3"></textarea>
+            </div>
+            <div>
+              <label style="color: #cbd5e1; font-weight: 700;">🔑 제외할 고유 ID (UID)</label>
+              <textarea id="manualExcludeUidTextarea" rows="4" placeholder="예: 57e3d8afa8b7b...&#10;fe76c6ac68365..."></textarea>
+            </div>
+          </div>
+          <div style="font-size: 11px; color: var(--text-sub); text-align: right; margin-top: 4px;">
+            * 줄바꿈이나 콤마로 구분 / 닉네임 또는 고유 ID 중 하나만 일치해도 제외됩니다.
+          </div>
         </div>
 
         <hr style="border-color: var(--border-color); margin: 20px 0;">
@@ -847,7 +858,8 @@
 
     const manualExcludeToggle = document.getElementById('manualExcludeToggle');
     const manualExcludeBox = document.getElementById('manualExcludeBox');
-    const manualExcludeTextarea = document.getElementById('manualExcludeTextarea');
+    const manualExcludeNickTextarea = document.getElementById('manualExcludeNickTextarea');
+    const manualExcludeUidTextarea = document.getElementById('manualExcludeUidTextarea');
 
     autoExcludePreviousToggle.addEventListener('change', updateFilteredStats);
 
@@ -861,16 +873,22 @@
       updateFilteredStats();
     });
 
-    manualExcludeTextarea.addEventListener('input', () => {
-      const text = manualExcludeTextarea.value.trim().toLowerCase();
+    function updateManualTokens() {
       manualExcludedTokens.clear();
-      if (text) {
-        // Extract all tokens (lines, commas, or inside parentheses like 닉네임(UID))
-        const tokens = text.split(/[\n,()\s]+/).map(s => s.trim()).filter(Boolean);
-        tokens.forEach(t => manualExcludedTokens.add(t));
+      const nickText = manualExcludeNickTextarea.value.trim().toLowerCase();
+      const uidText = manualExcludeUidTextarea.value.trim().toLowerCase();
+
+      if (nickText) {
+        nickText.split(/[\n,]+/).map(s => s.trim()).filter(Boolean).forEach(t => manualExcludedTokens.add(t));
+      }
+      if (uidText) {
+        uidText.split(/[\n,]+/).map(s => s.trim()).filter(Boolean).forEach(t => manualExcludedTokens.add(t));
       }
       updateFilteredStats();
-    });
+    }
+
+    manualExcludeNickTextarea.addEventListener('input', updateManualTokens);
+    manualExcludeUidTextarea.addEventListener('input', updateManualTokens);
 
     // File Upload Handler (Dual Verification: Reads both UID and Nickname columns)
     excludeFileInput.addEventListener('change', (e) => {
@@ -885,7 +903,6 @@
         const lines = content.split(/\r?\n/);
         lines.forEach(line => {
           if (!line.trim()) return;
-          // Parse CSV commas or TXT tokens
           const parts = line.split(',').map(p => p.trim().replace(/^"|"$/g, ''));
           parts.forEach(p => {
             if (p && p !== "닉네임" && p !== "순위" && p !== "고유식별자(UID)" && p !== "구독여부" && p !== "팔로우여부") {
