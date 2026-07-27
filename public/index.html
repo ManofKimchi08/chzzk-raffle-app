@@ -1209,6 +1209,89 @@
       statusText.innerText = text;
     }
 
+    function parseFollowerStatus(profileData) {
+      let isFollower = false;
+      let followMonths = 0;
+
+      const sp = profileData.streamingProperty || {};
+
+      const candidates = [
+        sp.follower,
+        sp.following,
+        sp.followDate,
+        sp.createdDate,
+        profileData.follower,
+        profileData.following,
+        profileData.followDate,
+        profileData.createdDate
+      ];
+
+      let rawDateVal = null;
+
+      for (const cand of candidates) {
+        if (!cand) continue;
+
+        if (cand === true) {
+          isFollower = true;
+        } else if (typeof cand === 'object') {
+          isFollower = true;
+          const d = cand.followDate || cand.createdDate || cand.createDate || cand.followTime || cand.date || cand.time || cand.createdAt;
+          if (d) {
+            rawDateVal = d;
+            break;
+          }
+        } else if (typeof cand === 'string' || typeof cand === 'number') {
+          isFollower = true;
+          rawDateVal = cand;
+          break;
+        }
+      }
+
+      const badges = [...(profileData.viewerBadges || []), ...(profileData.activityBadges || [])];
+      for (const b of badges) {
+        const badgeObj = b.badge || b;
+        const bId = String(badgeObj.badgeId || badgeObj.badgeNo || badgeObj.name || '').toLowerCase();
+        const bTitle = String(badgeObj.title || badgeObj.name || badgeObj.badgeName || '').toLowerCase();
+
+        if (bId.includes('follower') || bId.includes('follow_') || bTitle.includes('팔로워')) {
+          isFollower = true;
+
+          if (!rawDateVal) {
+            const mMatch = bTitle.match(/(\d+)\s*개월/);
+            const yMatch = bTitle.match(/(\d+)\s*년/);
+            if (mMatch) {
+              followMonths = parseInt(mMatch[1], 10);
+            } else if (yMatch) {
+              followMonths = parseInt(yMatch[1], 10) * 12;
+            }
+          }
+        }
+      }
+
+      if (rawDateVal) {
+        let fTime = 0;
+        if (typeof rawDateVal === 'number') {
+          fTime = rawDateVal < 1e11 ? rawDateVal * 1000 : rawDateVal;
+        } else if (typeof rawDateVal === 'string') {
+          const cleanStr = rawDateVal.trim().replace(/\./g, '-').replace(' ', 'T');
+          fTime = new Date(cleanStr).getTime();
+          if (isNaN(fTime)) {
+            fTime = new Date(rawDateVal).getTime();
+          }
+        }
+
+        if (!isNaN(fTime) && fTime > 0) {
+          const diffMs = Date.now() - fTime;
+          if (diffMs >= 0) {
+            const days = diffMs / (1000 * 60 * 60 * 24);
+            followMonths = Math.floor(days / 30);
+          }
+        }
+      }
+
+      return { isFollower, followMonths };
+    }
+
     function processChatMessage(item) {
       chatLogCount++;
 
@@ -1223,29 +1306,12 @@
 
       const sp = profileData.streamingProperty || {};
       const subInfo = sp.subscription || null;
-      const followInfo = sp.follower || (typeof sp.following === 'object' ? sp.following : null);
       
       const isSubscriber = !!subInfo;
       const subMonth = subInfo ? (subInfo.accumulativeMonth || 1) : 0;
       const subTier = subInfo ? (subInfo.tier || 1) : 0;
 
-      let isFollower = false;
-      let followMonths = 0;
-
-      if (followInfo) {
-        let followDateStr = typeof followInfo === 'string' ? followInfo : (followInfo.followDate || followInfo.createdDate || followInfo.createDate || followInfo.followTime);
-        if (followDateStr) {
-          const fTime = new Date(followDateStr).getTime();
-          if (!isNaN(fTime)) {
-            isFollower = true;
-            const days = Math.floor((Date.now() - fTime) / (1000 * 60 * 60 * 24));
-            followMonths = Math.floor(days / 30);
-          }
-        } else if (typeof followInfo === 'object' || followInfo === true) {
-          isFollower = true;
-          followMonths = 0;
-        }
-      }
+      const { isFollower, followMonths } = parseFollowerStatus(profileData);
 
       const now = new Date().toLocaleTimeString('ko-KR');
 
@@ -1464,7 +1530,7 @@
           if (w.subTier > 0) badgesHtml += `<span class="badge-tag badge-tier">${w.subTier}티어</span>`;
         }
         if (w.isFollower) {
-          const fMonthsText = w.followMonths > 0 ? ` (${w.followMonths}개월째)` : '';
+          const fMonthsText = w.followMonths > 0 ? ` (${w.followMonths}개월째)` : ' (1개월 미만)';
           badgesHtml += `<span class="badge-tag badge-follow">❤️ 팔로워${fMonthsText}</span>`;
         }
         if (!badgesHtml) badgesHtml = `<span style="color: var(--text-sub); font-size: 11px;">일반 시청자</span>`;
