@@ -605,11 +605,6 @@
           <input type="text" id="channelInput" placeholder="https://chzzk.naver.com/live/채널ID 또는 채널ID" value="1ad5aa0f6c6741b072528fad5e5e76b1">
         </div>
 
-        <div class="toggle-row" style="margin-bottom: 16px;">
-          <span class="toggle-label">📜 과거 채팅 수집 포함 (접속 전 100개 채팅 복구)</span>
-          <input type="checkbox" id="includeHistoryToggle" checked style="width: 18px; height: 18px; cursor: pointer;">
-        </div>
-
         <div class="form-group">
           <label>참여 키워드 (공백시 모든 채팅 수집)</label>
           <input type="text" id="keywordInput" placeholder="예: !추첨, !참여">
@@ -839,12 +834,12 @@
 
     let chatLogCount = 0;
     let drawnWinners = [];
+    let currentDrawRound = 0;
     let pingInterval = null;
     let liveStatusPollingInterval = null;
 
     // Elements
     const channelInput = document.getElementById('channelInput');
-    const includeHistoryToggle = document.getElementById('includeHistoryToggle');
     const keywordInput = document.getElementById('keywordInput');
     const connectBtn = document.getElementById('connectBtn');
     const disconnectBtn = document.getElementById('disconnectBtn');
@@ -1115,28 +1110,16 @@
         try {
           const msg = JSON.parse(event.data);
 
-          if (msg.cmd === 10100) {
-            isConnected = true;
-            reconnectAttempts = 0;
-            const streamerPrefix = currentChannelName ? `[${currentChannelName}] ` : '';
-            setStatus('connected', `${streamerPrefix}방송 연결됨`);
-            connectBtn.style.display = 'none';
-            disconnectBtn.style.display = 'inline-flex';
-            channelInput.disabled = true;
-
-            if (includeHistoryToggle.checked) {
-              const recentReq = {
-                ver: "2",
-                cmd: 5101,
-                svcid: "game",
-                cid: currentChatChannelId,
-                bdy: { recentCount: 100 },
-                tid: 2
-              };
-              ws.send(JSON.stringify(recentReq));
+            if (msg.cmd === 10100) {
+              isConnected = true;
+              reconnectAttempts = 0;
+              const streamerPrefix = currentChannelName ? `[${currentChannelName}] ` : '';
+              setStatus('connected', `${streamerPrefix}방송 연결됨`);
+              connectBtn.style.display = 'none';
+              disconnectBtn.style.display = 'inline-flex';
+              channelInput.disabled = true;
+              return;
             }
-            return;
-          }
 
           if (Array.isArray(msg.bdy)) {
             msg.bdy.forEach(item => {
@@ -1471,13 +1454,18 @@
         if (rollCounter > 20) {
           clearInterval(rollTimer);
 
+          currentDrawRound++;
+
           // Fisher-Yates shuffle algorithm
           for (let i = eligibleList.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [eligibleList[i], eligibleList[j]] = [eligibleList[j], eligibleList[i]];
           }
 
-          const currentWinners = eligibleList.slice(0, actualWinnerCount);
+          const currentWinners = eligibleList.slice(0, actualWinnerCount).map(w => ({
+            ...w,
+            round: currentDrawRound
+          }));
 
           // Add to cumulative drawn set for multi-round auto duplicate prevention!
           currentWinners.forEach(w => cumulativeDrawnUIDs.add(w.uid.toLowerCase()));
@@ -1488,7 +1476,7 @@
           updateFilteredStats();
 
           winnerOverlay.classList.remove('drawing');
-          rollText.innerHTML = `<img src="delibird.png" alt="Delibird" class="delibird-icon" style="height: 36px;"> 🎉 이번 회차 ${actualWinnerCount.toLocaleString()}명 추첨 완료! (누적 ${drawnWinners.length.toLocaleString()}명)`;
+          rollText.innerHTML = `<img src="delibird.png" alt="Delibird" class="delibird-icon" style="height: 36px;"> 🎉 제 ${currentDrawRound}회차 ${actualWinnerCount.toLocaleString()}명 추첨 완료! (누적 ${drawnWinners.length.toLocaleString()}명)`;
           subRollText.innerText = `다음 회차 추첨 시 이전 당첨자는 고유 ID 기반으로 자동 제외됩니다.`;
           exportBtn.disabled = false;
           drawBtn.disabled = false;
@@ -1505,8 +1493,23 @@
         return;
       }
 
+      let lastRound = null;
       winners.forEach((w, index) => {
-        let badgesHtml = '';
+        const roundNum = w.round || 1;
+
+        // Visual Divider Banner for each Draw Round!
+        if (roundNum !== lastRound) {
+          lastRound = roundNum;
+          const headerTr = document.createElement('tr');
+          headerTr.innerHTML = `
+            <td colspan="4" style="background: linear-gradient(90deg, rgba(0, 255, 163, 0.15), rgba(168, 85, 247, 0.15)); color: #00ffa3; font-weight: 800; font-size: 13px; padding: 10px 16px; border-top: 1px solid rgba(0,255,163,0.3); border-bottom: 1px solid rgba(0,255,163,0.3); letter-spacing: 0.5px;">
+              🏆 제 ${roundNum} 회차 당첨자
+            </td>
+          `;
+          winnersTableBody.appendChild(headerTr);
+        }
+
+        let badgesHtml = `<span class="badge-tag" style="background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.4); font-weight: 700;">🎉 ${roundNum}회차</span>`;
         if (w.isSubscriber) {
           badgesHtml += `<span class="badge-tag badge-sub">⭐ 구독 (${w.subMonth}개월)</span>`;
           if (w.subTier > 0) badgesHtml += `<span class="badge-tag badge-tier">${w.subTier}티어</span>`;
@@ -1520,7 +1523,6 @@
           else if (w.donatorLevel === 1) lvlText = ' (후원자)';
           badgesHtml += `<span class="badge-tag badge-follow">🧀 후원자${lvlText}</span>`;
         }
-        if (!badgesHtml) badgesHtml = `<span style="color: var(--text-sub); font-size: 11px;">일반 시청자</span>`;
 
         const tr = document.createElement('tr');
         tr.innerHTML = `
@@ -1544,7 +1546,7 @@
     exportBtn.addEventListener('click', () => {
       if (drawnWinners.length === 0) return;
 
-      let csvContent = "\uFEFF순위,닉네임,구독여부,구독개월,구독티어,후원여부,후원등급,채팅내용,참여시간,고유식별자(UID)\n";
+      let csvContent = "\uFEFF순위,추첨회차,닉네임,구독여부,구독개월,구독티어,후원여부,후원등급,채팅내용,참여시간,고유식별자(UID)\n";
       drawnWinners.forEach((w, idx) => {
         const safeNick = `"${w.nickname.replace(/"/g, '""')}"`;
         const safeMsg = `"${w.msg.replace(/"/g, '""')}"`;
@@ -1558,7 +1560,8 @@
           else if (w.donatorLevel === 2) donorLvlStr = "10만 치즈 이상";
           else donorLvlStr = "일반 후원자";
         }
-        csvContent += `${idx + 1},${safeNick},${isSubStr},${w.subMonth},${w.subTier}티어,${isDonorStr},${donorLvlStr},${safeMsg},${w.time},${w.uid}\n`;
+        const roundStr = `${w.round || 1}회차`;
+        csvContent += `${idx + 1},${roundStr},${safeNick},${isSubStr},${w.subMonth},${w.subTier}티어,${isDonorStr},${donorLvlStr},${safeMsg},${w.time},${w.uid}\n`;
       });
 
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -1580,6 +1583,7 @@
         fileExcludedTokens.clear();
         manualExcludePairs = [];
         drawnWinners = [];
+        currentDrawRound = 0;
         chatLogCount = 0;
         participantCountEl.innerText = '0';
         filteredCountEl.innerText = '0';
@@ -1588,7 +1592,7 @@
         chatFeed.innerHTML = '<div style="color: #64748b; text-align: center; margin-top: 50px;">초기화되었습니다.</div>';
         rollText.innerHTML = `<img src="delibird.png" alt="Delibird" style="height: 36px; vertical-align: middle; margin-right: 8px;"> 대기 중`;
         subRollText.innerText = "참여자를 모은 뒤 '추첨하기' 버튼을 눌러주세요.";
-        winnersTableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-sub); padding: 40px 0;">아직 추첨 결과가 없습니다.</td></tr>';
+        winnersTableBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--text-sub); padding: 40px 0;">아직 추첨 결과가 없습니다.</td></tr>';
         exportBtn.disabled = true;
         drawBtn.disabled = true;
       }
