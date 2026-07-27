@@ -1223,33 +1223,28 @@
 
       const sp = profileData.streamingProperty || {};
       const subInfo = sp.subscription || null;
-      const followInfo = sp.follower || sp.following || profileData.follower || profileData.following || profileData.followDate || sp.followDate || null;
+      const followInfo = sp.follower || (typeof sp.following === 'object' ? sp.following : null);
       
       const isSubscriber = !!subInfo;
       const subMonth = subInfo ? (subInfo.accumulativeMonth || 1) : 0;
       const subTier = subInfo ? (subInfo.tier || 1) : 0;
 
-      const hasFollowBadge = Array.isArray(profileData.viewerBadges) && profileData.viewerBadges.some(b => {
-        const bId = (b.badgeId || b.badgeNo || b.name || '').toLowerCase();
-        const bTitle = (b.title || '').toLowerCase();
-        return bId.includes('fan') || bId.includes('follow') || bTitle.includes('팬') || bTitle.includes('팔로');
-      });
-
-      const isFollower = !!(followInfo || hasFollowBadge || isSubscriber);
-      
+      let isFollower = false;
       let followMonths = 0;
+
       if (followInfo) {
         let followDateStr = typeof followInfo === 'string' ? followInfo : (followInfo.followDate || followInfo.createdDate || followInfo.createDate || followInfo.followTime);
         if (followDateStr) {
           const fTime = new Date(followDateStr).getTime();
           if (!isNaN(fTime)) {
-            const days = (Date.now() - fTime) / (1000 * 60 * 60 * 24);
-            followMonths = Math.max(1, Math.floor(days / 30));
+            isFollower = true;
+            const days = Math.floor((Date.now() - fTime) / (1000 * 60 * 60 * 24));
+            followMonths = Math.floor(days / 30);
           }
+        } else if (typeof followInfo === 'object' || followInfo === true) {
+          isFollower = true;
+          followMonths = 0;
         }
-      }
-      if (isFollower && followMonths === 0) {
-        followMonths = 1;
       }
 
       const now = new Date().toLocaleTimeString('ko-KR');
