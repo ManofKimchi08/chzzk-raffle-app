@@ -1246,41 +1246,18 @@
 
       const sp = profileData.streamingProperty || {};
 
-      // 1. Target candidate objects for follow information (EXCLUDING image URLs!)
-      const followObjects = [
-        sp.follower,
-        sp.following,
-        sp.followDate,
-        profileData.follower,
-        profileData.following,
-        profileData.followDate
-      ];
-
-      for (const obj of followObjects) {
-        if (!obj) continue;
-
-        if (obj === true) {
-          isFollower = true;
-        } else if (typeof obj === 'object') {
-          isFollower = true;
-          for (const k of ['followDate', 'createdDate', 'createDate', 'followTime', 'date', 'time', 'createdAt', 'title', 'description']) {
-            if (obj[k]) {
-              const t = parseKoreanDate(String(obj[k]));
-              if (t) { fTime = t; break; }
-            }
-          }
-        } else if (typeof obj === 'string' || typeof obj === 'number') {
-          isFollower = true;
-          if (typeof obj === 'number') {
-            fTime = obj < 1e11 ? obj * 1000 : obj;
-          } else {
-            fTime = parseKoreanDate(obj);
-          }
+      // 1. Direct Follower Object from streamingProperty
+      if (sp.follower && typeof sp.follower === 'object') {
+        isFollower = true;
+        const dStr = sp.follower.followDate || sp.follower.createdDate || sp.follower.createDate || sp.follower.followTime;
+        if (dStr) {
+          fTime = parseKoreanDate(String(dStr));
         }
-        if (fTime) break;
+      } else if (sp.follower === true) {
+        isFollower = true;
       }
 
-      // 2. Check viewerBadges & activityBadges
+      // 2. Inspect badges, STRICTLY excluding Cheese Donator / Fan / Sponsor badges!
       const badges = [...(profileData.viewerBadges || []), ...(profileData.activityBadges || [])];
       for (const b of badges) {
         const badgeObj = b.badge || b;
@@ -1291,7 +1268,25 @@
         const text = bTitle + ' ' + bDesc;
         const lowerText = text.toLowerCase();
 
-        if (bId.includes('follower') || bId.includes('follow_') || lowerText.includes('팔로우') || lowerText.includes('팔로워')) {
+        // EXCLUDE Cheese Donator / Fan / Sponsor badges!
+        const isDonationBadge =
+          bId.includes('fan') ||
+          bId.includes('cheese') ||
+          bId.includes('donation') ||
+          bId.includes('sponsor') ||
+          bId.includes('supporter') ||
+          bId.includes('pay') ||
+          lowerText.includes('치즈') ||
+          lowerText.includes('후원') ||
+          lowerText.includes('팬');
+
+        if (isDonationBadge) {
+          // Donators are NOT followers! Skip this badge.
+          continue;
+        }
+
+        // Explicitly check for Follower badge
+        if (bId.includes('follower') || bId.includes('follow_') || lowerText.includes('팔로워') || (lowerText.includes('팔로우') && !lowerText.includes('후원'))) {
           isFollower = true;
 
           if (!fTime) {
@@ -1308,23 +1303,13 @@
         }
       }
 
-      // 3. Subscribers are automatically followers!
-      if (sp.subscription || profileData.subscription) {
-        isFollower = true;
-      }
-
-      // 4. Calculate followMonths from fTime
+      // 3. Compute followMonths if fTime was found
       if (fTime) {
         const diffMs = Date.now() - fTime;
         if (diffMs >= 0) {
           const days = diffMs / (1000 * 60 * 60 * 24);
           followMonths = Math.floor(days / 30);
         }
-      }
-
-      // 5. Default followMonths to 1 if isFollower is true but date is missing from payload
-      if (isFollower && followMonths === 0 && !fTime) {
-        followMonths = 1;
       }
 
       return { isFollower, followMonths };
