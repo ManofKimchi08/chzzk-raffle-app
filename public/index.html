@@ -1209,9 +1209,35 @@
       statusText.innerText = text;
     }
 
+    function parseKoreanDate(str) {
+      if (!str || typeof str !== 'string') return null;
+
+      // Pattern 1: "2024년 2월 29일 부터 팔로우" or "2024년 2월 29일"
+      const koMatch = str.match(/(\d{4})\s*년\s*(\d{1,2})\s*월\s*(\d{1,2})\s*일/);
+      if (koMatch) {
+        const year = parseInt(koMatch[1], 10);
+        const month = parseInt(koMatch[2], 10) - 1;
+        const day = parseInt(koMatch[3], 10);
+        const d = new Date(year, month, day);
+        if (!isNaN(d.getTime())) return d.getTime();
+      }
+
+      // Pattern 2: "2024.02.29" or "2024-02-29 15:30:00"
+      const cleanStr = str.trim().replace(/\./g, '-').replace(' ', 'T');
+      const d2 = new Date(cleanStr);
+      if (!isNaN(d2.getTime())) return d2.getTime();
+
+      // Pattern 3: Standard Date parse
+      const d3 = new Date(str);
+      if (!isNaN(d3.getTime())) return d3.getTime();
+
+      return null;
+    }
+
     function parseFollowerStatus(profileData) {
       let isFollower = false;
       let followMonths = 0;
+      let fTime = null;
 
       const sp = profileData.streamingProperty || {};
 
@@ -1226,8 +1252,6 @@
         profileData.createdDate
       ];
 
-      let rawDateVal = null;
-
       for (const cand of candidates) {
         if (!cand) continue;
 
@@ -1235,57 +1259,60 @@
           isFollower = true;
         } else if (typeof cand === 'object') {
           isFollower = true;
-          const d = cand.followDate || cand.createdDate || cand.createDate || cand.followTime || cand.date || cand.time || cand.createdAt;
-          if (d) {
-            rawDateVal = d;
-            break;
+          for (const key of ['followDate', 'createdDate', 'createDate', 'followTime', 'date', 'time', 'createdAt', 'title', 'description', 'text']) {
+            if (cand[key]) {
+              const parsedTime = parseKoreanDate(String(cand[key]));
+              if (parsedTime) {
+                fTime = parsedTime;
+                break;
+              }
+            }
           }
         } else if (typeof cand === 'string' || typeof cand === 'number') {
           isFollower = true;
-          rawDateVal = cand;
-          break;
+          if (typeof cand === 'number') {
+            fTime = cand < 1e11 ? cand * 1000 : cand;
+          } else {
+            fTime = parseKoreanDate(cand);
+          }
         }
+        if (fTime) break;
       }
 
       const badges = [...(profileData.viewerBadges || []), ...(profileData.activityBadges || [])];
       for (const b of badges) {
         const badgeObj = b.badge || b;
         const bId = String(badgeObj.badgeId || badgeObj.badgeNo || badgeObj.name || '').toLowerCase();
-        const bTitle = String(badgeObj.title || badgeObj.name || badgeObj.badgeName || '').toLowerCase();
+        const bTitle = String(badgeObj.title || badgeObj.name || badgeObj.badgeName || '');
+        const bDesc = String(badgeObj.description || badgeObj.text || '');
 
-        if (bId.includes('follower') || bId.includes('follow_') || bTitle.includes('팔로워')) {
+        const combinedText = (bTitle + ' ' + bDesc).toLowerCase();
+
+        if (bId.includes('follower') || bId.includes('follow_') || combinedText.includes('팔로우') || combinedText.includes('팔로워')) {
           isFollower = true;
 
-          if (!rawDateVal) {
-            const mMatch = bTitle.match(/(\d+)\s*개월/);
-            const yMatch = bTitle.match(/(\d+)\s*년/);
-            if (mMatch) {
-              followMonths = parseInt(mMatch[1], 10);
-            } else if (yMatch) {
-              followMonths = parseInt(yMatch[1], 10) * 12;
+          if (!fTime) {
+            const parsedFromBadge = parseKoreanDate(bTitle) || parseKoreanDate(bDesc);
+            if (parsedFromBadge) {
+              fTime = parsedFromBadge;
+            } else {
+              const mMatch = combinedText.match(/(\d+)\s*개월/);
+              const yMatch = combinedText.match(/(\d+)\s*년/);
+              if (mMatch) {
+                followMonths = parseInt(mMatch[1], 10);
+              } else if (yMatch) {
+                followMonths = parseInt(yMatch[1], 10) * 12;
+              }
             }
           }
         }
       }
 
-      if (rawDateVal) {
-        let fTime = 0;
-        if (typeof rawDateVal === 'number') {
-          fTime = rawDateVal < 1e11 ? rawDateVal * 1000 : rawDateVal;
-        } else if (typeof rawDateVal === 'string') {
-          const cleanStr = rawDateVal.trim().replace(/\./g, '-').replace(' ', 'T');
-          fTime = new Date(cleanStr).getTime();
-          if (isNaN(fTime)) {
-            fTime = new Date(rawDateVal).getTime();
-          }
-        }
-
-        if (!isNaN(fTime) && fTime > 0) {
-          const diffMs = Date.now() - fTime;
-          if (diffMs >= 0) {
-            const days = diffMs / (1000 * 60 * 60 * 24);
-            followMonths = Math.floor(days / 30);
-          }
+      if (fTime) {
+        const diffMs = Date.now() - fTime;
+        if (diffMs >= 0) {
+          const days = diffMs / (1000 * 60 * 60 * 24);
+          followMonths = Math.floor(days / 30);
         }
       }
 
