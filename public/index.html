@@ -1589,8 +1589,8 @@
           if (w.subTier > 0) badgesHtml += `<span class="badge-tag badge-tier">${w.subTier}티어</span>`;
         }
         if (w.isFollower) {
-          const fMonthsText = (w.hasExactFollowDate && w.followMonths > 0) ? ` (${w.followMonths}개월째)` : '';
-          badgesHtml += `<span class="badge-tag badge-follow">❤️ 팔로워${fMonthsText}</span>`;
+          const m = w.followMonths > 0 ? w.followMonths : 1;
+          badgesHtml += `<span class="badge-tag badge-follow">❤️ 팔로워 (${m}개월째)</span>`;
         }
         if (!badgesHtml) badgesHtml = `<span style="color: var(--text-sub); font-size: 11px;">일반 시청자</span>`;
 
@@ -1622,7 +1622,8 @@
         const safeMsg = `"${w.msg.replace(/"/g, '""')}"`;
         const isSubStr = w.isSubscriber ? "구독자" : "미구독";
         const isFollowStr = w.isFollower ? "팔로워" : "미팔로우";
-        const followMonthsStr = (w.hasExactFollowDate && w.followMonths > 0) ? `${w.followMonths}개월` : "팔로워";
+        const m = w.followMonths > 0 ? w.followMonths : 1;
+        const followMonthsStr = `${m}개월`;
         csvContent += `${idx + 1},${safeNick},${isSubStr},${w.subMonth},${w.subTier}티어,${isFollowStr},${followMonthsStr},${safeMsg},${w.time},${w.uid}\n`;
       });
 
