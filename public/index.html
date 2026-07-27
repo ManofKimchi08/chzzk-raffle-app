@@ -784,9 +784,34 @@
         <div class="winners-header">
           <div class="panel-title" style="margin-bottom: 0;">🏆 당첨자 명단 (<span id="drawnWinnerCount">0</span>명)</div>
           <div class="winners-actions">
-            <input type="text" id="searchInput" placeholder="닉네임 검색..." style="width: 150px; padding: 6px 10px; font-size: 12px;">
+            <input type="text" id="searchInput" placeholder="닉네임 검색..." style="width: 140px; padding: 6px 10px; font-size: 12px;">
+            <button id="exportConfigBtn" class="btn-sm" style="background: rgba(255,255,255,0.08); border: 1px solid var(--border-color); color: var(--text-main); cursor: pointer;">⚙️ 항목 선택</button>
             <button id="exportBtn" class="btn-sm btn-excel" disabled>📊 엑셀 다운로드</button>
             <button id="resetBtn" class="btn-sm btn-danger">초기화</button>
+          </div>
+        </div>
+
+        <!-- CSV Column Selection Panel -->
+        <div id="csvConfigBox" style="display: none; background: rgba(15, 23, 42, 0.95); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px 16px; margin-bottom: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.4);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <span style="font-weight: 700; font-size: 13px; color: var(--chzzk-green);">📊 엑셀 저장 포함 항목 선택</span>
+            <div>
+              <button type="button" id="selectAllColsBtn" class="btn-sm" style="padding: 2px 8px; font-size: 11px; margin-right: 4px; background: rgba(255,255,255,0.1); cursor: pointer;">전체 선택</button>
+              <button type="button" id="deselectAllColsBtn" class="btn-sm" style="padding: 2px 8px; font-size: 11px; background: rgba(255,255,255,0.1); cursor: pointer;">전체 해제</button>
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; font-size: 12px;">
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;"><input type="checkbox" class="csv-col-check" value="rank" checked> 순위</label>
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;"><input type="checkbox" class="csv-col-check" value="round" checked> 추첨회차</label>
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;"><input type="checkbox" class="csv-col-check" value="nickname" checked> 닉네임</label>
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;"><input type="checkbox" class="csv-col-check" value="isSub" checked> 구독여부</label>
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;"><input type="checkbox" class="csv-col-check" value="subMonth" checked> 구독개월</label>
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;"><input type="checkbox" class="csv-col-check" value="subTier" checked> 구독티어</label>
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;"><input type="checkbox" class="csv-col-check" value="isDonor" checked> 후원여부</label>
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;"><input type="checkbox" class="csv-col-check" value="donorLevel" checked> 후원등급</label>
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;"><input type="checkbox" class="csv-col-check" value="msg" checked> 채팅내용</label>
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;"><input type="checkbox" class="csv-col-check" value="time" checked> 참여시간</label>
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;"><input type="checkbox" class="csv-col-check" value="uid" checked> 고유식별자(UID)</label>
           </div>
         </div>
 
@@ -1542,26 +1567,65 @@
       renderWinnersTable(filtered);
     });
 
+    // CSV Column Selection Panel Elements & Toggle
+    const exportConfigBtn = document.getElementById('exportConfigBtn');
+    const csvConfigBox = document.getElementById('csvConfigBox');
+    const selectAllColsBtn = document.getElementById('selectAllColsBtn');
+    const deselectAllColsBtn = document.getElementById('deselectAllColsBtn');
+
+    exportConfigBtn.addEventListener('click', () => {
+      csvConfigBox.style.display = csvConfigBox.style.display === 'none' ? 'block' : 'none';
+    });
+
+    selectAllColsBtn.addEventListener('click', () => {
+      document.querySelectorAll('.csv-col-check').forEach(cb => cb.checked = true);
+    });
+
+    deselectAllColsBtn.addEventListener('click', () => {
+      document.querySelectorAll('.csv-col-check').forEach(cb => cb.checked = false);
+    });
+
+    // Column Mapping Dictionary
+    const COLUMN_MAP = {
+      rank: { label: "순위", getVal: (w, idx) => idx + 1 },
+      round: { label: "추첨회차", getVal: (w) => `${w.round || 1}회차` },
+      nickname: { label: "닉네임", getVal: (w) => `"${w.nickname.replace(/"/g, '""')}"` },
+      isSub: { label: "구독여부", getVal: (w) => w.isSubscriber ? "구독자" : "미구독" },
+      subMonth: { label: "구독개월", getVal: (w) => w.subMonth },
+      subTier: { label: "구독티어", getVal: (w) => `${w.subTier}티어` },
+      isDonor: { label: "후원여부", getVal: (w) => w.isDonator ? "후원자" : "미후원" },
+      donorLevel: {
+        label: "후원등급",
+        getVal: (w) => {
+          if (!w.isDonator) return "일반";
+          if (w.donatorLevel === 5) return "1억 치즈 이상";
+          if (w.donatorLevel === 4) return "1000만 치즈 이상";
+          if (w.donatorLevel === 3) return "100만 치즈 이상";
+          if (w.donatorLevel === 2) return "10만 치즈 이상";
+          return "일반 후원자";
+        }
+      },
+      msg: { label: "채팅내용", getVal: (w) => `"${w.msg.replace(/"/g, '""')}"` },
+      time: { label: "참여시간", getVal: (w) => w.time },
+      uid: { label: "고유식별자(UID)", getVal: (w) => w.uid }
+    };
+
     // CSV Download
     exportBtn.addEventListener('click', () => {
       if (drawnWinners.length === 0) return;
 
-      let csvContent = "\uFEFF순위,추첨회차,닉네임,구독여부,구독개월,구독티어,후원여부,후원등급,채팅내용,참여시간,고유식별자(UID)\n";
+      const activeChecks = Array.from(document.querySelectorAll('.csv-col-check:checked')).map(cb => cb.value);
+      if (activeChecks.length === 0) {
+        alert('엑셀에 저장할 항목을 최소 1개 이상 선택해 주세요.');
+        return;
+      }
+
+      const headers = activeChecks.map(key => COLUMN_MAP[key].label).join(',');
+      let csvContent = "\uFEFF" + headers + "\n";
+
       drawnWinners.forEach((w, idx) => {
-        const safeNick = `"${w.nickname.replace(/"/g, '""')}"`;
-        const safeMsg = `"${w.msg.replace(/"/g, '""')}"`;
-        const isSubStr = w.isSubscriber ? "구독자" : "미구독";
-        const isDonorStr = w.isDonator ? "후원자" : "미후원";
-        let donorLvlStr = "일반";
-        if (w.isDonator) {
-          if (w.donatorLevel === 5) donorLvlStr = "1억 치즈 이상";
-          else if (w.donatorLevel === 4) donorLvlStr = "1000만 치즈 이상";
-          else if (w.donatorLevel === 3) donorLvlStr = "100만 치즈 이상";
-          else if (w.donatorLevel === 2) donorLvlStr = "10만 치즈 이상";
-          else donorLvlStr = "일반 후원자";
-        }
-        const roundStr = `${w.round || 1}회차`;
-        csvContent += `${idx + 1},${roundStr},${safeNick},${isSubStr},${w.subMonth},${w.subTier}티어,${isDonorStr},${donorLvlStr},${safeMsg},${w.time},${w.uid}\n`;
+        const rowValues = activeChecks.map(key => COLUMN_MAP[key].getVal(w, idx));
+        csvContent += rowValues.join(',') + "\n";
       });
 
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
