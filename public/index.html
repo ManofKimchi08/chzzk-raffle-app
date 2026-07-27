@@ -1590,8 +1590,15 @@
           if (w.subTier > 0) badgesHtml += `<span class="badge-tag badge-tier">${w.subTier}티어</span>`;
         }
         if (w.isFollower) {
-          const m = w.followMonths > 0 ? w.followMonths : 1;
-          badgesHtml += `<span class="badge-tag badge-follow">❤️ 팔로워 (${m}개월째)</span>`;
+          let fMonthsText = '';
+          if (w.hasExactFollowDate && w.followMonths > 0) {
+            fMonthsText = ` (${w.followMonths}개월째)`;
+          } else if (w.isSubscriber && w.subMonth > 0) {
+            fMonthsText = ` (${w.subMonth}개월 이상)`;
+          } else if (w.followMonths > 0) {
+            fMonthsText = ` (${w.followMonths}개월째)`;
+          }
+          badgesHtml += `<span class="badge-tag badge-follow">❤️ 팔로워${fMonthsText}</span>`;
         }
         if (!badgesHtml) badgesHtml = `<span style="color: var(--text-sub); font-size: 11px;">일반 시청자</span>`;
 
