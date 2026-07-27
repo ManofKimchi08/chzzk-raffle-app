@@ -1244,32 +1244,73 @@
       let followMonths = 0;
       let fTime = null;
 
-      const profileStr = JSON.stringify(profileData || {});
-
-      // 1. Check if follower keywords or objects exist
-      if (/팔로우|follower|following/i.test(profileStr)) {
-        isFollower = true;
-      }
-
       const sp = profileData.streamingProperty || {};
-      if (sp.follower || sp.following || sp.followDate) {
-        isFollower = true;
+
+      // 1. Target candidate objects for follow information (EXCLUDING image URLs!)
+      const followObjects = [
+        sp.follower,
+        sp.following,
+        sp.followDate,
+        profileData.follower,
+        profileData.following,
+        profileData.followDate
+      ];
+
+      for (const obj of followObjects) {
+        if (!obj) continue;
+
+        if (obj === true) {
+          isFollower = true;
+        } else if (typeof obj === 'object') {
+          isFollower = true;
+          for (const k of ['followDate', 'createdDate', 'createDate', 'followTime', 'date', 'time', 'createdAt', 'title', 'description']) {
+            if (obj[k]) {
+              const t = parseKoreanDate(String(obj[k]));
+              if (t) { fTime = t; break; }
+            }
+          }
+        } else if (typeof obj === 'string' || typeof obj === 'number') {
+          isFollower = true;
+          if (typeof obj === 'number') {
+            fTime = obj < 1e11 ? obj * 1000 : obj;
+          } else {
+            fTime = parseKoreanDate(obj);
+          }
+        }
+        if (fTime) break;
       }
 
-      // 2. Try parsing Korean or dot formatted date from profile string or objects
-      fTime = parseKoreanDate(profileStr);
+      // 2. Check viewerBadges & activityBadges
+      const badges = [...(profileData.viewerBadges || []), ...(profileData.activityBadges || [])];
+      for (const b of badges) {
+        const badgeObj = b.badge || b;
+        const bId = String(badgeObj.badgeId || badgeObj.badgeNo || badgeObj.name || '').toLowerCase();
+        const bTitle = String(badgeObj.title || badgeObj.name || badgeObj.badgeName || '');
+        const bDesc = String(badgeObj.description || badgeObj.text || '');
 
-      // 3. Fallback month regex search from profileStr ("3개월 팔로워", "팔로워 6개월", "1년 팔로워")
-      if (!fTime) {
-        const mMatch = profileStr.match(/(\d+)\s*개월/);
-        const yMatch = profileStr.match(/(\d+)\s*년/);
-        if (mMatch) {
-          followMonths = parseInt(mMatch[1], 10);
+        const text = bTitle + ' ' + bDesc;
+        const lowerText = text.toLowerCase();
+
+        if (bId.includes('follower') || bId.includes('follow_') || lowerText.includes('팔로우') || lowerText.includes('팔로워')) {
           isFollower = true;
-        } else if (yMatch) {
-          followMonths = parseInt(yMatch[1], 10) * 12;
-          isFollower = true;
+
+          if (!fTime) {
+            const parsedBadgeTime = parseKoreanDate(text);
+            if (parsedBadgeTime) {
+              fTime = parsedBadgeTime;
+            } else {
+              const mMatch = text.match(/(\d+)\s*개월/);
+              const yMatch = text.match(/(\d+)\s*년/);
+              if (mMatch) followMonths = parseInt(mMatch[1], 10);
+              else if (yMatch) followMonths = parseInt(yMatch[1], 10) * 12;
+            }
+          }
         }
+      }
+
+      // 3. Subscribers are automatically followers!
+      if (sp.subscription || profileData.subscription) {
+        isFollower = true;
       }
 
       // 4. Calculate followMonths from fTime
@@ -1278,16 +1319,13 @@
         if (diffMs >= 0) {
           const days = diffMs / (1000 * 60 * 60 * 24);
           followMonths = Math.floor(days / 30);
-          isFollower = true;
         }
       }
 
-      // 5. If user is follower but followMonths is 0 and no date string was present:
+      // 5. Default followMonths to 1 if isFollower is true but date is missing from payload
       if (isFollower && followMonths === 0 && !fTime) {
         followMonths = 1;
       }
-
-      console.log('Follower Parsed:', profileData.nickname, { isFollower, followMonths });
 
       return { isFollower, followMonths };
     }
