@@ -847,7 +847,6 @@
     const participantCountEl = document.getElementById('participantCount');
     const filteredCountEl = document.getElementById('filteredCount');
     const excludedCountEl = document.getElementById('excludedCount');
-    const viewersCountEl = document.getElementById('viewersCount');
     const chatFeed = document.getElementById('chatFeed');
     const winnerOverlay = document.getElementById('winnerOverlay');
     const rollText = document.getElementById('rollText');
@@ -1061,7 +1060,6 @@
         }
 
         currentChannelName = data.channelName || '';
-        viewersCountEl.innerText = data.concurrentUserCount ? data.concurrentUserCount.toLocaleString() : '0';
         currentChatChannelId = data.chatChannelId;
         currentAccessToken = data.accessToken;
 
@@ -1175,9 +1173,6 @@
         try {
           const res = await fetch(`/api/chzzk/?channelId=${currentChannelId}`);
           const data = await res.json();
-          if (data.concurrentUserCount) {
-            viewersCountEl.innerText = data.concurrentUserCount.toLocaleString();
-          }
 
           if (data.chatChannelId && data.chatChannelId !== currentChatChannelId) {
             currentChatChannelId = data.chatChannelId;
