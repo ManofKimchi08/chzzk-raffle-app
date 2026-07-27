@@ -698,8 +698,8 @@
           <input type="checkbox" id="followOnlyToggle" style="width: 18px; height: 18px; cursor: pointer;">
         </div>
         <div class="sub-filter-box" id="followFilterBox" style="display: none;">
-          <label>최소 팔로우 기간 (일 단위)</label>
-          <input type="number" id="minFollowDays" value="0" min="0" placeholder="0 = 전체 팔로워, 30 = 30일 이상 팔로워">
+          <label>최소 팔로우 기간 (월 단위)</label>
+          <input type="number" id="minFollowMonths" value="0" min="0" placeholder="0 = 전체 팔로워, 1 = 1개월 이상 팔로워">
         </div>
 
         <!-- Subscription Filters -->
@@ -858,7 +858,7 @@
     // Advanced Filter Elements
     const followOnlyToggle = document.getElementById('followOnlyToggle');
     const followFilterBox = document.getElementById('followFilterBox');
-    const minFollowDays = document.getElementById('minFollowDays');
+    const minFollowMonths = document.getElementById('minFollowMonths');
 
     const subOnlyToggle = document.getElementById('subOnlyToggle');
     const subFilterBox = document.getElementById('subFilterBox');
@@ -995,7 +995,7 @@
       updateFilteredStats();
     });
 
-    minFollowDays.addEventListener('input', updateFilteredStats);
+    minFollowMonths.addEventListener('input', updateFilteredStats);
     minSubMonths.addEventListener('input', updateFilteredStats);
     subTierSelect.addEventListener('change', updateFilteredStats);
     keywordInput.addEventListener('input', updateFilteredStats);
@@ -1223,23 +1223,33 @@
 
       const sp = profileData.streamingProperty || {};
       const subInfo = sp.subscription || null;
-      const followInfo = sp.follower || sp.following || sp.followDate || null;
+      const followInfo = sp.follower || sp.following || profileData.follower || profileData.following || profileData.followDate || sp.followDate || null;
       
       const isSubscriber = !!subInfo;
       const subMonth = subInfo ? (subInfo.accumulativeMonth || 1) : 0;
       const subTier = subInfo ? (subInfo.tier || 1) : 0;
 
-      const isFollower = !!(followInfo || (profileData.viewerBadges && profileData.viewerBadges.some(b => b.badge && b.badge.badgeId && b.badge.badgeId.includes('fan'))));
+      const hasFollowBadge = Array.isArray(profileData.viewerBadges) && profileData.viewerBadges.some(b => {
+        const bId = (b.badgeId || b.badgeNo || b.name || '').toLowerCase();
+        const bTitle = (b.title || '').toLowerCase();
+        return bId.includes('fan') || bId.includes('follow') || bTitle.includes('팬') || bTitle.includes('팔로');
+      });
+
+      const isFollower = !!(followInfo || hasFollowBadge || isSubscriber);
       
-      let followDays = 0;
+      let followMonths = 0;
       if (followInfo) {
-        let followDateStr = typeof followInfo === 'string' ? followInfo : (followInfo.followDate || followInfo.createdDate);
+        let followDateStr = typeof followInfo === 'string' ? followInfo : (followInfo.followDate || followInfo.createdDate || followInfo.createDate || followInfo.followTime);
         if (followDateStr) {
           const fTime = new Date(followDateStr).getTime();
           if (!isNaN(fTime)) {
-            followDays = Math.floor((Date.now() - fTime) / (1000 * 60 * 60 * 24));
+            const days = (Date.now() - fTime) / (1000 * 60 * 60 * 24);
+            followMonths = Math.max(1, Math.floor(days / 30));
           }
         }
+      }
+      if (isFollower && followMonths === 0) {
+        followMonths = 1;
       }
 
       const now = new Date().toLocaleTimeString('ko-KR');
@@ -1254,7 +1264,7 @@
           subMonth: subMonth,
           subTier: subTier,
           isFollower: isFollower,
-          followDays: followDays
+          followMonths: followMonths
         });
 
         updateFilteredStats();
@@ -1308,7 +1318,7 @@
       const matchMode = matchModeRadio ? matchModeRadio.value : 'exact';
 
       const isFollowOnly = followOnlyToggle.checked;
-      const reqFollowDays = parseInt(minFollowDays.value) || 0;
+      const reqFollowMonths = parseInt(minFollowMonths.value) || 0;
 
       const isSubOnly = subOnlyToggle.checked;
       const reqSubMonths = parseInt(minSubMonths.value) || 0;
@@ -1333,7 +1343,7 @@
         // Follow Filter
         if (isFollowOnly) {
           if (!p.isFollower) return false;
-          if (reqFollowDays > 0 && p.followDays < reqFollowDays) return false;
+          if (reqFollowMonths > 0 && p.followMonths < reqFollowMonths) return false;
         }
 
         // Subscription Filter
@@ -1459,8 +1469,8 @@
           if (w.subTier > 0) badgesHtml += `<span class="badge-tag badge-tier">${w.subTier}티어</span>`;
         }
         if (w.isFollower) {
-          const fDaysText = w.followDays > 0 ? ` (${w.followDays}일째)` : '';
-          badgesHtml += `<span class="badge-tag badge-follow">❤️ 팔로워${fDaysText}</span>`;
+          const fMonthsText = w.followMonths > 0 ? ` (${w.followMonths}개월째)` : '';
+          badgesHtml += `<span class="badge-tag badge-follow">❤️ 팔로워${fMonthsText}</span>`;
         }
         if (!badgesHtml) badgesHtml = `<span style="color: var(--text-sub); font-size: 11px;">일반 시청자</span>`;
 
@@ -1486,13 +1496,13 @@
     exportBtn.addEventListener('click', () => {
       if (drawnWinners.length === 0) return;
 
-      let csvContent = "\uFEFF순위,닉네임,구독여부,구독개월,구독티어,팔로우여부,팔로우일수,채팅내용,참여시간,고유식별자(UID)\n";
+      let csvContent = "\uFEFF순위,닉네임,구독여부,구독개월,구독티어,팔로우여부,팔로우개월수,채팅내용,참여시간,고유식별자(UID)\n";
       drawnWinners.forEach((w, idx) => {
         const safeNick = `"${w.nickname.replace(/"/g, '""')}"`;
         const safeMsg = `"${w.msg.replace(/"/g, '""')}"`;
         const isSubStr = w.isSubscriber ? "구독자" : "미구독";
         const isFollowStr = w.isFollower ? "팔로워" : "미팔로우";
-        csvContent += `${idx + 1},${safeNick},${isSubStr},${w.subMonth},${w.subTier}티어,${isFollowStr},${w.followDays}일,${safeMsg},${w.time},${w.uid}\n`;
+        csvContent += `${idx + 1},${safeNick},${isSubStr},${w.subMonth},${w.subTier}티어,${isFollowStr},${w.followMonths}개월,${safeMsg},${w.time},${w.uid}\n`;
       });
 
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
