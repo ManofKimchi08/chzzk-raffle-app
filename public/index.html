@@ -1250,24 +1250,46 @@
       const sp = profileData.streamingProperty || {};
       const subInfo = sp.subscription || profileData.subscription || null;
 
-      // 1. Subscribers are 100% followers! Map subMonth to followMonths
+      // 1. Subscribers are 100% followers!
       if (subInfo) {
         isFollower = true;
-        followMonths = subInfo.accumulativeMonth || 1;
       }
 
-      // 2. Direct Follower Object from streamingProperty
-      if (sp.follower && typeof sp.follower === 'object') {
-        isFollower = true;
-        const dStr = sp.follower.followDate || sp.follower.createdDate || sp.follower.createDate || sp.follower.followTime;
-        if (dStr) {
-          fTime = parseKoreanDate(String(dStr));
+      // 2. Direct Follower Object & Candidate Search for followDate
+      const candidates = [
+        sp.follower,
+        sp.following,
+        sp.followDate,
+        profileData.follower,
+        profileData.following,
+        profileData.followDate
+      ];
+
+      for (const cand of candidates) {
+        if (!cand) continue;
+
+        if (cand === true) {
+          isFollower = true;
+        } else if (typeof cand === 'object') {
+          isFollower = true;
+          for (const k of ['followDate', 'createdDate', 'createDate', 'followTime', 'date', 'time', 'createdAt', 'title', 'description', 'text']) {
+            if (cand[k]) {
+              const t = parseKoreanDate(String(cand[k]));
+              if (t) { fTime = t; break; }
+            }
+          }
+        } else if (typeof cand === 'string' || typeof cand === 'number') {
+          isFollower = true;
+          if (typeof cand === 'number') {
+            fTime = cand < 1e11 ? cand * 1000 : cand;
+          } else {
+            fTime = parseKoreanDate(cand);
+          }
         }
-      } else if (sp.follower === true) {
-        isFollower = true;
+        if (fTime) break;
       }
 
-      // 3. Inspect badges, STRICTLY excluding Cheese Donator / Fan / Sponsor badges!
+      // 3. Inspect badges (strictly excluding donation/cheese badges)
       const badges = [...(profileData.viewerBadges || []), ...(profileData.activityBadges || [])];
       for (const b of badges) {
         const badgeObj = b.badge || b;
@@ -1290,12 +1312,8 @@
           lowerText.includes('후원') ||
           lowerText.includes('팬');
 
-        if (isDonationBadge) {
-          // Donators are NOT followers based on donation badge!
-          continue;
-        }
+        if (isDonationBadge) continue;
 
-        // Explicitly check for Follower badge
         if (bId.includes('follower') || bId.includes('follow_') || lowerText.includes('팔로워') || (lowerText.includes('팔로우') && !lowerText.includes('후원'))) {
           isFollower = true;
 
@@ -1313,7 +1331,7 @@
         }
       }
 
-      // 4. Compute followMonths if fTime was found
+      // 4. Compute followMonths strictly from fTime if valid date exists!
       if (fTime) {
         const diffMs = Date.now() - fTime;
         if (diffMs >= 0) {
@@ -1322,13 +1340,16 @@
         }
       }
 
-      // 5. General Chatter Fallback:
-      // Since Chzzk WebSocket hides follow date for unbadged free viewers,
-      // treat all general chatters as eligible followers (followMonths = 1) so they aren't filtered out to 0!
-      if (!isFollower && !subInfo) {
+      // 5. Fallback ONLY if followMonths is still 0 after checking all dates/badges:
+      if (isFollower && followMonths === 0) {
+        if (subInfo && subInfo.accumulativeMonth) {
+          followMonths = subInfo.accumulativeMonth;
+        } else {
+          followMonths = 1;
+        }
+      } else if (!isFollower && !subInfo) {
+        // General chatter fallback
         isFollower = true;
-        if (followMonths === 0) followMonths = 1;
-      } else if (isFollower && followMonths === 0) {
         followMonths = 1;
       }
 
