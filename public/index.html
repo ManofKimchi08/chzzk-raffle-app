@@ -699,7 +699,10 @@
         </div>
         <div class="sub-filter-box" id="followFilterBox" style="display: none;">
           <label>최소 팔로우 기간 (월 단위)</label>
-          <input type="number" id="minFollowMonths" value="0" min="0" placeholder="0 = 전체 팔로워, 1 = 1개월 이상 팔로워">
+          <input type="number" id="minFollowMonths" value="0" min="0" placeholder="0 = 전체 팔로워 (권장), 1 = 1개월 이상 팔로워">
+          <div style="font-size: 11px; color: var(--text-sub); margin-top: 6px; line-height: 1.4;">
+            💡 <b>치지직 안내:</b> 구독자는 구독 개월수가 반영되며, 일반 시청자는 <code>0</code> (전체 팔로워) 설정 시 모든 채팅 참여자가 유효 응모됩니다.
+          </div>
         </div>
 
         <!-- Subscription Filters -->
@@ -1245,8 +1248,15 @@
       let fTime = null;
 
       const sp = profileData.streamingProperty || {};
+      const subInfo = sp.subscription || profileData.subscription || null;
 
-      // 1. Direct Follower Object from streamingProperty
+      // 1. Subscribers are 100% followers! Map subMonth to followMonths
+      if (subInfo) {
+        isFollower = true;
+        followMonths = subInfo.accumulativeMonth || 1;
+      }
+
+      // 2. Direct Follower Object from streamingProperty
       if (sp.follower && typeof sp.follower === 'object') {
         isFollower = true;
         const dStr = sp.follower.followDate || sp.follower.createdDate || sp.follower.createDate || sp.follower.followTime;
@@ -1257,7 +1267,7 @@
         isFollower = true;
       }
 
-      // 2. Inspect badges, STRICTLY excluding Cheese Donator / Fan / Sponsor badges!
+      // 3. Inspect badges, STRICTLY excluding Cheese Donator / Fan / Sponsor badges!
       const badges = [...(profileData.viewerBadges || []), ...(profileData.activityBadges || [])];
       for (const b of badges) {
         const badgeObj = b.badge || b;
@@ -1281,7 +1291,7 @@
           lowerText.includes('팬');
 
         if (isDonationBadge) {
-          // Donators are NOT followers! Skip this badge.
+          // Donators are NOT followers based on donation badge!
           continue;
         }
 
@@ -1303,13 +1313,23 @@
         }
       }
 
-      // 3. Compute followMonths if fTime was found
+      // 4. Compute followMonths if fTime was found
       if (fTime) {
         const diffMs = Date.now() - fTime;
         if (diffMs >= 0) {
           const days = diffMs / (1000 * 60 * 60 * 24);
           followMonths = Math.floor(days / 30);
         }
+      }
+
+      // 5. General Chatter Fallback:
+      // Since Chzzk WebSocket hides follow date for unbadged free viewers,
+      // treat all general chatters as eligible followers (followMonths = 1) so they aren't filtered out to 0!
+      if (!isFollower && !subInfo) {
+        isFollower = true;
+        if (followMonths === 0) followMonths = 1;
+      } else if (isFollower && followMonths === 0) {
+        followMonths = 1;
       }
 
       return { isFollower, followMonths };
