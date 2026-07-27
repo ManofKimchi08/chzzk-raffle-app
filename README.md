@@ -1,28 +1,38 @@
-# 🎮 치지직 대규모 시청자 추첨 시스템 (Chzzk Mega Raffle System)
+# 🎮 치지직 대규모 시청자 추첨 시스템 (Chzzk Mega Raffle System) v1.7.1
 
 ![Chzzk Mega Raffle](https://img.shields.io/badge/Chzzk-WebSocket%20Live-00ffa3?style=for-the-badge&logo=naver)
+![Version](https://img.shields.io/badge/Release-v1.7.1-purple?style=for-the-badge)
 ![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![HTML5](https://img.shields.io/badge/HTML5-SinglePage-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
 
-네이버 **치지직(Chzzk)** 라이브 방송 채팅창과 웹소켓(WebSocket)으로 직접 연결하여 **팔로우 여부/기간, 구독 여부/기간/티어** 등 다양한 조건으로 시청자를 실시간 분류하고 **수백~수천 명 이상을 중복 없이 공정하게 일괄 추첨**하는 고급 웹 애플리케이션입니다.
+네이버 **치지직(Chzzk)** 라이브 방송 채팅창과 웹소켓(WebSocket)으로 직접 연결하여 **치즈 후원자(10만~1억 치즈 등급), 구독자(개월 수/티어)** 등 다양한 조건으로 시청자를 실시간 분류하고 **수백~수천 명 이상을 중복 없이 공정하게 일괄 추첨**하는 고급 웹 애플리케이션입니다.
 
 ---
 
 ## 🌟 핵심 기능 (Key Features)
 
 - **⚡ 실시간 웹소켓(WebSocket) 채팅 수집**: 방송 URL 또는 채널 ID만 입력하면 실시간 채팅 메시지를 초고속 수집합니다.
-- **🛡️ 자동 중복 및 도배 방지 (Deduplication)**: 시청자가 채팅을 여러 번 쳐도 유저 고유 식별자(`userIdHash`)를 기준으로 1회만 응모 처리됩니다.
-- **❤️ 팔로우 상세 필터링**:
-  - **팔로워 전용 추첨** 옵션
-  - **최소 팔로우 기간 지정** (예: 30일 이상 팔로우한 팬만 추첨)
-- **⭐ 구독 상세 필터링**:
-  - **구독자 전용 추첨** 옵션
-  - **최소 구독 개월 수 지정** (예: 3개월 이상 연속 구독자만 추첨)
-  - **구독 티어 지정** (1티어 이상 또는 2티어 전용 추첨)
-- **🎯 키워드 필터링**: `!추첨`, `!참여` 등 원하는 키워드를 지정하거나, 빈칸으로 두어 전 시청자를 대상으로 수집할 수 있습니다.
-- **🎁 대규모 일괄 무작위 추첨**: 1명부터 5,000명+ 이상까지 **Fisher-Yates 셔플 알고리즘**을 통해 편향 없는 무작위 추첨을 수행합니다.
-- **📊 엑셀(CSV) 다운로드**: 당첨자 명단 및 **구독 상태, 구독 개월, 팔로우 기간** 정보를 UTF-8 BOM 엑셀 CSV 파일로 원클릭 저장합니다.
+- **🧀 치즈 후원자 전용 추첨 (Cheese Donator Filter)**:
+  - 팬 배지 및 일반 치즈 후원자 전체 대상 추첨
+  - 치즈 누적 후원 등급별 정밀 필터링:
+    - **일반 후원자 이상 (LV1+)**
+    - **🔥 10만 치즈 이상 (LV2+)**
+    - **🔥 100만 치즈 이상 (LV3+)**
+    - **💖 1,000만 치즈 이상 (LV4+)**
+    - **✨ 1억 치즈 이상 (LV5+)**
+- **⭐ 구독자 전용 추첨 (Subscription Filter)**:
+  - **최소 구독 개월 수 지정** (예: 3개월 이상 연속 구독자)
+  - **구독 티어 지정** (1티어 이상 또는 2티어 전용)
+- **🔄 다회차 중복 당첨 방지 & 강력한 제외 설정**:
+  - **이전 회차 당첨자 자동 제외**: 1회차, 2회차 등 다회차 추첨 시 이전 회차 당첨자는 고유 ID 기반으로 100% 자동 차단
+  - **과거 당첨자 엑셀/CSV 파일 제외**: 엑셀/CSV 파일 드래그 앤 드롭으로 이전 당첨자 일괄 제외
+  - **수동 직접 제외**: 닉네임 및 고유 ID 표 대조로 특정 사용자 개별 제외
+- **🏆 회차별 당첨자 구획 배너 & 배지 표기**:
+  - 추첨회차마다 `🏆 제 N 회차 당첨자` 네온 구분 배너 자동 표시
+  - 당첨자 항목마다 `🎉 N회차` 태그 배지 시각적 표시
+- **📊 엑셀 커스텀 내보내기 (`⚙️ 항목 선택` 기능)**:
+  - `순위`, `추첨회차`, `닉네임`, `구독여부`, `구독개월`, `구독티어`, `후원여부`, `후원등급`, `채팅내용`, `참여시간`, `고유식별자(UID)` 등 11개 항목 중 원하는 항목만 선택하여 한글 깨짐 없이 UTF-8 BOM CSV 추출
 
 ---
 
@@ -37,7 +47,7 @@ sequenceDiagram
     participant ChzzkAPI as Naver Chzzk API
     participant ChzzkWS as Chzzk WebSocket Server
 
-    Streamer->>WebApp: 방송 URL & 팔로우/구독 필터 설정
+    Streamer->>WebApp: 방송 URL & 후원자/구독자 필터 설정
     WebApp->>Server: /api/chzzk/?channelId={ID}
     Server->>ChzzkAPI: GET /service/v2/channels/{ID}/live-detail
     ChzzkAPI-->>Server: chatChannelId 반환
@@ -47,13 +57,13 @@ sequenceDiagram
     WebApp->>ChzzkWS: wss://kr-ss1.chat.naver.com/chat 접속
     WebApp->>ChzzkWS: Handshake 패킷 송신 (cmd: 100)
     ChzzkWS-->>WebApp: Connect Response (cmd: 10100)
-    loop 실시간 채팅 수집 & 프로필 분석
-        ChzzkWS-->>WebApp: Chat Message (profile.streamingProperty)
-        WebApp->>WebApp: 팔로우/구독 상태 실시간 파싱 & 필터링
+    loop 실시간 채팅 수집 & 배지 파싱
+        ChzzkWS-->>WebApp: Chat Message (profile.viewerBadges / streamingProperty)
+        WebApp->>WebApp: 치즈 후원 등급 & 구독 정보 실시간 수집 및 필터링
     end
-    Streamer->>WebApp: [조건별 추첨하기] 클릭
-    WebApp->>WebApp: Fisher-Yates 셔플 기반 N명 추첨
-    WebApp->>Streamer: 배지 표기 당첨자 출력 & 엑셀 CSV 다운로드
+    Streamer->>WebApp: [조건에 맞는 시청자 추첨하기] 클릭
+    WebApp->>WebApp: Fisher-Yates 셔플 기반 N명 추첨 (다회차 자동 제외 적용)
+    WebApp->>Streamer: 회차별 구획 배너 당첨자 출력 & 선택 항목 엑셀 CSV 다운로드
 ```
 
 ---
