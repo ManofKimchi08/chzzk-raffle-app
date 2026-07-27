@@ -1222,12 +1222,17 @@
         if (!isNaN(d.getTime())) return d.getTime();
       }
 
-      // Pattern 2: "2024.02.29" or "2024-02-29 15:30:00"
-      const cleanStr = str.trim().replace(/\./g, '-').replace(' ', 'T');
-      const d2 = new Date(cleanStr);
-      if (!isNaN(d2.getTime())) return d2.getTime();
+      // Pattern 2: "2024.02.29", "2024. 2. 29.", "2024-02-29 15:30:00"
+      const dotMatch = str.match(/(\d{4})\s*[\.\-]\s*(\d{1,2})\s*[\.\-]\s*(\d{1,2})/);
+      if (dotMatch) {
+        const year = parseInt(dotMatch[1], 10);
+        const month = parseInt(dotMatch[2], 10) - 1;
+        const day = parseInt(dotMatch[3], 10);
+        const d = new Date(year, month, day);
+        if (!isNaN(d.getTime())) return d.getTime();
+      }
 
-      // Pattern 3: Standard Date parse
+      // Pattern 3: Standard ISO Date parse
       const d3 = new Date(str);
       if (!isNaN(d3.getTime())) return d3.getTime();
 
@@ -1239,82 +1244,50 @@
       let followMonths = 0;
       let fTime = null;
 
+      const profileStr = JSON.stringify(profileData || {});
+
+      // 1. Check if follower keywords or objects exist
+      if (/팔로우|follower|following/i.test(profileStr)) {
+        isFollower = true;
+      }
+
       const sp = profileData.streamingProperty || {};
-
-      const candidates = [
-        sp.follower,
-        sp.following,
-        sp.followDate,
-        sp.createdDate,
-        profileData.follower,
-        profileData.following,
-        profileData.followDate,
-        profileData.createdDate
-      ];
-
-      for (const cand of candidates) {
-        if (!cand) continue;
-
-        if (cand === true) {
-          isFollower = true;
-        } else if (typeof cand === 'object') {
-          isFollower = true;
-          for (const key of ['followDate', 'createdDate', 'createDate', 'followTime', 'date', 'time', 'createdAt', 'title', 'description', 'text']) {
-            if (cand[key]) {
-              const parsedTime = parseKoreanDate(String(cand[key]));
-              if (parsedTime) {
-                fTime = parsedTime;
-                break;
-              }
-            }
-          }
-        } else if (typeof cand === 'string' || typeof cand === 'number') {
-          isFollower = true;
-          if (typeof cand === 'number') {
-            fTime = cand < 1e11 ? cand * 1000 : cand;
-          } else {
-            fTime = parseKoreanDate(cand);
-          }
-        }
-        if (fTime) break;
+      if (sp.follower || sp.following || sp.followDate) {
+        isFollower = true;
       }
 
-      const badges = [...(profileData.viewerBadges || []), ...(profileData.activityBadges || [])];
-      for (const b of badges) {
-        const badgeObj = b.badge || b;
-        const bId = String(badgeObj.badgeId || badgeObj.badgeNo || badgeObj.name || '').toLowerCase();
-        const bTitle = String(badgeObj.title || badgeObj.name || badgeObj.badgeName || '');
-        const bDesc = String(badgeObj.description || badgeObj.text || '');
+      // 2. Try parsing Korean or dot formatted date from profile string or objects
+      fTime = parseKoreanDate(profileStr);
 
-        const combinedText = (bTitle + ' ' + bDesc).toLowerCase();
-
-        if (bId.includes('follower') || bId.includes('follow_') || combinedText.includes('팔로우') || combinedText.includes('팔로워')) {
+      // 3. Fallback month regex search from profileStr ("3개월 팔로워", "팔로워 6개월", "1년 팔로워")
+      if (!fTime) {
+        const mMatch = profileStr.match(/(\d+)\s*개월/);
+        const yMatch = profileStr.match(/(\d+)\s*년/);
+        if (mMatch) {
+          followMonths = parseInt(mMatch[1], 10);
           isFollower = true;
-
-          if (!fTime) {
-            const parsedFromBadge = parseKoreanDate(bTitle) || parseKoreanDate(bDesc);
-            if (parsedFromBadge) {
-              fTime = parsedFromBadge;
-            } else {
-              const mMatch = combinedText.match(/(\d+)\s*개월/);
-              const yMatch = combinedText.match(/(\d+)\s*년/);
-              if (mMatch) {
-                followMonths = parseInt(mMatch[1], 10);
-              } else if (yMatch) {
-                followMonths = parseInt(yMatch[1], 10) * 12;
-              }
-            }
-          }
+        } else if (yMatch) {
+          followMonths = parseInt(yMatch[1], 10) * 12;
+          isFollower = true;
         }
       }
 
+      // 4. Calculate followMonths from fTime
       if (fTime) {
         const diffMs = Date.now() - fTime;
         if (diffMs >= 0) {
           const days = diffMs / (1000 * 60 * 60 * 24);
           followMonths = Math.floor(days / 30);
+          isFollower = true;
         }
       }
+
+      // 5. If user is follower but followMonths is 0 and no date string was present:
+      if (isFollower && followMonths === 0 && !fTime) {
+        followMonths = 1;
+      }
+
+      console.log('Follower Parsed:', profileData.nickname, { isFollower, followMonths });
 
       return { isFollower, followMonths };
     }
