@@ -339,7 +339,7 @@
     /* Stats Grid */
     .stats-container {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 12px;
       margin-bottom: 20px;
     }
@@ -769,10 +769,6 @@
             <div class="stat-label">제외된 시청자 수</div>
             <div class="stat-value" id="excludedCount" style="color: var(--warning);">0</div>
           </div>
-          <div class="stat-card">
-            <div class="stat-label">시청자 수</div>
-            <div class="stat-value" id="viewersCount">0</div>
-          </div>
         </div>
 
         <div id="winnerOverlay" class="winner-overlay">
@@ -798,14 +794,13 @@
               <tr>
                 <th style="width: 50px;">순위</th>
                 <th>닉네임</th>
+                <th>고유 식별 ID (UID)</th>
                 <th>배지 (팔로우/구독 상태)</th>
-                <th>채팅 내용</th>
-                <th>참여 시간</th>
               </tr>
             </thead>
             <tbody id="winnersTableBody">
               <tr>
-                <td colspan="5" style="text-align: center; color: var(--text-sub); padding: 40px 0;">
+                <td colspan="4" style="text-align: center; color: var(--text-sub); padding: 40px 0;">
                   아직 추첨 결과가 없습니다.
                 </td>
               </tr>
@@ -1458,7 +1453,7 @@
       winnersTableBody.innerHTML = '';
 
       if (winners.length === 0) {
-        winnersTableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-sub); padding: 40px 0;">당첨자가 없습니다.</td></tr>`;
+        winnersTableBody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--text-sub); padding: 40px 0;">당첨자가 없습니다.</td></tr>`;
         return;
       }
 
@@ -1478,9 +1473,8 @@
         tr.innerHTML = `
           <td><span class="rank-num">${index + 1}</span></td>
           <td style="font-weight: 700;">${escapeHtml(w.nickname)}</td>
+          <td style="font-size: 12px; font-family: monospace; color: var(--chzzk-green);">${escapeHtml(w.uid)}</td>
           <td>${badgesHtml}</td>
-          <td style="color: #cbd5e1;">${escapeHtml(w.msg)}</td>
-          <td style="font-size: 12px; color: var(--text-sub);">${w.time}</td>
         `;
         winnersTableBody.appendChild(tr);
       });
