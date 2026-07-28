@@ -68,21 +68,28 @@ sequenceDiagram
 
 ---
 
-## 🚀 로컬 실행 방법 (Local Run)
+## 🚀 실행 방법 (Execution Guide)
 
-### Requirements
-- Python 3.9 이상 (Standard Library 사용)
+### 1. `.exe` 실행 파일로 바로 실행하기 (Windows 추천)
+- `dist/치지직추첨기.exe` (또는 Releases에서 다운로드한 `치지직추첨기.exe`) 파일을 **더블 클릭**만 하시면 됩니다.
+- 파이썬이나 기타 부가 프로그램 설치가 전혀 필요 없는 독립형 무설치 실행 파일입니다.
 
-### Execution
-```bash
-# 1. 저장소 클론
-git clone https://github.com/dlwjdxor/chzzk-raffle-app.git
-cd chzzk-raffle-app
+---
 
-# 2. 서버 실행
-python server.py
-```
-서버가 실행되면 자동으로 브라우저에서 `http://localhost:8000` 이 열립니다.
+### 2. 파이썬 소스 코드로 실행하기 (Mac / Linux / Windows 공통)
+파이썬 표준 라이브러리만 사용하므로 별도의 `pip install` 없이 바로 실행 가능합니다.
+
+- **필수 조건**: Python 3.9 이상
+- **실행 명령어**:
+  ```bash
+  # 저장소 클론 후 이동
+  git clone https://github.com/dlwjdxor/chzzk-raffle-app.git
+  cd chzzk-raffle-app
+
+  # 서버 실행 (Windows: python server.py / Mac & Linux: python3 server.py)
+  python server.py
+  ```
+- 서버가 실행되면 웹 브라우저에서 **`http://localhost:8000`** 페이지가 자동으로 열립니다.
 
 ---
 
