@@ -2573,12 +2573,12 @@
 
       <!-- BOTTOM PANEL: Authentic Voltorb Flip Interactive Board Stage (하부 게임 스테이지) -->
       <div class="panel" style="display: flex; flex-direction: column; align-items: center;">
-        <div class="panel-title" style="align-self: flex-start; margin-bottom: 14px; display: flex; justify-content: space-between; width: 100%; align-items: center; flex-wrap: wrap; gap: 6px;">
+        <div class="panel-title" style="align-self: flex-start; margin-bottom: 14px; display: flex; justify-content: space-between; width: 100%; align-items: center; flex-wrap: wrap; gap: 10px;">
           <div style="display: flex; align-items: center; gap: 8px;">
             <span>🎯 5×5 찌리리공 뒤집기 보드</span>
-            <span id="gameBoardRoundLevelBadge" class="badge-tag" style="background: rgba(0, 255, 163, 0.15); color: var(--chzzk-green); font-size: 11px; font-weight: 800;">Lv.1</span>
+            <span id="gameBoardRoundLevelBadge" class="badge-tag" style="background: rgba(0, 255, 163, 0.15); color: var(--chzzk-green); font-size: 12px; font-weight: 800;">Lv.1</span>
           </div>
-          <div id="gameInstructionText" style="font-size: 12px; color: var(--text-sub); font-weight: 600;">
+          <div id="gameInstructionText" style="font-size: 15px; color: #fff; font-weight: 800; background: rgba(0, 0, 0, 0.45); padding: 8px 18px; border-radius: 8px; border: 1px solid rgba(0, 255, 163, 0.3); box-shadow: 0 2px 10px rgba(0,0,0,0.3); letter-spacing: 0.3px;">
             [배틀 시작] 버튼을 눌러 게임을 시작하세요. (1턴씩 번갈아 카드를 오픈합니다)
           </div>
         </div>
@@ -2596,7 +2596,7 @@
               <div style="display: flex; align-items: center; gap: 6px;">
                 <span id="gameHudLiveDot" class="live-dot" style="background: #38bdf8;"></span>
                 <span id="gameHudTitle" style="font-size: 12px; font-weight: 800; color: #38bdf8;">시청자 실시간 좌표 투표 중</span>
-                <span id="gameHudSubTitle" style="font-size: 11px; color: var(--text-sub);">(채팅에 좌표 입력: 예 <b>A3</b>, <b>B2</b>, <b>15</b>)</span>
+                <span id="gameHudSubTitle" style="font-size: 11px; color: var(--text-sub);">(채팅 입력: 좌표 <b>A1~E5</b> 또는 홀드 <b>stop</b>)</span>
               </div>
               <span id="gameVotingTimerText" style="font-family: 'Outfit'; font-weight: 800; color: #ffd700; font-size: 14px;">30.0s</span>
             </div>
@@ -6592,7 +6592,7 @@
       gamePhaseBadge.innerText = gameTurnLimit > 0 
         ? `👥 시청자 투표 턴 (${viewersTurnCount + 1}/${gameTurnLimit})`
         : '👥 2단계: 시청자 투표 턴';
-      gameInstructionText.innerText = '시청자 투표 턴: 채팅창에 좌표(A1~E5)를 입력하세요!';
+      gameInstructionText.innerText = '👥 시청자 투표 턴: 채팅창에 좌표(A1~E5) 또는 [stop] 을 입력하세요!';
 
       gameViewersStatusTag.className = 'badge-tag';
       gameViewersStatusTag.style.background = 'rgba(56, 189, 248, 0.2)';
@@ -6613,7 +6613,7 @@
       gameHudTitle.innerText = gameTurnLimit > 0 
         ? `👥 시청자 실시간 좌표 투표 [${viewersTurnCount + 1}/${gameTurnLimit}턴]`
         : '👥 시청자 실시간 좌표 투표 중';
-      gameHudSubTitle.innerText = '(채팅에 좌표 입력: 예 A3, B2, 15)';
+      gameHudSubTitle.innerHTML = '(채팅 입력: 좌표 <b>A1~E5</b> 또는 홀드 <b>stop</b>)';
 
       currentTurnTotalDuration = parseFloat(gameVoteDurationSelect.value) || 30.0;
       currentTurnRemainingSeconds = currentTurnTotalDuration;
@@ -6650,8 +6650,16 @@
       if (!msg) return;
 
       const clean = msg.trim().toUpperCase().replace(/\s+/g, '');
-      let targetTile = null;
+      
+      // Check for STOP (홀드/그만두기) command
+      if (clean === 'STOP' || clean === '스톱' || clean === '스탑' || clean === '그만' || clean === 'HOLD' || clean === '0') {
+        currentVoteUsers.set(uid, 'STOP');
+        recomputeVoteCounts();
+        renderVotingBarsUI();
+        return;
+      }
 
+      let targetTile = null;
       const coordMatch = clean.match(/^([A-E])([1-5])$/);
       if (coordMatch) {
         const colLetter = coordMatch[1];
@@ -6687,18 +6695,25 @@
         .slice(0, 4);
 
       if (sortedCandidates.length === 0) {
-        gameTopVotedCandidatesList.innerHTML = `<div style="color: var(--text-sub); text-align: center; padding: 4px 0;">시청자들이 채팅창에 좌표(예: A1, B3, C5)를 입력하면 실시간 집계됩니다.</div>`;
+        gameTopVotedCandidatesList.innerHTML = `<div style="color: var(--text-sub); text-align: center; padding: 4px 0;">시청자들이 채팅창에 좌표(예: A1, B3) 또는 [stop] 을 입력하면 실시간 집계됩니다.</div>`;
         return;
       }
 
       let html = '';
       sortedCandidates.forEach(([coord, count], i) => {
         const pct = totalVotes > 0 ? Math.round((count / totalVotes) * 100) : 0;
+        const isStop = (coord === 'STOP');
+        const labelText = isStop ? '🛑 STOP (홀드)' : coord;
+        const barBg = isStop 
+          ? 'linear-gradient(90deg, #ef4444, #f97316)' 
+          : (i === 0 ? 'linear-gradient(90deg, #ffd700, #ff8800)' : 'linear-gradient(90deg, #38bdf8, #0284c7)');
+        const labelColor = isStop ? '#ef4444' : (i === 0 ? '#ffd700' : '#fff');
+
         html += `
           <div style="display: flex; align-items: center; gap: 8px;">
-            <span style="font-weight: 800; color: ${i === 0 ? '#ffd700' : '#fff'}; width: 28px;">${coord}</span>
+            <span style="font-weight: 800; color: ${labelColor}; min-width: ${isStop ? '95px' : '28px'}; font-size: ${isStop ? '11px' : '12px'};">${labelText}</span>
             <div style="flex: 1; height: 12px; background: rgba(255,255,255,0.08); border-radius: 6px; overflow: hidden;">
-              <div style="height: 100%; width: ${pct}%; background: ${i === 0 ? 'linear-gradient(90deg, #ffd700, #ff8800)' : 'linear-gradient(90deg, #38bdf8, #0284c7)'}; transition: width 0.15s;"></div>
+              <div style="height: 100%; width: ${pct}%; background: ${barBg}; transition: width 0.15s;"></div>
             </div>
             <span style="font-size: 10px; color: var(--text-sub); width: 60px; text-align: right;">${count}표 (${pct}%)</span>
           </div>
@@ -6719,29 +6734,42 @@
       let maxVotes = 0;
       let topCandidates = [];
 
-      for (const t of unflipped) {
-        const votes = currentVoteCounts[t.coord] || 0;
+      // Choices include unflipped coords AND 'STOP' if voted
+      const validChoices = [...unflipped.map(t => t.coord)];
+      if ((currentVoteCounts['STOP'] || 0) > 0) {
+        validChoices.push('STOP');
+      }
+
+      for (const choice of validChoices) {
+        const votes = currentVoteCounts[choice] || 0;
         if (votes > maxVotes) {
           maxVotes = votes;
-          topCandidates = [t];
+          topCandidates = [choice];
         } else if (votes === maxVotes && maxVotes > 0) {
-          topCandidates.push(t);
+          topCandidates.push(choice);
         }
       }
 
-      let targetTile = null;
+      let selectedChoice = null;
       if (maxVotes > 0 && topCandidates.length > 0) {
         if (topCandidates.length > 1) {
-          showToast(`⚡ 동점 발생 (${maxVotes}표)! 동점 좌표 [${topCandidates.map(t => t.coord).join(', ')}] 중 1개가 무작위 추첨됩니다.`, '🎲');
+          showToast(`⚡ 동점 발생 (${maxVotes}표)! 동점 항목 [${topCandidates.join(', ')}] 중 1개가 무작위 추첨됩니다.`, '🎲');
         }
-        targetTile = topCandidates[Math.floor(Math.random() * topCandidates.length)];
+        selectedChoice = topCandidates[Math.floor(Math.random() * topCandidates.length)];
       } else {
         showToast('시청자 투표가 없어 미오픈 타일 중 1개가 무작위로 오픈됩니다!', '🎲');
-        targetTile = unflipped[Math.floor(Math.random() * unflipped.length)];
+        const randomTile = unflipped[Math.floor(Math.random() * unflipped.length)];
+        selectedChoice = randomTile.coord;
       }
 
-      if (targetTile) {
-        flipTile(targetTile, 'viewers');
+      if (selectedChoice === 'STOP') {
+        showToast(`🛑 시청자 연합이 [STOP]에 최다 투표하여 ${viewersResult.score} 코인을 안전하게 확보하고 마감했습니다!`, '💰');
+        cashOutGame();
+      } else {
+        const targetTile = boardTiles.find(t => t.coord === selectedChoice);
+        if (targetTile) {
+          flipTile(targetTile, 'viewers');
+        }
       }
     }
 
