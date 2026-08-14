@@ -2438,6 +2438,16 @@
             </div>
 
             <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="font-size: 12px; color: var(--text-sub); font-weight: 700;">🎯 턴 제한 모드</span>
+              <select id="gameTurnLimitSelect" style="padding: 6px 12px; font-size: 12px; background: #080c14; border: 1px solid var(--border-color); color: #fff; border-radius: 6px; font-weight: 700;">
+                <option value="0" selected>♾️ 무제한 데스매치 (폭발/클리어까지)</option>
+                <option value="3">⚡ 스피드전 (각 3턴 / 총 6턴)</option>
+                <option value="5">⚔️ 표준전 (각 5턴 / 총 10턴)</option>
+                <option value="7">🧠 심층전 (각 7턴 / 총 14턴)</option>
+              </select>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 6px;">
               <span style="font-size: 12px; color: var(--text-sub); font-weight: 700;">⏱️ 턴 제한 시간</span>
               <select id="gameVoteDurationSelect" style="padding: 6px 12px; font-size: 12px; background: #080c14; border: 1px solid var(--border-color); color: #fff; border-radius: 6px; font-weight: 700;">
                 <option value="15">⚡ 15초 (빠른 턴)</option>
@@ -2473,6 +2483,9 @@
             </div>
             <div style="font-size: 10px; color: var(--text-sub); margin-top: 2px;">
               남은 2·3배 카드: <b id="gameRemainingTargetCards" style="color: #ffd700;">-</b>개
+            </div>
+            <div id="gameTurnProgressBadge" style="font-size: 10px; color: #38bdf8; margin-top: 2px; font-weight: 800;">
+              모드: ♾️ 무제한
             </div>
           </div>
 
@@ -5982,10 +5995,11 @@
     }
 
     // ==========================================
-    // ⚡ VOLTORB FLIP BATTLE SYSTEM ENGINE (찌리리공 뒤집기 - 1턴 교대 배틀)
+    // ⚡ VOLTORB FLIP BATTLE SYSTEM ENGINE (찌리리공 뒤집기 - 1턴 교대 & 턴 제한 배틀)
     // ==========================================
     const gamePhaseBadge = document.getElementById('gamePhaseBadge');
     const gameLevelSelect = document.getElementById('gameLevelSelect');
+    const gameTurnLimitSelect = document.getElementById('gameTurnLimitSelect');
     const gameVoteDurationSelect = document.getElementById('gameVoteDurationSelect');
 
     const gameStreamerScoreText = document.getElementById('gameStreamerScoreText');
@@ -5994,6 +6008,7 @@
     const gameViewersStatusTag = document.getElementById('gameViewersStatusTag');
     const gameCurrentCoinsText = document.getElementById('gameCurrentCoinsText');
     const gameRemainingTargetCards = document.getElementById('gameRemainingTargetCards');
+    const gameTurnProgressBadge = document.getElementById('gameTurnProgressBadge');
 
     const startGameStreamerBtn = document.getElementById('startGameStreamerBtn');
     const startGameViewersBtn = document.getElementById('startGameViewersBtn');
@@ -6039,6 +6054,11 @@
     };
 
     let gameLevel = 1;
+    let gameTurnLimit = 0; // 0 = unlimited, 3, 5, 7
+    let streamerTurnCount = 0;
+    let viewersTurnCount = 0;
+    let battleEndReason = ''; // 'cleared' | 'exploded' | 'turn_limit' | 'cashed_out'
+
     let gamePhase = 'idle'; // 'idle' | 'streamer' | 'viewers' | 'ended'
     let isMemoMode = false;
     let activeMemoTool = 1; // 1 | 2 | 3 | 'v'
@@ -6063,6 +6083,11 @@
 
     function initNewGameRound(keepScores = false) {
       clearInterval(currentTurnTimerInterval);
+      gameTurnLimit = parseInt(gameTurnLimitSelect.value, 10) || 0;
+      streamerTurnCount = 0;
+      viewersTurnCount = 0;
+      battleEndReason = '';
+
       if (!keepScores) {
         streamerResult = { score: 0, flippedCount: 0, status: 'none' };
         viewersResult = { score: 0, flippedCount: 0, status: 'none' };
@@ -6246,6 +6271,16 @@
       currentBoardCoins = (streamerResult.score || 0) + (viewersResult.score || 0);
       gameCurrentCoinsText.innerText = currentBoardCoins.toLocaleString();
       gameRemainingTargetCards.innerText = Math.max(0, remainingTargetCardsCount);
+
+      if (gameTurnProgressBadge) {
+        if (gameTurnLimit === 0) {
+          gameTurnProgressBadge.innerText = '모드: ♾️ 무제한 데스매치';
+          gameTurnProgressBadge.style.color = '#38bdf8';
+        } else {
+          gameTurnProgressBadge.innerText = `진행: 👑스트리머(${streamerTurnCount}/${gameTurnLimit}) · 👥시청자(${viewersTurnCount}/${gameTurnLimit})`;
+          gameTurnProgressBadge.style.color = '#ffd700';
+        }
+      }
     }
 
     function handleTileClick(idx) {
@@ -6267,11 +6302,17 @@
       if (tile.flipped) return;
       tile.flipped = true;
 
-      if (player === 'streamer') streamerResult.flippedCount++;
-      else viewersResult.flippedCount++;
+      if (player === 'streamer') {
+        streamerResult.flippedCount++;
+        streamerTurnCount++;
+      } else {
+        viewersResult.flippedCount++;
+        viewersTurnCount++;
+      }
 
       if (tile.val === 0) {
         // 💥 Voltorb Exploded!
+        battleEndReason = 'exploded';
         updateBoardStatsUI();
         renderBoardUI();
 
@@ -6334,9 +6375,21 @@
 
       // Check Clear Condition
       if (remainingTargetCardsCount <= 0) {
+        battleEndReason = 'cleared';
         streamerResult.status = 'cleared';
         viewersResult.status = 'cleared';
         showToast('🎉 보드의 모든 2배·3배 카드를 찾아 클리어했습니다!', '🏆');
+        endBattle();
+        revealEntireBoard();
+        return;
+      }
+
+      // Check Turn Limit Condition
+      if (gameTurnLimit > 0 && streamerTurnCount >= gameTurnLimit && viewersTurnCount >= gameTurnLimit) {
+        battleEndReason = 'turn_limit';
+        streamerResult.status = 'turn_end';
+        viewersResult.status = 'turn_end';
+        showToast(`🏁 ${gameTurnLimit}턴 배틀이 모두 종료되었습니다! 최종 점수를 판정합니다.`, '🏆');
         endBattle();
         revealEntireBoard();
         return;
@@ -6369,13 +6422,15 @@
       gamePhase = 'streamer';
       gamePhaseBadge.className = 'live-badge-pill live';
       gamePhaseBadge.style.background = 'linear-gradient(135deg, #eab308, #ca8a04)';
-      gamePhaseBadge.innerText = '👑 1단계: 스트리머 턴';
+      gamePhaseBadge.innerText = gameTurnLimit > 0 
+        ? `👑 스트리머 턴 (${streamerTurnCount + 1}/${gameTurnLimit})`
+        : '👑 1단계: 스트리머 턴';
       gameInstructionText.innerText = '스트리머 턴: 타일을 1장 선택하세요 (시간 초과 시 랜덤 자동 오픈됩니다)';
 
       gameStreamerStatusTag.className = 'badge-tag';
       gameStreamerStatusTag.style.background = 'rgba(255, 215, 0, 0.2)';
       gameStreamerStatusTag.style.color = '#ffd700';
-      gameStreamerStatusTag.innerText = '선택 중';
+      gameStreamerStatusTag.innerText = gameTurnLimit > 0 ? `${streamerTurnCount + 1}턴 선택 중` : '선택 중';
 
       gameViewersStatusTag.className = 'badge-tag';
       gameViewersStatusTag.style.background = 'rgba(255, 255, 255, 0.08)';
@@ -6386,7 +6441,9 @@
       gameViewersVotingHud.style.display = 'block';
       gameHudLiveDot.style.background = '#ffd700';
       gameHudTitle.style.color = '#ffd700';
-      gameHudTitle.innerText = '👑 스트리머 턴 (타일 1장 선택)';
+      gameHudTitle.innerText = gameTurnLimit > 0 
+        ? `👑 스트리머 턴 [${streamerTurnCount + 1}/${gameTurnLimit}턴]`
+        : '👑 스트리머 턴 (타일 1장 선택)';
       gameHudSubTitle.innerText = '(타일을 클릭하세요. 시간 초과 시 랜덤 오픈)';
       gameTopVotedCandidatesList.innerHTML = '<div style="color: #ffd700; text-align: center; padding: 4px 0; font-weight: 700;">스트리머가 신중하게 카드를 고르는 중입니다...</div>';
 
@@ -6423,13 +6480,15 @@
       gamePhase = 'viewers';
       gamePhaseBadge.className = 'live-badge-pill live';
       gamePhaseBadge.style.background = 'linear-gradient(135deg, #0284c7, #0369a1)';
-      gamePhaseBadge.innerText = '👥 2단계: 시청자 투표 턴';
+      gamePhaseBadge.innerText = gameTurnLimit > 0 
+        ? `👥 시청자 투표 턴 (${viewersTurnCount + 1}/${gameTurnLimit})`
+        : '👥 2단계: 시청자 투표 턴';
       gameInstructionText.innerText = '시청자 투표 턴: 채팅창에 좌표(A1~E5)를 입력하세요!';
 
       gameViewersStatusTag.className = 'badge-tag';
       gameViewersStatusTag.style.background = 'rgba(56, 189, 248, 0.2)';
       gameViewersStatusTag.style.color = '#38bdf8';
-      gameViewersStatusTag.innerText = '투표 진행 중';
+      gameViewersStatusTag.innerText = gameTurnLimit > 0 ? `${viewersTurnCount + 1}턴 투표 중` : '투표 진행 중';
 
       gameStreamerStatusTag.className = 'badge-tag';
       gameStreamerStatusTag.style.background = 'rgba(255, 255, 255, 0.08)';
@@ -6442,7 +6501,9 @@
       gameViewersVotingHud.style.display = 'block';
       gameHudLiveDot.style.background = '#38bdf8';
       gameHudTitle.style.color = '#38bdf8';
-      gameHudTitle.innerText = '👥 시청자 실시간 좌표 투표 중';
+      gameHudTitle.innerText = gameTurnLimit > 0 
+        ? `👥 시청자 실시간 좌표 투표 [${viewersTurnCount + 1}/${gameTurnLimit}턴]`
+        : '👥 시청자 실시간 좌표 투표 중';
       gameHudSubTitle.innerText = '(채팅에 좌표 입력: 예 A3, B2, 15)';
 
       currentTurnTotalDuration = parseFloat(gameVoteDurationSelect.value) || 30.0;
@@ -6579,6 +6640,7 @@
     function cashOutGame() {
       if (gamePhase === 'ended' || gamePhase === 'idle') return;
       clearInterval(currentTurnTimerInterval);
+      battleEndReason = 'cashed_out';
 
       if (gamePhase === 'streamer') {
         streamerResult.status = 'cashed_out';
@@ -6609,12 +6671,29 @@
     function showShowdownResult() {
       gameResultModal.classList.add('active');
       gameModalStreamerCoins.innerText = streamerResult.score.toLocaleString();
-      gameModalStreamerDetail.innerText = `${streamerResult.flippedCount}개 타일 오픈 (${streamerResult.status === 'cleared' ? '🏆 클리어' : streamerResult.status === 'exploded' ? '💥 폭발' : streamerResult.status === 'survived' ? '🛡️ 생존' : '🛑 안전 마감'})`;
+      gameModalStreamerDetail.innerText = `${streamerResult.flippedCount}개 타일 오픈 (${streamerResult.status === 'cleared' ? '🏆 클리어' : streamerResult.status === 'exploded' ? '💥 폭발' : streamerResult.status === 'turn_end' ? '🏁 턴 완료' : streamerResult.status === 'survived' ? '🛡️ 생존' : '🛑 안전 마감'})`;
 
       gameModalViewersCoins.innerText = viewersResult.score.toLocaleString();
-      gameModalViewersDetail.innerText = `${viewersResult.flippedCount}개 타일 오픈 (${viewersResult.status === 'cleared' ? '🏆 클리어' : viewersResult.status === 'exploded' ? '💥 폭발' : viewersResult.status === 'survived' ? '🛡️ 생존' : '🛑 안전 마감'})`;
+      gameModalViewersDetail.innerText = `${viewersResult.flippedCount}개 타일 오픈 (${viewersResult.status === 'cleared' ? '🏆 클리어' : viewersResult.status === 'exploded' ? '💥 폭발' : viewersResult.status === 'turn_end' ? '🏁 턴 완료' : viewersResult.status === 'survived' ? '🛡️ 생존' : '🛑 안전 마감'})`;
 
-      if (streamerResult.status === 'exploded' && viewersResult.status !== 'exploded') {
+      if (battleEndReason === 'turn_limit') {
+        if (streamerResult.score > viewersResult.score) {
+          gameResultChampionTrophy.innerText = '👑';
+          gameResultWinnerHeader.innerText = `🏁 ${gameTurnLimit}턴 종료 판정 승리: 스트리머!`;
+          gameResultWinnerHeader.style.color = '#ffd700';
+          gameModalSummaryText.innerText = `지정된 ${gameTurnLimit}턴 승부 종료! 스트리머가 ${streamerResult.score.toLocaleString()} 코인으로 시청자 연합(${viewersResult.score.toLocaleString()} 코인)을 꺾고 승리했습니다!`;
+        } else if (viewersResult.score > streamerResult.score) {
+          gameResultChampionTrophy.innerText = '👥';
+          gameResultWinnerHeader.innerText = `🏁 ${gameTurnLimit}턴 종료 판정 승리: 시청자 연합!`;
+          gameResultWinnerHeader.style.color = '#38bdf8';
+          gameModalSummaryText.innerText = `지정된 ${gameTurnLimit}턴 승부 종료! 시청자 연합이 ${viewersResult.score.toLocaleString()} 코인으로 스트리머(${streamerResult.score.toLocaleString()} 코인)를 꺾고 승리했습니다!`;
+        } else {
+          gameResultChampionTrophy.innerText = '🤝';
+          gameResultWinnerHeader.innerText = `🏁 ${gameTurnLimit}턴 종료: 황금빛 무승부!`;
+          gameResultWinnerHeader.style.color = '#00ffa3';
+          gameModalSummaryText.innerText = `지정된 ${gameTurnLimit}턴 동안 양측 모두 ${streamerResult.score.toLocaleString()} 코인으로 동점을 기록했습니다!`;
+        }
+      } else if (streamerResult.status === 'exploded' && viewersResult.status !== 'exploded') {
         gameResultChampionTrophy.innerText = '👥';
         gameResultWinnerHeader.innerText = '시청자 연합의 승리!';
         gameResultWinnerHeader.style.color = '#38bdf8';
@@ -6665,6 +6744,7 @@
     });
 
     gameLevelSelect.addEventListener('change', () => initNewGameRound(false));
+    gameTurnLimitSelect.addEventListener('change', () => initNewGameRound(false));
     gameModalNextRoundBtn.addEventListener('click', () => {
       gameResultModal.classList.remove('active');
       initNewGameRound(false);
