@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <style>
     :root {
       --bg-dark: #0a0c10;
@@ -907,6 +908,33 @@
       }
     }
 
+    /* 🔔 Toast Notification */
+    .app-toast {
+      position: fixed;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid var(--chzzk-green);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 15px var(--chzzk-green-glow);
+      color: #fff;
+      padding: 10px 22px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 700;
+      z-index: 10000;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .app-toast.active {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
     /* 🎰 Visual Roulette Styles */
     .roulette-grid {
       display: grid;
@@ -1550,12 +1578,26 @@
           <button type="button" id="rouletteDonationTabBtn" class="sub-tab-btn">🧀 치즈 도네이션 연동</button>
         </div>
 
-        <!-- 1. Manual Input Mode (Clean, No Presets) -->
+        <!-- 1. Manual Input Mode (Clean, Direct & Excel Import/Export) -->
         <div id="rouletteManualBox">
           <div class="form-group" style="margin-bottom: 12px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
               <label style="margin-bottom: 0; font-size: 13px;">룰렛 항목 목록 (칸별 직접 관리)</label>
               <span id="manualItemCount" style="color: var(--chzzk-green); font-size: 11px; font-weight: 700;">총 0개 항목</span>
+            </div>
+
+            <!-- Excel/CSV Import & Export Action Bar -->
+            <div style="display: flex; gap: 6px; margin-bottom: 10px;">
+              <input type="file" id="rouletteImportFileInput" accept=".csv, .xlsx, .xls, .txt, .tsv" style="display: none;">
+              <button type="button" id="importRouletteFileBtn" class="btn-chip" style="flex: 1.2; padding: 7px 10px; font-size: 11px; background: rgba(0, 255, 163, 0.12); color: var(--chzzk-green); border-color: rgba(0, 255, 163, 0.35); font-weight: 700;">
+                📂 엑셀/CSV 불러오기
+              </button>
+              <button type="button" id="exportRouletteItemsBtn" class="btn-chip btn-chip-secondary" style="flex: 1; padding: 7px 10px; font-size: 11px; font-weight: 700;">
+                💾 엑셀 저장
+              </button>
+              <button type="button" id="downloadRouletteTemplateBtn" class="btn-chip btn-chip-secondary" style="padding: 7px 8px; font-size: 11px;" title="룰렛 항목 엑셀 샘플 양식 다운로드">
+                📄 양식
+              </button>
             </div>
             
             <!-- Dynamic Interactive Item Rows Container -->
@@ -1639,7 +1681,10 @@
         <div style="margin-top: 14px;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
             <span style="font-size: 12px; font-weight: 700; color: var(--text-sub);">📜 룰렛 당첨 히스토리</span>
-            <button type="button" id="clearRouletteHistoryBtn" class="btn-chip btn-chip-secondary" style="padding: 2px 6px; font-size: 10px;">초기화</button>
+            <div style="display: flex; gap: 6px;">
+              <button type="button" id="exportRouletteHistoryBtn" class="btn-chip btn-chip-primary" style="padding: 2px 8px; font-size: 10px; background: #107c41; color: #fff;">📊 엑셀 저장</button>
+              <button type="button" id="clearRouletteHistoryBtn" class="btn-chip btn-chip-secondary" style="padding: 2px 6px; font-size: 10px;">초기화</button>
+            </div>
           </div>
           <div class="table-container" style="max-height: 120px;">
             <table>
@@ -1892,6 +1937,12 @@
         <button type="button" id="closeUserChatModalBottomBtn" class="btn btn-secondary" style="padding: 8px 16px; font-size: 12px;">닫기</button>
       </div>
     </div>
+  </div>
+
+  <!-- 🔔 Global Toast Notification -->
+  <div id="appToast" class="app-toast">
+    <span id="appToastIcon">🎉</span>
+    <span id="appToastText">알림</span>
   </div>
 
   <canvas id="confettiCanvas"></canvas>
@@ -3289,6 +3340,10 @@
     const manualItemCountEl = document.getElementById('manualItemCount');
     const addRouletteRowBtn = document.getElementById('addRouletteRowBtn');
     const clearAllRouletteRowsBtn = document.getElementById('clearAllRouletteRowsBtn');
+    const rouletteImportFileInput = document.getElementById('rouletteImportFileInput');
+    const importRouletteFileBtn = document.getElementById('importRouletteFileBtn');
+    const exportRouletteItemsBtn = document.getElementById('exportRouletteItemsBtn');
+    const downloadRouletteTemplateBtn = document.getElementById('downloadRouletteTemplateBtn');
 
     const minDonationCheeseSelect = document.getElementById('minDonationCheeseSelect');
     const donationWeightToggle = document.getElementById('donationWeightToggle');
@@ -3315,6 +3370,7 @@
     const removeAndCloseRouletteModalBtn = document.getElementById('removeAndCloseRouletteModalBtn');
     const rouletteHistoryBody = document.getElementById('rouletteHistoryBody');
     const clearRouletteHistoryBtn = document.getElementById('clearRouletteHistoryBtn');
+    const exportRouletteHistoryBtn = document.getElementById('exportRouletteHistoryBtn');
 
     let currentRouletteMode = 'manual';
     let donationRouletteList = [];
@@ -3473,6 +3529,190 @@
 
     addRouletteRowBtn.addEventListener('click', () => addManualRouletteRow('', 1, true));
     clearAllRouletteRowsBtn.addEventListener('click', clearAllManualRouletteRows);
+
+    // ==========================================
+    // 🔔 TOAST NOTIFICATION UTILITY
+    // ==========================================
+    function showToast(msg, icon = '🎉') {
+      const toast = document.getElementById('appToast');
+      const toastText = document.getElementById('appToastText');
+      const toastIcon = document.getElementById('appToastIcon');
+      if (!toast) return;
+      toastText.innerText = msg;
+      toastIcon.innerText = icon;
+      toast.classList.add('active');
+      clearTimeout(window.__toastTimeout);
+      window.__toastTimeout = setTimeout(() => {
+        toast.classList.remove('active');
+      }, 2800);
+    }
+
+    // ==========================================
+    // 📊 ROULETTE EXCEL / CSV IMPORT & EXPORT
+    // ==========================================
+    downloadRouletteTemplateBtn.addEventListener('click', () => {
+      const templateCsv = "\uFEFF항목,비율\n치킨 1마리,1\n피자 1판,1\n문화상품권 1만원,1\n스타벅스 아메리카노,1\n꽝,2\n";
+      const blob = new Blob([templateCsv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'chzzk_roulette_template.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      showToast('룰렛 엑셀 샘플 양식을 다운로드했습니다.', '📄');
+    });
+
+    exportRouletteItemsBtn.addEventListener('click', () => {
+      const activeItems = manualRouletteRows.filter(r => r.text && r.text.trim().length > 0);
+      if (activeItems.length === 0) {
+        showToast('저장할 룰렛 항목이 없습니다. 항목을 추가해 주세요.', '⚠️');
+        return;
+      }
+
+      let csvContent = "\uFEFF항목,비율\n";
+      activeItems.forEach(item => {
+        const escapedText = item.text.replace(/"/g, '""');
+        csvContent += `"${escapedText}",${item.weight || 1}\n`;
+      });
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const dateStr = new Date().toISOString().slice(0,19).replace(/[^0-9]/g, "");
+      a.href = url;
+      a.download = `chzzk_roulette_items_${dateStr}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      showToast(`총 ${activeItems.length}개의 룰렛 항목을 저장했습니다.`, '💾');
+    });
+
+    importRouletteFileBtn.addEventListener('click', () => {
+      rouletteImportFileInput.value = '';
+      rouletteImportFileInput.click();
+    });
+
+    rouletteImportFileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const isXLSX = file.name.endsWith('.xlsx') || file.name.endsWith('.xls');
+
+      if (isXLSX && window.XLSX) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          try {
+            const data = new Uint8Array(evt.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+            const firstSheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[firstSheetName];
+            const jsonRows = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+            parseRouletteArrayData(jsonRows, file.name);
+          } catch (err) {
+            console.error(err);
+            showToast('엑셀 파일을 읽는 도중 오류가 발생했습니다.', '❌');
+          }
+        };
+        reader.readAsArrayBuffer(file);
+      } else {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          const text = evt.target.result;
+          parseRouletteCsvText(text, file.name);
+        };
+        reader.readAsText(file, 'utf-8');
+      }
+    });
+
+    function parseRouletteCsvText(text, fileName) {
+      const lines = text.split(/\r\n|\n|\r/);
+      const parsedRows = [];
+      
+      lines.forEach((line, lineIdx) => {
+        const clean = line.trim();
+        if (!clean) return;
+
+        const parts = clean.split(/[,;\t]/);
+        let itemText = parts[0] ? parts[0].trim().replace(/^"|"$/g, '') : '';
+        let weight = parts[1] ? parseInt(parts[1].trim().replace(/^"|"$/g, '')) : 1;
+
+        if (lineIdx === 0 && (itemText.toLowerCase() === '항목' || itemText.toLowerCase() === 'item' || itemText.toLowerCase() === '이름' || itemText.toLowerCase() === 'name')) {
+          return;
+        }
+
+        if (itemText) {
+          parsedRows.push({
+            text: itemText,
+            weight: isNaN(weight) || weight < 1 ? 1 : weight
+          });
+        }
+      });
+
+      if (parsedRows.length === 0) {
+        showToast(`[${fileName}] 유효한 룰렛 항목이 없습니다.`, '⚠️');
+        return;
+      }
+
+      manualRouletteRows = parsedRows;
+      renderManualRouletteRows();
+      drawRouletteWheel();
+      showToast(`[${fileName}] ${parsedRows.length}개 항목을 불러왔습니다!`, '🎉');
+    }
+
+    function parseRouletteArrayData(arrayData, fileName) {
+      const parsedRows = [];
+      arrayData.forEach((row, rowIdx) => {
+        if (!Array.isArray(row) || row.length === 0) return;
+        let itemText = row[0] !== undefined ? String(row[0]).trim() : '';
+        let weight = row[1] !== undefined ? parseInt(row[1]) : 1;
+
+        if (rowIdx === 0 && (itemText.toLowerCase() === '항목' || itemText.toLowerCase() === 'item' || itemText.toLowerCase() === '이름' || itemText.toLowerCase() === 'name')) {
+          return;
+        }
+
+        if (itemText) {
+          parsedRows.push({
+            text: itemText,
+            weight: isNaN(weight) || weight < 1 ? 1 : weight
+          });
+        }
+      });
+
+      if (parsedRows.length === 0) {
+        showToast(`[${fileName}] 유효한 룰렛 항목이 없습니다.`, '⚠️');
+        return;
+      }
+
+      manualRouletteRows = parsedRows;
+      renderManualRouletteRows();
+      drawRouletteWheel();
+      showToast(`[${fileName}] ${parsedRows.length}개 항목을 불러왔습니다!`, '🎉');
+    }
+
+    exportRouletteHistoryBtn.addEventListener('click', () => {
+      if (rouletteHistory.length === 0) {
+        showToast('저장할 룰렛 당첨 내역이 없습니다.', '⚠️');
+        return;
+      }
+
+      let csvContent = "\uFEFF회차,당첨 항목,시간\n";
+      rouletteHistory.forEach(h => {
+        const escapedItem = (h.item || '').replace(/"/g, '""');
+        csvContent += `${h.round || 1}회차,"${escapedItem}",${h.time || ''}\n`;
+      });
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const dateStr = new Date().toISOString().slice(0,19).replace(/[^0-9]/g, "");
+      a.href = url;
+      a.download = `chzzk_roulette_winners_history_${dateStr}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      showToast(`총 ${rouletteHistory.length}건의 룰렛 당첨 내역을 저장했습니다.`, '📊');
+    });
 
     function updateManualItemCount() {
       const items = getActiveRouletteItems();
