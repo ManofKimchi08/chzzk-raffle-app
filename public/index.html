@@ -1223,6 +1223,148 @@
       border-color: var(--chzzk-green);
       background: rgba(0, 255, 163, 0.05);
     }
+    /* 📊 Live Poll Styles */
+    .poll-grid {
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 1024px) {
+      .poll-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .poll-option-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #141b2b;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 6px 8px;
+      transition: all 0.15s;
+    }
+
+    .poll-option-row:hover {
+      border-color: rgba(0, 255, 163, 0.3);
+      background: #182236;
+    }
+
+    .poll-bar-item {
+      background: #0f1523;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .poll-bar-item.winner-leader {
+      border-color: rgba(255, 215, 0, 0.6);
+      background: #151b2d;
+      box-shadow: 0 4px 20px rgba(255, 215, 0, 0.15), 0 0 10px rgba(0, 255, 163, 0.15);
+    }
+
+    .poll-bar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .poll-bar-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .poll-num-chip {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 12px;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    .winner-leader .poll-num-chip {
+      background: linear-gradient(135deg, #ffd700, #ffaa00);
+      color: #1a1000;
+      box-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+    }
+
+    .poll-bar-stats {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .poll-percent-val {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--chzzk-green);
+    }
+
+    .winner-leader .poll-percent-val {
+      color: #ffd700;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+    }
+
+    .poll-count-val {
+      font-size: 13px;
+      color: var(--text-sub);
+      font-weight: 600;
+    }
+
+    .poll-progress-track {
+      width: 100%;
+      height: 12px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 6px;
+      overflow: hidden;
+      position: relative;
+      z-index: 2;
+    }
+
+    .poll-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #00ffa3, #0070f3);
+      border-radius: 6px;
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .winner-leader .poll-progress-fill {
+      background: linear-gradient(90deg, #ffd700, #00ffa3);
+      box-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
+    }
+
+    .poll-timer-gauge-track {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .poll-timer-gauge-fill {
+      height: 100%;
+      width: 100%;
+      background: var(--chzzk-green);
+      transition: width 1s linear;
+    }
   </style>
 </head>
 <body>
@@ -1246,6 +1388,10 @@
         <button type="button" id="tabRouletteBtn" class="nav-tab-btn">
           <span>🎰</span>
           <span>비주얼 룰렛</span>
+        </button>
+        <button type="button" id="tabPollBtn" class="nav-tab-btn">
+          <span>📊</span>
+          <span>실시간 투표</span>
         </button>
       </div>
 
@@ -1743,6 +1889,202 @@
         </div>
       </div>
     </div>
+
+    <!-- 📊 MAIN TAB 3: 실시간 투표 시스템 (Poll View) -->
+    <div id="pollView" class="poll-grid" style="display: none;">
+      <!-- Left Panel: Poll Configuration & Controls -->
+      <div class="panel">
+        <div class="panel-title">
+          <span>📊 실시간 투표 설정 및 제어</span>
+        </div>
+
+        <!-- Sub Tabs: General Chat vs Cheese Donation -->
+        <div class="sub-tabs">
+          <button type="button" id="pollModeChatTabBtn" class="sub-tab-btn active">✍️ 일반 채팅 투표</button>
+          <button type="button" id="pollModeCheeseTabBtn" class="sub-tab-btn">🧀 치즈 도네이션 투표</button>
+        </div>
+
+        <!-- Poll Question Input -->
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label>투표 주제 (질문)</label>
+          <input type="text" id="pollTitleInput" placeholder="예: 오늘 2부 게임 뭐할까요?, 찬반 투표 등" value="오늘 2부 콘텐츠 무엇을 할까요?" style="font-weight: 700;">
+        </div>
+
+        <!-- Quick Presets -->
+        <div style="margin-bottom: 10px;">
+          <div style="font-size: 11px; color: var(--text-sub); margin-bottom: 5px;">⚡ 빠른 추천 프리셋</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+            <button type="button" class="btn-chip btn-chip-secondary" id="presetPollOxBtn" style="padding: 3px 8px; font-size: 11px;">⭕ O / ❌ X</button>
+            <button type="button" class="btn-chip btn-chip-secondary" id="presetPollYesNoBtn" style="padding: 3px 8px; font-size: 11px;">👍 찬성 / 👎 반대</button>
+            <button type="button" class="btn-chip btn-chip-secondary" id="presetPoll123Btn" style="padding: 3px 8px; font-size: 11px;">1번 / 2번 / 3번</button>
+            <button type="button" class="btn-chip btn-chip-secondary" id="presetPollFoodBtn" style="padding: 3px 8px; font-size: 11px;">치킨 / 피자 / 햄버거</button>
+            <button type="button" class="btn-chip btn-chip-secondary" id="presetPollGameBtn" style="padding: 3px 8px; font-size: 11px;">롤 / 발로란트 / 배그</button>
+          </div>
+        </div>
+
+        <!-- Poll Options Container -->
+        <div class="form-group" style="margin-bottom: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <label style="margin-bottom: 0; font-size: 13px;">선택지 목록 (2~10개)</label>
+            <span id="pollOptionCount" style="color: var(--chzzk-green); font-size: 11px; font-weight: 700;">총 2개 항목</span>
+          </div>
+
+          <div id="pollOptionsList" class="roulette-items-list" style="max-height: 200px;">
+            <!-- Dynamic option rows -->
+          </div>
+
+          <div style="display: flex; gap: 8px; margin-top: 8px;">
+            <button type="button" id="addPollOptionBtn" class="btn btn-secondary" style="flex: 1; padding: 8px 12px; font-size: 12px;">
+              ➕ 선택지 추가 (Enter)
+            </button>
+            <button type="button" id="clearAllPollOptionsBtn" class="btn-chip btn-chip-danger" style="padding: 8px 12px; font-size: 12px;">
+              🗑️ 전체 삭제
+            </button>
+          </div>
+        </div>
+
+        <hr style="border-color: var(--border-color); margin: 14px 0;">
+
+        <!-- 1. General Chat Poll Settings -->
+        <div id="pollChatConfigBox">
+          <div class="panel-title" style="font-size: 13px; margin-bottom: 8px;">⚙️ 채팅 투표 상세 옵션</div>
+
+          <div class="form-group" style="margin-bottom: 8px;">
+            <label>투표 참여 방식</label>
+            <select id="pollVoteTypeSelect">
+              <option value="both" selected>🔢 번호(!1, 1) + 키워드 둘 다 인정</option>
+              <option value="numberOnly">🔢 번호만 인정 (!1, 1, 2, 3...)</option>
+              <option value="keywordOnly">🔤 선택지 키워드만 인정</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 8px;">
+            <label>중복 투표 규정</label>
+            <select id="pollDuplicateModeSelect">
+              <option value="single" selected>🔒 1인 1표 고정 (첫 투표만 인정)</option>
+              <option value="allowRevote">🔄 재투표 허용 (마지막 입력 번호로 변경)</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 8px;">
+            <label>참여 자격 필터</label>
+            <select id="pollAudienceFilterSelect">
+              <option value="all" selected>👥 전체 시청자 누구나</option>
+              <option value="subscriber">⭐ 구독자만 참여</option>
+              <option value="donator">🧀 치즈 후원자만 참여</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 2. Cheese Donation Poll Settings -->
+        <div id="pollCheeseConfigBox" style="display: none;">
+          <div style="background: rgba(0, 255, 163, 0.06); border: 1px solid rgba(0, 255, 163, 0.2); border-radius: 8px; padding: 10px 12px; margin-bottom: 10px;">
+            <div style="font-size: 12px; color: var(--chzzk-green); font-weight: 700; margin-bottom: 3px;">
+              🧀 치즈 도네이션 배틀 투표
+            </div>
+            <div style="font-size: 11px; color: var(--text-sub); line-height: 1.4;">
+              시청자가 치즈 후원 시 <b>후원 메시지에 선택지 번호나 키워드</b>를 넣으면 후원 치즈가 해당 선택지로 즉시 집계됩니다.
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 8px;">
+            <label>최소 후원 치즈 기준</label>
+            <select id="pollMinCheeseSelect">
+              <option value="1">전체 후원 (1치즈 이상 모두 집계)</option>
+              <option value="1000" selected>1,000 치즈 이상</option>
+              <option value="5000">5,000 치즈 이상</option>
+              <option value="10000">10,000 치즈 이상</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 8px;">
+            <label>치즈 집계 방식</label>
+            <select id="pollCheeseWeightSelect">
+              <option value="amount" selected>💰 치즈 금액 비례 누적 (1치즈 = 1표)</option>
+              <option value="count">🎟️ 후원 건수 기준 (1도네 = 1표)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Common Timer Option -->
+        <div class="form-group" style="margin-top: 8px; margin-bottom: 12px;">
+          <label>투표 제한 시간 (타이머)</label>
+          <select id="pollDurationSelect">
+            <option value="0" selected>⏳ 무제한 (수동 마감)</option>
+            <option value="30">⚡ 30초</option>
+            <option value="60">⏱️ 1분</option>
+            <option value="120">⏱️ 2분</option>
+            <option value="180">⏱️ 3분</option>
+            <option value="300">⏱️ 5분</option>
+          </select>
+        </div>
+
+        <!-- Action Control Buttons -->
+        <div style="display: flex; gap: 8px; margin-top: 14px;">
+          <button type="button" id="startPollBtn" class="btn btn-primary" style="flex: 1; padding: 12px; font-size: 14px; font-weight: 800;">
+            ▶️ 투표 시작
+          </button>
+          <button type="button" id="pausePollBtn" class="btn btn-secondary" style="display: none; padding: 12px; font-size: 13px;">
+            ⏸️ 일시 정지
+          </button>
+          <button type="button" id="stopPollBtn" class="btn btn-danger" style="display: none; padding: 12px; font-size: 13px; font-weight: 800;">
+            ⏹️ 투표 마감
+          </button>
+          <button type="button" id="resetPollBtn" class="btn-chip btn-chip-secondary" style="padding: 12px 14px; font-size: 12px;">
+            🔄 초기화
+          </button>
+        </div>
+
+        <!-- Export Buttons -->
+        <div style="display: flex; gap: 6px; margin-top: 10px;">
+          <button type="button" id="exportPollSummaryBtn" class="btn-chip btn-chip-secondary" style="flex: 1; padding: 6px 8px; font-size: 11px;">
+            📊 투표 요약 엑셀 저장
+          </button>
+          <button type="button" id="exportPollVotersBtn" class="btn-chip btn-chip-secondary" style="flex: 1; padding: 6px 8px; font-size: 11px;">
+            👥 투표자 명단 엑셀 저장
+          </button>
+        </div>
+      </div>
+
+      <!-- Right Panel: Live Visual Voting Stage -->
+      <div class="panel" style="display: flex; flex-direction: column;">
+        <div class="panel-title" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span>📊 실시간 투표 현황</span>
+            <span id="pollStatusBadge" class="live-badge-pill offline" style="font-size: 11px;">대기 중</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; font-size: 12px; color: var(--text-sub);">
+            <span>총 참여: <b id="pollTotalVotesCount" style="color: var(--chzzk-green); font-size: 15px; font-family: 'Outfit';">0</b><span id="pollVoteUnitText">표</span></span>
+            <span id="pollTimerDisplay" style="font-family: 'Outfit'; font-weight: 700; color: #ffd700; display: none;">남은 시간: 00:00</span>
+          </div>
+        </div>
+
+        <!-- Big Question Banner -->
+        <div style="background: linear-gradient(135deg, rgba(0, 255, 163, 0.12) 0%, rgba(121, 40, 202, 0.15) 100%); border: 1px solid rgba(0, 255, 163, 0.25); border-radius: 12px; padding: 14px 18px; margin-bottom: 16px;">
+          <div style="font-size: 11px; color: var(--chzzk-green); font-weight: 800; letter-spacing: 0.5px; margin-bottom: 4px;">Q. LIVE POLL</div>
+          <div id="pollActiveQuestionText" style="font-size: 18px; font-weight: 800; color: #fff;">투표를 시작하면 주제가 여기에 표시됩니다.</div>
+          <div id="pollTimerGaugeTrack" class="poll-timer-gauge-track" style="display: none;">
+            <div id="pollTimerGaugeFill" class="poll-timer-gauge-fill"></div>
+          </div>
+        </div>
+
+        <!-- Live Visual Bars Container -->
+        <div id="pollVisualBarsContainer" style="flex: 1; display: flex; flex-direction: column; justify-content: flex-start; min-height: 220px;">
+          <!-- Dynamically populated real-time bar items -->
+        </div>
+
+        <!-- Real-time Vote Incoming Feed Stream -->
+        <div style="margin-top: 16px; border-top: 1px solid var(--border-color); padding-top: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <span style="font-size: 11px; font-weight: 700; color: var(--text-sub);">⚡ 실시간 투표 유입 로그</span>
+            <span id="pollFeedCount" style="font-size: 10px; color: var(--text-sub);">최신 20건</span>
+          </div>
+          <div id="pollLiveFeedBox" style="max-height: 90px; overflow-y: auto; background: #080c14; border: 1px solid var(--border-color); border-radius: 8px; padding: 6px 10px; display: flex; flex-wrap: wrap; gap: 6px;">
+            <div style="color: var(--text-sub); font-size: 11px; padding: 8px 0; width: 100%; text-align: center;">투표가 시작되면 실시간 투표 참여자가 여기에 표시됩니다.</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- 📡 Broadcast Connection Setup Modal (A안) -->
@@ -1935,6 +2277,30 @@
           <span>당첨자가 방송 채팅을 입력하면 창에 실시간으로 자동 추가됩니다.</span>
         </div>
         <button type="button" id="closeUserChatModalBottomBtn" class="btn btn-secondary" style="padding: 8px 16px; font-size: 12px;">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🏆 Poll Final Result Announcement Modal -->
+  <div id="pollResultModal" class="modal-backdrop">
+    <div class="modal-content" style="max-width: 520px; text-align: center;">
+      <div style="font-size: 54px; margin-bottom: 6px; animation: winnerBounce 0.8s ease;">👑</div>
+      <div style="font-size: 13px; font-weight: 800; color: #ffd700; letter-spacing: 1px; margin-bottom: 4px;">FINAL WINNER</div>
+      <div id="pollResultWinnerTitle" style="font-size: 26px; font-weight: 800; color: #fff; margin-bottom: 6px; word-break: break-all;">-</div>
+      <div id="pollResultStatsText" style="font-size: 14px; color: var(--chzzk-green); font-weight: 700; margin-bottom: 18px;">총 0표 (0%) 획득으로 최종 1위!</div>
+
+      <!-- Ranking Breakdown List -->
+      <div id="pollResultBreakdownList" style="background: #080c14; border: 1px solid var(--border-color); border-radius: 10px; padding: 12px; margin-bottom: 18px; max-height: 180px; overflow-y: auto; text-align: left;">
+        <!-- Rank rows -->
+      </div>
+
+      <div style="display: flex; gap: 8px; justify-content: center;">
+        <button type="button" id="exportPollResultModalBtn" class="btn-chip btn-chip-primary" style="padding: 10px 16px; font-size: 12px; background: #107c41; color: #fff;">
+          📊 결과 엑셀 저장
+        </button>
+        <button type="button" id="closePollResultModalBtn" class="btn btn-secondary" style="padding: 10px 20px; font-size: 12px;">
+          닫기
+        </button>
       </div>
     </div>
   </div>
@@ -2662,10 +3028,14 @@
         appendUserChatMessage(chatRecord, true);
       }
 
-      // Parse and Handle Live Cheese Donation for Roulette
+      // Handle Live Poll Chat & Donation
+      handleLivePollChat(nickname, msgText, uid, isSubscriber, isDonator, now);
+
+      // Parse and Handle Live Cheese Donation for Roulette & Cheese Poll
       const donationInfo = parseLiveDonation(item, profileData);
       if (donationInfo.isDonation) {
         handleLiveDonation(nickname, msgText, uid, donationInfo.payAmount, now);
+        handleLivePollDonation(nickname, msgText, uid, donationInfo.payAmount, now);
       }
 
       addChatToFeed(nickname, msgText, now, isSubscriber, isDonator);
@@ -3326,8 +3696,10 @@
     // ==========================================
     const tabRaffleBtn = document.getElementById('tabRaffleBtn');
     const tabRouletteBtn = document.getElementById('tabRouletteBtn');
+    const tabPollBtn = document.getElementById('tabPollBtn');
     const raffleView = document.getElementById('raffleView');
     const rouletteView = document.getElementById('rouletteView');
+    const pollView = document.getElementById('pollView');
     const bgCharRaffle = document.getElementById('bgCharRaffle');
     const bgCharRoulette = document.getElementById('bgCharRoulette');
 
@@ -3405,17 +3777,21 @@
       if (tab === 'raffle') {
         tabRaffleBtn.classList.add('active');
         tabRouletteBtn.classList.remove('active');
+        tabPollBtn.classList.remove('active');
         raffleView.style.display = 'block';
         rouletteView.style.display = 'none';
+        pollView.style.display = 'none';
         if (bgCharRaffle && bgCharRoulette) {
           bgCharRaffle.classList.add('active');
           bgCharRoulette.classList.remove('active');
         }
-      } else {
+      } else if (tab === 'roulette') {
         tabRouletteBtn.classList.add('active');
         tabRaffleBtn.classList.remove('active');
+        tabPollBtn.classList.remove('active');
         rouletteView.style.display = 'grid';
         raffleView.style.display = 'none';
+        pollView.style.display = 'none';
         if (bgCharRaffle && bgCharRoulette) {
           bgCharRoulette.classList.add('active');
           bgCharRaffle.classList.remove('active');
@@ -3425,10 +3801,24 @@
         } else {
           drawRouletteWheel();
         }
+      } else if (tab === 'poll') {
+        tabPollBtn.classList.add('active');
+        tabRaffleBtn.classList.remove('active');
+        tabRouletteBtn.classList.remove('active');
+        pollView.style.display = 'grid';
+        raffleView.style.display = 'none';
+        rouletteView.style.display = 'none';
+        if (bgCharRaffle && bgCharRoulette) {
+          bgCharRaffle.classList.remove('active');
+          bgCharRoulette.classList.remove('active');
+        }
+        renderPollOptionsList();
+        renderPollVisualBars();
       }
     }
     tabRaffleBtn.addEventListener('click', () => switchMainTab('raffle'));
     tabRouletteBtn.addEventListener('click', () => switchMainTab('roulette'));
+    tabPollBtn.addEventListener('click', () => switchMainTab('poll'));
 
     function switchRouletteMode(mode) {
       currentRouletteMode = mode;
@@ -4219,6 +4609,692 @@
       }
     }
 
+    // ==========================================
+    // 📊 LIVE POLL & CHEESE BATTLE ENGINE
+    // ==========================================
+    const pollModeChatTabBtn = document.getElementById('pollModeChatTabBtn');
+    const pollModeCheeseTabBtn = document.getElementById('pollModeCheeseTabBtn');
+    const pollChatConfigBox = document.getElementById('pollChatConfigBox');
+    const pollCheeseConfigBox = document.getElementById('pollCheeseConfigBox');
+
+    const pollTitleInput = document.getElementById('pollTitleInput');
+    const presetPollOxBtn = document.getElementById('presetPollOxBtn');
+    const presetPollYesNoBtn = document.getElementById('presetPollYesNoBtn');
+    const presetPoll123Btn = document.getElementById('presetPoll123Btn');
+    const presetPollFoodBtn = document.getElementById('presetPollFoodBtn');
+    const presetPollGameBtn = document.getElementById('presetPollGameBtn');
+
+    const pollOptionCount = document.getElementById('pollOptionCount');
+    const pollOptionsList = document.getElementById('pollOptionsList');
+    const addPollOptionBtn = document.getElementById('addPollOptionBtn');
+    const clearAllPollOptionsBtn = document.getElementById('clearAllPollOptionsBtn');
+
+    const pollVoteTypeSelect = document.getElementById('pollVoteTypeSelect');
+    const pollDuplicateModeSelect = document.getElementById('pollDuplicateModeSelect');
+    const pollAudienceFilterSelect = document.getElementById('pollAudienceFilterSelect');
+    const pollMinCheeseSelect = document.getElementById('pollMinCheeseSelect');
+    const pollCheeseWeightSelect = document.getElementById('pollCheeseWeightSelect');
+    const pollDurationSelect = document.getElementById('pollDurationSelect');
+
+    const startPollBtn = document.getElementById('startPollBtn');
+    const pausePollBtn = document.getElementById('pausePollBtn');
+    const stopPollBtn = document.getElementById('stopPollBtn');
+    const resetPollBtn = document.getElementById('resetPollBtn');
+    const exportPollSummaryBtn = document.getElementById('exportPollSummaryBtn');
+    const exportPollVotersBtn = document.getElementById('exportPollVotersBtn');
+
+    const pollStatusBadge = document.getElementById('pollStatusBadge');
+    const pollTotalVotesCount = document.getElementById('pollTotalVotesCount');
+    const pollVoteUnitText = document.getElementById('pollVoteUnitText');
+    const pollTimerDisplay = document.getElementById('pollTimerDisplay');
+    const pollActiveQuestionText = document.getElementById('pollActiveQuestionText');
+    const pollTimerGaugeTrack = document.getElementById('pollTimerGaugeTrack');
+    const pollTimerGaugeFill = document.getElementById('pollTimerGaugeFill');
+    const pollVisualBarsContainer = document.getElementById('pollVisualBarsContainer');
+    const pollFeedCount = document.getElementById('pollFeedCount');
+    const pollLiveFeedBox = document.getElementById('pollLiveFeedBox');
+
+    const pollResultModal = document.getElementById('pollResultModal');
+    const pollResultWinnerTitle = document.getElementById('pollResultWinnerTitle');
+    const pollResultStatsText = document.getElementById('pollResultStatsText');
+    const pollResultBreakdownList = document.getElementById('pollResultBreakdownList');
+    const exportPollResultModalBtn = document.getElementById('exportPollResultModalBtn');
+    const closePollResultModalBtn = document.getElementById('closePollResultModalBtn');
+
+    // Poll State
+    let currentPollMode = 'chat'; // 'chat' or 'cheese'
+    let isPollRunning = false;
+    let isPollPaused = false;
+    let pollOptions = [
+      { id: 1, text: '선택지 1' },
+      { id: 2, text: '선택지 2' }
+    ];
+    let pollUserVotes = new Map(); // uid -> { optionId, optionText, nickname, time, isSub, isDonor, cheeseAmount }
+    let pollOptionVotes = new Map(); // optionId -> total score/votes
+    let pollLiveFeedItems = [];
+    let pollTimerInterval = null;
+    let pollTotalDurationSec = 0;
+    let pollRemainingSec = 0;
+
+    function switchPollMode(mode) {
+      if (isPollRunning) {
+        showToast('투표 진행 중에는 모드를 변경할 수 없습니다.', '⚠️');
+        return;
+      }
+      currentPollMode = mode;
+      if (mode === 'chat') {
+        pollModeChatTabBtn.classList.add('active');
+        pollModeCheeseTabBtn.classList.remove('active');
+        pollChatConfigBox.style.display = 'block';
+        pollCheeseConfigBox.style.display = 'none';
+        pollVoteUnitText.innerText = '표';
+      } else {
+        pollModeCheeseTabBtn.classList.add('active');
+        pollModeChatTabBtn.classList.remove('active');
+        pollCheeseConfigBox.style.display = 'block';
+        pollChatConfigBox.style.display = 'none';
+        pollVoteUnitText.innerText = pollCheeseWeightSelect.value === 'amount' ? '치즈' : '표';
+      }
+      renderPollVisualBars();
+    }
+
+    pollModeChatTabBtn.addEventListener('click', () => switchPollMode('chat'));
+    pollModeCheeseTabBtn.addEventListener('click', () => switchPollMode('cheese'));
+
+    pollCheeseWeightSelect.addEventListener('change', () => {
+      if (currentPollMode === 'cheese') {
+        pollVoteUnitText.innerText = pollCheeseWeightSelect.value === 'amount' ? '치즈' : '표';
+      }
+      renderPollVisualBars();
+    });
+
+    function renderPollOptionsList() {
+      pollOptionsList.innerHTML = '';
+      pollOptions.forEach((opt, idx) => {
+        const row = document.createElement('div');
+        row.className = 'poll-option-row';
+        row.innerHTML = `
+          <span class="row-index-badge">${idx + 1}</span>
+          <input type="text" class="row-item-input" value="${escapeHtml(opt.text)}" placeholder="선택지 이름 입력 (예: 찬성, 롤)" ${isPollRunning ? 'disabled' : ''}>
+          <button type="button" class="row-delete-btn" title="삭제" ${isPollRunning ? 'disabled' : ''}>✕</button>
+        `;
+
+        const input = row.querySelector('.row-item-input');
+        const delBtn = row.querySelector('.row-delete-btn');
+
+        input.addEventListener('input', (e) => {
+          pollOptions[idx].text = e.target.value;
+          renderPollVisualBars();
+        });
+
+        input.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' && !isPollRunning) {
+            e.preventDefault();
+            addPollOption('', true);
+          }
+        });
+
+        delBtn.addEventListener('click', () => {
+          if (isPollRunning) return;
+          if (pollOptions.length <= 2) {
+            showToast('투표 선택지는 최소 2개 이상이어야 합니다.', '⚠️');
+            return;
+          }
+          removePollOption(idx);
+        });
+
+        pollOptionsList.appendChild(row);
+      });
+
+      pollOptionCount.innerText = `총 ${pollOptions.length}개 항목`;
+      renderPollVisualBars();
+    }
+
+    function addPollOption(text = '', focus = false) {
+      if (pollOptions.length >= 10) {
+        showToast('선택지는 최대 10개까지 추가할 수 있습니다.', '⚠️');
+        return;
+      }
+      const nextId = pollOptions.length > 0 ? Math.max(...pollOptions.map(o => o.id)) + 1 : 1;
+      pollOptions.push({ id: nextId, text: text || `선택지 ${pollOptions.length + 1}` });
+      renderPollOptionsList();
+      if (focus) {
+        const inputs = pollOptionsList.querySelectorAll('.row-item-input');
+        if (inputs.length > 0) {
+          inputs[inputs.length - 1].focus();
+          inputs[inputs.length - 1].select();
+        }
+      }
+    }
+
+    function removePollOption(idx) {
+      pollOptions.splice(idx, 1);
+      renderPollOptionsList();
+    }
+
+    addPollOptionBtn.addEventListener('click', () => addPollOption('', true));
+    clearAllPollOptionsBtn.addEventListener('click', () => {
+      if (isPollRunning) {
+        showToast('투표 진행 중에는 삭제할 수 없습니다.', '⚠️');
+        return;
+      }
+      pollOptions = [
+        { id: 1, text: '선택지 1' },
+        { id: 2, text: '선택지 2' }
+      ];
+      renderPollOptionsList();
+    });
+
+    // Presets
+    function applyPollPreset(title, optionTexts) {
+      if (isPollRunning) {
+        showToast('투표 진행 중에는 프리셋을 적용할 수 없습니다.', '⚠️');
+        return;
+      }
+      pollTitleInput.value = title;
+      pollOptions = optionTexts.map((txt, i) => ({ id: i + 1, text: txt }));
+      renderPollOptionsList();
+      showToast(`'${title}' 프리셋이 적용되었습니다.`, '⚡');
+    }
+
+    presetPollOxBtn.addEventListener('click', () => applyPollPreset('O / X 실시간 투표', ['⭕ O (그렇다)', '❌ X (아니다)']));
+    presetPollYesNoBtn.addEventListener('click', () => applyPollPreset('찬성 / 반대 실시간 투표', ['👍 찬성 (동의합니다)', '👎 반대 (반대합니다)']));
+    presetPoll123Btn.addEventListener('click', () => applyPollPreset('1번 vs 2번 vs 3번 선택', ['1번 선택지', '2번 선택지', '3번 선택지']));
+    presetPollFoodBtn.addEventListener('click', () => applyPollPreset('오늘 야식 메뉴 추천 투표', ['🍗 치킨', '🍕 피자', '🍔 햄버거', '🍲 떡볶이']));
+    presetPollGameBtn.addEventListener('click', () => applyPollPreset('오늘 2부 플레이할 게임 투표', ['🎮 리그 오브 레전드', '🎯 발로란트', '🔫 배틀그라운드']));
+
+    // Visual Bars Rendering
+    function renderPollVisualBars() {
+      if (!pollVisualBarsContainer) return;
+      pollVisualBarsContainer.innerHTML = '';
+
+      const validOptions = pollOptions.filter(o => o.text && o.text.trim().length > 0);
+      if (validOptions.length === 0) {
+        pollVisualBarsContainer.innerHTML = '<div style="color: var(--text-sub); text-align: center; padding: 60px 0; font-size: 13px;">선택지를 입력하거나 프리셋을 선택해 주세요.</div>';
+        return;
+      }
+
+      // Calculate total votes
+      let totalVotes = 0;
+      validOptions.forEach(opt => {
+        totalVotes += (pollOptionVotes.get(opt.id) || 0);
+      });
+
+      pollTotalVotesCount.innerText = totalVotes.toLocaleString();
+
+      // Find leader
+      let maxScore = 0;
+      let leaderId = -1;
+      if (totalVotes > 0) {
+        validOptions.forEach(opt => {
+          const score = pollOptionVotes.get(opt.id) || 0;
+          if (score > maxScore) {
+            maxScore = score;
+            leaderId = opt.id;
+          }
+        });
+      }
+
+      const unit = currentPollMode === 'cheese' && pollCheeseWeightSelect.value === 'amount' ? '치즈' : '표';
+
+      validOptions.forEach((opt, idx) => {
+        const score = pollOptionVotes.get(opt.id) || 0;
+        const pct = totalVotes > 0 ? ((score / totalVotes) * 100).toFixed(1) : '0.0';
+        const isLeader = totalVotes > 0 && opt.id === leaderId && score > 0;
+
+        const barItem = document.createElement('div');
+        barItem.className = `poll-bar-item ${isLeader ? 'winner-leader' : ''}`;
+
+        barItem.innerHTML = `
+          <div class="poll-bar-header">
+            <div class="poll-bar-title-wrap">
+              <span class="poll-num-chip">${isLeader ? '👑 ' : ''}${idx + 1}번</span>
+              <span style="word-break: break-all;">${escapeHtml(opt.text)}</span>
+            </div>
+            <div class="poll-bar-stats">
+              <span class="poll-percent-val">${pct}%</span>
+              <span class="poll-count-val">(${score.toLocaleString()} ${unit})</span>
+            </div>
+          </div>
+          <div class="poll-progress-track">
+            <div class="poll-progress-fill" style="width: ${pct}%;"></div>
+          </div>
+        `;
+
+        pollVisualBarsContainer.appendChild(barItem);
+      });
+    }
+
+    // Start / Pause / Stop / Reset Controls
+    function startPoll() {
+      const validOptions = pollOptions.filter(o => o.text && o.text.trim().length > 0);
+      if (validOptions.length < 2) {
+        showToast('투표를 시작하려면 최소 2개 이상의 선택지 이름이 필요합니다.', '⚠️');
+        return;
+      }
+
+      isPollRunning = true;
+      isPollPaused = false;
+
+      // Update Controls UI
+      startPollBtn.style.display = 'none';
+      pausePollBtn.style.display = 'inline-flex';
+      pausePollBtn.innerText = '⏸️ 일시 정지';
+      stopPollBtn.style.display = 'inline-flex';
+      pollTitleInput.disabled = true;
+      document.querySelectorAll('#pollOptionsList input, #pollOptionsList button').forEach(el => el.disabled = true);
+      addPollOptionBtn.disabled = true;
+      clearAllPollOptionsBtn.disabled = true;
+
+      // Status
+      pollStatusBadge.className = 'live-badge-pill live';
+      pollStatusBadge.innerText = '🔴 투표 진행 중';
+      pollActiveQuestionText.innerText = pollTitleInput.value.trim() || '실시간 시청자 투표 진행 중';
+
+      // Timer Setup
+      const durationSec = parseInt(pollDurationSelect.value) || 0;
+      if (durationSec > 0) {
+        pollTotalDurationSec = durationSec;
+        pollRemainingSec = durationSec;
+        pollTimerDisplay.style.display = 'inline-block';
+        pollTimerGaugeTrack.style.display = 'block';
+        updatePollTimerUI();
+
+        if (pollTimerInterval) clearInterval(pollTimerInterval);
+        pollTimerInterval = setInterval(() => {
+          if (!isPollPaused) {
+            pollRemainingSec--;
+            updatePollTimerUI();
+            if (pollRemainingSec <= 0) {
+              clearInterval(pollTimerInterval);
+              stopPoll(true);
+            }
+          }
+        }, 1000);
+      } else {
+        pollTimerDisplay.style.display = 'none';
+        pollTimerGaugeTrack.style.display = 'none';
+      }
+
+      showToast('투표가 시작되었습니다! 채팅/후원이 실시간 집계됩니다.', '🚀');
+    }
+
+    function updatePollTimerUI() {
+      const mins = Math.floor(pollRemainingSec / 60);
+      const secs = pollRemainingSec % 60;
+      const formatted = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+      pollTimerDisplay.innerText = `남은 시간: ${formatted}`;
+
+      if (pollTotalDurationSec > 0) {
+        const pct = (pollRemainingSec / pollTotalDurationSec) * 100;
+        pollTimerGaugeFill.style.width = `${Math.max(0, pct)}%`;
+        if (pct < 20) {
+          pollTimerGaugeFill.style.background = '#ff4757';
+        } else if (pct < 50) {
+          pollTimerGaugeFill.style.background = '#ffa502';
+        } else {
+          pollTimerGaugeFill.style.background = 'var(--chzzk-green)';
+        }
+      }
+    }
+
+    function togglePausePoll() {
+      if (!isPollRunning) return;
+      isPollPaused = !isPollPaused;
+      if (isPollPaused) {
+        pausePollBtn.innerText = '▶️ 이어서 진행';
+        pollStatusBadge.className = 'live-badge-pill offline';
+        pollStatusBadge.innerText = '⏸️ 일시 정지';
+        showToast('투표가 일시 정지되었습니다.', '⏸️');
+      } else {
+        pausePollBtn.innerText = '⏸️ 일시 정지';
+        pollStatusBadge.className = 'live-badge-pill live';
+        pollStatusBadge.innerText = '🔴 투표 진행 중';
+        showToast('투표가 다시 시작되었습니다.', '▶️');
+      }
+    }
+
+    function stopPoll(autoByTimer = false) {
+      if (!isPollRunning) return;
+      isPollRunning = false;
+      isPollPaused = false;
+      if (pollTimerInterval) clearInterval(pollTimerInterval);
+
+      // UI
+      startPollBtn.style.display = 'inline-flex';
+      pausePollBtn.style.display = 'none';
+      stopPollBtn.style.display = 'none';
+      pollTitleInput.disabled = false;
+      document.querySelectorAll('#pollOptionsList input, #pollOptionsList button').forEach(el => el.disabled = false);
+      addPollOptionBtn.disabled = false;
+      clearAllPollOptionsBtn.disabled = false;
+
+      pollStatusBadge.className = 'live-badge-pill';
+      pollStatusBadge.style.background = 'rgba(255, 215, 0, 0.2)';
+      pollStatusBadge.style.color = '#ffd700';
+      pollStatusBadge.innerText = '🏁 투표 마감';
+
+      // Calculate Winner
+      const validOptions = pollOptions.filter(o => o.text && o.text.trim().length > 0);
+      let totalVotes = 0;
+      validOptions.forEach(opt => totalVotes += (pollOptionVotes.get(opt.id) || 0));
+
+      const sorted = [...validOptions].sort((a, b) => {
+        return (pollOptionVotes.get(b.id) || 0) - (pollOptionVotes.get(a.id) || 0);
+      });
+
+      const topOption = sorted[0];
+      const topScore = topOption ? (pollOptionVotes.get(topOption.id) || 0) : 0;
+      const topPct = totalVotes > 0 ? ((topScore / totalVotes) * 100).toFixed(1) : '0.0';
+      const unit = currentPollMode === 'cheese' && pollCheeseWeightSelect.value === 'amount' ? '치즈' : '표';
+
+      if (topOption && topScore > 0) {
+        pollResultWinnerTitle.innerText = topOption.text;
+        pollResultStatsText.innerText = `총 ${topScore.toLocaleString()} ${unit} (${topPct}%) 획득으로 최종 1위!`;
+      } else {
+        pollResultWinnerTitle.innerText = '득표 결과 없음';
+        pollResultStatsText.innerText = '참여 인원이 없어 순위가 집계되지 않았습니다.';
+      }
+
+      // Ranking breakdown list
+      pollResultBreakdownList.innerHTML = '';
+      sorted.forEach((opt, idx) => {
+        const sc = pollOptionVotes.get(opt.id) || 0;
+        const p = totalVotes > 0 ? ((sc / totalVotes) * 100).toFixed(1) : '0.0';
+        const row = document.createElement('div');
+        row.style.display = 'flex';
+        row.style.justifyContent = 'space-between';
+        row.style.padding = '6px 0';
+        row.style.borderBottom = '1px solid rgba(255,255,255,0.06)';
+        row.style.fontSize = '12px';
+        row.innerHTML = `
+          <div>
+            <span style="font-weight: 800; color: ${idx === 0 ? '#ffd700' : 'var(--text-sub)'}; margin-right: 6px;">${idx + 1}위</span>
+            <span style="color: #fff; font-weight: 700;">${escapeHtml(opt.text)}</span>
+          </div>
+          <div style="font-weight: 700; color: var(--chzzk-green); font-family: 'Outfit';">
+            ${sc.toLocaleString()} ${unit} (${p}%)
+          </div>
+        `;
+        pollResultBreakdownList.appendChild(row);
+      });
+
+      launchConfetti();
+      pollResultModal.classList.add('active');
+      showToast(autoByTimer ? '⏰ 제한 시간이 종료되어 투표가 마감되었습니다!' : '투표가 마감되었습니다!', '🏁');
+    }
+
+    function resetPoll() {
+      if (confirm('투표 진행 상황과 모든 득표/치즈 집계 내역을 초기화하시겠습니까?')) {
+        isPollRunning = false;
+        isPollPaused = false;
+        if (pollTimerInterval) clearInterval(pollTimerInterval);
+
+        pollUserVotes.clear();
+        pollOptionVotes.clear();
+        pollLiveFeedItems = [];
+
+        startPollBtn.style.display = 'inline-flex';
+        pausePollBtn.style.display = 'none';
+        stopPollBtn.style.display = 'none';
+        pollTitleInput.disabled = false;
+        document.querySelectorAll('#pollOptionsList input, #pollOptionsList button').forEach(el => el.disabled = false);
+        addPollOptionBtn.disabled = false;
+        clearAllPollOptionsBtn.disabled = false;
+
+        pollStatusBadge.className = 'live-badge-pill offline';
+        pollStatusBadge.innerText = '대기 중';
+        pollActiveQuestionText.innerText = '투표를 시작하면 주제가 여기에 표시됩니다.';
+        pollTimerDisplay.style.display = 'none';
+        pollTimerGaugeTrack.style.display = 'none';
+
+        pollLiveFeedBox.innerHTML = '<div style="color: var(--text-sub); font-size: 11px; padding: 8px 0; width: 100%; text-align: center;">투표가 시작되면 실시간 투표 참여자가 여기에 표시됩니다.</div>';
+        pollFeedCount.innerText = '최신 0건';
+
+        renderPollVisualBars();
+        showToast('투표가 초기화되었습니다.', '🔄');
+      }
+    }
+
+    startPollBtn.addEventListener('click', startPoll);
+    pausePollBtn.addEventListener('click', togglePausePoll);
+    stopPollBtn.addEventListener('click', () => stopPoll(false));
+    resetPollBtn.addEventListener('click', resetPoll);
+
+    closePollResultModalBtn.addEventListener('click', () => {
+      pollResultModal.classList.remove('active');
+    });
+    pollResultModal.addEventListener('click', (e) => {
+      if (e.target === pollResultModal) pollResultModal.classList.remove('active');
+    });
+
+    // Handle Incoming Live Chat Poll
+    function handleLivePollChat(nickname, msg, uid, isSubscriber, isDonator, timeStr) {
+      if (!isPollRunning || isPollPaused || currentPollMode !== 'chat') return;
+
+      // Check Audience Filter
+      const audFilter = pollAudienceFilterSelect.value;
+      if (audFilter === 'subscriber' && !isSubscriber) return;
+      if (audFilter === 'donator' && !isDonator) return;
+
+      const trimmedMsg = msg.trim();
+      const voteType = pollVoteTypeSelect.value;
+      const validOptions = pollOptions.filter(o => o.text && o.text.trim().length > 0);
+
+      let matchedOption = null;
+
+      // 1. Number matching (!1, 1, !2, 2...)
+      if (voteType === 'both' || voteType === 'numberOnly') {
+        const numMatch = trimmedMsg.match(/^!?([1-9]|10)\b/);
+        if (numMatch) {
+          const optIndex = parseInt(numMatch[1]) - 1;
+          if (optIndex >= 0 && optIndex < validOptions.length) {
+            matchedOption = validOptions[optIndex];
+          }
+        }
+      }
+
+      // 2. Keyword matching
+      if (!matchedOption && (voteType === 'both' || voteType === 'keywordOnly')) {
+        for (const opt of validOptions) {
+          const lowerOpt = opt.text.trim().toLowerCase();
+          if (lowerOpt.length > 0 && trimmedMsg.toLowerCase().includes(lowerOpt)) {
+            matchedOption = opt;
+            break;
+          }
+        }
+      }
+
+      if (!matchedOption) return;
+
+      const dupMode = pollDuplicateModeSelect.value;
+      const hasVoted = pollUserVotes.has(uid);
+
+      if (dupMode === 'single' && hasVoted) {
+        return; // Ignore duplicate vote
+      }
+
+      if (dupMode === 'allowRevote' && hasVoted) {
+        const prevVote = pollUserVotes.get(uid);
+        if (prevVote.optionId === matchedOption.id) return; // Same option
+        // Decrement previous option vote
+        const curPrev = pollOptionVotes.get(prevVote.optionId) || 0;
+        pollOptionVotes.set(prevVote.optionId, Math.max(0, curPrev - 1));
+      }
+
+      // Record vote
+      pollUserVotes.set(uid, {
+        optionId: matchedOption.id,
+        optionText: matchedOption.text,
+        nickname: nickname,
+        time: timeStr,
+        uid: uid,
+        isSubscriber: isSubscriber,
+        isDonator: isDonator,
+        cheeseAmount: 0
+      });
+
+      const curCount = pollOptionVotes.get(matchedOption.id) || 0;
+      pollOptionVotes.set(matchedOption.id, curCount + 1);
+
+      addPollFeedItem(nickname, matchedOption.text, timeStr, false, 0);
+      renderPollVisualBars();
+    }
+
+    // Handle Incoming Live Cheese Donation Poll
+    function handleLivePollDonation(nickname, msg, uid, amount, timeStr) {
+      if (!isPollRunning || isPollPaused || currentPollMode !== 'cheese') return;
+
+      const minCheese = Number(pollMinCheeseSelect.value) || 1;
+      if (amount < minCheese) return;
+
+      const trimmedMsg = msg.trim();
+      const validOptions = pollOptions.filter(o => o.text && o.text.trim().length > 0);
+
+      let matchedOption = null;
+
+      // Match number (!1, 1, 2...)
+      const numMatch = trimmedMsg.match(/^!?([1-9]|10)\b/);
+      if (numMatch) {
+        const optIndex = parseInt(numMatch[1]) - 1;
+        if (optIndex >= 0 && optIndex < validOptions.length) {
+          matchedOption = validOptions[optIndex];
+        }
+      }
+
+      // Match keyword
+      if (!matchedOption) {
+        for (const opt of validOptions) {
+          const lowerOpt = opt.text.trim().toLowerCase();
+          if (lowerOpt.length > 0 && trimmedMsg.toLowerCase().includes(lowerOpt)) {
+            matchedOption = opt;
+            break;
+          }
+        }
+      }
+
+      if (!matchedOption) return;
+
+      const weightMode = pollCheeseWeightSelect.value;
+      const addScore = weightMode === 'amount' ? amount : 1;
+
+      pollUserVotes.set(`${uid}_${Date.now()}`, {
+        optionId: matchedOption.id,
+        optionText: matchedOption.text,
+        nickname: nickname,
+        time: timeStr,
+        uid: uid,
+        isSubscriber: false,
+        isDonator: true,
+        cheeseAmount: amount
+      });
+
+      const curScore = pollOptionVotes.get(matchedOption.id) || 0;
+      pollOptionVotes.set(matchedOption.id, curScore + addScore);
+
+      addPollFeedItem(nickname, matchedOption.text, timeStr, true, amount);
+      renderPollVisualBars();
+    }
+
+    function addPollFeedItem(nickname, optionText, timeStr, isCheese, amount) {
+      if (pollLiveFeedItems.length === 0) {
+        pollLiveFeedBox.innerHTML = '';
+      }
+
+      pollLiveFeedItems.unshift({ nickname, optionText, timeStr, isCheese, amount });
+      if (pollLiveFeedItems.length > 25) pollLiveFeedItems.pop();
+
+      const chip = document.createElement('div');
+      chip.style.display = 'inline-flex';
+      chip.style.alignItems = 'center';
+      chip.style.gap = '5px';
+      chip.style.background = isCheese ? 'rgba(255, 215, 0, 0.12)' : 'rgba(255, 255, 255, 0.06)';
+      chip.style.border = isCheese ? '1px solid rgba(255, 215, 0, 0.3)' : '1px solid rgba(255, 255, 255, 0.08)';
+      chip.style.padding = '3px 8px';
+      chip.style.borderRadius = '16px';
+      chip.style.fontSize = '11px';
+      chip.style.animation = 'chatSlideIn 0.25s ease';
+
+      chip.innerHTML = `
+        <span style="font-weight: 700; color: ${isCheese ? '#ffd700' : 'var(--chzzk-green)'};">${escapeHtml(nickname)}</span>
+        <span style="color: var(--text-sub);">➔</span>
+        <span style="font-weight: 800; color: #fff;">${escapeHtml(optionText)}</span>
+        ${isCheese ? `<span style="font-size: 9px; color: #ffd700; font-weight: 800;">(+${amount.toLocaleString()}🧀)</span>` : ''}
+      `;
+
+      pollLiveFeedBox.insertBefore(chip, pollLiveFeedBox.firstChild);
+      pollFeedCount.innerText = `최신 ${pollLiveFeedItems.length}건`;
+    }
+
+    // Export Poll Summary & Voters
+    function exportPollSummary() {
+      const validOptions = pollOptions.filter(o => o.text && o.text.trim().length > 0);
+      if (validOptions.length === 0) {
+        showToast('저장할 투표 결과가 없습니다.', '⚠️');
+        return;
+      }
+
+      let totalVotes = 0;
+      validOptions.forEach(opt => totalVotes += (pollOptionVotes.get(opt.id) || 0));
+
+      const question = (pollTitleInput.value.trim() || '실시간 투표').replace(/"/g, '""');
+      const unit = currentPollMode === 'cheese' && pollCheeseWeightSelect.value === 'amount' ? '치즈' : '표';
+
+      let csv = `\uFEFF투표 주제,"${question}"\n총 집계,${totalVotes}${unit}\n\n순위,선택지 번호,선택지 이름,득표/치즈수,득표율(%)\n`;
+
+      const sorted = [...validOptions].sort((a, b) => {
+        return (pollOptionVotes.get(b.id) || 0) - (pollOptionVotes.get(a.id) || 0);
+      });
+
+      sorted.forEach((opt, idx) => {
+        const sc = pollOptionVotes.get(opt.id) || 0;
+        const p = totalVotes > 0 ? ((sc / totalVotes) * 100).toFixed(1) : '0.0';
+        csv += `${idx + 1}위,${opt.id}번,"${opt.text.replace(/"/g, '""')}",${sc},${p}%\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const dateStr = new Date().toISOString().slice(0, 19).replace(/[^0-9]/g, "");
+      a.href = url;
+      a.download = `chzzk_poll_summary_${dateStr}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      showToast('투표 요약 엑셀 파일을 다운로드했습니다.', '📊');
+    }
+
+    function exportPollVoters() {
+      if (pollUserVotes.size === 0) {
+        showToast('저장할 투표 참여자 내역이 없습니다.', '⚠️');
+        return;
+      }
+
+      let csv = "\uFEFF순번,닉네임,선택한 항목,치즈 후원액,투표 시간,구독 여부,후원자 여부,고유식별자(UID)\n";
+      let seq = 1;
+
+      pollUserVotes.forEach((v) => {
+        const nick = (v.nickname || '').replace(/"/g, '""');
+        const opt = (v.optionText || '').replace(/"/g, '""');
+        csv += `${seq++},"${nick}","${opt}",${v.cheeseAmount || 0},${v.time || ''},${v.isSubscriber ? '구독자' : '일반'},${v.isDonator ? '후원자' : '일반'},${v.uid || ''}\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const dateStr = new Date().toISOString().slice(0, 19).replace(/[^0-9]/g, "");
+      a.href = url;
+      a.download = `chzzk_poll_voters_${dateStr}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      showToast(`총 ${pollUserVotes.size}명의 투표자 명단을 저장했습니다.`, '👥');
+    }
+
+    exportPollSummaryBtn.addEventListener('click', exportPollSummary);
+    exportPollVotersBtn.addEventListener('click', exportPollVoters);
+    exportPollResultModalBtn.addEventListener('click', exportPollSummary);
+
     window.addEventListener('resize', () => {
       if (confettiCanvas) {
         confettiCanvas.width = window.innerWidth;
@@ -4228,6 +5304,7 @@
 
     // Initialize
     renderManualRouletteRows();
+    renderPollOptionsList();
   </script>
 </body>
 </html>
