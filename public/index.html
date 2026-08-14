@@ -821,6 +821,92 @@
       margin-left: 6px;
     }
 
+    /* 💬 Winner User Real-time Chat Tracker Styles */
+    .user-chat-link-btn {
+      background: rgba(0, 255, 163, 0.08);
+      border: 1px solid rgba(0, 255, 163, 0.25);
+      color: #fff;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      font-size: 13px;
+    }
+
+    .user-chat-link-btn:hover {
+      background: var(--chzzk-green);
+      color: #051911;
+      border-color: var(--chzzk-green);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(0, 255, 163, 0.4);
+    }
+
+    .user-chat-stream-box {
+      max-height: 320px;
+      min-height: 180px;
+      overflow-y: auto;
+      background: #080c14;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .user-chat-msg-row {
+      background: #111827;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      animation: chatSlideIn 0.25s ease-out;
+      transition: all 0.2s;
+    }
+
+    .user-chat-msg-row.new-live {
+      border-color: rgba(0, 255, 163, 0.6);
+      background: rgba(0, 255, 163, 0.09);
+      box-shadow: 0 0 12px rgba(0, 255, 163, 0.2);
+    }
+
+    .user-chat-msg-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .user-chat-msg-time {
+      font-size: 10px;
+      color: var(--text-sub);
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .user-chat-msg-content {
+      color: #f1f5f9;
+      word-break: break-all;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    @keyframes chatSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     /* 🎰 Visual Roulette Styles */
     .roulette-grid {
       display: grid;
@@ -1695,6 +1781,55 @@
     </div>
   </div>
 
+  <!-- 💬 Winner User Real-time Chat Tracker Modal -->
+  <div id="userChatModal" class="modal-backdrop">
+    <div class="modal-content" style="max-width: 580px; width: 90%; border-color: rgba(0, 255, 163, 0.35); box-shadow: 0 16px 50px rgba(0, 0, 0, 0.8);">
+      <!-- Header -->
+      <div class="modal-header" style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border-color);">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 26px;">💬</span>
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span id="userChatModalNick" style="font-size: 18px; font-weight: 800; color: #fff;">-</span>
+              <span class="live-badge-pill live" style="font-size: 10px; padding: 2px 7px;">🔴 실시간 추적 중</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px; margin-top: 4px; font-size: 11px; color: var(--text-sub);">
+              <span>고유 UID: <span id="userChatModalUid" style="font-family: monospace; color: var(--chzzk-green); font-weight: 700;">-</span></span>
+              <button type="button" class="btn-chip btn-chip-secondary" id="copyUserUidBtn" style="padding: 1px 6px; font-size: 10px;" title="UID 복사">복사</button>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="modal-close-btn" id="closeUserChatModalBtn">✕</button>
+      </div>
+
+      <!-- User Badges & Meta Info Row -->
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: #0c121e; border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; margin-bottom: 12px;">
+        <div id="userChatModalBadges" style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
+          <!-- Badges dynamically inserted -->
+        </div>
+        <div style="font-size: 12px; font-weight: 700; color: var(--text-sub); white-space: nowrap; margin-left: 8px;">
+          수집된 채팅: <span id="userChatModalMsgCount" style="color: var(--chzzk-green); font-weight: 800;">0</span>건
+        </div>
+      </div>
+
+      <!-- Chat History Stream Box -->
+      <div class="modal-body" style="padding: 0;">
+        <div id="userChatModalFeed" class="user-chat-stream-box">
+          <!-- Dynamic chat messages -->
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer" style="margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+        <div style="font-size: 11px; color: var(--text-sub); display: flex; align-items: center; gap: 6px;">
+          <span class="live-dot" style="background: var(--chzzk-green); width: 7px; height: 7px;"></span>
+          <span>당첨자가 방송 채팅을 입력하면 창에 실시간으로 자동 추가됩니다.</span>
+        </div>
+        <button type="button" id="closeUserChatModalBottomBtn" class="btn btn-secondary" style="padding: 8px 16px; font-size: 12px;">닫기</button>
+      </div>
+    </div>
+  </div>
+
   <canvas id="confettiCanvas"></canvas>
 
   <script>
@@ -1711,6 +1846,9 @@
     let currentAccessToken = '';
 
     let participants = new Map(); // uid -> participant Object
+    let userChatHistory = new Map(); // uid -> Array of full chat history
+    let activeTrackingUserUID = null; // UID currently being inspected in real-time modal
+
     let cumulativeDrawnUIDs = new Set(); // Multi-round auto-excluded UIDs
     let fileExcludedTokens = new Set(); // Excel/CSV uploaded excluded UIDs and Nicknames (lowercase)
     let manualExcludePairs = []; // [{ nick: '...', uid: '...' }, ...]
@@ -1752,6 +1890,17 @@
     const closeChatDrawerBtn = document.getElementById('closeChatDrawerBtn');
     const chatBadgeCount = document.getElementById('chatBadgeCount');
     const drawerChatCount = document.getElementById('drawerChatCount');
+
+    // Winner User Chat Tracker Modal Elements
+    const userChatModal = document.getElementById('userChatModal');
+    const userChatModalNick = document.getElementById('userChatModalNick');
+    const userChatModalUid = document.getElementById('userChatModalUid');
+    const userChatModalBadges = document.getElementById('userChatModalBadges');
+    const userChatModalMsgCount = document.getElementById('userChatModalMsgCount');
+    const userChatModalFeed = document.getElementById('userChatModalFeed');
+    const closeUserChatModalBtn = document.getElementById('closeUserChatModalBtn');
+    const closeUserChatModalBottomBtn = document.getElementById('closeUserChatModalBottomBtn');
+    const copyUserUidBtn = document.getElementById('copyUserUidBtn');
 
     // Live Broadcast State & Elements
     let isChannelLive = false;
@@ -2362,6 +2511,27 @@
         updateFilteredStats();
       }
 
+      // Record full chat log per user UID for winner inspection
+      if (!userChatHistory.has(uid)) {
+        userChatHistory.set(uid, []);
+      }
+      const chatRecord = {
+        nickname: nickname,
+        msg: msgText,
+        time: now,
+        isSubscriber: isSubscriber,
+        subMonth: subMonth,
+        subTier: subTier,
+        isDonator: isDonator,
+        donatorLevel: donatorLevel
+      };
+      userChatHistory.get(uid).push(chatRecord);
+
+      // If User Chat Tracker Modal is currently open for this user, append live!
+      if (activeTrackingUserUID === uid) {
+        appendUserChatMessage(chatRecord, true);
+      }
+
       // Parse and Handle Live Cheese Donation for Roulette
       const donationInfo = parseLiveDonation(item, profileData);
       if (donationInfo.isDonation) {
@@ -2604,7 +2774,11 @@
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td><span class="rank-num">${index + 1}</span></td>
-          <td style="font-weight: 700;">${escapeHtml(w.nickname)}</td>
+          <td>
+            <button type="button" class="user-chat-link-btn" onclick="openUserChatModal('${escapeHtml(w.uid)}', '${escapeHtml(w.nickname)}')" title="클릭하여 실시간 채팅 내역 및 추가 채팅 추적 열기">
+              💬 <span>${escapeHtml(w.nickname)}</span>
+            </button>
+          </td>
           <td style="font-size: 12px; font-family: monospace; color: var(--chzzk-green);">${escapeHtml(w.uid)}</td>
           <td>${badgesHtml}</td>
         `;
@@ -2702,6 +2876,8 @@
         participantCountEl.innerText = '0';
         filteredCountEl.innerText = '0';
         excludedCountEl.innerText = '0';
+        userChatHistory.clear();
+        activeTrackingUserUID = null;
         drawnWinnerCountEl.innerText = '0';
         chatFeed.innerHTML = '<div style="color: #64748b; text-align: center; margin-top: 80px; font-size: 12px;">초기화되었습니다.</div>';
         rollText.innerHTML = `<img src="delibird.png" alt="Delibird" style="height: 38px; vertical-align: middle;"> 대기 중`;
@@ -2710,6 +2886,122 @@
         exportBtn.disabled = true;
         drawBtn.disabled = true;
       }
+    });
+
+    // ==========================================
+    // 💬 WINNER USER REAL-TIME CHAT TRACKER
+    // ==========================================
+    function openUserChatModal(uid, fallbackNick) {
+      activeTrackingUserUID = uid;
+      
+      const p = participants.get(uid) || drawnWinners.find(w => w.uid === uid) || {
+        nickname: fallbackNick || uid.substring(0, 8),
+        uid: uid,
+        isSubscriber: false,
+        isDonator: false
+      };
+
+      userChatModalNick.innerText = p.nickname;
+      userChatModalUid.innerText = p.uid;
+
+      // Badges
+      let badgesHtml = '';
+      if (p.isSubscriber) {
+        badgesHtml += `<span class="badge-tag badge-sub">⭐ 구독 (${p.subMonth || 1}개월)</span>`;
+        if (p.subTier > 0) badgesHtml += `<span class="badge-tag badge-tier">${p.subTier}티어</span>`;
+      }
+      if (p.isDonator) {
+        let lvlText = '';
+        if (p.donatorLevel === 5) lvlText = ' (1억 치즈+)';
+        else if (p.donatorLevel === 4) lvlText = ' (1,000만 치즈+)';
+        else if (p.donatorLevel === 3) lvlText = ' (100만 치즈+)';
+        else if (p.donatorLevel === 2) lvlText = ' (10만 치즈+)';
+        else if (p.donatorLevel === 1) lvlText = ' (후원자)';
+        badgesHtml += `<span class="badge-tag badge-follow">🧀 후원자${lvlText}</span>`;
+      }
+      if (!p.isSubscriber && !p.isDonator) {
+        badgesHtml += `<span class="badge-tag" style="background: rgba(255,255,255,0.06); color: var(--text-sub);">일반 시청자</span>`;
+      }
+      userChatModalBadges.innerHTML = badgesHtml;
+
+      // Populate existing chat history
+      userChatModalFeed.innerHTML = '';
+      const history = userChatHistory.get(uid) || [];
+      
+      // If history is empty but participant had an initial msg, populate it
+      if (history.length === 0 && p.msg) {
+        history.push({
+          nickname: p.nickname,
+          msg: p.msg,
+          time: p.time || new Date().toLocaleTimeString('ko-KR'),
+          isSubscriber: p.isSubscriber,
+          isDonator: p.isDonator
+        });
+        userChatHistory.set(uid, history);
+      }
+
+      userChatModalMsgCount.innerText = history.length.toLocaleString();
+
+      if (history.length === 0) {
+        userChatModalFeed.innerHTML = '<div style="color: var(--text-sub); text-align: center; padding: 40px 0; font-size: 12px;">아직 수집된 채팅 내역이 없습니다.<br><span style="font-size: 11px; color: #64748b; margin-top: 4px; display: inline-block;">당첨자가 방송에서 채팅을 입력하면 실시간으로 여기에 자동 추가됩니다.</span></div>';
+      } else {
+        history.forEach(item => {
+          appendUserChatMessage(item, false);
+        });
+      }
+
+      userChatModal.classList.add('active');
+    }
+
+    function appendUserChatMessage(item, isLive = false) {
+      // If placeholder exists, remove it
+      const placeholder = userChatModalFeed.querySelector('div[style*="text-align: center"]');
+      if (placeholder) {
+        userChatModalFeed.innerHTML = '';
+      }
+
+      const row = document.createElement('div');
+      row.className = `user-chat-msg-row ${isLive ? 'new-live' : ''}`;
+      row.innerHTML = `
+        <div class="user-chat-msg-header">
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span style="font-weight: 700; color: var(--chzzk-green); font-size: 12px;">${escapeHtml(item.nickname)}</span>
+            ${isLive ? '<span class="badge-tag" style="background: rgba(0,255,163,0.2); color: var(--chzzk-green); font-size: 9px; padding: 1px 4px; border: 1px solid rgba(0,255,163,0.4);">🔴 LIVE NEW</span>' : ''}
+          </div>
+          <span class="user-chat-msg-time">${item.time}</span>
+        </div>
+        <div class="user-chat-msg-content">${escapeHtml(item.msg || '(메시지 없음)')}</div>
+      `;
+      userChatModalFeed.appendChild(row);
+
+      const curCount = userChatHistory.get(activeTrackingUserUID)?.length || userChatModalFeed.children.length;
+      userChatModalMsgCount.innerText = curCount.toLocaleString();
+
+      userChatModalFeed.scrollTop = userChatModalFeed.scrollHeight;
+    }
+
+    function closeUserChatModal() {
+      userChatModal.classList.remove('active');
+      activeTrackingUserUID = null;
+    }
+
+    closeUserChatModalBtn.addEventListener('click', closeUserChatModal);
+    closeUserChatModalBottomBtn.addEventListener('click', closeUserChatModal);
+    userChatModal.addEventListener('click', (e) => {
+      if (e.target === userChatModal) closeUserChatModal();
+    });
+
+    copyUserUidBtn.addEventListener('click', () => {
+      if (!activeTrackingUserUID) return;
+      navigator.clipboard.writeText(activeTrackingUserUID).then(() => {
+        const originalText = copyUserUidBtn.innerText;
+        copyUserUidBtn.innerText = '✓ 복사됨!';
+        copyUserUidBtn.style.color = 'var(--chzzk-green)';
+        setTimeout(() => {
+          copyUserUidBtn.innerText = originalText;
+          copyUserUidBtn.style.color = '';
+        }, 1500);
+      });
     });
 
     // ==========================================
