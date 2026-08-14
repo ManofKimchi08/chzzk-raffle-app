@@ -42,21 +42,36 @@
         radial-gradient(circle at 90% 80%, rgba(121, 40, 202, 0.08) 0%, transparent 40%);
     }
 
-    body::before {
-      content: "";
+    /* Tab-Specific Background Mascot Characters */
+    .bg-character {
       position: fixed;
-      bottom: -30px;
-      right: -30px;
+      bottom: -20px;
+      right: -20px;
       width: 580px;
       height: 580px;
-      background-image: url('delibird-bg.png');
       background-repeat: no-repeat;
       background-position: bottom right;
       background-size: contain;
-      opacity: 0.08;
+      opacity: 0;
       pointer-events: none;
       z-index: 0;
-      filter: drop-shadow(0 0 20px rgba(0, 255, 163, 0.2));
+      transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1), transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+      transform: scale(0.96) translate(10px, 10px);
+    }
+
+    .bg-character.active {
+      opacity: 0.08;
+      transform: scale(1) translate(0, 0);
+    }
+
+    .bg-character-raffle {
+      background-image: url('delibird-bg.png');
+      filter: drop-shadow(0 0 24px rgba(0, 255, 163, 0.25));
+    }
+
+    .bg-character-roulette {
+      background-image: url('center_character.png');
+      filter: drop-shadow(0 0 24px rgba(168, 85, 247, 0.25));
     }
 
     .container {
@@ -1097,6 +1112,9 @@
   </style>
 </head>
 <body>
+  <!-- Ambient Tab Mascot Backgrounds -->
+  <div id="bgCharRaffle" class="bg-character bg-character-raffle active"></div>
+  <div id="bgCharRoulette" class="bg-character bg-character-roulette"></div>
 
   <div class="container">
     <header>
@@ -2720,6 +2738,8 @@
     const tabRouletteBtn = document.getElementById('tabRouletteBtn');
     const raffleView = document.getElementById('raffleView');
     const rouletteView = document.getElementById('rouletteView');
+    const bgCharRaffle = document.getElementById('bgCharRaffle');
+    const bgCharRoulette = document.getElementById('bgCharRoulette');
 
     const rouletteManualTabBtn = document.getElementById('rouletteManualTabBtn');
     const rouletteDonationTabBtn = document.getElementById('rouletteDonationTabBtn');
@@ -2792,11 +2812,19 @@
         tabRouletteBtn.classList.remove('active');
         raffleView.style.display = 'block';
         rouletteView.style.display = 'none';
+        if (bgCharRaffle && bgCharRoulette) {
+          bgCharRaffle.classList.add('active');
+          bgCharRoulette.classList.remove('active');
+        }
       } else {
         tabRouletteBtn.classList.add('active');
         tabRaffleBtn.classList.remove('active');
         rouletteView.style.display = 'grid';
         raffleView.style.display = 'none';
+        if (bgCharRaffle && bgCharRoulette) {
+          bgCharRoulette.classList.add('active');
+          bgCharRaffle.classList.remove('active');
+        }
         renderManualRouletteRows();
       }
     }
