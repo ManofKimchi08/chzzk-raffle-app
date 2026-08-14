@@ -6546,21 +6546,27 @@
         return;
       }
 
-      let bestCoord = null;
-      let maxVotes = -1;
+      let maxVotes = 0;
+      let topCandidates = [];
 
       for (const t of unflipped) {
         const votes = currentVoteCounts[t.coord] || 0;
         if (votes > maxVotes) {
           maxVotes = votes;
-          bestCoord = t.coord;
+          topCandidates = [t];
+        } else if (votes === maxVotes && maxVotes > 0) {
+          topCandidates.push(t);
         }
       }
 
       let targetTile = null;
-      if (maxVotes > 0 && bestCoord) {
-        targetTile = unflipped.find(t => t.coord === bestCoord);
+      if (maxVotes > 0 && topCandidates.length > 0) {
+        if (topCandidates.length > 1) {
+          showToast(`⚡ 동점 발생 (${maxVotes}표)! 동점 좌표 [${topCandidates.map(t => t.coord).join(', ')}] 중 1개가 무작위 추첨됩니다.`, '🎲');
+        }
+        targetTile = topCandidates[Math.floor(Math.random() * topCandidates.length)];
       } else {
+        showToast('시청자 투표가 없어 미오픈 타일 중 1개가 무작위로 오픈됩니다!', '🎲');
         targetTile = unflipped[Math.floor(Math.random() * unflipped.length)];
       }
 
