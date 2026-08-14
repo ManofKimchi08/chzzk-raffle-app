@@ -2424,6 +2424,16 @@
 
           <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
             <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="font-size: 12px; color: var(--text-sub); font-weight: 700;">🏆 매치 방식</span>
+              <select id="gameMatchFormatSelect" style="padding: 6px 12px; font-size: 12px; background: #080c14; border: 1px solid var(--border-color); color: #fff; border-radius: 6px; font-weight: 700;">
+                <option value="single" selected>단판 승부 (1세트 결착)</option>
+                <option value="bo3">3판 2선승제 (BO3 - 2승 시 우승)</option>
+                <option value="bo5">5판 3선승제 (BO5 - 3승 시 우승)</option>
+                <option value="bo7">7판 4선승제 (BO7 - 4승 시 우승)</option>
+              </select>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 6px;">
               <span style="font-size: 12px; color: var(--text-sub); font-weight: 700;">🎯 난이도 레벨</span>
               <select id="gameLevelSelect" style="padding: 6px 12px; font-size: 12px; background: #080c14; border: 1px solid var(--border-color); color: #fff; border-radius: 6px; font-weight: 700;">
                 <option value="1" selected>Lv.1 (초급 - 코인 24~48 / 폭탄 6개)</option>
@@ -2466,8 +2476,11 @@
           <div style="display: flex; align-items: center; gap: 12px;">
             <div style="font-size: 32px;">👑</div>
             <div>
-              <div style="font-size: 12px; color: #ffd700; font-weight: 800;">PLAYER 1 (스트리머)</div>
-              <div style="display: flex; align-items: baseline; gap: 6px;">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span style="font-size: 12px; color: #ffd700; font-weight: 800;">PLAYER 1 (스트리머)</span>
+                <span id="gameStreamerSetWinsBadge" class="badge-tag" style="background: rgba(255, 215, 0, 0.2); color: #ffd700; font-size: 11px; font-weight: 900; display: none;">⭐ 0승</span>
+              </div>
+              <div style="display: flex; align-items: baseline; gap: 6px; margin-top: 2px;">
                 <span id="gameStreamerScoreText" style="font-size: 26px; font-weight: 900; font-family: 'Outfit'; color: #fff;">0</span>
                 <span style="font-size: 12px; color: var(--text-sub);">코인</span>
                 <span id="gameStreamerStatusTag" class="badge-tag" style="background: rgba(255, 255, 255, 0.08); color: var(--text-sub); font-size: 11px;">대기</span>
@@ -2477,7 +2490,7 @@
 
           <!-- Center: VS Badge & Current Board Multiplier -->
           <div style="text-align: center; padding: 0 16px; border-left: 1px solid rgba(255,255,255,0.08); border-right: 1px solid rgba(255,255,255,0.08);">
-            <div style="font-size: 11px; font-weight: 800; color: var(--text-sub); letter-spacing: 1px; margin-bottom: 2px;">CURRENT BOARD</div>
+            <div id="gameMatchRoundBadge" style="font-size: 11px; font-weight: 800; color: #ffd700; letter-spacing: 1px; margin-bottom: 2px;">단판 승부</div>
             <div style="font-size: 18px; font-weight: 900; color: var(--chzzk-green); font-family: 'Outfit';">
               <span id="gameCurrentCoinsText">0</span> <span style="font-size: 11px; color: var(--text-sub);">COINS</span>
             </div>
@@ -2492,8 +2505,11 @@
           <!-- Right: Viewers Score Card -->
           <div style="display: flex; align-items: center; justify-content: flex-end; gap: 12px; text-align: right;">
             <div>
-              <div style="font-size: 12px; color: #38bdf8; font-weight: 800;">PLAYER 2 (시청자 연합)</div>
-              <div style="display: flex; align-items: baseline; justify-content: flex-end; gap: 6px;">
+              <div style="display: flex; align-items: center; justify-content: flex-end; gap: 6px;">
+                <span id="gameViewersSetWinsBadge" class="badge-tag" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; font-size: 11px; font-weight: 900; display: none;">⭐ 0승</span>
+                <span style="font-size: 12px; color: #38bdf8; font-weight: 800;">PLAYER 2 (시청자 연합)</span>
+              </div>
+              <div style="display: flex; align-items: baseline; justify-content: flex-end; gap: 6px; margin-top: 2px;">
                 <span id="gameViewersStatusTag" class="badge-tag" style="background: rgba(255, 255, 255, 0.08); color: var(--text-sub); font-size: 11px;">대기</span>
                 <span id="gameViewersScoreText" style="font-size: 26px; font-weight: 900; font-family: 'Outfit'; color: #fff;">0</span>
                 <span style="font-size: 12px; color: var(--text-sub);">코인</span>
@@ -2802,8 +2818,13 @@
   <div id="gameResultModal" class="modal-backdrop">
     <div class="modal-content" style="max-width: 560px; text-align: center; border-color: #ffd700; box-shadow: 0 0 50px rgba(255, 215, 0, 0.35);">
       <div id="gameResultChampionTrophy" style="font-size: 58px; margin-bottom: 6px; animation: winnerBounce 0.8s ease;">👑</div>
-      <div style="font-size: 13px; font-weight: 800; color: #ffd700; letter-spacing: 1.5px; margin-bottom: 4px;">VOLTORB FLIP BATTLE SHOWDOWN</div>
-      <div id="gameResultWinnerHeader" style="font-size: 28px; font-weight: 900; color: #fff; margin-bottom: 16px;">스트리머의 대승리!</div>
+      <div id="gameModalSubHeader" style="font-size: 13px; font-weight: 800; color: #ffd700; letter-spacing: 1.5px; margin-bottom: 4px;">VOLTORB FLIP BATTLE SHOWDOWN</div>
+      <div id="gameResultWinnerHeader" style="font-size: 28px; font-weight: 900; color: #fff; margin-bottom: 12px;">스트리머의 대승리!</div>
+
+      <!-- Match Set Score Banner (BO3 / BO5) -->
+      <div id="gameModalSetScoreBanner" style="background: rgba(255, 215, 0, 0.1); border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 8px; padding: 6px 14px; margin-bottom: 14px; font-size: 13px; font-weight: 800; color: #ffd700; display: none;">
+        세트 스코어: <span id="gameModalSetScoreText">👑 0 : 0 👥</span>
+      </div>
 
       <!-- Score Comparison Box -->
       <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: center; background: #080c14; border: 1px solid var(--border-color); border-radius: 12px; padding: 18px; margin-bottom: 18px;">
@@ -5995,20 +6016,24 @@
     }
 
     // ==========================================
-    // ⚡ VOLTORB FLIP BATTLE SYSTEM ENGINE (찌리리공 뒤집기 - 1턴 교대 & 턴 제한 배틀)
+    // ⚡ VOLTORB FLIP BATTLE SYSTEM ENGINE (세트 매치 & 턴 제한 배틀)
     // ==========================================
     const gamePhaseBadge = document.getElementById('gamePhaseBadge');
+    const gameMatchFormatSelect = document.getElementById('gameMatchFormatSelect');
     const gameLevelSelect = document.getElementById('gameLevelSelect');
     const gameTurnLimitSelect = document.getElementById('gameTurnLimitSelect');
     const gameVoteDurationSelect = document.getElementById('gameVoteDurationSelect');
 
     const gameStreamerScoreText = document.getElementById('gameStreamerScoreText');
     const gameStreamerStatusTag = document.getElementById('gameStreamerStatusTag');
+    const gameStreamerSetWinsBadge = document.getElementById('gameStreamerSetWinsBadge');
     const gameViewersScoreText = document.getElementById('gameViewersScoreText');
     const gameViewersStatusTag = document.getElementById('gameViewersStatusTag');
+    const gameViewersSetWinsBadge = document.getElementById('gameViewersSetWinsBadge');
     const gameCurrentCoinsText = document.getElementById('gameCurrentCoinsText');
     const gameRemainingTargetCards = document.getElementById('gameRemainingTargetCards');
     const gameTurnProgressBadge = document.getElementById('gameTurnProgressBadge');
+    const gameMatchRoundBadge = document.getElementById('gameMatchRoundBadge');
 
     const startGameStreamerBtn = document.getElementById('startGameStreamerBtn');
     const startGameViewersBtn = document.getElementById('startGameViewersBtn');
@@ -6032,7 +6057,10 @@
 
     const gameResultModal = document.getElementById('gameResultModal');
     const gameResultChampionTrophy = document.getElementById('gameResultChampionTrophy');
+    const gameModalSubHeader = document.getElementById('gameModalSubHeader');
     const gameResultWinnerHeader = document.getElementById('gameResultWinnerHeader');
+    const gameModalSetScoreBanner = document.getElementById('gameModalSetScoreBanner');
+    const gameModalSetScoreText = document.getElementById('gameModalSetScoreText');
     const gameModalStreamerCoins = document.getElementById('gameModalStreamerCoins');
     const gameModalStreamerDetail = document.getElementById('gameModalStreamerDetail');
     const gameModalViewersCoins = document.getElementById('gameModalViewersCoins');
@@ -6059,6 +6087,15 @@
     let viewersTurnCount = 0;
     let battleEndReason = ''; // 'cleared' | 'exploded' | 'turn_limit' | 'cashed_out'
 
+    // Match / Set State (단판 / 3선2승 / 5선3승 / 7선4승)
+    let matchFormat = 'single'; // 'single' | 'bo3' | 'bo5' | 'bo7'
+    let matchTargetWins = 1;
+    let matchCurrentRound = 1;
+    let matchStreamerWins = 0;
+    let matchViewersWins = 0;
+    let isMatchConcluded = false;
+    let lastRoundWinner = 'none'; // 'streamer' | 'viewers' | 'draw'
+
     let gamePhase = 'idle'; // 'idle' | 'streamer' | 'viewers' | 'ended'
     let isMemoMode = false;
     let activeMemoTool = 1; // 1 | 2 | 3 | 'v'
@@ -6080,6 +6117,40 @@
     let currentTurnTotalDuration = 30.0;
     let currentVoteCounts = {}; // coordKey -> count
     let currentVoteUsers = new Map(); // uid -> coordKey
+
+    function initNewMatch(resetSets = true) {
+      if (resetSets) {
+        matchCurrentRound = 1;
+        matchStreamerWins = 0;
+        matchViewersWins = 0;
+        isMatchConcluded = false;
+      }
+
+      matchFormat = gameMatchFormatSelect ? gameMatchFormatSelect.value : 'single';
+      matchTargetWins = matchFormat === 'bo3' ? 2 : (matchFormat === 'bo5' ? 3 : (matchFormat === 'bo7' ? 4 : 1));
+
+      // Update Match Round & Set Score Badges
+      if (matchFormat === 'single') {
+        if (gameStreamerSetWinsBadge) gameStreamerSetWinsBadge.style.display = 'none';
+        if (gameViewersSetWinsBadge) gameViewersSetWinsBadge.style.display = 'none';
+        if (gameMatchRoundBadge) gameMatchRoundBadge.innerText = '단판 승부';
+      } else {
+        const fmtName = matchFormat === 'bo3' ? '3판 2선승제 (BO3)' : (matchFormat === 'bo5' ? '5판 3선승제 (BO5)' : '7판 4선승제 (BO7)');
+        if (gameStreamerSetWinsBadge) {
+          gameStreamerSetWinsBadge.style.display = 'inline-flex';
+          gameStreamerSetWinsBadge.innerText = `⭐ ${matchStreamerWins}/${matchTargetWins}승`;
+        }
+        if (gameViewersSetWinsBadge) {
+          gameViewersSetWinsBadge.style.display = 'inline-flex';
+          gameViewersSetWinsBadge.innerText = `⭐ ${matchViewersWins}/${matchTargetWins}승`;
+        }
+        if (gameMatchRoundBadge) {
+          gameMatchRoundBadge.innerText = `⚔️ ${matchCurrentRound}세트 [${fmtName}]`;
+        }
+      }
+
+      initNewGameRound(false);
+    }
 
     function initNewGameRound(keepScores = false) {
       clearInterval(currentTurnTimerInterval);
@@ -6111,7 +6182,9 @@
       gamePhase = 'idle';
       gamePhaseBadge.className = 'live-badge-pill offline';
       gamePhaseBadge.innerText = '대기 중';
-      gameInstructionText.innerText = '[배틀 시작] 버튼을 눌러 게임을 시작하세요. (1턴씩 번갈아 카드를 오픈합니다)';
+      gameInstructionText.innerText = matchFormat === 'single'
+        ? '[배틀 시작] 버튼을 눌러 게임을 시작하세요. (1턴씩 번갈아 카드를 오픈합니다)'
+        : `[배틀 시작] 버튼을 눌러 ${matchCurrentRound}세트를 시작하세요! (목표: ${matchTargetWins}승)`;
       gameViewersVotingHud.style.display = 'none';
 
       generateVoltorbBoard(gameLevel);
@@ -6280,6 +6353,11 @@
           gameTurnProgressBadge.innerText = `진행: 👑스트리머(${streamerTurnCount}/${gameTurnLimit}) · 👥시청자(${viewersTurnCount}/${gameTurnLimit})`;
           gameTurnProgressBadge.style.color = '#ffd700';
         }
+      }
+
+      if (matchFormat !== 'single') {
+        if (gameStreamerSetWinsBadge) gameStreamerSetWinsBadge.innerText = `⭐ ${matchStreamerWins}/${matchTargetWins}승`;
+        if (gameViewersSetWinsBadge) gameViewersSetWinsBadge.innerText = `⭐ ${matchViewersWins}/${matchTargetWins}승`;
       }
     }
 
@@ -6659,9 +6737,39 @@
       clearInterval(currentTurnTimerInterval);
       gameViewersVotingHud.style.display = 'none';
 
+      // Determine Round Winner
+      if (streamerResult.status === 'exploded' && viewersResult.status !== 'exploded') {
+        lastRoundWinner = 'viewers';
+      } else if (viewersResult.status === 'exploded' && streamerResult.status !== 'exploded') {
+        lastRoundWinner = 'streamer';
+      } else if (streamerResult.score > viewersResult.score) {
+        lastRoundWinner = 'streamer';
+      } else if (viewersResult.score > streamerResult.score) {
+        lastRoundWinner = 'viewers';
+      } else {
+        lastRoundWinner = 'draw';
+      }
+
+      // Update Set Scores
+      if (lastRoundWinner === 'streamer') matchStreamerWins++;
+      else if (lastRoundWinner === 'viewers') matchViewersWins++;
+
+      // Check Match Conclusion
+      if (matchFormat === 'single') {
+        isMatchConcluded = true;
+      } else if (matchStreamerWins >= matchTargetWins || matchViewersWins >= matchTargetWins) {
+        isMatchConcluded = true;
+      } else {
+        isMatchConcluded = false;
+      }
+
+      updateBoardStatsUI();
+
       gamePhaseBadge.className = 'live-badge-pill offline';
-      gamePhaseBadge.innerText = '대결 종료';
-      gameInstructionText.innerText = '대결이 종료되었습니다! [🏆 최종 결과 발표] 버튼을 눌러 승자를 확인하세요.';
+      gamePhaseBadge.innerText = isMatchConcluded ? '매치 종료' : `${matchCurrentRound}세트 종료`;
+      gameInstructionText.innerText = isMatchConcluded 
+        ? '매치가 종료되었습니다! [🏆 최종 결과 발표] 버튼을 눌러 승자를 확인하세요.'
+        : `${matchCurrentRound}세트가 종료되었습니다. 다음 라운드를 진행하세요.`;
       showShowdownResultBtn.style.display = 'inline-flex';
 
       showShowdownResult();
@@ -6676,64 +6784,83 @@
       gameModalViewersCoins.innerText = viewersResult.score.toLocaleString();
       gameModalViewersDetail.innerText = `${viewersResult.flippedCount}개 타일 오픈 (${viewersResult.status === 'cleared' ? '🏆 클리어' : viewersResult.status === 'exploded' ? '💥 폭발' : viewersResult.status === 'turn_end' ? '🏁 턴 완료' : viewersResult.status === 'survived' ? '🛡️ 생존' : '🛑 안전 마감'})`;
 
-      if (battleEndReason === 'turn_limit') {
-        if (streamerResult.score > viewersResult.score) {
-          gameResultChampionTrophy.innerText = '👑';
-          gameResultWinnerHeader.innerText = `🏁 ${gameTurnLimit}턴 종료 판정 승리: 스트리머!`;
-          gameResultWinnerHeader.style.color = '#ffd700';
-          gameModalSummaryText.innerText = `지정된 ${gameTurnLimit}턴 승부 종료! 스트리머가 ${streamerResult.score.toLocaleString()} 코인으로 시청자 연합(${viewersResult.score.toLocaleString()} 코인)을 꺾고 승리했습니다!`;
-        } else if (viewersResult.score > streamerResult.score) {
-          gameResultChampionTrophy.innerText = '👥';
-          gameResultWinnerHeader.innerText = `🏁 ${gameTurnLimit}턴 종료 판정 승리: 시청자 연합!`;
-          gameResultWinnerHeader.style.color = '#38bdf8';
-          gameModalSummaryText.innerText = `지정된 ${gameTurnLimit}턴 승부 종료! 시청자 연합이 ${viewersResult.score.toLocaleString()} 코인으로 스트리머(${streamerResult.score.toLocaleString()} 코인)를 꺾고 승리했습니다!`;
-        } else {
-          gameResultChampionTrophy.innerText = '🤝';
-          gameResultWinnerHeader.innerText = `🏁 ${gameTurnLimit}턴 종료: 황금빛 무승부!`;
-          gameResultWinnerHeader.style.color = '#00ffa3';
-          gameModalSummaryText.innerText = `지정된 ${gameTurnLimit}턴 동안 양측 모두 ${streamerResult.score.toLocaleString()} 코인으로 동점을 기록했습니다!`;
-        }
-      } else if (streamerResult.status === 'exploded' && viewersResult.status !== 'exploded') {
-        gameResultChampionTrophy.innerText = '👥';
-        gameResultWinnerHeader.innerText = '시청자 연합의 승리!';
-        gameResultWinnerHeader.style.color = '#38bdf8';
-        gameModalSummaryText.innerText = `스트리머가 찌리리공을 밟아 폭발하여 시청자 연합이 승리했습니다!`;
-      } else if (viewersResult.status === 'exploded' && streamerResult.status !== 'exploded') {
-        gameResultChampionTrophy.innerText = '👑';
-        gameResultWinnerHeader.innerText = '스트리머의 승리!';
-        gameResultWinnerHeader.style.color = '#ffd700';
-        gameModalSummaryText.innerText = `시청자 연합이 찌리리공을 밟아 폭발하여 스트리머가 승리했습니다!`;
-      } else if (streamerResult.score > viewersResult.score) {
-        gameResultChampionTrophy.innerText = '👑';
-        gameResultWinnerHeader.innerText = '스트리머의 대승리!';
-        gameResultWinnerHeader.style.color = '#ffd700';
-        gameModalSummaryText.innerText = `스트리머가 ${streamerResult.score.toLocaleString()} 코인을 획득하여 시청자 연합(${viewersResult.score.toLocaleString()} 코인)을 꺾고 승리했습니다!`;
-      } else if (viewersResult.score > streamerResult.score) {
-        gameResultChampionTrophy.innerText = '👥';
-        gameResultWinnerHeader.innerText = '시청자 연합의 집단지성 승리!';
-        gameResultWinnerHeader.style.color = '#38bdf8';
-        gameModalSummaryText.innerText = `시청자들이 실시간 투표 집단지성으로 ${viewersResult.score.toLocaleString()} 코인을 획득하여 스트리머(${streamerResult.score.toLocaleString()} 코인)를 꺾었습니다!`;
+      // Multi-Set Banner UI
+      if (matchFormat !== 'single') {
+        gameModalSetScoreBanner.style.display = 'block';
+        gameModalSetScoreText.innerText = `👑 ${matchStreamerWins} : ${matchViewersWins} 👥 (목표: ${matchTargetWins}선승)`;
       } else {
-        gameResultChampionTrophy.innerText = '🤝';
-        gameResultWinnerHeader.innerText = '황금빛 무승부!';
-        gameResultWinnerHeader.style.color = '#00ffa3';
-        gameModalSummaryText.innerText = `스트리머와 시청자 연합이 모두 ${streamerResult.score.toLocaleString()} 코인으로 동점을 기록했습니다!`;
+        gameModalSetScoreBanner.style.display = 'none';
       }
 
-      triggerConfetti();
+      const fmtName = matchFormat === 'bo3' ? '3판 2선승제' : (matchFormat === 'bo5' ? '5판 3선승제' : (matchFormat === 'bo7' ? '7판 4선승제' : '단판 승부'));
+
+      if (isMatchConcluded) {
+        // Final Champion Decided!
+        gameResultChampionTrophy.innerText = '🏆';
+        if (matchStreamerWins > matchViewersWins) {
+          gameResultWinnerHeader.innerText = matchFormat === 'single' ? '스트리머의 대승리!' : `👑 스트리머 최종 매치 우승!`;
+          gameResultWinnerHeader.style.color = '#ffd700';
+          gameModalSummaryText.innerText = matchFormat === 'single'
+            ? `스트리머가 ${streamerResult.score.toLocaleString()} 코인을 획득하여 승리했습니다!`
+            : `[${fmtName}] 스트리머가 세트 스코어 ${matchStreamerWins} : ${matchViewersWins}로 최종 우승을 차지했습니다!`;
+        } else if (matchViewersWins > matchStreamerWins) {
+          gameResultWinnerHeader.innerText = matchFormat === 'single' ? '시청자 연합의 집단지성 승리!' : `👥 시청자 연합 최종 매치 우승!`;
+          gameResultWinnerHeader.style.color = '#38bdf8';
+          gameModalSummaryText.innerText = matchFormat === 'single'
+            ? `시청자 연합이 ${viewersResult.score.toLocaleString()} 코인을 획득하여 승리했습니다!`
+            : `[${fmtName}] 시청자 연합이 세트 스코어 ${matchViewersWins} : ${matchStreamerWins}로 최종 우승을 차지했습니다!`;
+        } else {
+          gameResultWinnerHeader.innerText = '황금빛 무승부!';
+          gameResultWinnerHeader.style.color = '#00ffa3';
+          gameModalSummaryText.innerText = `양측이 동점으로 매치를 마감했습니다!`;
+        }
+
+        gameModalNextRoundBtn.innerText = '🔄 새로운 매치 시작';
+        gameModalNextRoundBtn.onclick = () => {
+          gameResultModal.classList.remove('active');
+          initNewMatch(true);
+          startStreamerTurn();
+        };
+
+        triggerConfetti();
+      } else {
+        // Intermediate Round Result (Next Round Pending)
+        gameResultChampionTrophy.innerText = '🔥';
+        if (lastRoundWinner === 'streamer') {
+          gameResultWinnerHeader.innerText = `🔥 ${matchCurrentRound}세트 승리: 스트리머!`;
+          gameResultWinnerHeader.style.color = '#ffd700';
+          gameModalSummaryText.innerText = `스트리머가 이번 라운드를 가져가며 세트 스코어 👑 ${matchStreamerWins} : ${matchViewersWins} 👥 가 되었습니다!`;
+        } else if (lastRoundWinner === 'viewers') {
+          gameResultWinnerHeader.innerText = `🔥 ${matchCurrentRound}세트 승리: 시청자 연합!`;
+          gameResultWinnerHeader.style.color = '#38bdf8';
+          gameModalSummaryText.innerText = `시청자 연합이 이번 라운드를 가져가며 세트 스코어 👑 ${matchStreamerWins} : ${matchViewersWins} 👥 가 되었습니다!`;
+        } else {
+          gameResultWinnerHeader.innerText = `🔥 ${matchCurrentRound}세트: 무승부!`;
+          gameResultWinnerHeader.style.color = '#00ffa3';
+          gameModalSummaryText.innerText = `이번 라운드는 무승부로 종료되어 세트 스코어가 유지됩니다! (👑 ${matchStreamerWins} : ${matchViewersWins} 👥)`;
+        }
+
+        gameModalNextRoundBtn.innerText = `⚔️ 다음 세트 (Round ${matchCurrentRound + 1}) 시작`;
+        gameModalNextRoundBtn.onclick = () => {
+          gameResultModal.classList.remove('active');
+          matchCurrentRound++;
+          initNewMatch(false);
+          startStreamerTurn();
+        };
+      }
     }
 
     // Event Listeners
     startGameStreamerBtn.addEventListener('click', () => {
-      initNewGameRound(false);
+      initNewMatch(true);
       startStreamerTurn();
     });
     startGameViewersBtn.addEventListener('click', () => {
-      initNewGameRound(false);
+      initNewMatch(true);
       startViewersTurn();
     });
     gameCashOutBtn.addEventListener('click', cashOutGame);
-    resetGameBtn.addEventListener('click', () => initNewGameRound(false));
+    resetGameBtn.addEventListener('click', () => initNewMatch(true));
     showShowdownResultBtn.addEventListener('click', showShowdownResult);
 
     toggleMemoModeBtn.addEventListener('click', () => {
@@ -6743,13 +6870,9 @@
       showToast(`메모 모드: ${isMemoMode ? 'ON (타일을 누르면 메모가 토글됩니다)' : 'OFF (타일을 누르면 뒤집힙니다)'}`, '📝');
     });
 
+    gameMatchFormatSelect.addEventListener('change', () => initNewMatch(true));
     gameLevelSelect.addEventListener('change', () => initNewGameRound(false));
     gameTurnLimitSelect.addEventListener('change', () => initNewGameRound(false));
-    gameModalNextRoundBtn.addEventListener('click', () => {
-      gameResultModal.classList.remove('active');
-      initNewGameRound(false);
-      startStreamerTurn();
-    });
     closeGameResultModalBtn.addEventListener('click', () => {
       gameResultModal.classList.remove('active');
     });
@@ -6764,7 +6887,7 @@
     // Initialize
     renderManualRouletteRows();
     renderPollOptionsList();
-    initNewGameRound(false);
+    initNewMatch(true);
   </script>
 </body>
 </html>
