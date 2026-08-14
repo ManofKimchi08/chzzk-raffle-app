@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>치지직 대규모 시청자 추첨 & 룰렛 & 찌리리공 배틀 v4.1.0 | Chzzk Mega Raffle & Voltorb Flip</title>
+  <title>치지직 대규모 시청자 추첨 & 룰렛 & 찌리리공 배틀 v4.1.1 | Chzzk Mega Raffle & Voltorb Flip</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
@@ -1492,11 +1492,17 @@
     .voltorb-coord-badge {
       position: absolute;
       top: 3px;
-      left: 4px;
+      left: 50%;
+      transform: translateX(-50%);
       font-size: 10px;
       font-weight: 800;
       color: rgba(255, 255, 255, 0.7);
+      background: rgba(0, 0, 0, 0.35);
+      padding: 0 4px;
+      border-radius: 3px;
       z-index: 2;
+      pointer-events: none;
+      letter-spacing: 0.5px;
     }
 
     /* Memo quadrants on unflipped tile */
@@ -1511,13 +1517,14 @@
     }
 
     .memo-mark {
-      font-size: 9px;
-      font-weight: 800;
+      font-size: 12px;
+      font-weight: 900;
       display: flex;
       align-items: center;
       justify-content: center;
       opacity: 0;
       transition: opacity 0.15s;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
     }
 
     .memo-mark.active {
@@ -1528,7 +1535,7 @@
     .memo-mark.m-2 { color: #f59e0b; justify-content: flex-end; align-items: flex-start; }
     .memo-mark.m-3 { color: #38bdf8; justify-content: flex-start; align-items: flex-end; }
     .memo-mark.m-v { justify-content: flex-end; align-items: flex-end; }
-    .memo-mark.m-v img { width: 10px; height: 10px; object-fit: contain; }
+    .memo-mark.m-v img { width: 14px; height: 14px; object-fit: contain; }
 
     /* Flipped back side */
     .voltorb-tile-back {
@@ -6336,22 +6343,30 @@
       cornerPanel.className = 'voltorb-corner-panel';
       cornerPanel.innerHTML = `
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2px;">
-          <button type="button" class="memo-select-btn ${activeMemoTool === 1 ? 'active' : ''}" onclick="selectMemoTool(1)">1</button>
-          <button type="button" class="memo-select-btn ${activeMemoTool === 2 ? 'active' : ''}" onclick="selectMemoTool(2)" style="color: #f59e0b;">2</button>
-          <button type="button" class="memo-select-btn ${activeMemoTool === 3 ? 'active' : ''}" onclick="selectMemoTool(3)" style="color: #38bdf8;">3</button>
-          <button type="button" class="memo-select-btn ${activeMemoTool === 'v' ? 'active' : ''}" onclick="selectMemoTool('v')"><img src="voltorb-icon.png" alt="V" style="width: 14px; height: 14px; object-fit: contain;"></button>
+          <button type="button" class="memo-select-btn ${isMemoMode && activeMemoTool === 1 ? 'active' : ''}" onclick="selectMemoTool(1)" title="1번 메모 (다시 누르면 메모 모드 해제)">1</button>
+          <button type="button" class="memo-select-btn ${isMemoMode && activeMemoTool === 2 ? 'active' : ''}" onclick="selectMemoTool(2)" style="color: #f59e0b;" title="2번 메모 (다시 누르면 메모 모드 해제)">2</button>
+          <button type="button" class="memo-select-btn ${isMemoMode && activeMemoTool === 3 ? 'active' : ''}" onclick="selectMemoTool(3)" style="color: #38bdf8;" title="3번 메모 (다시 누르면 메모 모드 해제)">3</button>
+          <button type="button" class="memo-select-btn ${isMemoMode && activeMemoTool === 'v' ? 'active' : ''}" onclick="selectMemoTool('v')" title="찌리리공 메모 (다시 누르면 메모 모드 해제)"><img src="voltorb-icon.png" alt="V" style="width: 14px; height: 14px; object-fit: contain;"></button>
         </div>
       `;
       voltorbBoardContainer.appendChild(cornerPanel);
     }
 
     function selectMemoTool(tool) {
-      activeMemoTool = tool;
-      if (!isMemoMode) {
+      if (isMemoMode && activeMemoTool === tool) {
+        // 이미 활성화된 메모 도구를 다시 누르면 메모 모드 OFF!
+        isMemoMode = false;
+        memoModeStateText.innerText = 'OFF';
+        memoModeStateText.style.color = 'var(--text-sub)';
+        showToast('메모 모드가 해제되었습니다. (타일을 클릭하면 뒤집힙니다)', '🛑');
+      } else {
+        // 새로 켜거나 다른 메모 도구로 전환
         isMemoMode = true;
+        activeMemoTool = tool;
         memoModeStateText.innerText = 'ON';
         memoModeStateText.style.color = 'var(--chzzk-green)';
-        showToast(`메모 모드가 켜졌습니다! [${tool === 'v' ? '찌리리공 폭탄' : tool}] 마킹 가능`, '📝');
+        const toolName = (tool === 'v' ? '찌리리공 폭탄' : tool);
+        showToast(`메모 모드 [${toolName}] 활성화! (타일을 클릭해 마킹 / 다시 누르면 해제)`, '📝');
       }
       renderBoardUI();
     }
@@ -6884,6 +6899,7 @@
       memoModeStateText.innerText = isMemoMode ? 'ON' : 'OFF';
       memoModeStateText.style.color = isMemoMode ? 'var(--chzzk-green)' : 'var(--text-sub)';
       showToast(`메모 모드: ${isMemoMode ? 'ON (타일을 누르면 메모가 토글됩니다)' : 'OFF (타일을 누르면 뒤집힙니다)'}`, '📝');
+      renderBoardUI();
     });
 
     gameMatchFormatSelect.addEventListener('change', () => initNewMatch(true));
