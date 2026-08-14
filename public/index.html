@@ -75,6 +75,11 @@
       filter: drop-shadow(0 0 24px rgba(168, 85, 247, 0.25));
     }
 
+    .bg-character-poll {
+      background-image: url('simisear-bg.png');
+      filter: drop-shadow(0 0 24px rgba(255, 107, 107, 0.25));
+    }
+
     .container {
       max-width: 1420px;
       margin: 0 auto;
@@ -1371,6 +1376,7 @@
   <!-- Ambient Tab Mascot Backgrounds -->
   <div id="bgCharRaffle" class="bg-character bg-character-raffle active"></div>
   <div id="bgCharRoulette" class="bg-character bg-character-roulette"></div>
+  <div id="bgCharPoll" class="bg-character bg-character-poll"></div>
 
   <div class="container">
     <header>
@@ -1917,8 +1923,6 @@
             <button type="button" class="btn-chip btn-chip-secondary" id="presetPollOxBtn" style="padding: 3px 8px; font-size: 11px;">⭕ O / ❌ X</button>
             <button type="button" class="btn-chip btn-chip-secondary" id="presetPollYesNoBtn" style="padding: 3px 8px; font-size: 11px;">👍 찬성 / 👎 반대</button>
             <button type="button" class="btn-chip btn-chip-secondary" id="presetPoll123Btn" style="padding: 3px 8px; font-size: 11px;">1번 / 2번 / 3번</button>
-            <button type="button" class="btn-chip btn-chip-secondary" id="presetPollFoodBtn" style="padding: 3px 8px; font-size: 11px;">치킨 / 피자 / 햄버거</button>
-            <button type="button" class="btn-chip btn-chip-secondary" id="presetPollGameBtn" style="padding: 3px 8px; font-size: 11px;">롤 / 발로란트 / 배그</button>
           </div>
         </div>
 
@@ -3702,6 +3706,7 @@
     const pollView = document.getElementById('pollView');
     const bgCharRaffle = document.getElementById('bgCharRaffle');
     const bgCharRoulette = document.getElementById('bgCharRoulette');
+    const bgCharPoll = document.getElementById('bgCharPoll');
 
     const rouletteManualTabBtn = document.getElementById('rouletteManualTabBtn');
     const rouletteDonationTabBtn = document.getElementById('rouletteDonationTabBtn');
@@ -3781,10 +3786,9 @@
         raffleView.style.display = 'block';
         rouletteView.style.display = 'none';
         pollView.style.display = 'none';
-        if (bgCharRaffle && bgCharRoulette) {
-          bgCharRaffle.classList.add('active');
-          bgCharRoulette.classList.remove('active');
-        }
+        if (bgCharRaffle) bgCharRaffle.classList.add('active');
+        if (bgCharRoulette) bgCharRoulette.classList.remove('active');
+        if (bgCharPoll) bgCharPoll.classList.remove('active');
       } else if (tab === 'roulette') {
         tabRouletteBtn.classList.add('active');
         tabRaffleBtn.classList.remove('active');
@@ -3792,10 +3796,9 @@
         rouletteView.style.display = 'grid';
         raffleView.style.display = 'none';
         pollView.style.display = 'none';
-        if (bgCharRaffle && bgCharRoulette) {
-          bgCharRoulette.classList.add('active');
-          bgCharRaffle.classList.remove('active');
-        }
+        if (bgCharRoulette) bgCharRoulette.classList.add('active');
+        if (bgCharRaffle) bgCharRaffle.classList.remove('active');
+        if (bgCharPoll) bgCharPoll.classList.remove('active');
         if (currentRouletteMode === 'manual') {
           renderManualRouletteRows();
         } else {
@@ -3808,10 +3811,9 @@
         pollView.style.display = 'grid';
         raffleView.style.display = 'none';
         rouletteView.style.display = 'none';
-        if (bgCharRaffle && bgCharRoulette) {
-          bgCharRaffle.classList.remove('active');
-          bgCharRoulette.classList.remove('active');
-        }
+        if (bgCharPoll) bgCharPoll.classList.add('active');
+        if (bgCharRaffle) bgCharRaffle.classList.remove('active');
+        if (bgCharRoulette) bgCharRoulette.classList.remove('active');
         renderPollOptionsList();
         renderPollVisualBars();
       }
@@ -4621,8 +4623,6 @@
     const presetPollOxBtn = document.getElementById('presetPollOxBtn');
     const presetPollYesNoBtn = document.getElementById('presetPollYesNoBtn');
     const presetPoll123Btn = document.getElementById('presetPoll123Btn');
-    const presetPollFoodBtn = document.getElementById('presetPollFoodBtn');
-    const presetPollGameBtn = document.getElementById('presetPollGameBtn');
 
     const pollOptionCount = document.getElementById('pollOptionCount');
     const pollOptionsList = document.getElementById('pollOptionsList');
@@ -4800,8 +4800,6 @@
     presetPollOxBtn.addEventListener('click', () => applyPollPreset('O / X 실시간 투표', ['⭕ O (그렇다)', '❌ X (아니다)']));
     presetPollYesNoBtn.addEventListener('click', () => applyPollPreset('찬성 / 반대 실시간 투표', ['👍 찬성 (동의합니다)', '👎 반대 (반대합니다)']));
     presetPoll123Btn.addEventListener('click', () => applyPollPreset('1번 vs 2번 vs 3번 선택', ['1번 선택지', '2번 선택지', '3번 선택지']));
-    presetPollFoodBtn.addEventListener('click', () => applyPollPreset('오늘 야식 메뉴 추천 투표', ['🍗 치킨', '🍕 피자', '🍔 햄버거', '🍲 떡볶이']));
-    presetPollGameBtn.addEventListener('click', () => applyPollPreset('오늘 2부 플레이할 게임 투표', ['🎮 리그 오브 레전드', '🎯 발로란트', '🔫 배틀그라운드']));
 
     // Visual Bars Rendering
     function renderPollVisualBars() {
