@@ -1,7 +1,7 @@
-# 🎮 치지직 대규모 시청자 추첨 & 비주얼 룰렛 시스템 (Chzzk Mega Raffle & Roulette) v2.0.0
+# 🎮 치지직 대규모 시청자 추첨 & 비주얼 룰렛 시스템 (Chzzk Mega Raffle & Roulette) v2.1.0
 
 ![Chzzk Mega Raffle](https://img.shields.io/badge/Chzzk-WebSocket%20Live-00ffa3?style=for-the-badge&logo=naver)
-![Version](https://img.shields.io/badge/Release-v2.0.0-purple?style=for-the-badge)
+![Version](https://img.shields.io/badge/Release-v2.1.0-purple?style=for-the-badge)
 ![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![HTML5](https://img.shields.io/badge/HTML5-SinglePage-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
@@ -12,7 +12,15 @@
 
 ## 🌟 핵심 기능 (Key Features)
 
-### 🎟️ 1. 시청자 대규모 추첨기 (Mega Raffle)
+### 🎨 1. 와이드 & 모던 UI/UX 리디자인 (`NEW in v2.1.0`)
+- **📡 방송 연결 설정창 모달 분리**: 좌측을 차지하던 주소/키워드 입력 폼을 깔끔한 모달 팝업으로 분리하고 상단 헤더에 슬림한 스마트 연결 상태 칩(`[ 🟢 방송명 연결됨 (수집 N개) ⚙️ 변경 ]`) 배치
+- **💬 우측 슬라이드 채팅 서랍(Drawer)**: 메인 화면을 가리던 채팅창을 우측에서 부드럽게 열리고 닫히는 서랍 형태로 전환하여 추첨 스테이지와 룰렛 원판을 100% 풀 와이드로 활용
+- **🎯 원터치 토글 필터**: `[ 👥 전체 참여자 ]`, `[ 🧀 치즈 후원자 필터 ]`, `[ ⭐ 구독자 필터 ]` 버튼을 누르면 즉시 초록 불이 켜지며 세부 설정이 펼쳐지는 직관적인 인터랙션
+- **🚫 독립된 중복 방지 & 제외 관리**: 이전 회차 당첨자 자동 제외, 엑셀/CSV 파일 제외, 수동 닉네임 제외를 명확히 분리 관리
+
+---
+
+### 🎟️ 2. 시청자 대규모 추첨기 (Mega Raffle)
 - **⚡ 실시간 웹소켓(WebSocket) 채팅 수집**: 방송 URL 또는 채널 ID만 입력하면 실시간 채팅 메시지를 초고속 수집합니다.
 - **🧀 치즈 후원자 전용 추첨 (Cheese Donator Filter)**:
   - 팬 배지 및 일반 치즈 후원자 전체 대상 추첨
@@ -37,11 +45,12 @@
 
 ---
 
-### 🎰 2. 비주얼 룰렛 시스템 (Visual Roulette Engine) - `NEW in v2.0.0`
-- **✍️ 수동 직접 입력 룰렛 (Manual Mode)**:
-  - 줄바꿈으로 경품, 벌칙, 메뉴 등 원하는 항목을 자유롭게 입력 (`항목:가중치` 형식으로 확률 차등 적용 가능)
+### 🎰 3. 비주얼 룰렛 시스템 (Visual Roulette Engine)
+- **✍️ 칸(Row) 단위 인터랙티브 룰렛 관리**:
+  - 줄바꿈 텍스트 상자 대신 **개별 칸별 항목 이름, 비율(가중치), 개별 삭제(`✕`) 버튼** 지원
+  - **`➕ 새 항목 칸 추가` 버튼 및 `Enter` 키**로 빠르고 간편하게 칸 생성
   - 원클릭 빠른 프리셋 제공 (`🎁 경품 세트`, `🔥 벌칙 세트`, `🍱 메뉴 선택`)
-  - **👥 추첨 참여자 불러오기**: 현재 수집된 유효 응모자 명단을 버튼 하나로 룰렛 원판에 즉시 로드
+  - **👥 추첨 참여자 불러오기**: 현재 수집된 유효 응모자 명단을 버튼 하나로 룰렛 개별 칸에 즉시 생성
 - **🧀 치지직 치즈 도네이션 실시간 연동 룰렛 (Donation Mode)**:
   - 방송 중 시청자가 치즈를 후원하는 순간 룰렛 원판에 실시간 자동 등록
   - **후원자 닉네임 모드** (후원자 대상 추첨) & **후원 메시지 모드** (시청자 추천 벌칙/미션 모음)

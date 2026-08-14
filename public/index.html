@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>치지직 대규모 시청자 추첨 시스템 | Chzzk Mega Raffle</title>
+  <title>치지직 대규모 시청자 추첨 & 룰렛 시스템 | Chzzk Mega Raffle & Roulette</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-dark: #0a0c10;
-      --bg-card: rgba(18, 22, 32, 0.88);
+      --bg-card: rgba(18, 22, 32, 0.92);
       --bg-card-hover: #1a202c;
       --chzzk-green: #00ffa3;
       --chzzk-green-glow: rgba(0, 255, 163, 0.35);
@@ -53,34 +53,36 @@
       background-repeat: no-repeat;
       background-position: bottom right;
       background-size: contain;
-      opacity: 0.12;
+      opacity: 0.08;
       pointer-events: none;
       z-index: 0;
       filter: drop-shadow(0 0 20px rgba(0, 255, 163, 0.2));
     }
 
     .container {
-      max-width: 1360px;
+      max-width: 1420px;
       margin: 0 auto;
-      padding: 24px;
+      padding: 20px 24px;
       position: relative;
       z-index: 1;
     }
 
-    /* Header */
+    /* Modern Top Header */
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 20px;
+      padding-bottom: 16px;
       border-bottom: 1px solid var(--border-color);
-      margin-bottom: 24px;
+      margin-bottom: 20px;
+      gap: 16px;
+      flex-wrap: wrap;
     }
 
     .logo-group {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
     .logo-badge {
@@ -88,36 +90,80 @@
       color: #000;
       font-family: 'Outfit', sans-serif;
       font-weight: 800;
-      font-size: 14px;
+      font-size: 13px;
       padding: 4px 10px;
       border-radius: 6px;
       letter-spacing: 1px;
     }
 
     h1 {
-      font-size: 22px;
+      font-size: 20px;
       font-weight: 700;
       background: linear-gradient(to right, #ffffff, #cbd5e1);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
-    .status-badge {
-      display: inline-flex;
+    /* Center Mode Nav Tabs */
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+      background: rgba(18, 22, 32, 0.75);
+      padding: 5px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+    }
+
+    .nav-tab-btn {
+      padding: 8px 18px;
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-sub);
+      cursor: pointer;
+      display: flex;
       align-items: center;
       gap: 8px;
-      padding: 6px 14px;
-      border-radius: 20px;
-      background: #1e293b;
-      font-size: 13px;
-      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .nav-tab-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-tab-btn.active {
+      background: linear-gradient(135deg, rgba(0, 255, 163, 0.18), rgba(121, 40, 202, 0.22));
+      color: var(--chzzk-green);
+      border-color: rgba(0, 255, 163, 0.4);
+      box-shadow: 0 0 16px rgba(0, 255, 163, 0.15);
+    }
+
+    /* Right Header Controls */
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .smart-connection-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 12px;
+      border-radius: 10px;
+      background: #121826;
+      border: 1px solid var(--border-color);
+      font-size: 12px;
     }
 
     .status-dot {
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: #64748b;
+      background: #ef4444;
     }
 
     .status-dot.connected {
@@ -135,59 +181,197 @@
       to { opacity: 1; }
     }
 
-    /* Main Layout */
-    .grid {
-      display: grid;
-      grid-template-columns: 460px 1fr;
-      gap: 24px;
+    .btn-chip {
+      padding: 5px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s;
     }
 
-    @media (max-width: 1024px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
+    .btn-chip-primary {
+      background: var(--chzzk-green);
+      color: #000;
     }
 
-    /* Card Panels */
+    .btn-chip-primary:hover {
+      box-shadow: 0 0 12px var(--chzzk-green-glow);
+    }
+
+    .btn-chip-secondary {
+      background: #1e293b;
+      color: #cbd5e1;
+      border: 1px solid var(--border-color);
+    }
+
+    .btn-chip-secondary:hover {
+      background: #334155;
+      color: #fff;
+    }
+
+    .btn-chip-danger {
+      background: rgba(255, 71, 87, 0.2);
+      color: #ff6b81;
+      border: 1px solid rgba(255, 71, 87, 0.4);
+    }
+
+    .btn-chip-danger:hover {
+      background: rgba(255, 71, 87, 0.35);
+    }
+
+    .btn-chat-toggle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      background: #1e293b;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-chat-toggle:hover {
+      background: #334155;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .chat-badge {
+      background: var(--chzzk-green);
+      color: #000;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: 10px;
+    }
+
+    /* Cards & Grids */
     .panel {
       background: var(--bg-card);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
       border: 1px solid var(--border-color);
       border-radius: 16px;
       padding: 20px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      backdrop-filter: blur(12px);
     }
 
     .panel-title {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 700;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
+      color: #fff;
       display: flex;
       align-items: center;
-      gap: 8px;
-      color: #f8fafc;
+      justify-content: space-between;
     }
 
-    /* Form Controls */
-    .form-group {
+    /* Smart Filter Chips Bar */
+    .filter-chips-bar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
       margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .filter-chip-btn {
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 10px;
+      background: #121826;
+      border: 1.5px solid var(--border-color);
+      color: var(--text-sub);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+    }
+
+    .filter-chip-btn:hover {
+      background: #1e293b;
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .filter-chip-btn.active {
+      background: rgba(0, 255, 163, 0.12);
+      border-color: var(--chzzk-green);
+      color: var(--chzzk-green);
+      box-shadow: 0 0 16px rgba(0, 255, 163, 0.25);
+    }
+
+    .chip-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #475569;
+      display: inline-block;
+      transition: all 0.2s;
+    }
+
+    .filter-chip-btn.active .chip-indicator {
+      background: var(--chzzk-green);
+      box-shadow: 0 0 8px var(--chzzk-green);
+    }
+
+    .chip-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-sub);
+    }
+
+    .filter-chip-btn.active .chip-badge {
+      background: rgba(0, 255, 163, 0.2);
+      color: var(--chzzk-green);
+    }
+
+    .filter-accordion-panel {
+      background: #0d111a;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Forms & Controls */
+    .form-group {
+      margin-bottom: 14px;
     }
 
     label {
       display: block;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
-      color: var(--text-sub);
       margin-bottom: 6px;
+      color: var(--text-sub);
     }
 
-    input[type="text"], input[type="number"], textarea, select {
+    input[type="text"], input[type="number"], select, textarea {
       width: 100%;
+      padding: 10px 14px;
       background: #0f172a;
       border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 10px 12px;
+      border-radius: 8px;
       color: #fff;
       font-size: 13px;
       outline: none;
@@ -196,345 +380,186 @@
 
     input:focus, select:focus, textarea:focus {
       border-color: var(--chzzk-green);
-      box-shadow: 0 0 0 3px var(--chzzk-green-glow);
+      box-shadow: 0 0 10px var(--chzzk-green-glow);
     }
 
-    /* Match mode radio group */
     .radio-group {
       display: flex;
-      gap: 12px;
+      gap: 14px;
       margin-top: 6px;
     }
 
     .radio-label {
-      font-size: 12px;
-      color: var(--text-main);
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-sub);
       cursor: pointer;
     }
 
-    /* Checkbox & Switch controls */
     .toggle-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: #0f172a;
-      border: 1px solid var(--border-color);
-      padding: 10px 14px;
-      border-radius: 10px;
-      margin-bottom: 10px;
+      padding: 8px 0;
     }
 
     .toggle-label {
       font-size: 13px;
       font-weight: 600;
-      color: #e2e8f0;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .sub-filter-box {
-      background: #080a0f;
-      border: 1px solid var(--border-color);
-      padding: 12px;
-      border-radius: 10px;
-      margin-bottom: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .inline-inputs {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      color: #fff;
     }
 
     .btn {
-      width: 100%;
-      padding: 14px;
-      border: none;
+      padding: 12px 20px;
       border-radius: 10px;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
-      justify-content: center;
+      border: none;
+      display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
+      transition: all 0.2s;
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, var(--chzzk-green), #00d26a);
+      background: linear-gradient(135deg, var(--chzzk-green), #00b894);
       color: #000;
+      box-shadow: 0 4px 20px var(--chzzk-green-glow);
     }
 
-    .btn-primary:hover {
+    .btn-primary:hover:not(:disabled) {
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px var(--chzzk-green-glow);
+      box-shadow: 0 6px 24px rgba(0, 255, 163, 0.5);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-secondary {
+      background: #1e293b;
+      color: #fff;
+      border: 1px solid var(--border-color);
+    }
+
+    .btn-secondary:hover {
+      background: #334155;
     }
 
     .btn-danger {
-      background: rgba(255, 71, 87, 0.15);
-      color: var(--danger);
-      border: 1px solid rgba(255, 71, 87, 0.3);
-    }
-
-    .btn-danger:hover {
-      background: rgba(255, 71, 87, 0.25);
-    }
-
-    .btn-draw {
-      background: linear-gradient(135deg, #7928ca, #ff0080);
+      background: var(--danger);
       color: #fff;
-      font-size: 17px;
-      padding: 16px;
-      box-shadow: 0 4px 20px rgba(121, 40, 202, 0.4);
     }
 
-    .btn-draw:hover {
-      transform: scale(1.02);
-      box-shadow: 0 6px 24px rgba(255, 0, 128, 0.5);
-    }
-
-    .delibird-icon {
-      height: 32px;
-      width: auto;
-      vertical-align: middle;
-      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
-      transition: transform 0.2s ease;
-    }
-
-    .btn-draw:hover .delibird-icon {
-      transform: rotate(-10deg) scale(1.15);
-    }
-
-    .btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none !important;
-      box-shadow: none !important;
-    }
-
-    /* File Drop Zone */
-    .file-drop-zone {
-      border: 2px dashed var(--border-color);
-      border-radius: 10px;
-      padding: 14px;
-      text-align: center;
-      background: rgba(15, 23, 42, 0.4);
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .file-drop-zone:hover {
-      border-color: var(--chzzk-green);
-      background: rgba(0, 255, 163, 0.05);
-    }
-
-    /* Stats Grid */
-    .stats-container {
+    /* Raffle Hero Stage */
+    .raffle-hero-stage {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
+      grid-template-columns: 1fr 340px;
+      gap: 20px;
       margin-bottom: 20px;
     }
 
-    .stat-card {
-      background: #0f172a;
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 16px;
-      text-align: center;
+    @media (max-width: 1024px) {
+      .raffle-hero-stage {
+        grid-template-columns: 1fr;
+      }
     }
 
-    .stat-value {
-      font-size: 24px;
-      font-weight: 800;
-      color: var(--chzzk-green);
-      font-family: 'Outfit', sans-serif;
-      margin-top: 4px;
-    }
-
-    .stat-label {
-      font-size: 12px;
-      color: var(--text-sub);
-    }
-
-    /* Preset Chips */
-    .chip-group {
+    .stage-card {
+      background: radial-gradient(circle at center, rgba(0, 255, 163, 0.06) 0%, rgba(18, 22, 32, 0.95) 75%);
+      border: 1px solid rgba(0, 255, 163, 0.2);
+      border-radius: 16px;
+      padding: 28px;
       display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 220px;
+      position: relative;
+    }
+
+    .stage-card.drawing {
+      animation: pulseGlow 1s infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      from { box-shadow: 0 0 15px rgba(0, 255, 163, 0.2); }
+      to { box-shadow: 0 0 40px rgba(0, 255, 163, 0.5); }
+    }
+
+    .roll-text {
+      font-size: 26px;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      word-break: break-word;
+    }
+
+    .sub-roll-text {
+      font-size: 13px;
+      color: var(--text-sub);
       margin-top: 8px;
     }
 
-    .chip {
-      background: #1e293b;
+    /* Live Stats Counter Cards */
+    .stat-counter-box {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .stat-card {
+      background: #121826;
       border: 1px solid var(--border-color);
-      color: var(--text-main);
-      padding: 6px 12px;
-      border-radius: 20px;
+      border-radius: 12px;
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .stat-card-title {
       font-size: 12px;
       font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
+      color: var(--text-sub);
     }
 
-    .chip:hover {
-      border-color: var(--chzzk-green);
-      color: var(--chzzk-green);
-    }
-
-    /* Live Chat Feed */
-    .chat-feed {
-      height: 160px;
-      background: #080a0f;
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 12px;
-      overflow-y: auto;
-      font-size: 13px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .chat-item {
-      display: flex;
-      gap: 8px;
-      align-items: baseline;
-      animation: fadeIn 0.2s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .chat-nick {
-      font-weight: 700;
-      color: var(--chzzk-green);
-      white-space: nowrap;
-    }
-
-    .chat-msg {
-      color: #cbd5e1;
-      word-break: break-all;
-    }
-
-    .chat-time {
-      font-size: 11px;
-      color: #475569;
-      margin-left: auto;
-    }
-
-    /* Badges */
-    .badge-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 11px;
-      padding: 2px 8px;
-      border-radius: 12px;
-      font-weight: 600;
-      margin-right: 4px;
-    }
-
-    .badge-sub {
-      background: rgba(121, 40, 202, 0.25);
-      color: #d8b4fe;
-      border: 1px solid rgba(121, 40, 202, 0.4);
-    }
-
-    .badge-follow {
-      background: rgba(0, 255, 163, 0.15);
-      color: var(--chzzk-green);
-      border: 1px solid rgba(0, 255, 163, 0.3);
-    }
-
-    .badge-tier {
-      background: rgba(255, 0, 128, 0.2);
-      color: #f472b6;
-      border: 1px solid rgba(255, 0, 128, 0.4);
-    }
-
-    /* Winner Area & Animation */
-    .winner-overlay {
-      position: relative;
-      min-height: 200px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      border: 2px dashed var(--border-color);
-      border-radius: 16px;
-      padding: 24px;
-      text-align: center;
-      background: rgba(15, 23, 42, 0.6);
-      transition: all 0.3s;
-    }
-
-    .winner-overlay.drawing {
-      border-color: var(--accent-pink);
-      box-shadow: inset 0 0 30px rgba(255, 0, 128, 0.2);
-    }
-
-    .lottery-roll {
-      font-size: 30px;
+    .stat-card-num {
+      font-size: 20px;
       font-weight: 800;
       font-family: 'Outfit', sans-serif;
-      background: linear-gradient(135deg, var(--chzzk-green), var(--accent-pink));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 8px;
+      color: var(--chzzk-green);
     }
 
-    /* Winners Table */
+    /* Winners Table Section */
     .winners-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 12px;
-      margin-top: 24px;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
     .winners-actions {
       display: flex;
+      align-items: center;
       gap: 8px;
     }
 
-    .btn-sm {
-      padding: 8px 14px;
-      font-size: 13px;
-      border-radius: 8px;
-      border: 1px solid var(--border-color);
-      background: #1e293b;
-      color: #fff;
-      cursor: pointer;
-    }
-
-    .btn-sm:hover {
-      background: #334155;
-    }
-
-    .btn-excel {
-      background: #107c41;
-      border-color: #107c41;
-      color: #fff;
-      font-weight: 700;
-    }
-
-    .btn-excel:hover {
-      background: #159a52;
-    }
-
     .table-container {
-      max-height: 400px;
+      max-height: 480px;
       overflow-y: auto;
       border: 1px solid var(--border-color);
       border-radius: 12px;
@@ -574,52 +599,195 @@
       font-family: 'Outfit', sans-serif;
     }
 
-    .table-input {
-      padding: 6px 10px !important;
-      font-size: 12px !important;
-      border-radius: 6px !important;
-    }
-
-    /* Navigation Tabs */
-    .nav-tabs {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 24px;
-      background: rgba(18, 22, 32, 0.6);
-      padding: 6px;
-      border-radius: 12px;
-      border: 1px solid var(--border-color);
-      width: fit-content;
-    }
-
-    .nav-tab-btn {
-      padding: 10px 20px;
-      font-size: 14px;
+    .badge-tag {
+      font-size: 10px;
       font-weight: 700;
-      border-radius: 8px;
-      border: 1px solid transparent;
-      background: transparent;
-      color: var(--text-sub);
-      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-right: 4px;
+    }
+
+    .badge-sub { background: rgba(0, 255, 163, 0.15); color: var(--chzzk-green); border: 1px solid rgba(0,255,163,0.3); }
+    .badge-tier { background: rgba(0, 112, 243, 0.15); color: #60a5fa; border: 1px solid rgba(0,112,243,0.3); }
+    .badge-follow { background: rgba(255, 165, 2, 0.15); color: #fbbf24; border: 1px solid rgba(255,165,2,0.3); }
+
+    /* Modal Backdrop */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      z-index: 1100;
       display: flex;
       align-items: center;
-      gap: 8px;
-      transition: all 0.2s ease;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
     }
 
-    .nav-tab-btn:hover {
+    .modal-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-content {
+      background: #121826;
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      width: 90%;
+      max-width: 520px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+      transform: scale(0.95);
+      transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .modal-backdrop.active .modal-content {
+      transform: scale(1);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .modal-close-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-sub);
+      font-size: 18px;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    .modal-close-btn:hover {
       color: #fff;
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.1);
     }
 
-    .nav-tab-btn.active {
-      background: linear-gradient(135deg, rgba(0, 255, 163, 0.15), rgba(121, 40, 202, 0.2));
-      color: var(--chzzk-green);
-      border-color: rgba(0, 255, 163, 0.4);
-      box-shadow: 0 0 16px rgba(0, 255, 163, 0.15);
+    .modal-footer {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-color);
     }
 
-    /* Sub Tabs (Manual / Donation Roulette) */
+    /* Slide-out Chat Drawer */
+    .drawer-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 1050;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .drawer-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .drawer-panel {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 390px;
+      max-width: 90vw;
+      height: 100vh;
+      background: #0f1420;
+      border-left: 1px solid var(--border-color);
+      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.7);
+      z-index: 1060;
+      transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .drawer-panel.active {
+      transform: translateX(0);
+    }
+
+    .drawer-header {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #141b2b;
+    }
+
+    .chat-box {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .chat-item {
+      background: #161e30;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      animation: chatIn 0.15s ease-out;
+    }
+
+    @keyframes chatIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .chat-nick {
+      font-weight: 700;
+      color: #fff;
+      margin-right: 6px;
+    }
+
+    .chat-msg {
+      color: #cbd5e1;
+      word-break: break-all;
+    }
+
+    .chat-time {
+      font-size: 10px;
+      color: var(--text-sub);
+      float: right;
+      margin-left: 6px;
+    }
+
+    /* 🎰 Visual Roulette Styles */
+    .roulette-grid {
+      display: grid;
+      grid-template-columns: 400px 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 1024px) {
+      .roulette-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
     .sub-tabs {
       display: flex;
       gap: 6px;
@@ -649,7 +817,6 @@
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    /* Roulette Stage & Canvas */
     .roulette-stage-wrapper {
       display: flex;
       flex-direction: column;
@@ -661,6 +828,7 @@
       border: 1px solid var(--border-color);
       border-radius: 16px;
       box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+      width: 100%;
     }
 
     .roulette-wheel-container {
@@ -746,12 +914,11 @@
       transform: none;
     }
 
-    /* Preset Badge Buttons */
     .preset-btn-group {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .preset-btn {
@@ -772,45 +939,98 @@
       border-color: rgba(0, 255, 163, 0.3);
     }
 
-    /* Modal for Winner */
-    .roulette-modal-backdrop {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(8px);
-      z-index: 1000;
+    /* Interactive Roulette Item Rows */
+    .roulette-items-list {
+      max-height: 220px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 6px;
+      background: #0d111a;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      margin-bottom: 8px;
+    }
+
+    .roulette-item-row {
       display: flex;
       align-items: center;
-      justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
+      gap: 8px;
+      background: #141b2b;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 6px 8px;
+      transition: all 0.15s;
     }
 
-    .roulette-modal-backdrop.active {
-      opacity: 1;
-      pointer-events: auto;
+    .roulette-item-row:hover {
+      border-color: rgba(0, 255, 163, 0.3);
+      background: #182236;
     }
 
-    .roulette-modal-content {
-      background: #121620;
-      border: 2px solid var(--chzzk-green);
-      border-radius: 20px;
-      padding: 36px 30px;
-      max-width: 480px;
-      width: 90%;
+    .row-index-badge {
+      font-size: 11px;
+      font-weight: 800;
+      font-family: 'Outfit', sans-serif;
+      color: var(--chzzk-green);
+      min-width: 20px;
       text-align: center;
-      box-shadow: 0 0 50px rgba(0, 255, 163, 0.35);
-      transform: scale(0.9);
-      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      position: relative;
     }
 
-    .roulette-modal-backdrop.active .roulette-modal-content {
-      transform: scale(1);
+    .row-item-input {
+      flex: 1;
+      padding: 6px 10px !important;
+      font-size: 12px !important;
+      border-radius: 6px !important;
+      background: #0a0e17 !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    }
+
+    .row-item-input:focus {
+      border-color: var(--chzzk-green) !important;
+    }
+
+    .row-weight-wrap {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: #0a0e17;
+      padding: 2px 6px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .row-weight-label {
+      font-size: 10px;
+      color: var(--text-sub);
+      white-space: nowrap;
+    }
+
+    .row-weight-input {
+      width: 38px !important;
+      padding: 3px 2px !important;
+      text-align: center !important;
+      font-size: 12px !important;
+      font-weight: 700 !important;
+      border: none !important;
+      background: transparent !important;
+      color: var(--chzzk-green) !important;
+    }
+
+    .row-delete-btn {
+      padding: 5px 8px !important;
+      font-size: 11px !important;
+      background: rgba(255, 71, 87, 0.15) !important;
+      color: #ff6b81 !important;
+      border: 1px solid rgba(255, 71, 87, 0.3) !important;
+      border-radius: 6px !important;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .row-delete-btn:hover {
+      background: rgba(255, 71, 87, 0.35) !important;
     }
 
     #confettiCanvas {
@@ -820,7 +1040,23 @@
       width: 100vw;
       height: 100vh;
       pointer-events: none;
-      z-index: 999;
+      z-index: 1200;
+    }
+
+    /* File Drop Zone */
+    .file-drop-zone {
+      border: 2px dashed var(--border-color);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+      background: rgba(15, 23, 42, 0.6);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .file-drop-zone:hover {
+      border-color: var(--chzzk-green);
+      background: rgba(0, 255, 163, 0.05);
     }
   </style>
 </head>
@@ -830,230 +1066,261 @@
     <header>
       <div class="logo-group">
         <div class="logo-badge">CHZZK</div>
-        <h1>치지직 대규모 시청자 추첨 & 룰렛 시스템</h1>
+        <h1>치지직 대규모 추첨 & 룰렛</h1>
       </div>
-      <div class="status-badge">
-        <div id="statusDot" class="status-dot"></div>
-        <span id="statusText">연결 대기 중</span>
+
+      <!-- Center Mode Nav Tabs -->
+      <div class="nav-tabs">
+        <button type="button" id="tabRaffleBtn" class="nav-tab-btn active">
+          <span>🎟️</span>
+          <span>시청자 대규모 추첨</span>
+        </button>
+        <button type="button" id="tabRouletteBtn" class="nav-tab-btn">
+          <span>🎰</span>
+          <span>비주얼 룰렛</span>
+        </button>
+      </div>
+
+      <!-- Right Header Actions -->
+      <div class="header-right">
+        <div class="smart-connection-chip">
+          <div id="statusDot" class="status-dot"></div>
+          <span id="statusText" style="font-weight: 700; color: #fff;">방송 미연결</span>
+          <button type="button" id="openConnectModalBtn" class="btn-chip btn-chip-primary">
+            <span>📡</span>
+            <span id="connectBtnLabel">방송 연결</span>
+          </button>
+          <button type="button" id="disconnectBtn" class="btn-chip btn-chip-danger" style="display: none;">
+            <span>🛑</span>
+            <span>종료</span>
+          </button>
+        </div>
+
+        <button type="button" id="openChatDrawerBtn" class="btn-chat-toggle" title="실시간 채팅 피드 열기">
+          <span>💬</span>
+          <span>채팅 피드</span>
+          <span id="chatBadgeCount" class="chat-badge">0</span>
+        </button>
       </div>
     </header>
 
-    <!-- Top Navigation Tabs -->
-    <div class="nav-tabs">
-      <button type="button" id="tabRaffleBtn" class="nav-tab-btn active">
-        <span>🎟️</span>
-        <span>시청자 대규모 추첨기</span>
-      </button>
-      <button type="button" id="tabRouletteBtn" class="nav-tab-btn">
-        <span>🎰</span>
-        <span>비주얼 룰렛 시스템</span>
-      </button>
-    </div>
-
-    <!-- 🎟️ Raffle View (Tab 1) -->
-    <div id="raffleView" class="grid">
-      <!-- Left Panel: Setup & Advanced Filters -->
-      <div class="panel">
-        <div class="panel-title">📡 방송 연결 설정</div>
-        
-        <div class="form-group">
-          <label>치지직 방송 URL 또는 채널 ID</label>
-          <input type="text" id="channelInput" placeholder="https://chzzk.naver.com/live/채널ID 또는 채널ID" value="1ad5aa0f6c6741b072528fad5e5e76b1">
-        </div>
-
-        <div class="form-group">
-          <label>참여 키워드 (공백시 모든 채팅 수집)</label>
-          <input type="text" id="keywordInput" placeholder="예: !추첨, !참여">
-          <div class="radio-group">
-            <label class="radio-label">
-              <input type="radio" name="keywordMatchMode" value="exact" checked> 완전 일치 (예: !추첨 정확히 일치)
-            </label>
-            <label class="radio-label">
-              <input type="radio" name="keywordMatchMode" value="partial"> 부분 일치 (예: !추첨합니다 수용)
-            </label>
-          </div>
-        </div>
-
-        <div class="form-group" style="display: flex; gap: 8px;">
-          <button id="connectBtn" class="btn btn-primary">수집 시작</button>
-          <button id="disconnectBtn" class="btn btn-danger" style="display: none;">중단</button>
-        </div>
-
-        <hr style="border-color: var(--border-color); margin: 20px 0;">
-
-        <!-- Duplicate Prevention & Exclusion Panel (Interactive Table Layout) -->
-        <div class="panel-title">🚫 다회차 중복 당첨 방지 및 제외 설정</div>
-
-        <div class="toggle-row">
-          <span class="toggle-label">🔄 이전 회차 당첨자 자동 제외 (고유 ID 기반 100% 중복 방지)</span>
-          <input type="checkbox" id="autoExcludePreviousToggle" checked style="width: 18px; height: 18px; cursor: pointer;">
-        </div>
-
-        <div class="toggle-row">
-          <span class="toggle-label">📂 과거 당첨자 엑셀/CSV 업로드 제외</span>
-          <input type="checkbox" id="fileExcludeToggle" style="width: 18px; height: 18px; cursor: pointer;">
-        </div>
-        <div class="sub-filter-box" id="fileExcludeBox" style="display: none;">
-          <label>엑셀/CSV 또는 텍스트 파일 (.csv, .txt)</label>
-          <div class="file-drop-zone" onclick="document.getElementById('excludeFileInput').click()">
-            <span id="fileDropText" style="font-size: 12px; color: var(--text-sub);">
-              📁 이곳을 클릭하거나 이전 당첨자 엑셀/CSV 파일을 드래그해 놓으세요
-            </span>
-            <input type="file" id="excludeFileInput" accept=".csv, .txt" style="display: none;">
-          </div>
-          <div id="fileExcludeStatus" style="font-size: 11px; color: var(--chzzk-green); margin-top: 4px;"></div>
-        </div>
-
-        <div class="toggle-row">
-          <span class="toggle-label">✏️ 수동 직접 제외 (닉네임 & 고유 ID 표 대조 제외)</span>
-          <input type="checkbox" id="manualExcludeToggle" style="width: 18px; height: 18px; cursor: pointer;">
-        </div>
-        <div class="sub-filter-box" id="manualExcludeBox" style="display: none;">
-          <div style="margin-bottom: 6px; font-size: 12px; color: var(--text-sub);">
-            📋 엑셀/표(Tab 구분) 붙여넣기 박스:
-          </div>
-          <textarea id="tablePasteInput" rows="2" placeholder="엑셀 표 복사 후 여기에 붙여넣으면 아래 표로 자동 분할됩니다.&#10;(예: 닉네임1 [탭] 고유아이디1)" style="font-size: 12px; margin-bottom: 10px;"></textarea>
-
-          <div class="table-container" style="max-height: 200px; margin-bottom: 8px;">
-            <table id="excludeRulesTable">
-              <thead>
-                <tr>
-                  <th style="width: 42%;">👤 닉네임</th>
-                  <th style="width: 48%;">🔑 고유 아이디 (UID)</th>
-                  <th style="width: 10%; text-align: center;">삭제</th>
-                </tr>
-              </thead>
-              <tbody id="excludeRulesBody">
-                <!-- Initial sample rows -->
-              </tbody>
-            </table>
-          </div>
-
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <button id="addRuleRowBtn" type="button" class="btn-sm" style="background: #1e293b; font-weight: 600; font-size: 12px;">+ 행 추가</button>
-            <button id="clearRulesBtn" type="button" class="btn-sm btn-danger" style="padding: 4px 10px; font-size: 11px;">전체 삭제</button>
-          </div>
-
-          <div style="font-size: 11px; color: var(--chzzk-green); margin-top: 6px;">
-            * 닉네임과 고유 ID가 모두 입력된 행은 <b>두 정보가 모두 일치할 때만</b> 정확히 제외됩니다!
-          </div>
-        </div>
-
-        <hr style="border-color: var(--border-color); margin: 20px 0;">
-
-        <div class="panel-title">🎯 후원자 & 구독자 상세 필터 설정</div>
-
-        <!-- Donator Filters -->
-        <div class="toggle-row">
-          <span class="toggle-label">🧀 치즈 후원자 전용 추첨</span>
-          <input type="checkbox" id="donorOnlyToggle" style="width: 18px; height: 18px; cursor: pointer;">
-        </div>
-        <div class="sub-filter-box" id="donorFilterBox" style="display: none;">
-          <label>후원자 치즈 등급 필터</label>
-          <select id="donorLevelSelect" style="width: 100%; padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: rgba(0,0,0,0.3); color: var(--text-main); font-size: 13px;">
-            <option value="0">모든 후원자 (팬 배지 및 후원자 전체)</option>
-            <option value="1">일반 치즈 후원자 이상 (LV1+)</option>
-            <option value="2">🔥 10만 치즈 이상 (LV2+)</option>
-            <option value="3">🔥 100만 치즈 이상 (LV3+)</option>
-            <option value="4">💖 1,000만 치즈 이상 (LV4+)</option>
-            <option value="5">✨ 1억 치즈 이상 (LV5+)</option>
-          </select>
-        </div>
-
-        <!-- Subscription Filters -->
-        <div class="toggle-row">
-          <span class="toggle-label">⭐️ 구독자 전용 추첨</span>
-          <input type="checkbox" id="subOnlyToggle" style="width: 18px; height: 18px; cursor: pointer;">
-        </div>
-        <div class="sub-filter-box" id="subFilterBox" style="display: none;">
-          <div class="inline-inputs">
-            <div>
-              <label>최소 구독 개월 수</label>
-              <input type="number" id="minSubMonths" value="0" min="0" placeholder="예: 3 (3개월 이상)">
-            </div>
-            <div>
-              <label>구독 티어 필터</label>
-              <select id="subTierSelect">
-                <option value="0">모든 티어 (1~2티어)</option>
-                <option value="1">1티어 이상</option>
-                <option value="2">2티어 전용</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <hr style="border-color: var(--border-color); margin: 20px 0;">
-
-        <div class="panel-title">🎁 추첨 설정 및 실행</div>
-
-        <div class="form-group">
-          <label>당첨 인원 수 (최대 5,000명+)</label>
-          <input type="number" id="winnerCount" value="10" min="1" max="5000">
-          <div class="chip-group">
-            <div class="chip" onclick="setWinners(1)">1명</div>
-            <div class="chip" onclick="setWinners(10)">10명</div>
-            <div class="chip" onclick="setWinners(50)">50명</div>
-            <div class="chip" onclick="setWinners(100)">100명</div>
-            <div class="chip" onclick="setWinners(300)">300명</div>
-            <div class="chip" onclick="setWinners(500)">500명</div>
-          </div>
-        </div>
-
-        <button id="drawBtn" class="btn btn-draw" disabled>
-          <img src="delibird.png" alt="Delibird" class="delibird-icon">
-          조건에 맞는 시청자 추첨하기
+    <!-- 🎟️ MAIN TAB 1: 시청자 대규모 추첨기 (Raffle View) -->
+    <div id="raffleView">
+      <!-- Smart Filter Chips & Accordion Panels -->
+      <div class="filter-chips-bar">
+        <span style="font-size: 13px; font-weight: 700; color: var(--text-sub); display: flex; align-items: center; gap: 4px;">
+          🎯 추첨 대상:
+        </span>
+        <button type="button" class="filter-chip-btn active" id="chipAllToggle" onclick="setFilterMode('all')">
+          <span class="chip-indicator"></span>
+          <span>👥 전체 참여자</span>
         </button>
-
-        <hr style="border-color: var(--border-color); margin: 20px 0;">
-
-        <div class="panel-title">💬 실시간 채팅 감시</div>
-        <div class="chat-feed" id="chatFeed">
-          <div style="color: #64748b; text-align: center; margin-top: 50px;">방송 연결 후 채팅이 이곳에 표시됩니다.</div>
+        <button type="button" class="filter-chip-btn" id="chipDonorToggle" onclick="toggleFilter('donor')">
+          <span class="chip-indicator"></span>
+          <span>🧀 치즈 후원자 필터</span>
+        </button>
+        <button type="button" class="filter-chip-btn" id="chipSubToggle" onclick="toggleFilter('sub')">
+          <span class="chip-indicator"></span>
+          <span>⭐ 구독자 필터</span>
+        </button>
+        
+        <div style="margin-left: auto; display: flex; gap: 8px;">
+          <button type="button" class="filter-chip-btn" id="chipExcludeToggle" onclick="toggleExcludePanel()">
+            <span>🚫 중복 방지 & 제외 관리</span>
+            <span id="excludeBadge" class="chip-badge">기본 중복제외 ON</span>
+          </button>
         </div>
       </div>
 
-      <!-- Right Panel: Winners & Stats -->
-      <div class="panel">
-        <div class="stats-container">
-          <div class="stat-card">
-            <div class="stat-label">총 참여자 (전체)</div>
-            <div class="stat-value" id="participantCount">0</div>
+      <!-- Detail Panel 1: Cheese Donator Filter -->
+      <div id="donorFilterPanel" class="filter-accordion-panel" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 13px; font-weight: 800; color: var(--chzzk-green);">🧀 치즈 후원자 전용 추첨 세부 조건</span>
+            <span style="font-size: 11px; color: var(--text-sub);">(후원 뱃지를 보유한 시청자만 추첨)</span>
           </div>
-          <div class="stat-card">
-            <div class="stat-label">필터 적용 유효응모자</div>
-            <div class="stat-value" id="filteredCount" style="color: var(--accent-pink);">0</div>
+          <button type="button" class="btn-chip btn-chip-secondary" onclick="toggleFilter('donor')">✕ 필터 끄기</button>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div>
+            <label>최소 후원 등급 기준</label>
+            <select id="donorLevelSelect">
+              <option value="1">일반 후원자 이상 (치즈 후원 배지/팬 배지)</option>
+              <option value="2">🔥 10만 치즈 이상 후원자 (LV2+)</option>
+              <option value="3">🔥 100만 치즈 이상 후원자 (LV3+)</option>
+              <option value="4">💖 1,000만 치즈 이상 후원자 (LV4+)</option>
+              <option value="5">✨ 1억 치즈 이상 후원자 (LV5+)</option>
+            </select>
           </div>
-          <div class="stat-card">
-            <div class="stat-label">제외된 시청자 수</div>
-            <div class="stat-value" id="excludedCount" style="color: var(--warning);">0</div>
+          <div style="font-size: 11px; color: var(--text-sub); display: flex; align-items: center; line-height: 1.5; background: rgba(0,255,163,0.04); padding: 10px; border-radius: 8px; border: 1px solid rgba(0,255,163,0.1);">
+            💡 치지직 채팅 프로필의 활동 배지 및 치즈 등급을 실시간 감지하여 고액 후원자를 정밀하게 필터링합니다.
+          </div>
+        </div>
+      </div>
+
+      <!-- Detail Panel 2: Subscriber Filter -->
+      <div id="subFilterPanel" class="filter-accordion-panel" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 13px; font-weight: 800; color: var(--chzzk-green);">⭐ 구독자 전용 추첨 세부 조건</span>
+            <span style="font-size: 11px; color: var(--text-sub);">(현재 채널 구독자만 추첨)</span>
+          </div>
+          <button type="button" class="btn-chip btn-chip-secondary" onclick="toggleFilter('sub')">✕ 필터 끄기</button>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div>
+            <label>최소 연속 구독 개월 수</label>
+            <input type="number" id="minSubMonths" min="0" placeholder="0 = 전체 구독자 (1개월 이상)" value="0">
+          </div>
+          <div>
+            <label>최소 구독 티어</label>
+            <select id="subTierSelect">
+              <option value="0">전체 티어 (1티어 및 2티어)</option>
+              <option value="1">1티어 이상</option>
+              <option value="2">2티어 전용</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detail Panel 3: Exclude Settings -->
+      <div id="excludeFilterPanel" class="filter-accordion-panel" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div>
+            <span style="font-weight: 800; color: #fff; font-size: 14px;">🚫 중복 당첨 방지 및 제외 관리</span>
+            <span style="font-size: 11px; color: var(--text-sub); margin-left: 8px;">(이전 당첨자, 블랙리스트 파일, 특정 닉네임을 추첨 대상에서 100% 제외)</span>
+          </div>
+          <button type="button" class="btn-chip btn-chip-secondary" onclick="toggleExcludePanel()">✕ 닫기</button>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+          <!-- 1. Auto Exclude Previous -->
+          <div style="background: #121826; padding: 14px; border-radius: 10px; border: 1px solid var(--border-color);">
+            <div class="toggle-row">
+              <span class="toggle-label" style="font-size: 13px;">🔄 이전 회차 당첨자 중복 제외</span>
+              <input type="checkbox" id="autoExcludePreviousToggle" checked style="width: 18px; height: 18px; cursor: pointer;">
+            </div>
+            <div style="font-size: 11px; color: var(--text-sub); margin-top: 6px; line-height: 1.4;">
+              1회차에 뽑힌 당첨자가 2회차/3회차에 다시 뽑히지 않도록 고유 ID(UID)로 자동 차단합니다.
+            </div>
+          </div>
+
+          <!-- 2. Excel Exclude -->
+          <div style="background: #121826; padding: 14px; border-radius: 10px; border: 1px solid var(--border-color);">
+            <div class="toggle-row">
+              <span class="toggle-label" style="font-size: 13px;">📂 과거 당첨자/블랙리스트 파일 업로드</span>
+              <input type="checkbox" id="fileExcludeToggle" style="width: 18px; height: 18px; cursor: pointer;">
+            </div>
+            <div id="fileExcludeBox" style="display: none; margin-top: 8px;">
+              <div class="file-drop-zone" onclick="document.getElementById('excludeFileInput').click()">
+                <span id="fileDropText" style="font-size: 11px; color: var(--text-sub);">
+                  📁 엑셀/CSV/TXT 파일 클릭 또는 드래그 업로드
+                </span>
+                <input type="file" id="excludeFileInput" accept=".csv, .txt" style="display: none;">
+              </div>
+              <div id="fileExcludeStatus" style="font-size: 11px; color: var(--chzzk-green); margin-top: 4px;"></div>
+            </div>
+          </div>
+
+          <!-- 3. Manual Exclude -->
+          <div style="background: #121826; padding: 14px; border-radius: 10px; border: 1px solid var(--border-color);">
+            <div class="toggle-row">
+              <span class="toggle-label" style="font-size: 13px;">✍️ 특정 닉네임/UID 직접 입력 제외</span>
+              <input type="checkbox" id="manualExcludeToggle" style="width: 18px; height: 18px; cursor: pointer;">
+            </div>
+            <div id="manualExcludeBox" style="display: none; margin-top: 8px;">
+              <input type="text" id="tablePasteInput" placeholder="제외할 닉네임 또는 엑셀 복사열 붙여넣기 (Ctrl+V)" style="font-size: 11px; padding: 6px 10px; margin-bottom: 6px;">
+              <div style="max-height: 80px; overflow-y: auto;">
+                <table style="font-size: 11px;">
+                  <tbody id="excludeRulesBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Raffle Hero Rolling Stage & Counters -->
+      <div class="raffle-hero-stage">
+        <!-- Center Stage -->
+        <div class="stage-card" id="winnerOverlay">
+          <div class="roll-text" id="rollText">
+            <img src="delibird.png" alt="Delibird" class="delibird-icon" style="height: 38px; vertical-align: middle;">
+            <span>추첨 준비 완료</span>
+          </div>
+          <div class="sub-roll-text" id="subRollText">
+            방송을 연결하고 참여자를 모은 뒤 아래 [추첨하기] 버튼을 눌러주세요.
+          </div>
+          
+          <div style="display: flex; gap: 12px; align-items: center; margin-top: 20px; width: 100%; max-width: 480px;">
+            <div style="display: flex; align-items: center; gap: 6px; background: #0f172a; border: 1px solid var(--border-color); border-radius: 10px; padding: 6px 12px;">
+              <span style="font-size: 12px; color: var(--text-sub); white-space: nowrap;">추첨 인원:</span>
+              <input type="number" id="winnerCount" min="1" value="1" style="width: 65px; text-align: center; font-weight: 800; border: none; background: transparent; padding: 4px; font-size: 16px; color: var(--chzzk-green);">
+              <span style="font-size: 12px; color: var(--text-sub);">명</span>
+            </div>
+            <button id="drawBtn" class="btn btn-primary" style="flex: 1; padding: 14px 20px;" disabled>
+              <span>🎉</span>
+              <span>조건에 맞는 시청자 추첨하기</span>
+            </button>
+            <button id="resetBtn" class="btn btn-secondary" style="padding: 14px 16px;" title="전체 참여자 및 당첨자 명단 초기화">
+              <span>🔄</span>
+            </button>
           </div>
         </div>
 
-        <div id="winnerOverlay" class="winner-overlay">
-          <div id="rollText" class="lottery-roll">
-            <img src="delibird.png" alt="Delibird" style="height: 36px; vertical-align: middle; margin-right: 8px;">
-            대기 중
-          </div>
-          <div id="subRollText" style="color: var(--text-sub); font-size: 14px;">참여자를 모은 뒤 필터 조건을 설정하고 '추첨하기'를 눌러주세요.</div>
-        </div>
-
-        <div class="winners-header">
-          <div class="panel-title" style="margin-bottom: 0;">🏆 당첨자 명단 (<span id="drawnWinnerCount">0</span>명)</div>
-          <div class="winners-actions">
-            <input type="text" id="searchInput" placeholder="닉네임 검색..." style="width: 140px; padding: 6px 10px; font-size: 12px;">
-            <button id="exportConfigBtn" class="btn-sm" style="background: rgba(255,255,255,0.08); border: 1px solid var(--border-color); color: var(--text-main); cursor: pointer;" title="엑셀(CSV) 다운로드 시 파일에 포함할 저장 항목(닉네임, UID, 구독정보 등)을 자유롭게 선택합니다.">⚙️ 항목 선택</button>
-            <button id="exportBtn" class="btn-sm btn-excel" disabled>📊 엑셀 다운로드</button>
-            <button id="resetBtn" class="btn-sm btn-danger">초기화</button>
-          </div>
-        </div>
-
-        <!-- CSV Column Selection Panel -->
-        <div id="csvConfigBox" style="display: none; background: rgba(15, 23, 42, 0.95); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px 16px; margin-bottom: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.4);">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-            <span style="font-weight: 700; font-size: 13px; color: var(--chzzk-green);">📊 엑셀 저장 포함 항목 선택</span>
+        <!-- Live Stat Counter Cards -->
+        <div class="stat-counter-box">
+          <div class="stat-card">
             <div>
-              <button type="button" id="selectAllColsBtn" class="btn-sm" style="padding: 2px 8px; font-size: 11px; margin-right: 4px; background: rgba(255,255,255,0.1); cursor: pointer;">전체 선택</button>
-              <button type="button" id="deselectAllColsBtn" class="btn-sm" style="padding: 2px 8px; font-size: 11px; background: rgba(255,255,255,0.1); cursor: pointer;">전체 해제</button>
+              <div class="stat-card-title">👥 유효 응모자</div>
+              <div style="font-size: 10px; color: var(--text-sub);">필터 조건 부합 인원</div>
+            </div>
+            <div class="stat-card-num" id="filteredCount">0</div>
+          </div>
+          <div class="stat-card">
+            <div>
+              <div class="stat-card-title">💬 총 채팅 수집</div>
+              <div style="font-size: 10px; color: var(--text-sub);">전체 참여 시청자</div>
+            </div>
+            <div class="stat-card-num" id="participantCount" style="color: #cbd5e1;">0</div>
+          </div>
+          <div class="stat-card">
+            <div>
+              <div class="stat-card-title">🚫 제외된 인원</div>
+              <div style="font-size: 10px; color: var(--text-sub);">중복/파일/수동 제외</div>
+            </div>
+            <div class="stat-card-num" id="excludedCount" style="color: #ff6b81;">0</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Winners Table Section -->
+      <div class="panel">
+        <div class="winners-header">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 15px; font-weight: 700; color: #fff;">🏆 당첨자 명단</span>
+            <span class="badge-tag" style="background: rgba(0,255,163,0.15); color: var(--chzzk-green); font-size: 11px;">
+              총 <span id="drawnWinnerCount">0</span>명
+            </span>
+          </div>
+
+          <div class="winners-actions">
+            <input type="text" id="searchInput" placeholder="닉네임 / 채팅 검색..." style="width: 180px; padding: 6px 10px; font-size: 12px;">
+            <button type="button" id="exportConfigBtn" class="btn-chip btn-chip-secondary" title="엑셀(CSV) 다운로드 시 파일에 포함할 저장 항목을 선택합니다.">
+              ⚙️ 항목 선택
+            </button>
+            <button type="button" id="exportBtn" class="btn-chip btn-chip-primary" style="background: #107c41; color: #fff;" disabled>
+              📊 엑셀(CSV) 다운로드
+            </button>
+          </div>
+        </div>
+
+        <!-- Collapsible CSV Column Selection Box -->
+        <div id="csvConfigBox" style="display: none; background: #0f172a; border: 1px solid var(--border-color); border-radius: 10px; padding: 12px 16px; margin-bottom: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="font-size: 12px; font-weight: 700; color: #fff;">📊 저장할 엑셀 컬럼 선택</span>
+            <div style="display: flex; gap: 6px;">
+              <button type="button" id="selectAllColsBtn" class="btn-chip btn-chip-secondary" style="padding: 2px 6px; font-size: 10px;">전체 선택</button>
+              <button type="button" id="deselectAllColsBtn" class="btn-chip btn-chip-secondary" style="padding: 2px 6px; font-size: 10px;">전체 해제</button>
             </div>
           </div>
           <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; font-size: 12px;">
@@ -1090,15 +1357,16 @@
             </tbody>
           </table>
         </div>
-
       </div>
     </div>
 
-    <!-- 🎰 Roulette View (Tab 2) -->
-    <div id="rouletteView" class="grid" style="display: none;">
-      <!-- Left Panel: Roulette Settings & Item Management -->
+    <!-- 🎰 MAIN TAB 2: 비주얼 룰렛 시스템 (Roulette View) -->
+    <div id="rouletteView" class="roulette-grid" style="display: none;">
+      <!-- Left Panel: Roulette Settings & Management -->
       <div class="panel">
-        <div class="panel-title">🎰 룰렛 설정 및 항목 관리</div>
+        <div class="panel-title">
+          <span>🎰 룰렛 설정 및 항목 관리</span>
+        </div>
 
         <!-- Sub Tabs: Manual vs Donation -->
         <div class="sub-tabs">
@@ -1110,7 +1378,7 @@
         <div id="rouletteManualBox">
           <div class="form-group">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-              <label style="margin-bottom: 0;">룰렛 항목 입력 (한 줄에 하나씩)</label>
+              <label style="margin-bottom: 0;">룰렛 항목 목록 (칸별 직접 관리)</label>
               <span id="manualItemCount" style="color: var(--chzzk-green); font-size: 11px; font-weight: 700;">총 0개 항목</span>
             </div>
             <div class="preset-btn-group">
@@ -1120,7 +1388,20 @@
               <button type="button" class="preset-btn" onclick="loadRoulettePreset('food')">🍱 메뉴 선택</button>
               <button type="button" class="preset-btn" onclick="importRaffleToRoulette()" style="color: var(--chzzk-green); border-color: rgba(0,255,163,0.3);">👥 추첨 참여자 불러오기</button>
             </div>
-            <textarea id="rouletteManualInput" rows="7" placeholder="한 줄에 하나씩 입력하세요.&#10;예:&#10;치킨 1마리&#10;문화상품권 5천원&#10;꽝&#10;스타벅스 아메리카노&#10;꽝" style="width: 100%; background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; color: #fff; padding: 10px; font-size: 13px; resize: vertical; line-height: 1.5;"></textarea>
+            
+            <!-- Dynamic Interactive Item Rows Container -->
+            <div id="rouletteItemsContainer" class="roulette-items-list">
+              <!-- Dynamically populated rows -->
+            </div>
+
+            <div style="display: flex; gap: 8px; margin-top: 8px;">
+              <button type="button" id="addRouletteRowBtn" class="btn btn-secondary" style="flex: 1; padding: 8px 12px; font-size: 12px;">
+                ➕ 새 항목 칸 추가 (Enter)
+              </button>
+              <button type="button" id="clearAllRouletteRowsBtn" class="btn-chip btn-chip-danger" style="padding: 8px 12px; font-size: 12px;">
+                🗑️ 전체 삭제
+              </button>
+            </div>
           </div>
         </div>
 
@@ -1149,7 +1430,7 @@
 
           <div class="form-group">
             <label>최소 후원 치즈 기준</label>
-            <select id="minDonationCheeseSelect" style="width: 100%; background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; color: #fff; padding: 8px 12px; font-size: 13px;">
+            <select id="minDonationCheeseSelect">
               <option value="1">전체 후원 (1치즈 이상 모두 수집)</option>
               <option value="1000" selected>1,000 치즈 이상</option>
               <option value="5000">5,000 치즈 이상</option>
@@ -1160,37 +1441,37 @@
           </div>
 
           <div class="toggle-row" style="margin-top: 10px;">
-            <span class="toggle-label">💰 후원 금액 비례 칸 크기 확장 (가중치 연동)</span>
+            <span class="toggle-label" style="font-size: 12px;">💰 후원 금액 비례 칸 크기 확장 (가중치 연동)</span>
             <input type="checkbox" id="donationWeightToggle" checked style="width: 18px; height: 18px; cursor: pointer;">
           </div>
 
           <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; margin-bottom: 6px;">
             <span style="font-size: 12px; font-weight: 700; color: var(--text-sub);">실시간 수집된 도네이션 (<span id="donationItemCount" style="color: var(--chzzk-green);">0</span>건)</span>
-            <button type="button" id="clearDonationsBtn" class="btn-sm" style="padding: 3px 8px; font-size: 11px; background: rgba(255, 71, 87, 0.2); border-color: rgba(255, 71, 87, 0.4); color: #ff6b81;">목록 비우기</button>
+            <button type="button" id="clearDonationsBtn" class="btn-chip btn-chip-danger" style="padding: 2px 6px; font-size: 10px;">목록 비우기</button>
           </div>
-          <div id="donationFeedList" style="max-height: 140px; overflow-y: auto; background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; padding: 8px; font-size: 11px;">
-            <div style="text-align: center; color: var(--text-sub); padding: 20px 0;">아직 수집된 도네이션이 없습니다.</div>
+          <div id="donationFeedList" style="max-height: 120px; overflow-y: auto; background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; padding: 6px; font-size: 11px;">
+            <div style="text-align: center; color: var(--text-sub); padding: 16px 0;">아직 수집된 도네이션이 없습니다.</div>
           </div>
         </div>
 
         <hr style="border-color: var(--border-color); margin: 16px 0;">
 
         <!-- Common Roulette Options -->
-        <div class="panel-title" style="font-size: 13px; margin-bottom: 8px;">⚙️ 룰렛 상세 설정</div>
+        <div class="panel-title" style="font-size: 13px; margin-bottom: 6px;">⚙️ 룰렛 세부 설정</div>
 
         <div class="toggle-row">
-          <span class="toggle-label">🗑️ 당첨된 항목 룰렛에서 자동 제거</span>
+          <span class="toggle-label" style="font-size: 12px;">🗑️ 당첨된 항목 룰렛에서 자동 제거</span>
           <input type="checkbox" id="autoRemoveWonItemToggle" style="width: 18px; height: 18px; cursor: pointer;">
         </div>
 
         <div class="toggle-row">
-          <span class="toggle-label">🔊 회전 효과음 (Web Audio 틱 사운드)</span>
+          <span class="toggle-label" style="font-size: 12px;">🔊 회전 효과음 (Web Audio 틱 사운드)</span>
           <input type="checkbox" id="rouletteSoundToggle" checked style="width: 18px; height: 18px; cursor: pointer;">
         </div>
 
-        <div class="form-group" style="margin-top: 10px;">
+        <div class="form-group" style="margin-top: 8px;">
           <label>회전 시간 (긴장감 조절)</label>
-          <select id="spinDurationSelect" style="width: 100%; background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; color: #fff; padding: 8px 12px; font-size: 13px;">
+          <select id="spinDurationSelect">
             <option value="3">⚡ 빠르게 (3초)</option>
             <option value="5" selected>🎯 표준 (5초)</option>
             <option value="8">🔥 극적인 긴장감 (8초)</option>
@@ -1198,12 +1479,12 @@
         </div>
 
         <!-- Roulette History Table -->
-        <div style="margin-top: 16px;">
+        <div style="margin-top: 14px;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
             <span style="font-size: 12px; font-weight: 700; color: var(--text-sub);">📜 룰렛 당첨 히스토리</span>
-            <button type="button" id="clearRouletteHistoryBtn" class="btn-sm" style="padding: 2px 6px; font-size: 10px;">초기화</button>
+            <button type="button" id="clearRouletteHistoryBtn" class="btn-chip btn-chip-secondary" style="padding: 2px 6px; font-size: 10px;">초기화</button>
           </div>
-          <div class="table-container" style="max-height: 140px;">
+          <div class="table-container" style="max-height: 120px;">
             <table>
               <thead>
                 <tr>
@@ -1213,7 +1494,7 @@
                 </tr>
               </thead>
               <tbody id="rouletteHistoryBody">
-                <tr><td colspan="3" style="text-align:center; color: var(--text-sub); font-size: 11px; padding: 16px 0;">아직 룰렛 결과가 없습니다.</td></tr>
+                <tr><td colspan="3" style="text-align:center; color: var(--text-sub); font-size: 11px; padding: 14px 0;">아직 룰렛 결과가 없습니다.</td></tr>
               </tbody>
             </table>
           </div>
@@ -1221,11 +1502,11 @@
 
       </div>
 
-      <!-- Right Panel: Big Visual Canvas Roulette Stage -->
+      <!-- Right Panel: Big Canvas Roulette Stage -->
       <div class="panel" style="display: flex; flex-direction: column; align-items: center; justify-content: flex-start;">
         <div class="panel-title" style="align-self: flex-start; margin-bottom: 16px;">🎯 비주얼 룰렛 원판</div>
 
-        <div class="roulette-stage-wrapper" style="width: 100%;">
+        <div class="roulette-stage-wrapper">
           <div class="roulette-wheel-container">
             <!-- Golden Top Pointer Pin -->
             <svg class="wheel-pointer" viewBox="0 0 32 46" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1260,10 +1541,69 @@
     </div>
   </div>
 
-  <!-- Roulette Winner Modal Backdrop -->
-  <div id="rouletteWinnerModal" class="roulette-modal-backdrop">
-    <div class="roulette-modal-content">
-      <div style="font-size: 44px; margin-bottom: 8px;">🎉</div>
+  <!-- 📡 Broadcast Connection Setup Modal (A안) -->
+  <div id="connectionModal" class="modal-backdrop">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 24px;">📡</span>
+          <div style="font-size: 17px; font-weight: 800; color: #fff;">치지직 방송 연결 설정</div>
+        </div>
+        <button type="button" class="modal-close-btn" id="closeConnectModalBtn">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-group">
+          <label>치지직 방송 URL 또는 채널 ID</label>
+          <input type="text" id="channelInput" placeholder="https://chzzk.naver.com/live/채널ID 또는 채널ID" value="1ad5aa0f6c6741b072528fad5e5e76b1">
+        </div>
+
+        <div class="form-group">
+          <label>참여 키워드 (공백시 모든 채팅 수집)</label>
+          <input type="text" id="keywordInput" placeholder="예: !추첨, !참여">
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="keywordMatchMode" value="exact" checked> 완전 일치 (예: !추첨)
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="keywordMatchMode" value="partial"> 부분 일치 (예: !추첨합니다)
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" id="connectModalCancelBtn" class="btn btn-secondary" style="padding: 10px 16px; font-size: 13px;">닫기</button>
+        <button type="button" id="connectBtn" class="btn btn-primary" style="flex: 1; padding: 10px 16px; font-size: 13px;">
+          <span>🚀</span>
+          <span>실시간 수집 시작</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 💬 Slide-out Chat Drawer (A안) -->
+  <div id="chatDrawerBackdrop" class="drawer-backdrop"></div>
+  <div id="chatDrawer" class="drawer-panel">
+    <div class="drawer-header">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 18px;">💬</span>
+        <span style="font-weight: 700; font-size: 14px; color: #fff;">실시간 채팅 & 후원 피드</span>
+        <span id="drawerChatCount" class="badge-tag" style="background: rgba(0,255,163,0.15); color: var(--chzzk-green);">0</span>
+      </div>
+      <button type="button" class="modal-close-btn" id="closeChatDrawerBtn">✕</button>
+    </div>
+    <div class="chat-box" id="chatFeed">
+      <div style="color: #64748b; text-align: center; margin-top: 80px; font-size: 12px;">
+        방송 연결 후 시청자들의 실시간 채팅이 여기에 표시됩니다.
+      </div>
+    </div>
+  </div>
+
+  <!-- 🎰 Roulette Winner Modal Backdrop -->
+  <div id="rouletteWinnerModal" class="modal-backdrop">
+    <div class="modal-content" style="text-align: center; border-color: var(--chzzk-green); box-shadow: 0 0 50px rgba(0, 255, 163, 0.35);">
+      <div style="font-size: 44px; margin-bottom: 6px;">🎉</div>
       <div style="font-size: 13px; color: var(--chzzk-green); font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;">Roulette Winner</div>
       <div id="rouletteWinnerTitle" style="font-size: 26px; font-weight: 800; color: #fff; margin: 12px 0 16px 0; word-break: break-word; text-shadow: 0 0 20px rgba(0,255,163,0.4);">
         치킨 1마리
@@ -1312,6 +1652,7 @@
     const drawBtn = document.getElementById('drawBtn');
     const statusDot = document.getElementById('statusDot');
     const statusText = document.getElementById('statusText');
+    const connectBtnLabel = document.getElementById('connectBtnLabel');
     const participantCountEl = document.getElementById('participantCount');
     const filteredCountEl = document.getElementById('filteredCount');
     const excludedCountEl = document.getElementById('excludedCount');
@@ -1323,17 +1664,32 @@
     const exportBtn = document.getElementById('exportBtn');
     const drawnWinnerCountEl = document.getElementById('drawnWinnerCount');
 
-    // Advanced Filter Elements
-    const donorOnlyToggle = document.getElementById('donorOnlyToggle');
-    const donorFilterBox = document.getElementById('donorFilterBox');
-    const donorLevelSelect = document.getElementById('donorLevelSelect');
+    // Connection Modal & Chat Drawer Elements
+    const connectionModal = document.getElementById('connectionModal');
+    const openConnectModalBtn = document.getElementById('openConnectModalBtn');
+    const closeConnectModalBtn = document.getElementById('closeConnectModalBtn');
+    const connectModalCancelBtn = document.getElementById('connectModalCancelBtn');
 
-    const subOnlyToggle = document.getElementById('subOnlyToggle');
-    const subFilterBox = document.getElementById('subFilterBox');
+    const chatDrawer = document.getElementById('chatDrawer');
+    const chatDrawerBackdrop = document.getElementById('chatDrawerBackdrop');
+    const openChatDrawerBtn = document.getElementById('openChatDrawerBtn');
+    const closeChatDrawerBtn = document.getElementById('closeChatDrawerBtn');
+    const chatBadgeCount = document.getElementById('chatBadgeCount');
+    const drawerChatCount = document.getElementById('drawerChatCount');
+
+    // Advanced Filter Elements & State
+    let isDonorFilterActive = false;
+    let isSubFilterActive = false;
+
+    const donorFilterPanel = document.getElementById('donorFilterPanel');
+    const donorLevelSelect = document.getElementById('donorLevelSelect');
+    const subFilterPanel = document.getElementById('subFilterPanel');
     const minSubMonths = document.getElementById('minSubMonths');
     const subTierSelect = document.getElementById('subTierSelect');
 
     // Duplicate Prevention & Exclusion Elements
+    const excludeFilterPanel = document.getElementById('excludeFilterPanel');
+    const excludeBadge = document.getElementById('excludeBadge');
     const autoExcludePreviousToggle = document.getElementById('autoExcludePreviousToggle');
     const fileExcludeToggle = document.getElementById('fileExcludeToggle');
     const fileExcludeBox = document.getElementById('fileExcludeBox');
@@ -1344,159 +1700,232 @@
     const manualExcludeBox = document.getElementById('manualExcludeBox');
     const tablePasteInput = document.getElementById('tablePasteInput');
     const excludeRulesBody = document.getElementById('excludeRulesBody');
-    const addRuleRowBtn = document.getElementById('addRuleRowBtn');
-    const clearRulesBtn = document.getElementById('clearRulesBtn');
 
-    autoExcludePreviousToggle.addEventListener('change', updateFilteredStats);
+    // ==========================================
+    // 🗂️ MODAL & DRAWER HANDLERS (A안)
+    // ==========================================
+    function openConnectModal() {
+      connectionModal.classList.add('active');
+    }
+    function closeConnectModal() {
+      connectionModal.classList.remove('active');
+    }
+    openConnectModalBtn.addEventListener('click', openConnectModal);
+    closeConnectModalBtn.addEventListener('click', closeConnectModal);
+    connectModalCancelBtn.addEventListener('click', closeConnectModal);
+
+    function openChatDrawer() {
+      chatDrawer.classList.add('active');
+      chatDrawerBackdrop.classList.add('active');
+    }
+    function closeChatDrawer() {
+      chatDrawer.classList.remove('active');
+      chatDrawerBackdrop.classList.remove('active');
+    }
+    openChatDrawerBtn.addEventListener('click', openChatDrawer);
+    closeChatDrawerBtn.addEventListener('click', closeChatDrawer);
+    chatDrawerBackdrop.addEventListener('click', closeChatDrawer);
+
+    // ==========================================
+    // 🎯 FILTER & EXCLUSION TOGGLE CONTROLS
+    // ==========================================
+    function toggleFilter(type) {
+      if (type === 'donor') {
+        isDonorFilterActive = !isDonorFilterActive;
+      } else if (type === 'sub') {
+        isSubFilterActive = !isSubFilterActive;
+      }
+      updateFilterUI();
+    }
+
+    function setFilterMode(mode) {
+      if (mode === 'all') {
+        isDonorFilterActive = false;
+        isSubFilterActive = false;
+        updateFilterUI();
+      }
+    }
+
+    function toggleExcludePanel() {
+      const isOpen = excludeFilterPanel.style.display !== 'none';
+      excludeFilterPanel.style.display = isOpen ? 'none' : 'block';
+      document.getElementById('chipExcludeToggle').classList.toggle('active', !isOpen);
+    }
+
+    function updateFilterUI() {
+      const chipAll = document.getElementById('chipAllToggle');
+      const chipDonor = document.getElementById('chipDonorToggle');
+      const chipSub = document.getElementById('chipSubToggle');
+
+      chipDonor.classList.toggle('active', isDonorFilterActive);
+      donorFilterPanel.style.display = isDonorFilterActive ? 'block' : 'none';
+
+      chipSub.classList.toggle('active', isSubFilterActive);
+      subFilterPanel.style.display = isSubFilterActive ? 'block' : 'none';
+
+      const isAll = !isDonorFilterActive && !isSubFilterActive;
+      chipAll.classList.toggle('active', isAll);
+
+      updateFilteredStats();
+    }
+
+    function updateExcludeBadge() {
+      if (!excludeBadge) return;
+      const count = (autoExcludePreviousToggle.checked ? 1 : 0) +
+                    (fileExcludeToggle.checked ? 1 : 0) +
+                    (manualExcludeToggle.checked ? 1 : 0);
+
+      if (count === 0) {
+        excludeBadge.innerText = '제외 없음';
+        excludeBadge.style.background = 'rgba(255, 255, 255, 0.08)';
+        excludeBadge.style.color = 'var(--text-sub)';
+      } else if (autoExcludePreviousToggle.checked && count === 1) {
+        excludeBadge.innerText = '기본 중복제외 ON';
+        excludeBadge.style.background = 'rgba(0, 255, 163, 0.15)';
+        excludeBadge.style.color = 'var(--chzzk-green)';
+      } else {
+        excludeBadge.innerText = `${count}개 제외 적용 중`;
+        excludeBadge.style.background = 'rgba(0, 255, 163, 0.2)';
+        excludeBadge.style.color = 'var(--chzzk-green)';
+      }
+    }
+
+    donorLevelSelect.addEventListener('change', updateFilteredStats);
+    minSubMonths.addEventListener('input', updateFilteredStats);
+    subTierSelect.addEventListener('change', updateFilteredStats);
+
+    autoExcludePreviousToggle.addEventListener('change', () => {
+      updateExcludeBadge();
+      updateFilteredStats();
+    });
 
     fileExcludeToggle.addEventListener('change', () => {
       fileExcludeBox.style.display = fileExcludeToggle.checked ? 'block' : 'none';
+      updateExcludeBadge();
       updateFilteredStats();
     });
 
     manualExcludeToggle.addEventListener('change', () => {
       manualExcludeBox.style.display = manualExcludeToggle.checked ? 'block' : 'none';
+      updateExcludeBadge();
       updateFilteredStats();
     });
 
-    // Add initial sample rows
-    function addRuleRow(nick = '', uid = '') {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td><input type="text" class="table-input rule-nick" placeholder="닉네임" value="${escapeHtml(nick)}"></td>
-        <td><input type="text" class="table-input rule-uid" placeholder="고유 아이디" value="${escapeHtml(uid)}"></td>
-        <td style="text-align: center;"><button type="button" class="btn-sm btn-danger del-row-btn" style="padding: 2px 8px; font-size: 11px;">✕</button></td>
-      `;
-
-      tr.querySelector('.rule-nick').addEventListener('input', updateManualRulesFromDOM);
-      tr.querySelector('.rule-uid').addEventListener('input', updateManualRulesFromDOM);
-      tr.querySelector('.del-row-btn').addEventListener('click', () => {
-        tr.remove();
-        updateManualRulesFromDOM();
-      });
-
-      excludeRulesBody.appendChild(tr);
-      updateManualRulesFromDOM();
-    }
-
-    addRuleRowBtn.addEventListener('click', () => addRuleRow());
-    clearRulesBtn.addEventListener('click', () => {
-      excludeRulesBody.innerHTML = '';
-      updateManualRulesFromDOM();
-    });
-
-    // Initialize 3 default empty rows
-    for (let i = 1; i <= 3; i++) {
-      addRuleRow();
-    }
-
-    // Bulk Paste Handler for Excel Tables
-    tablePasteInput.addEventListener('input', () => {
-      const text = tablePasteInput.value.trim();
-      if (!text) return;
-
-      const lines = text.split(/\r?\n/);
-      lines.forEach(line => {
-        if (!line.trim()) return;
-        const cols = line.split(/[\t,]+/).map(c => c.trim().replace(/^"|"$/g, ''));
-        if (cols.length >= 2) {
-          addRuleRow(cols[0], cols[1]);
-        } else if (cols.length === 1) {
-          addRuleRow(cols[0], '');
-        }
-      });
-
-      tablePasteInput.value = '';
-    });
-
-    function updateManualRulesFromDOM() {
-      manualExcludePairs = [];
-      const rows = excludeRulesBody.querySelectorAll('tr');
-      rows.forEach(tr => {
-        const nickInput = tr.querySelector('.rule-nick');
-        const uidInput = tr.querySelector('.rule-uid');
-        if (nickInput && uidInput) {
-          const nick = nickInput.value.trim().toLowerCase();
-          const uid = uidInput.value.trim().toLowerCase();
-          if (nick || uid) {
-            manualExcludePairs.push({ nick, uid });
-          }
-        }
-      });
-      updateFilteredStats();
-    }
-
-    // File Upload Handler (Dual Verification: Reads both UID and Nickname columns)
-    excludeFileInput.addEventListener('change', (e) => {
+    // File Upload Exclude Logic
+    excludeFileInput.addEventListener('change', handleExcludeFileUpload);
+    function handleExcludeFileUpload(e) {
       const file = e.target.files[0];
       if (!file) return;
 
       const reader = new FileReader();
-      reader.onload = (evt) => {
-        const content = evt.target.result;
-        fileExcludedTokens.clear();
+      reader.onload = function(evt) {
+        const text = evt.target.result;
+        parseExcludeFileText(text, file.name);
+      };
+      reader.readAsText(file, 'utf-8');
+    }
 
-        const lines = content.split(/\r?\n/);
+    function parseExcludeFileText(text, fileName) {
+      fileExcludedTokens.clear();
+      const lines = text.split(/\r\n|\n|\r/);
+      let count = 0;
+
+      lines.forEach(line => {
+        const clean = line.trim();
+        if (!clean) return;
+        const tokens = clean.split(/[,;\t]/);
+        tokens.forEach(tok => {
+          let t = tok.trim().replace(/^"|"$/g, '').toLowerCase();
+          if (t && t.length > 1) {
+            fileExcludedTokens.add(t);
+            count++;
+          }
+        });
+      });
+
+      fileExcludeStatus.innerText = `✅ [${fileName}] 총 ${fileExcludedTokens.size.toLocaleString()}개 키워드/UID 제외 등록 완료`;
+      fileExcludeToggle.checked = true;
+      fileExcludeBox.style.display = 'block';
+      updateFilteredStats();
+    }
+
+    // Manual Rule Table Paste
+    tablePasteInput.addEventListener('paste', (e) => {
+      setTimeout(() => {
+        const raw = tablePasteInput.value;
+        if (!raw.trim()) return;
+
+        const lines = raw.split(/\r\n|\n|\r/);
         lines.forEach(line => {
           if (!line.trim()) return;
-          const parts = line.split(',').map(p => p.trim().replace(/^"|"$/g, ''));
-          parts.forEach(p => {
-            if (p && p !== "닉네임" && p !== "순위" && p !== "고유식별자(UID)" && p !== "구독여부" && p !== "후원여부") {
-              fileExcludedTokens.add(p.toLowerCase());
-            }
-          });
+          const cols = line.split('\t');
+          let nick = cols[0] ? cols[0].trim().toLowerCase() : '';
+          let uid = cols[1] ? cols[1].trim().toLowerCase() : '';
+          if (nick || uid) {
+            manualExcludePairs.push({ nick: nick, uid: uid });
+          }
         });
 
-        fileExcludeStatus.innerText = `✅ 파일에서 ${fileExcludedTokens.size.toLocaleString()}개의 고유 ID / 닉네임을 제외 목록에 등록했습니다.`;
+        tablePasteInput.value = '';
+        renderManualRules();
         updateFilteredStats();
-      };
-      reader.readAsText(file);
+      }, 50);
     });
 
-    donorOnlyToggle.addEventListener('change', () => {
-      donorFilterBox.style.display = donorOnlyToggle.checked ? 'block' : 'none';
-      updateFilteredStats();
-    });
-
-    subOnlyToggle.addEventListener('change', () => {
-      subFilterBox.style.display = subOnlyToggle.checked ? 'block' : 'none';
-      updateFilteredStats();
-    });
-
-    donorLevelSelect.addEventListener('change', updateFilteredStats);
-    minSubMonths.addEventListener('input', updateFilteredStats);
-    subTierSelect.addEventListener('change', updateFilteredStats);
-    keywordInput.addEventListener('input', updateFilteredStats);
-
-    document.querySelectorAll('input[name="keywordMatchMode"]').forEach(radio => {
-      radio.addEventListener('change', updateFilteredStats);
-    });
-
-    function setWinners(n) {
-      document.getElementById('winnerCount').value = n;
+    function renderManualRules() {
+      excludeRulesBody.innerHTML = '';
+      manualExcludePairs.forEach((rule, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${escapeHtml(rule.nick || '-')}</td>
+          <td>${escapeHtml(rule.uid || '-')}</td>
+          <td><button type="button" class="btn-chip btn-chip-danger" style="padding: 2px 4px; font-size: 10px;" onclick="removeManualRule(${idx})">✕</button></td>
+        `;
+        excludeRulesBody.appendChild(tr);
+      });
     }
 
+    function removeManualRule(idx) {
+      manualExcludePairs.splice(idx, 1);
+      renderManualRules();
+      updateFilteredStats();
+    }
+
+    // Helper: Extract Channel ID
     function extractChannelId(input) {
       input = input.trim();
-      if (input.includes('chzzk.naver.com/live/')) {
-        const match = input.match(/live\/([a-zA-Z0-9]+)/);
-        if (match) return match[1];
-      }
-      return input;
+      const match = input.match(/chzzk\.naver\.com\/live\/([a-zA-Z0-9]+)/);
+      if (match && match[1]) return match[1];
+      return input.replace(/[^a-zA-Z0-9]/g, '');
     }
 
-    function getChzzkChatServers(chatChannelId) {
+    function getChzzkChatServers(chatCid) {
       let hash = 0;
-      for (let i = 0; i < chatChannelId.length; i++) {
-        hash += chatChannelId.charCodeAt(i);
+      for (let i = 0; i < chatCid.length; i++) {
+        hash = ((hash << 5) - hash) + chatCid.charCodeAt(i);
+        hash |= 0;
       }
-      const primaryIndex = (hash % 5) + 1;
-      const servers = [];
-      for (let i = 0; i < 5; i++) {
-        const idx = ((primaryIndex - 1 + i) % 5) + 1;
-        servers.push(`wss://kr-ss${idx}.chat.naver.com/chat`);
+      const serverNum = (Math.abs(hash) % 10) + 1;
+      return [
+        `wss://kr-ss${serverNum}.chat.naver.com/chat`,
+        `wss://kr-ss1.chat.naver.com/chat`,
+        `wss://kr-ss2.chat.naver.com/chat`
+      ];
+    }
+
+    function setStatus(status, text) {
+      statusDot.className = 'status-dot ' + status;
+      statusText.innerText = text;
+      
+      if (status === 'connected') {
+        isConnected = true;
+        connectBtnLabel.innerText = '방송 변경';
+        disconnectBtn.style.display = 'inline-flex';
+      } else {
+        isConnected = false;
+        connectBtnLabel.innerText = '방송 연결';
+        disconnectBtn.style.display = 'none';
       }
-      return servers;
     }
 
     // Connect Entry
@@ -1507,6 +1936,7 @@
         return;
       }
 
+      closeConnectModal();
       isManualDisconnect = false;
       reconnectAttempts = 0;
       serverIndexOffset = 0;
@@ -1515,7 +1945,7 @@
     });
 
     async function startConnectionFlow() {
-      setStatus('connecting', '치지직 방송 정보 및 접근 토큰 요청 중...');
+      setStatus('connecting', '치지직 방송 접근 토큰 요청 중...');
 
       try {
         const res = await fetch(`/api/chzzk/?channelId=${currentChannelId}`);
@@ -1527,7 +1957,7 @@
           return;
         }
 
-        currentChannelName = data.channelName || '';
+        currentChannelName = data.channelName || '치지직 방송';
         currentChatChannelId = data.chatChannelId;
         currentAccessToken = data.accessToken;
 
@@ -1544,7 +1974,7 @@
       const serverList = getChzzkChatServers(currentChatChannelId);
       const targetWsUrl = serverList[serverIndexOffset % serverList.length];
 
-      setStatus('connecting', `웹소켓 서버 접속 중... (${targetWsUrl.split('/')[2]})`);
+      setStatus('connecting', `웹소켓 서버 접속 중...`);
 
       ws = new WebSocket(targetWsUrl);
 
@@ -1574,130 +2004,64 @@
 
       ws.onmessage = (event) => {
         try {
-          const msg = JSON.parse(event.data);
+          const data = JSON.parse(event.data);
 
-            if (msg.cmd === 10100) {
-              isConnected = true;
-              reconnectAttempts = 0;
-              const streamerPrefix = currentChannelName ? `[${currentChannelName}] ` : '';
-              setStatus('connected', `${streamerPrefix}방송 연결됨`);
-              connectBtn.style.display = 'none';
-              disconnectBtn.style.display = 'inline-flex';
-              channelInput.disabled = true;
-              return;
-            }
-
-          if (Array.isArray(msg.bdy)) {
-            msg.bdy.forEach(item => {
-              if (item.profile && item.uid) {
-                processChatMessage(item);
-              }
-            });
+          // Connection confirmed
+          if (data.cmd === 10100) {
+            setStatus('connected', `🟢 [${currentChannelName}] 실시간 수집 중`);
+            reconnectAttempts = 0;
           }
-        } catch (e) {
-          console.error('WS Parse Error:', e);
-        }
+
+          // Live Chat Messages
+          if (data.cmd === 93101 && data.bdy) {
+            data.bdy.forEach(item => processChatMessage(item));
+          }
+        } catch (e) {}
+      };
+
+      ws.onerror = () => {
+        if (!isManualDisconnect) setStatus('connecting', '웹소켓 재연결 시도 중...');
       };
 
       ws.onclose = () => {
-        if (pingInterval) clearInterval(pingInterval);
-
         if (!isManualDisconnect) {
           reconnectAttempts++;
           serverIndexOffset++;
-          setStatus('connecting', `연결 끊김. 서버 폴백 재연결 시도 중... (${reconnectAttempts}회)`);
-
-          setTimeout(() => {
-            if (!isManualDisconnect) {
-              connectWebSocketServer();
-            }
-          }, 2000);
+          const waitTime = Math.min(1000 * Math.pow(1.5, reconnectAttempts), 10000);
+          setStatus('connecting', `연결 끊김 (${reconnectAttempts}회차 재접속 중...)`);
+          setTimeout(connectWebSocketServer, waitTime);
         } else {
-          setStatus('disconnected', '수집 중단됨');
+          setStatus('disconnected', '방송 미연결');
         }
       };
-
-      ws.onerror = (err) => {
-        console.error('WS Error:', err);
-      };
-    }
-
-    function startLiveStatusPolling() {
-      if (liveStatusPollingInterval) clearInterval(liveStatusPollingInterval);
-      liveStatusPollingInterval = setInterval(async () => {
-        if (!currentChannelId || isManualDisconnect) return;
-        try {
-          const res = await fetch(`/api/chzzk/?channelId=${currentChannelId}`);
-          const data = await res.json();
-
-          if (data.chatChannelId && data.chatChannelId !== currentChatChannelId) {
-            currentChatChannelId = data.chatChannelId;
-            currentAccessToken = data.accessToken;
-            if (ws) ws.close();
-          }
-        } catch (e) {
-          console.error('Live polling err:', e);
-        }
-      }, 30000);
     }
 
     disconnectBtn.addEventListener('click', () => {
       isManualDisconnect = true;
-      cleanupWS();
-      setStatus('disconnected', '수집 중단됨');
-    });
-
-    function cleanupWS() {
+      if (ws) ws.close();
       if (pingInterval) clearInterval(pingInterval);
       if (liveStatusPollingInterval) clearInterval(liveStatusPollingInterval);
-      if (ws) {
-        ws.close();
-        ws = null;
-      }
-      isConnected = false;
-      connectBtn.style.display = 'inline-flex';
-      disconnectBtn.style.display = 'none';
-      channelInput.disabled = false;
+      setStatus('disconnected', '방송 미연결');
+    });
+
+    function startLiveStatusPolling() {
+      if (liveStatusPollingInterval) clearInterval(liveStatusPollingInterval);
+      liveStatusPollingInterval = setInterval(async () => {
+        if (!isConnected || isManualDisconnect) return;
+        try {
+          const res = await fetch(`/api/chzzk/?channelId=${currentChannelId}`);
+          const data = await res.json();
+          if (data && data.status === 'CLOSE') {
+            setStatus('disconnected', `방송 종료됨 (${currentChannelName})`);
+          }
+        } catch (e) {}
+      }, 30000);
     }
 
-    function setStatus(type, text) {
-      statusDot.className = 'status-dot ' + type;
-      statusText.innerText = text;
-    }
-
-    function parseKoreanDate(str) {
-      if (!str || typeof str !== 'string') return null;
-
-      // Pattern 1: "2024년 2월 29일 부터 팔로우" or "2024년 2월 29일"
-      const koMatch = str.match(/(\d{4})\s*년\s*(\d{1,2})\s*월\s*(\d{1,2})\s*일/);
-      if (koMatch) {
-        const year = parseInt(koMatch[1], 10);
-        const month = parseInt(koMatch[2], 10) - 1;
-        const day = parseInt(koMatch[3], 10);
-        const d = new Date(year, month, day);
-        if (!isNaN(d.getTime())) return d.getTime();
-      }
-
-      // Pattern 2: "2024.02.29", "2024. 2. 29.", "2024-02-29 15:30:00"
-      const dotMatch = str.match(/(\d{4})\s*[\.\-]\s*(\d{1,2})\s*[\.\-]\s*(\d{1,2})/);
-      if (dotMatch) {
-        const year = parseInt(dotMatch[1], 10);
-        const month = parseInt(dotMatch[2], 10) - 1;
-        const day = parseInt(dotMatch[3], 10);
-        const d = new Date(year, month, day);
-        if (!isNaN(d.getTime())) return d.getTime();
-      }
-
-      // Pattern 3: Standard ISO Date parse
-      const d3 = new Date(str);
-      if (!isNaN(d3.getTime())) return d3.getTime();
-
-      return null;
-    }
-
+    // Donator Level Parser
     function parseDonatorStatus(profileData) {
       let isDonator = false;
-      let donatorLevel = 0; // 0 = none, 1 = fan/newbie/lv1, 2 = 10만치즈(lv2), 3 = 100만치즈(lv3), 4 = 1000만치즈(lv4), 5 = 1억치즈(lv5)
+      let donatorLevel = 0;
 
       const badges = [...(profileData.viewerBadges || []), ...(profileData.activityBadges || [])];
       for (const b of badges) {
@@ -1705,12 +2069,10 @@
         const bId = String(badgeObj.badgeId || badgeObj.badgeNo || badgeObj.name || '').toLowerCase();
         const bTitle = String(badgeObj.title || badgeObj.name || badgeObj.badgeName || '').toLowerCase();
         const bDesc = String(badgeObj.description || badgeObj.text || '').toLowerCase();
-
         const text = bId + ' ' + bTitle + ' ' + bDesc;
 
         if (text.includes('donation') || text.includes('cheese') || text.includes('fan') || text.includes('후원') || text.includes('치즈')) {
           isDonator = true;
-          
           if (text.includes('1억') || text.includes('lv5') || text.includes('level5')) donatorLevel = Math.max(donatorLevel, 5);
           else if (text.includes('1000만') || text.includes('1,000만') || text.includes('lv4') || text.includes('level4')) donatorLevel = Math.max(donatorLevel, 4);
           else if (text.includes('100만') || text.includes('1,000,000') || text.includes('lv3') || text.includes('level3')) donatorLevel = Math.max(donatorLevel, 3);
@@ -1725,6 +2087,8 @@
 
     function processChatMessage(item) {
       chatLogCount++;
+      chatBadgeCount.innerText = chatLogCount.toLocaleString();
+      drawerChatCount.innerText = `${chatLogCount.toLocaleString()}개`;
 
       let profileData = {};
       try {
@@ -1743,7 +2107,6 @@
       const subTier = subInfo ? (subInfo.tier || 1) : 0;
 
       const { isDonator, donatorLevel } = parseDonatorStatus(profileData);
-
       const now = new Date().toLocaleTimeString('ko-KR');
 
       if (!participants.has(uid)) {
@@ -1795,32 +2158,24 @@
       return { isDonation, payAmount, donationType };
     }
 
-    // Dual Condition Verification:
-    // If BOTH Nickname and UID are specified on a rule row, BOTH MUST match!
     function isExcluded(p) {
       const lowerNick = p.nickname.trim().toLowerCase();
       const lowerUid = p.uid.trim().toLowerCase();
 
-      // 1. Session Auto Exclude Previous Draw Winners (by exact UID)
       if (autoExcludePreviousToggle.checked && cumulativeDrawnUIDs.has(lowerUid)) {
         return true;
       }
 
-      // 2. File Upload Excluded Check
       if (fileExcludeToggle.checked && fileExcludedTokens.size > 0) {
         if (fileExcludedTokens.has(lowerUid) || fileExcludedTokens.has(lowerNick)) {
           return true;
         }
       }
 
-      // 3. Manual Pair Table Check (Both MUST match if both are filled on a row!)
       if (manualExcludeToggle.checked && manualExcludePairs.length > 0) {
         for (const rule of manualExcludePairs) {
           if (rule.nick && rule.uid) {
-            // BOTH Nickname AND UID must match!
-            if (lowerNick === rule.nick && lowerUid === rule.uid) {
-              return true;
-            }
+            if (lowerNick === rule.nick && lowerUid === rule.uid) return true;
           } else if (rule.nick) {
             if (lowerNick === rule.nick) return true;
           } else if (rule.uid) {
@@ -1839,36 +2194,30 @@
       const matchModeRadio = document.querySelector('input[name="keywordMatchMode"]:checked');
       const matchMode = matchModeRadio ? matchModeRadio.value : 'exact';
 
-      const isDonorOnly = donorOnlyToggle.checked;
+      const isDonorOnly = isDonorFilterActive;
       const reqDonorLevel = parseInt(donorLevelSelect.value) || 0;
 
-      const isSubOnly = subOnlyToggle.checked;
+      const isSubOnly = isSubFilterActive;
       const reqSubMonths = parseInt(minSubMonths.value) || 0;
       const reqSubTier = parseInt(subTierSelect.value) || 0;
 
       return all.filter(p => {
-        // Exclude Check (UID & Nickname Table Dual Condition)
         if (isExcluded(p)) return false;
 
-        // Keyword Matching Check
         if (targetKeyword) {
           if (matchMode === 'exact') {
             const words = p.msg.trim().split(/\s+/);
-            if (!words.includes(targetKeyword) && p.msg.trim() !== targetKeyword) {
-              return false;
-            }
+            if (!words.includes(targetKeyword) && p.msg.trim() !== targetKeyword) return false;
           } else {
             if (!p.msg.includes(targetKeyword)) return false;
           }
         }
 
-        // Donator Filter
         if (isDonorOnly) {
           if (!p.isDonator) return false;
           if (reqDonorLevel > 0 && p.donatorLevel < reqDonorLevel) return false;
         }
 
-        // Subscription Filter
         if (isSubOnly) {
           if (!p.isSubscriber) return false;
           if (reqSubMonths > 0 && p.subMonth < reqSubMonths) return false;
@@ -1899,8 +2248,8 @@
       div.className = 'chat-item';
 
       let badgesHtml = '';
-      if (isSub) badgesHtml += `<span class="badge-tag badge-sub">⭐ 구독자</span>`;
-      if (isDonor) badgesHtml += `<span class="badge-tag badge-follow">🧀 후원자</span>`;
+      if (isSub) badgesHtml += `<span class="badge-tag badge-sub">⭐ 구독</span>`;
+      if (isDonor) badgesHtml += `<span class="badge-tag badge-follow">🧀 후원</span>`;
 
       div.innerHTML = `
         ${badgesHtml}
@@ -1910,7 +2259,7 @@
       `;
       chatFeed.appendChild(div);
 
-      if (chatFeed.children.length > 50) {
+      if (chatFeed.children.length > 60) {
         chatFeed.removeChild(chatFeed.firstChild);
       }
       chatFeed.scrollTop = chatFeed.scrollHeight;
@@ -1922,7 +2271,7 @@
       }) : '';
     }
 
-    // Draw Execution
+    // Raffle Execution
     drawBtn.addEventListener('click', () => {
       const eligibleList = getEligibleParticipants();
       const totalEligible = eligibleList.length;
@@ -1937,7 +2286,7 @@
 
       drawBtn.disabled = true;
       winnerOverlay.classList.add('drawing');
-      rollText.innerHTML = `<img src="delibird.png" alt="Delibird" class="delibird-icon" style="height: 36px;"> 필터 조건에 맞춰 추첨 진행 중...`;
+      rollText.innerHTML = `<img src="delibird.png" alt="Delibird" class="delibird-icon" style="height: 38px;"> 필터 조건에 맞춰 추첨 진행 중...`;
       subRollText.innerText = `유효 응모자 ${totalEligible.toLocaleString()}명 중 ${actualWinnerCount.toLocaleString()}명을 공정하게 추첨합니다.`;
 
       let rollCounter = 0;
@@ -1945,14 +2294,12 @@
       const rollTimer = setInterval(() => {
         rollCounter++;
         const sampleNick = eligibleList[Math.floor(Math.random() * eligibleList.length)].nickname;
-        rollText.innerHTML = `<img src="delibird.png" alt="Delibird" class="delibird-icon" style="height: 36px;"> 추첨 중... [${sampleNick}]`;
+        rollText.innerHTML = `<img src="delibird.png" alt="Delibird" class="delibird-icon" style="height: 38px;"> 추첨 중... [${sampleNick}]`;
 
         if (rollCounter > 20) {
           clearInterval(rollTimer);
-
           currentDrawRound++;
 
-          // Fisher-Yates shuffle algorithm
           for (let i = eligibleList.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [eligibleList[i], eligibleList[j]] = [eligibleList[j], eligibleList[i]];
@@ -1963,16 +2310,14 @@
             round: currentDrawRound
           }));
 
-          // Add to cumulative drawn set for multi-round auto duplicate prevention!
           currentWinners.forEach(w => cumulativeDrawnUIDs.add(w.uid.toLowerCase()));
 
           drawnWinners = drawnWinners.concat(currentWinners);
           renderWinnersTable(drawnWinners);
-
           updateFilteredStats();
 
           winnerOverlay.classList.remove('drawing');
-          rollText.innerHTML = `<img src="delibird.png" alt="Delibird" class="delibird-icon" style="height: 36px;"> 🎉 제 ${currentDrawRound}회차 ${actualWinnerCount.toLocaleString()}명 추첨 완료! (누적 ${drawnWinners.length.toLocaleString()}명)`;
+          rollText.innerHTML = `<img src="delibird.png" alt="Delibird" class="delibird-icon" style="height: 38px;"> 🎉 제 ${currentDrawRound}회차 ${actualWinnerCount.toLocaleString()}명 당첨 완료!`;
           subRollText.innerText = `다음 회차 추첨 시 이전 당첨자는 고유 ID 기반으로 자동 제외됩니다.`;
           exportBtn.disabled = false;
           drawBtn.disabled = false;
@@ -1993,7 +2338,6 @@
       winners.forEach((w, index) => {
         const roundNum = w.round || 1;
 
-        // Visual Divider Banner for each Draw Round!
         if (roundNum !== lastRound) {
           lastRound = roundNum;
           const headerTr = document.createElement('tr');
@@ -2031,14 +2375,13 @@
       });
     }
 
-    // Search filter
     document.getElementById('searchInput').addEventListener('input', (e) => {
       const q = e.target.value.toLowerCase();
       const filtered = drawnWinners.filter(w => w.nickname.toLowerCase().includes(q) || w.msg.toLowerCase().includes(q));
       renderWinnersTable(filtered);
     });
 
-    // CSV Column Selection Panel Elements & Toggle
+    // CSV Download
     const exportConfigBtn = document.getElementById('exportConfigBtn');
     const csvConfigBox = document.getElementById('csvConfigBox');
     const selectAllColsBtn = document.getElementById('selectAllColsBtn');
@@ -2056,7 +2399,6 @@
       document.querySelectorAll('.csv-col-check').forEach(cb => cb.checked = false);
     });
 
-    // Column Mapping Dictionary
     const COLUMN_MAP = {
       rank: { label: "순위", getVal: (w, idx) => idx + 1 },
       round: { label: "추첨회차", getVal: (w) => `${w.round || 1}회차` },
@@ -2081,7 +2423,6 @@
       uid: { label: "고유식별자(UID)", getVal: (w) => w.uid }
     };
 
-    // CSV Download
     exportBtn.addEventListener('click', () => {
       if (drawnWinners.length === 0) return;
 
@@ -2110,7 +2451,6 @@
       document.body.removeChild(a);
     });
 
-    // Reset button
     document.getElementById('resetBtn').addEventListener('click', () => {
       if (confirm('수집된 참여자 및 누적 당첨자 명단을 초기화하시겠습니까?')) {
         participants.clear();
@@ -2120,12 +2460,14 @@
         drawnWinners = [];
         currentDrawRound = 0;
         chatLogCount = 0;
+        chatBadgeCount.innerText = '0';
+        drawerChatCount.innerText = '0';
         participantCountEl.innerText = '0';
         filteredCountEl.innerText = '0';
         excludedCountEl.innerText = '0';
         drawnWinnerCountEl.innerText = '0';
-        chatFeed.innerHTML = '<div style="color: #64748b; text-align: center; margin-top: 50px;">초기화되었습니다.</div>';
-        rollText.innerHTML = `<img src="delibird.png" alt="Delibird" style="height: 36px; vertical-align: middle; margin-right: 8px;"> 대기 중`;
+        chatFeed.innerHTML = '<div style="color: #64748b; text-align: center; margin-top: 80px; font-size: 12px;">초기화되었습니다.</div>';
+        rollText.innerHTML = `<img src="delibird.png" alt="Delibird" style="height: 38px; vertical-align: middle;"> 대기 중`;
         subRollText.innerText = "참여자를 모은 뒤 '추첨하기' 버튼을 눌러주세요.";
         winnersTableBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--text-sub); padding: 40px 0;">아직 추첨 결과가 없습니다.</td></tr>';
         exportBtn.disabled = true;
@@ -2136,22 +2478,21 @@
     // ==========================================
     // 🎰 VISUAL ROULETTE SYSTEM ENGINE
     // ==========================================
-
-    // Navigation Tabs Elements
     const tabRaffleBtn = document.getElementById('tabRaffleBtn');
     const tabRouletteBtn = document.getElementById('tabRouletteBtn');
     const raffleView = document.getElementById('raffleView');
     const rouletteView = document.getElementById('rouletteView');
 
-    // Roulette Sub Tabs & Boxes
     const rouletteManualTabBtn = document.getElementById('rouletteManualTabBtn');
     const rouletteDonationTabBtn = document.getElementById('rouletteDonationTabBtn');
     const rouletteManualBox = document.getElementById('rouletteManualBox');
     const rouletteDonationBox = document.getElementById('rouletteDonationBox');
 
-    // Inputs & Controls
-    const rouletteManualInput = document.getElementById('rouletteManualInput');
+    const rouletteItemsContainer = document.getElementById('rouletteItemsContainer');
     const manualItemCountEl = document.getElementById('manualItemCount');
+    const addRouletteRowBtn = document.getElementById('addRouletteRowBtn');
+    const clearAllRouletteRowsBtn = document.getElementById('clearAllRouletteRowsBtn');
+
     const minDonationCheeseSelect = document.getElementById('minDonationCheeseSelect');
     const donationWeightToggle = document.getElementById('donationWeightToggle');
     const donationItemCountEl = document.getElementById('donationItemCount');
@@ -2165,13 +2506,11 @@
     const spinBtnText = document.getElementById('spinBtnText');
     const currentRouletteItemPreview = document.getElementById('currentRouletteItemPreview');
 
-    // Canvas & Stage
     const rouletteCanvas = document.getElementById('rouletteCanvas');
     const rouletteCtx = rouletteCanvas.getContext('2d');
     const confettiCanvas = document.getElementById('confettiCanvas');
     const confettiCtx = confettiCanvas.getContext('2d');
 
-    // Winner Modal & History
     const rouletteWinnerModal = document.getElementById('rouletteWinnerModal');
     const rouletteWinnerTitle = document.getElementById('rouletteWinnerTitle');
     const rouletteWinnerSub = document.getElementById('rouletteWinnerSub');
@@ -2180,57 +2519,59 @@
     const rouletteHistoryBody = document.getElementById('rouletteHistoryBody');
     const clearRouletteHistoryBtn = document.getElementById('clearRouletteHistoryBtn');
 
-    // State Variables
-    let currentRouletteMode = 'manual'; // 'manual' | 'donation'
-    let donationRouletteList = []; // [{ nickname, msg, amount, time, uid }]
-    let rouletteHistory = []; // [{ round, item, time }]
+    let currentRouletteMode = 'manual';
+    let donationRouletteList = [];
+    let rouletteHistory = [];
     let rouletteRound = 0;
     let isRouletteSpinning = false;
-    let currentWheelAngle = 0; // in radians
+    let currentWheelAngle = 0;
     let currentWinnerObject = null;
     let lastTickSliceIndex = -1;
 
-    // Vibrant Modern Color Palette
-    const WHEEL_COLORS = [
-      { bg: '#00ffa3', text: '#051911' }, // Chzzk Green
-      { bg: '#a855f7', text: '#ffffff' }, // Purple
-      { bg: '#3b82f6', text: '#ffffff' }, // Blue
-      { bg: '#ec4899', text: '#ffffff' }, // Pink
-      { bg: '#f59e0b', text: '#0f172a' }, // Amber
-      { bg: '#06b6d4', text: '#082f49' }, // Cyan
-      { bg: '#10b981', text: '#ffffff' }, // Emerald
-      { bg: '#6366f1', text: '#ffffff' }, // Indigo
-      { bg: '#f43f5e', text: '#ffffff' }, // Rose
-      { bg: '#8b5cf6', text: '#ffffff' }, // Violet
-      { bg: '#eab308', text: '#1c1917' }, // Yellow
-      { bg: '#d946ef', text: '#ffffff' }, // Fuchsia
-      { bg: '#0ea5e9', text: '#ffffff' }, // Sky
-      { bg: '#84cc16', text: '#142704' }, // Lime
-      { bg: '#14b8a6', text: '#042f2e' }  // Teal
+    let manualRouletteRows = [
+      { text: '치킨 1마리', weight: 1 },
+      { text: '피자 1판', weight: 1 },
+      { text: '문화상품권 5천원', weight: 1 },
+      { text: '스타벅스 아메리카노', weight: 1 },
+      { text: '꽝', weight: 2 },
+      { text: '꽝', weight: 2 }
     ];
 
-    // Initial manual items placeholder
-    rouletteManualInput.value = "치킨 1마리\n피자 1판\n문화상품권 5천원\n스타벅스 아메리카노\n꽝\n꽝";
+    const WHEEL_COLORS = [
+      { bg: '#00ffa3', text: '#051911' },
+      { bg: '#a855f7', text: '#ffffff' },
+      { bg: '#3b82f6', text: '#ffffff' },
+      { bg: '#ec4899', text: '#ffffff' },
+      { bg: '#f59e0b', text: '#0f172a' },
+      { bg: '#06b6d4', text: '#082f49' },
+      { bg: '#10b981', text: '#ffffff' },
+      { bg: '#6366f1', text: '#ffffff' },
+      { bg: '#f43f5e', text: '#ffffff' },
+      { bg: '#8b5cf6', text: '#ffffff' },
+      { bg: '#eab308', text: '#1c1917' },
+      { bg: '#d946ef', text: '#ffffff' },
+      { bg: '#0ea5e9', text: '#ffffff' },
+      { bg: '#84cc16', text: '#142704' },
+      { bg: '#14b8a6', text: '#042f2e' }
+    ];
 
-    // 1. Navigation Tab Switching
     function switchMainTab(tab) {
       if (tab === 'raffle') {
         tabRaffleBtn.classList.add('active');
         tabRouletteBtn.classList.remove('active');
-        raffleView.style.display = 'grid';
+        raffleView.style.display = 'block';
         rouletteView.style.display = 'none';
       } else {
         tabRouletteBtn.classList.add('active');
         tabRaffleBtn.classList.remove('active');
         rouletteView.style.display = 'grid';
         raffleView.style.display = 'none';
-        drawRouletteWheel();
+        renderManualRouletteRows();
       }
     }
     tabRaffleBtn.addEventListener('click', () => switchMainTab('raffle'));
     tabRouletteBtn.addEventListener('click', () => switchMainTab('roulette'));
 
-    // 2. Roulette Sub-Tab Switching
     function switchRouletteMode(mode) {
       currentRouletteMode = mode;
       if (mode === 'manual') {
@@ -2238,29 +2579,132 @@
         rouletteDonationTabBtn.classList.remove('active');
         rouletteManualBox.style.display = 'block';
         rouletteDonationBox.style.display = 'none';
+        renderManualRouletteRows();
       } else {
         rouletteDonationTabBtn.classList.add('active');
         rouletteManualTabBtn.classList.remove('active');
         rouletteDonationBox.style.display = 'block';
         rouletteManualBox.style.display = 'none';
+        drawRouletteWheel();
       }
-      drawRouletteWheel();
     }
     rouletteManualTabBtn.addEventListener('click', () => switchRouletteMode('manual'));
     rouletteDonationTabBtn.addEventListener('click', () => switchRouletteMode('donation'));
 
-    // 3. Preset Loader
+    function renderManualRouletteRows() {
+      if (!rouletteItemsContainer) return;
+      rouletteItemsContainer.innerHTML = '';
+
+      if (manualRouletteRows.length === 0) {
+        rouletteItemsContainer.innerHTML = '<div style="color: var(--text-sub); text-align: center; padding: 24px 0; font-size: 11px;">항목이 없습니다. 아래 [새 항목 추가] 버튼을 눌러 칸을 추가하세요.</div>';
+      } else {
+        manualRouletteRows.forEach((row, idx) => {
+          const rowEl = document.createElement('div');
+          rowEl.className = 'roulette-item-row';
+          rowEl.innerHTML = `
+            <span class="row-index-badge">${idx + 1}</span>
+            <input type="text" class="row-item-input" value="${escapeHtml(row.text)}" placeholder="항목 이름 (예: 치킨, 꽝)">
+            <div class="row-weight-wrap">
+              <span class="row-weight-label">비율</span>
+              <input type="number" class="row-weight-input" min="1" max="100" value="${row.weight}">
+            </div>
+            <button type="button" class="row-delete-btn" title="삭제">✕</button>
+          `;
+
+          const textInput = rowEl.querySelector('.row-item-input');
+          const weightInput = rowEl.querySelector('.row-weight-input');
+          const delBtn = rowEl.querySelector('.row-delete-btn');
+
+          textInput.addEventListener('input', (e) => {
+            manualRouletteRows[idx].text = e.target.value;
+            updateManualItemCount();
+            drawRouletteWheel();
+          });
+
+          textInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              addManualRouletteRow('', 1, true);
+            }
+          });
+
+          weightInput.addEventListener('input', (e) => {
+            manualRouletteRows[idx].weight = Math.max(1, parseInt(e.target.value) || 1);
+            drawRouletteWheel();
+          });
+
+          delBtn.addEventListener('click', () => {
+            removeManualRouletteRow(idx);
+          });
+
+          rouletteItemsContainer.appendChild(rowEl);
+        });
+      }
+
+      updateManualItemCount();
+      drawRouletteWheel();
+    }
+
+    function addManualRouletteRow(text = '', weight = 1, focusNew = false) {
+      manualRouletteRows.push({ text: text, weight: weight });
+      renderManualRouletteRows();
+      if (focusNew) {
+        const inputs = rouletteItemsContainer.querySelectorAll('.row-item-input');
+        if (inputs.length > 0) {
+          inputs[inputs.length - 1].focus();
+        }
+      }
+    }
+
+    function removeManualRouletteRow(idx) {
+      manualRouletteRows.splice(idx, 1);
+      renderManualRouletteRows();
+    }
+
+    function clearAllManualRouletteRows() {
+      if (manualRouletteRows.length === 0) return;
+      if (confirm('모든 룰렛 항목 칸을 삭제하시겠습니까?')) {
+        manualRouletteRows = [];
+        renderManualRouletteRows();
+      }
+    }
+
+    addRouletteRowBtn.addEventListener('click', () => addManualRouletteRow('', 1, true));
+    clearAllRouletteRowsBtn.addEventListener('click', clearAllManualRouletteRows);
+
     const PRESETS = {
-      prizes: "치킨 1마리\n피자 1판\n문화상품권 1만원\n스타벅스 아메리카노\n꽝\n꽝",
-      penalties: "노래 1곡 완창\n팔굽혀펴기 10회\n애교 3종 세트\n음소거 10분\n노방종 1시간 추가\n벌칙 면제",
-      food: "치킨\n피자\n햄버거\n짜장면 / 짬뽕\n삼겹살 / 제육\n국밥 / 찌개\n마라탕\n다이어트 샐러드"
+      prizes: [
+        { text: '치킨 1마리', weight: 1 },
+        { text: '피자 1판', weight: 1 },
+        { text: '문화상품권 1만원', weight: 1 },
+        { text: '스타벅스 아메리카노', weight: 1 },
+        { text: '꽝', weight: 2 },
+        { text: '꽝', weight: 2 }
+      ],
+      penalties: [
+        { text: '노래 1곡 완창', weight: 1 },
+        { text: '팔굽혀펴기 10회', weight: 1 },
+        { text: '애교 3종 세트', weight: 1 },
+        { text: '음소거 10분', weight: 1 },
+        { text: '노방종 1시간 추가', weight: 1 },
+        { text: '벌칙 면제', weight: 1 }
+      ],
+      food: [
+        { text: '치킨', weight: 1 },
+        { text: '피자', weight: 1 },
+        { text: '햄버거', weight: 1 },
+        { text: '짜장면 / 짬뽕', weight: 1 },
+        { text: '삼겹살 / 제육', weight: 1 },
+        { text: '국밥 / 찌개', weight: 1 },
+        { text: '마라탕', weight: 1 },
+        { text: '다이어트 샐러드', weight: 1 }
+      ]
     };
 
     function loadRoulettePreset(type) {
       if (PRESETS[type]) {
-        rouletteManualInput.value = PRESETS[type];
-        updateManualItemCount();
-        drawRouletteWheel();
+        manualRouletteRows = JSON.parse(JSON.stringify(PRESETS[type]));
+        renderManualRouletteRows();
       }
     }
 
@@ -2270,36 +2714,27 @@
         alert('현재 추첨 조건에 맞는 유효 참여자가 없습니다. 먼저 방송을 연결하고 참여자를 수집해주세요.');
         return;
       }
-      rouletteManualInput.value = eligible.map(p => p.nickname).join('\n');
-      updateManualItemCount();
-      drawRouletteWheel();
-      alert(`현재 유효 응모자 ${eligible.length.toLocaleString()}명의 닉네임을 룰렛 항목으로 불러왔습니다!`);
+      manualRouletteRows = eligible.map(p => ({ text: p.nickname, weight: 1 }));
+      renderManualRouletteRows();
+      alert(`현재 유효 응모자 ${eligible.length.toLocaleString()}명의 닉네임 칸을 룰렛에 생성했습니다!`);
     }
 
-    // Manual Input Listener
     function updateManualItemCount() {
       const items = getActiveRouletteItems();
       manualItemCountEl.innerText = `총 ${items.length}개 항목`;
     }
-    rouletteManualInput.addEventListener('input', () => {
-      updateManualItemCount();
-      drawRouletteWheel();
-    });
 
-    // 4. Live Donation Handling
     function handleLiveDonation(nickname, msg, uid, amount, timeStr) {
       const minReqCheese = Number(minDonationCheeseSelect.value) || 1;
       if (amount < minReqCheese) return;
 
-      const itemEntry = {
+      donationRouletteList.push({
         nickname: nickname,
         msg: msg || '(메시지 없음)',
         amount: amount,
         time: timeStr,
         uid: uid
-      };
-
-      donationRouletteList.push(itemEntry);
+      });
       renderDonationFeed();
 
       if (currentRouletteMode === 'donation') {
@@ -2310,21 +2745,21 @@
     function renderDonationFeed() {
       donationItemCountEl.innerText = donationRouletteList.length.toLocaleString();
       if (donationRouletteList.length === 0) {
-        donationFeedList.innerHTML = '<div style="text-align: center; color: var(--text-sub); padding: 20px 0;">아직 수집된 도네이션이 없습니다.</div>';
+        donationFeedList.innerHTML = '<div style="text-align: center; color: var(--text-sub); padding: 16px 0;">아직 수집된 도네이션이 없습니다.</div>';
         return;
       }
 
       donationFeedList.innerHTML = '';
       donationRouletteList.slice(-20).reverse().forEach((d, idx) => {
         const div = document.createElement('div');
-        div.style.cssText = 'padding: 6px 8px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center;';
+        div.style.cssText = 'padding: 4px 6px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center;';
         div.innerHTML = `
           <div>
-            <span style="color: var(--chzzk-green); font-weight: 700;">🧀 ${d.amount.toLocaleString()}치즈</span>
+            <span style="color: var(--chzzk-green); font-weight: 700;">🧀 ${d.amount.toLocaleString()}</span>
             <span style="font-weight: 700; margin-left: 4px;">${escapeHtml(d.nickname)}</span>
-            <span style="color: var(--text-sub); margin-left: 6px;">${escapeHtml(d.msg)}</span>
+            <span style="color: var(--text-sub); margin-left: 4px;">${escapeHtml(d.msg)}</span>
           </div>
-          <button type="button" class="btn-sm" style="padding: 2px 6px; font-size: 10px; background: rgba(255,255,255,0.1);" onclick="removeDonationEntry(${donationRouletteList.length - 1 - idx})">삭제</button>
+          <button type="button" class="btn-chip btn-chip-danger" style="padding: 1px 4px; font-size: 9px;" onclick="removeDonationEntry(${donationRouletteList.length - 1 - idx})">✕</button>
         `;
         donationFeedList.appendChild(div);
       });
@@ -2359,34 +2794,16 @@
       if (currentRouletteMode === 'donation') drawRouletteWheel();
     });
 
-    // 5. Get Active Roulette Items with Weights
     function getActiveRouletteItems() {
       if (currentRouletteMode === 'manual') {
-        const rawLines = rouletteManualInput.value.split('\n')
-          .map(l => l.trim())
-          .filter(l => l.length > 0);
-        
-        return rawLines.map((line, idx) => {
-          let text = line;
-          let weight = 1;
-          // Check if user entered "Item:Weight" (e.g. "꽝:3" or "치킨:1")
-          if (line.includes(':')) {
-            const parts = line.split(':');
-            const possibleWeight = Number(parts[parts.length - 1].trim());
-            if (!isNaN(possibleWeight) && possibleWeight > 0) {
-              weight = possibleWeight;
-              text = parts.slice(0, -1).join(':').trim();
-            }
-          }
-          return {
+        return manualRouletteRows
+          .filter(r => r.text && r.text.trim().length > 0)
+          .map((r, idx) => ({
             id: idx,
-            text: text,
-            weight: weight,
-            originalLine: line
-          };
-        });
+            text: r.text.trim(),
+            weight: r.weight || 1
+          }));
       } else {
-        // Donation Mode
         const itemType = document.querySelector('input[name="donationItemType"]:checked').value;
         const useWeight = donationWeightToggle.checked;
         const minReq = Number(minDonationCheeseSelect.value) || 1;
@@ -2406,7 +2823,7 @@
       }
     }
 
-    // 6. Web Audio API SFX Synthesizer (Zero External Dependencies)
+    // Audio SFX Synthesizer
     let audioCtx = null;
 
     function playTickSound() {
@@ -2441,7 +2858,7 @@
         if (audioCtx.state === 'suspended') {
           audioCtx.resume();
         }
-        const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+        const notes = [523.25, 659.25, 783.99, 1046.50];
         notes.forEach((freq, i) => {
           const osc = audioCtx.createOscillator();
           const gain = audioCtx.createGain();
@@ -2458,7 +2875,6 @@
       } catch (e) {}
     }
 
-    // 7. HTML5 2D Canvas Wheel Drawing Engine
     function drawRouletteWheel() {
       const items = getActiveRouletteItems();
       const canvasWidth = rouletteCanvas.width;
@@ -2470,7 +2886,6 @@
       rouletteCtx.clearRect(0, 0, canvasWidth, canvasHeight);
 
       if (items.length === 0) {
-        // Draw Empty Placeholder Wheel
         rouletteCtx.save();
         rouletteCtx.beginPath();
         rouletteCtx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
@@ -2498,7 +2913,6 @@
       const totalWeight = items.reduce((acc, it) => acc + it.weight, 0);
       let currentAngle = currentWheelAngle;
 
-      // 1. Draw Slices
       items.forEach((item, index) => {
         const sliceAngle = (item.weight / totalWeight) * 2 * Math.PI;
         const colorObj = WHEEL_COLORS[index % WHEEL_COLORS.length];
@@ -2509,16 +2923,13 @@
         rouletteCtx.arc(centerX, centerY, radius, currentAngle, currentAngle + sliceAngle);
         rouletteCtx.closePath();
 
-        // Slice background
         rouletteCtx.fillStyle = colorObj.bg;
         rouletteCtx.fill();
 
-        // Slice dividing border
         rouletteCtx.lineWidth = 2.5;
         rouletteCtx.strokeStyle = '#0a0c10';
         rouletteCtx.stroke();
 
-        // 2. Draw Slice Text rotated along radius
         const midAngle = currentAngle + sliceAngle / 2;
         rouletteCtx.save();
         rouletteCtx.translate(centerX, centerY);
@@ -2527,7 +2938,6 @@
         rouletteCtx.textBaseline = 'middle';
         rouletteCtx.fillStyle = colorObj.text;
 
-        // Dynamic font size adjustment
         let fontSize = 15;
         if (items.length > 24) fontSize = 10;
         else if (items.length > 16) fontSize = 12;
@@ -2535,7 +2945,6 @@
 
         rouletteCtx.font = `bold ${fontSize}px Pretendard, sans-serif`;
 
-        // Truncate text if needed
         let displayText = item.text;
         const maxTextWidth = radius - 70;
         if (rouletteCtx.measureText(displayText).width > maxTextWidth) {
@@ -2553,7 +2962,6 @@
         currentAngle += sliceAngle;
       });
 
-      // 2. Outer Ring Glow & Border
       rouletteCtx.save();
       rouletteCtx.beginPath();
       rouletteCtx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
@@ -2569,14 +2977,12 @@
       rouletteCtx.restore();
     }
 
-    // 8. Physics Deceleration Spin Engine
     function easeOutQuart(x) {
       return 1 - Math.pow(1 - x, 4);
     }
 
     function getSliceIndexAtTopPointer(angle, items) {
       const totalWeight = items.reduce((acc, it) => acc + it.weight, 0);
-      // Top pointer is at -PI / 2 (or 3*PI/2)
       let pointerAngle = (1.5 * Math.PI - angle) % (2 * Math.PI);
       if (pointerAngle < 0) pointerAngle += 2 * Math.PI;
 
@@ -2606,7 +3012,6 @@
       const durationSec = Number(spinDurationSelect.value) || 5;
       const durationMs = durationSec * 1000;
 
-      // Calculate a random target spin: 5 to 10 full turns + random landing angle
       const startAngle = currentWheelAngle;
       const fullRotations = (5 + Math.floor(Math.random() * 5)) * 2 * Math.PI;
       const randomExtraAngle = Math.random() * 2 * Math.PI;
@@ -2623,7 +3028,6 @@
         currentWheelAngle = startAngle + (targetAngle - startAngle) * easeProgress;
         drawRouletteWheel();
 
-        // Collision detection for ticker sound
         const currentSliceIdx = getSliceIndexAtTopPointer(currentWheelAngle, items);
         if (currentSliceIdx !== lastTickSliceIndex) {
           lastTickSliceIndex = currentSliceIdx;
@@ -2633,7 +3037,6 @@
         if (progress < 1) {
           requestAnimationFrame(animateSpin);
         } else {
-          // Finished Spin!
           isRouletteSpinning = false;
           spinRouletteBtn.disabled = false;
           spinBtnText.innerText = '룰렛 돌리기 (SPIN)';
@@ -2650,7 +3053,6 @@
 
     spinRouletteBtn.addEventListener('click', spinRoulette);
 
-    // 9. Winner Celebration & History Logging
     function showRouletteWinner(winner) {
       rouletteRound++;
       playFanfareSound();
@@ -2660,7 +3062,6 @@
       rouletteWinnerSub.innerText = `🎉 제 ${rouletteRound}회차 룰렛 당첨이 완료되었습니다!`;
       rouletteWinnerModal.classList.add('active');
 
-      // Log to History Table
       const now = new Date().toLocaleTimeString('ko-KR');
       rouletteHistory.unshift({
         round: rouletteRound,
@@ -2669,7 +3070,6 @@
       });
       renderRouletteHistory();
 
-      // Check Auto Remove Option
       if (autoRemoveWonItemToggle.checked) {
         removeWinningItem(winner);
       }
@@ -2677,7 +3077,7 @@
 
     function renderRouletteHistory() {
       if (rouletteHistory.length === 0) {
-        rouletteHistoryBody.innerHTML = '<tr><td colspan="3" style="text-align:center; color: var(--text-sub); font-size: 11px; padding: 16px 0;">아직 룰렛 결과가 없습니다.</td></tr>';
+        rouletteHistoryBody.innerHTML = '<tr><td colspan="3" style="text-align:center; color: var(--text-sub); font-size: 11px; padding: 14px 0;">아직 룰렛 결과가 없습니다.</td></tr>';
         return;
       }
 
@@ -2704,23 +3104,11 @@
 
     function removeWinningItem(winner) {
       if (currentRouletteMode === 'manual') {
-        const lines = rouletteManualInput.value.split('\n');
-        // Remove first matching line
-        const removeIdx = lines.findIndex(l => {
-          let t = l.trim();
-          if (t.includes(':')) {
-            t = t.split(':').slice(0, -1).join(':').trim();
-          }
-          return t === winner.text;
-        });
+        const removeIdx = manualRouletteRows.findIndex(r => r.text && r.text.trim() === winner.text);
         if (removeIdx !== -1) {
-          lines.splice(removeIdx, 1);
-          rouletteManualInput.value = lines.join('\n');
-          updateManualItemCount();
-          drawRouletteWheel();
+          removeManualRouletteRow(removeIdx);
         }
       } else {
-        // Donation Mode
         const removeIdx = donationRouletteList.findIndex(d => {
           const itemType = document.querySelector('input[name="donationItemType"]:checked').value;
           const t = itemType === 'nickname' ? d.nickname : (d.msg || d.nickname);
@@ -2745,7 +3133,7 @@
       rouletteWinnerModal.classList.remove('active');
     });
 
-    // 10. Particle Confetti Engine
+    // Confetti Engine
     let confettiParticles = [];
     let isConfettiRunning = false;
 
@@ -2783,8 +3171,8 @@
       confettiParticles.forEach(p => {
         p.x += p.vx;
         p.y += p.vy;
-        p.vy += 0.45; // gravity
-        p.vx *= 0.98; // air drag
+        p.vy += 0.45;
+        p.vx *= 0.98;
         p.rotation += p.vRotation;
         p.opacity -= 0.007;
 
@@ -2815,9 +3203,8 @@
       }
     });
 
-    // Initial Wheel Draw
-    updateManualItemCount();
-    drawRouletteWheel();
+    // Initialize
+    renderManualRouletteRows();
   </script>
 </body>
 </html>
