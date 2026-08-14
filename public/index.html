@@ -80,6 +80,11 @@
       filter: drop-shadow(0 0 24px rgba(255, 107, 107, 0.25));
     }
 
+    .bg-character-game {
+      background-image: url('voltorb-bg.png');
+      filter: drop-shadow(0 0 28px rgba(255, 68, 68, 0.35));
+    }
+
     .container {
       max-width: 1420px;
       margin: 0 auto;
@@ -1382,6 +1387,254 @@
       background: var(--chzzk-green);
       transition: width 1s linear;
     }
+
+    /* ⚡ Voltorb Flip (찌리리공 뒤집기) Styles */
+    .game-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .voltorb-stage-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at center, #0f402c 0%, #061c13 70%, #020b07 100%);
+      border: 2px solid #1f8a55;
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(0, 255, 163, 0.1);
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .voltorb-board-container {
+      display: grid;
+      grid-template-columns: repeat(5, 68px) 80px;
+      grid-template-rows: repeat(5, 68px) 80px;
+      gap: 8px;
+      padding: 16px;
+      background: #08291c;
+      border: 3px solid #1a6e45;
+      border-radius: 14px;
+      box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.6);
+      user-select: none;
+    }
+
+    @media (max-width: 640px) {
+      .voltorb-board-container {
+        grid-template-columns: repeat(5, 46px) 56px;
+        grid-template-rows: repeat(5, 46px) 56px;
+        gap: 4px;
+        padding: 8px;
+      }
+    }
+
+    .voltorb-tile {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 8px;
+      cursor: pointer;
+      perspective: 800px;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .voltorb-tile:hover:not(.flipped) {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 255, 163, 0.3);
+    }
+
+    .voltorb-tile-inner {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 8px;
+    }
+
+    .voltorb-tile.flipped .voltorb-tile-inner {
+      transform: rotateY(180deg);
+    }
+
+    .voltorb-tile-front, .voltorb-tile-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    /* Unflipped front side */
+    .voltorb-tile-front {
+      background: linear-gradient(135deg, #1b7a4d 0%, #115736 100%);
+      border: 2px solid #289e65;
+      box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.2), 0 3px 6px rgba(0, 0, 0, 0.4);
+    }
+
+    .voltorb-tile-front::after {
+      content: '';
+      position: absolute;
+      width: 65%;
+      height: 65%;
+      background: repeating-linear-gradient(45deg, rgba(0, 255, 163, 0.08), rgba(0, 255, 163, 0.08) 4px, transparent 4px, transparent 8px);
+      border-radius: 4px;
+    }
+
+    .voltorb-coord-badge {
+      position: absolute;
+      top: 3px;
+      left: 4px;
+      font-size: 10px;
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.7);
+      z-index: 2;
+    }
+
+    /* Memo quadrants on unflipped tile */
+    .voltorb-memo-grid {
+      position: absolute;
+      inset: 4px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .memo-mark {
+      font-size: 9px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+
+    .memo-mark.active {
+      opacity: 1;
+    }
+
+    .memo-mark.m-1 { color: #ffffff; justify-content: flex-start; align-items: flex-start; }
+    .memo-mark.m-2 { color: #f59e0b; justify-content: flex-end; align-items: flex-start; }
+    .memo-mark.m-3 { color: #38bdf8; justify-content: flex-start; align-items: flex-end; }
+    .memo-mark.m-v { color: #ef4444; justify-content: flex-end; align-items: flex-end; }
+
+    /* Flipped back side */
+    .voltorb-tile-back {
+      transform: rotateY(180deg);
+      border: 2px solid #fff;
+      font-size: 26px;
+      font-weight: 900;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+
+    .voltorb-tile-back.val-1 {
+      background: linear-gradient(135deg, #10b981, #047857);
+      border-color: #34d399;
+      color: #fff;
+    }
+
+    .voltorb-tile-back.val-2 {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      border-color: #fbbf24;
+      color: #fff;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+    }
+
+    .voltorb-tile-back.val-3 {
+      background: linear-gradient(135deg, #0ea5e9, #0284c7);
+      border-color: #38bdf8;
+      color: #fff;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+    }
+
+    .voltorb-tile-back.val-0 {
+      background: linear-gradient(135deg, #dc2626, #991b1b);
+      border-color: #f87171;
+      color: #fff;
+      animation: voltorbExplode 0.4s ease forwards;
+    }
+
+    @keyframes voltorbExplode {
+      0% { transform: rotateY(180deg) scale(0.8); }
+      50% { transform: rotateY(180deg) scale(1.15); filter: brightness(1.6); }
+      100% { transform: rotateY(180deg) scale(1); }
+    }
+
+    /* Hint Badges on Right & Bottom */
+    .voltorb-hint-card {
+      border-radius: 8px;
+      padding: 6px 8px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .hint-color-0 { background: linear-gradient(135deg, #ea580c, #c2410c); border-color: #fb923c; } /* Row 1 */
+    .hint-color-1 { background: linear-gradient(135deg, #16a34a, #15803d); border-color: #4ade80; } /* Row 2 */
+    .hint-color-2 { background: linear-gradient(135deg, #d97706, #b45309); border-color: #fcd34d; } /* Row 3 */
+    .hint-color-3 { background: linear-gradient(135deg, #2563eb, #1d4ed8); border-color: #60a5fa; } /* Row 4 */
+    .hint-color-4 { background: linear-gradient(135deg, #9333ea, #7e22ce); border-color: #c084fc; } /* Row 5 */
+
+    .hint-row-val {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #fff;
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .hint-coin-icon { font-size: 12px; margin-right: 2px; }
+    .hint-voltorb-icon { font-size: 13px; margin-right: 2px; }
+
+    /* Corner Memo Master Toggle Panel */
+    .voltorb-corner-panel {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      gap: 4px;
+    }
+
+    .memo-select-btn {
+      width: 24px;
+      height: 24px;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+
+    .memo-select-btn.active {
+      border-color: var(--chzzk-green);
+      background: rgba(0, 255, 163, 0.2);
+      box-shadow: 0 0 6px rgba(0, 255, 163, 0.4);
+    }
   </style>
 </head>
 <body>
@@ -1389,12 +1642,13 @@
   <div id="bgCharRaffle" class="bg-character bg-character-raffle active"></div>
   <div id="bgCharRoulette" class="bg-character bg-character-roulette"></div>
   <div id="bgCharPoll" class="bg-character bg-character-poll"></div>
+  <div id="bgCharGame" class="bg-character bg-character-game"></div>
 
   <div class="container">
     <header>
       <div class="logo-group">
         <div class="logo-badge">CHZZK</div>
-        <h1>치지직 대규모 추첨 & 룰렛</h1>
+        <h1>치지직 대규모 추첨 & 룰렛 & 배틀</h1>
       </div>
 
       <!-- Center Mode Nav Tabs -->
@@ -1410,6 +1664,10 @@
         <button type="button" id="tabPollBtn" class="nav-tab-btn">
           <span>📊</span>
           <span>실시간 투표</span>
+        </button>
+        <button type="button" id="tabGameBtn" class="nav-tab-btn">
+          <span>⚡</span>
+          <span>찌리리공 뒤집기 배틀</span>
         </button>
       </div>
 
@@ -2151,6 +2409,158 @@
         </div>
       </div>
     </div>
+
+    <!-- ⚡ MAIN TAB 4: 찌리리공 뒤집기 배틀 시스템 (Game View) -->
+    <div id="gameView" class="game-grid" style="display: none;">
+      <!-- TOP PANEL: Battle Status & Controls (상부 설정 및 제어) -->
+      <div class="panel">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div class="panel-title" style="margin-bottom: 0;">
+              <span>⚡ 찌리리공 뒤집기 (스트리머 vs 시청자 배틀)</span>
+            </div>
+            <span id="gamePhaseBadge" class="live-badge-pill offline" style="font-size: 11px;">대기 중</span>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="font-size: 12px; color: var(--text-sub); font-weight: 700;">🎯 난이도 레벨</span>
+              <select id="gameLevelSelect" style="padding: 6px 12px; font-size: 12px; background: #080c14; border: 1px solid var(--border-color); color: #fff; border-radius: 6px; font-weight: 700;">
+                <option value="1" selected>Lv.1 (초급 - 코인 24~48 / 폭탄 6개)</option>
+                <option value="2">Lv.2 (중급 - 코인 54~108 / 폭탄 7개)</option>
+                <option value="3">Lv.3 (고급 - 코인 108~216 / 폭탄 8개)</option>
+                <option value="4">Lv.4 (달인 - 코인 216~432 / 폭탄 8~10개)</option>
+                <option value="5">Lv.5 (초고수 - 코인 432~864 / 폭탄 10개)</option>
+                <option value="6">Lv.6 (마스터 - 코인 864~1728 / 폭탄 10개)</option>
+                <option value="7">Lv.7 (챔피언 - 코인 1728~3456 / 폭탄 10~11개)</option>
+                <option value="8">Lv.8 (전설 - 코인 3456~6912 / 폭탄 10~12개)</option>
+              </select>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="font-size: 12px; color: var(--text-sub); font-weight: 700;">⏱️ 시청자 투표 시간</span>
+              <select id="gameVoteDurationSelect" style="padding: 6px 12px; font-size: 12px; background: #080c14; border: 1px solid var(--border-color); color: #fff; border-radius: 6px;">
+                <option value="3">⚡ 3초</option>
+                <option value="5" selected>⏱️ 5초 (표준)</option>
+                <option value="7">⏱️ 7초</option>
+                <option value="10">⏱️ 10초</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scoreboard Row (Streamer vs Viewers) -->
+        <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; align-items: center; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px 20px; margin-bottom: 14px;">
+          <!-- Left: Streamer Score Card -->
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="font-size: 32px;">👑</div>
+            <div>
+              <div style="font-size: 12px; color: #ffd700; font-weight: 800;">PLAYER 1 (스트리머)</div>
+              <div style="display: flex; align-items: baseline; gap: 6px;">
+                <span id="gameStreamerScoreText" style="font-size: 26px; font-weight: 900; font-family: 'Outfit'; color: #fff;">0</span>
+                <span style="font-size: 12px; color: var(--text-sub);">코인</span>
+                <span id="gameStreamerStatusTag" class="badge-tag" style="background: rgba(255, 255, 255, 0.08); color: var(--text-sub); font-size: 11px;">대기</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Center: VS Badge & Current Board Multiplier -->
+          <div style="text-align: center; padding: 0 16px; border-left: 1px solid rgba(255,255,255,0.08); border-right: 1px solid rgba(255,255,255,0.08);">
+            <div style="font-size: 11px; font-weight: 800; color: var(--text-sub); letter-spacing: 1px; margin-bottom: 2px;">CURRENT BOARD</div>
+            <div style="font-size: 18px; font-weight: 900; color: var(--chzzk-green); font-family: 'Outfit';">
+              <span id="gameCurrentCoinsText">0</span> <span style="font-size: 11px; color: var(--text-sub);">COINS</span>
+            </div>
+            <div style="font-size: 10px; color: var(--text-sub); margin-top: 2px;">
+              남은 2·3배 카드: <b id="gameRemainingTargetCards" style="color: #ffd700;">-</b>개
+            </div>
+          </div>
+
+          <!-- Right: Viewers Score Card -->
+          <div style="display: flex; align-items: center; justify-content: flex-end; gap: 12px; text-align: right;">
+            <div>
+              <div style="font-size: 12px; color: #38bdf8; font-weight: 800;">PLAYER 2 (시청자 연합)</div>
+              <div style="display: flex; align-items: baseline; justify-content: flex-end; gap: 6px;">
+                <span id="gameViewersStatusTag" class="badge-tag" style="background: rgba(255, 255, 255, 0.08); color: var(--text-sub); font-size: 11px;">대기</span>
+                <span id="gameViewersScoreText" style="font-size: 26px; font-weight: 900; font-family: 'Outfit'; color: #fff;">0</span>
+                <span style="font-size: 12px; color: var(--text-sub);">코인</span>
+              </div>
+            </div>
+            <div style="font-size: 32px;">👥</div>
+          </div>
+        </div>
+
+        <!-- Action Control Buttons Bar -->
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button type="button" id="startGameStreamerBtn" class="btn btn-primary" style="padding: 10px 16px; font-size: 13px; font-weight: 800;">
+              👑 스트리머 턴 시작
+            </button>
+            <button type="button" id="startGameViewersBtn" class="btn btn-secondary" style="padding: 10px 16px; font-size: 13px; font-weight: 800; background: linear-gradient(135deg, #0284c7, #0369a1); border-color: #38bdf8; color: #fff;">
+              👥 시청자 투표 턴 시작
+            </button>
+            <button type="button" id="gameCashOutBtn" class="btn btn-secondary" style="padding: 10px 14px; font-size: 12px; font-weight: 700;" title="현재 획득한 코인을 안전하게 확보하고 턴을 종료합니다">
+              🛑 그만둔다 (코인 확보)
+            </button>
+            <button type="button" id="resetGameBtn" class="btn-chip btn-chip-secondary" style="padding: 10px 14px; font-size: 12px;">
+              🔄 새 게임 생성
+            </button>
+          </div>
+
+          <!-- Memo Mode Toggle & Tools -->
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <button type="button" id="toggleMemoModeBtn" class="btn-chip btn-chip-secondary" style="padding: 9px 14px; font-size: 12px; font-weight: 700;">
+              <span>📝 메모 모드: </span><b id="memoModeStateText" style="color: var(--text-sub); margin-left: 4px;">OFF</b>
+            </button>
+            <button type="button" id="showShowdownResultBtn" class="btn-chip" style="padding: 9px 14px; font-size: 12px; font-weight: 800; background: linear-gradient(135deg, #ffd700, #ff8800); color: #1a1000; border: none; display: none;">
+              🏆 최종 결과 발표
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOTTOM PANEL: Authentic Voltorb Flip Interactive Board Stage (하부 게임 스테이지) -->
+      <div class="panel" style="display: flex; flex-direction: column; align-items: center;">
+        <div class="panel-title" style="align-self: flex-start; margin-bottom: 14px; display: flex; justify-content: space-between; width: 100%; align-items: center; flex-wrap: wrap; gap: 6px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span>🎯 5×5 찌리리공 뒤집기 보드</span>
+            <span id="gameBoardRoundLevelBadge" class="badge-tag" style="background: rgba(0, 255, 163, 0.15); color: var(--chzzk-green); font-size: 11px; font-weight: 800;">Lv.1</span>
+          </div>
+          <div id="gameInstructionText" style="font-size: 12px; color: var(--text-sub); font-weight: 600;">
+            [스트리머 턴 시작] 버튼을 눌러 게임을 시작하세요.
+          </div>
+        </div>
+
+        <!-- Voltorb Flip Interactive Game Stage -->
+        <div class="voltorb-stage-wrapper">
+          <!-- 5x5 Grid + Hint Cards -->
+          <div id="voltorbBoardContainer" class="voltorb-board-container">
+            <!-- Dynamically populated 25 tiles + 5 row hints + 5 col hints + 1 corner control -->
+          </div>
+
+          <!-- Live Voting HUD Overlay during Viewers' Turn -->
+          <div id="gameViewersVotingHud" style="width: 100%; max-width: 520px; margin-top: 16px; background: rgba(8, 12, 20, 0.92); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 12px; padding: 12px 16px; display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span class="live-dot" style="background: #38bdf8;"></span>
+                <span style="font-size: 12px; font-weight: 800; color: #38bdf8;">시청자 실시간 좌표 투표 중</span>
+                <span style="font-size: 11px; color: var(--text-sub);">(채팅에 좌표 입력: 예 <b>A3</b>, <b>B2</b>, <b>15</b>)</span>
+              </div>
+              <span id="gameVotingTimerText" style="font-family: 'Outfit'; font-weight: 800; color: #ffd700; font-size: 14px;">5.0s</span>
+            </div>
+
+            <!-- Countdown Bar Track -->
+            <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; margin-bottom: 10px;">
+              <div id="gameVotingTimerFill" style="height: 100%; width: 100%; background: linear-gradient(90deg, #38bdf8, #ffd700); transition: width 0.1s linear;"></div>
+            </div>
+
+            <!-- Real-time Vote Candidate Progress Bars -->
+            <div id="gameTopVotedCandidatesList" style="display: flex; flex-direction: column; gap: 4px; font-size: 11px;">
+              <div style="color: var(--text-sub); text-align: center; padding: 4px 0;">시청자들이 채팅창에 열고 싶은 좌표를 입력하면 실시간 집계됩니다.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- 📡 Broadcast Connection Setup Modal (A안) -->
@@ -2368,6 +2778,46 @@
           📊 결과 엑셀 저장
         </button>
         <button type="button" id="closePollResultModalBtn" class="btn btn-secondary" style="padding: 10px 20px; font-size: 12px;">
+          닫기
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🏆 Voltorb Flip Showdown Result Modal -->
+  <div id="gameResultModal" class="modal-backdrop">
+    <div class="modal-content" style="max-width: 560px; text-align: center; border-color: #ffd700; box-shadow: 0 0 50px rgba(255, 215, 0, 0.35);">
+      <div id="gameResultChampionTrophy" style="font-size: 58px; margin-bottom: 6px; animation: winnerBounce 0.8s ease;">👑</div>
+      <div style="font-size: 13px; font-weight: 800; color: #ffd700; letter-spacing: 1.5px; margin-bottom: 4px;">VOLTORB FLIP BATTLE SHOWDOWN</div>
+      <div id="gameResultWinnerHeader" style="font-size: 28px; font-weight: 900; color: #fff; margin-bottom: 16px;">스트리머의 대승리!</div>
+
+      <!-- Score Comparison Box -->
+      <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: center; background: #080c14; border: 1px solid var(--border-color); border-radius: 12px; padding: 18px; margin-bottom: 18px;">
+        <div style="text-align: center;">
+          <div style="font-size: 12px; color: #ffd700; font-weight: 800; margin-bottom: 4px;">👑 스트리머</div>
+          <div id="gameModalStreamerCoins" style="font-size: 32px; font-weight: 900; font-family: 'Outfit'; color: #fff;">0</div>
+          <div id="gameModalStreamerDetail" style="font-size: 11px; color: var(--text-sub); margin-top: 2px;">0개 타일 오픈</div>
+        </div>
+
+        <div style="font-size: 20px; font-weight: 900; color: var(--text-sub); font-family: 'Outfit';">VS</div>
+
+        <div style="text-align: center;">
+          <div style="font-size: 12px; color: #38bdf8; font-weight: 800; margin-bottom: 4px;">👥 시청자 연합</div>
+          <div id="gameModalViewersCoins" style="font-size: 32px; font-weight: 900; font-family: 'Outfit'; color: #fff;">0</div>
+          <div id="gameModalViewersDetail" style="font-size: 11px; color: var(--text-sub); margin-top: 2px;">0개 타일 오픈</div>
+        </div>
+      </div>
+
+      <!-- Summary Description -->
+      <div id="gameModalSummaryText" style="font-size: 14px; color: var(--chzzk-green); font-weight: 700; margin-bottom: 20px; line-height: 1.5;">
+        스트리머가 찌리리공을 피해 더 많은 코인을 획득하여 승리했습니다!
+      </div>
+
+      <div style="display: flex; gap: 8px; justify-content: center;">
+        <button type="button" id="gameModalNextRoundBtn" class="btn btn-primary" style="padding: 10px 20px; font-size: 13px; font-weight: 800;">
+          ⚡ 다음 라운드 대결
+        </button>
+        <button type="button" id="closeGameResultModalBtn" class="btn btn-secondary" style="padding: 10px 20px; font-size: 12px;">
           닫기
         </button>
       </div>
@@ -3100,6 +3550,9 @@
       // Handle Live Poll Chat & Donation
       handleLivePollChat(nickname, msgText, uid, isSubscriber, isDonator, now);
 
+      // Handle Live Voltorb Flip Coordinate Vote for Viewers' Turn
+      handleLiveGameChatVote(nickname, msgText, uid, now);
+
       // Parse and Handle Live Cheese Donation for Roulette & Cheese Poll
       const donationInfo = parseLiveDonation(item, profileData);
       if (donationInfo.isDonation) {
@@ -3766,12 +4219,15 @@
     const tabRaffleBtn = document.getElementById('tabRaffleBtn');
     const tabRouletteBtn = document.getElementById('tabRouletteBtn');
     const tabPollBtn = document.getElementById('tabPollBtn');
+    const tabGameBtn = document.getElementById('tabGameBtn');
     const raffleView = document.getElementById('raffleView');
     const rouletteView = document.getElementById('rouletteView');
     const pollView = document.getElementById('pollView');
+    const gameView = document.getElementById('gameView');
     const bgCharRaffle = document.getElementById('bgCharRaffle');
     const bgCharRoulette = document.getElementById('bgCharRoulette');
     const bgCharPoll = document.getElementById('bgCharPoll');
+    const bgCharGame = document.getElementById('bgCharGame');
 
     const rouletteManualTabBtn = document.getElementById('rouletteManualTabBtn');
     const rouletteDonationTabBtn = document.getElementById('rouletteDonationTabBtn');
@@ -3855,48 +4311,37 @@
     ];
 
     function switchMainTab(tab) {
-      if (tab === 'raffle') {
-        tabRaffleBtn.classList.add('active');
-        tabRouletteBtn.classList.remove('active');
-        tabPollBtn.classList.remove('active');
-        raffleView.style.display = 'block';
-        rouletteView.style.display = 'none';
-        pollView.style.display = 'none';
-        if (bgCharRaffle) bgCharRaffle.classList.add('active');
-        if (bgCharRoulette) bgCharRoulette.classList.remove('active');
-        if (bgCharPoll) bgCharPoll.classList.remove('active');
-      } else if (tab === 'roulette') {
-        tabRouletteBtn.classList.add('active');
-        tabRaffleBtn.classList.remove('active');
-        tabPollBtn.classList.remove('active');
-        rouletteView.style.display = 'flex';
-        raffleView.style.display = 'none';
-        pollView.style.display = 'none';
-        if (bgCharRoulette) bgCharRoulette.classList.add('active');
-        if (bgCharRaffle) bgCharRaffle.classList.remove('active');
-        if (bgCharPoll) bgCharPoll.classList.remove('active');
-        if (currentRouletteMode === 'manual') {
-          renderManualRouletteRows();
-        } else {
-          drawRouletteWheel();
-        }
+      tabRaffleBtn.classList.toggle('active', tab === 'raffle');
+      tabRouletteBtn.classList.toggle('active', tab === 'roulette');
+      tabPollBtn.classList.toggle('active', tab === 'poll');
+      if (tabGameBtn) tabGameBtn.classList.toggle('active', tab === 'game');
+
+      raffleView.style.display = tab === 'raffle' ? 'block' : 'none';
+      rouletteView.style.display = tab === 'roulette' ? 'flex' : 'none';
+      pollView.style.display = tab === 'poll' ? 'flex' : 'none';
+      if (gameView) gameView.style.display = tab === 'game' ? 'flex' : 'none';
+
+      if (bgCharRaffle) bgCharRaffle.classList.toggle('active', tab === 'raffle');
+      if (bgCharRoulette) bgCharRoulette.classList.toggle('active', tab === 'roulette');
+      if (bgCharPoll) bgCharPoll.classList.toggle('active', tab === 'poll');
+      if (bgCharGame) bgCharGame.classList.toggle('active', tab === 'game');
+
+      if (tab === 'roulette') {
+        if (currentRouletteMode === 'manual') renderManualRouletteRows();
+        else drawRouletteWheel();
       } else if (tab === 'poll') {
-        tabPollBtn.classList.add('active');
-        tabRaffleBtn.classList.remove('active');
-        tabRouletteBtn.classList.remove('active');
-        pollView.style.display = 'flex';
-        raffleView.style.display = 'none';
-        rouletteView.style.display = 'none';
-        if (bgCharPoll) bgCharPoll.classList.add('active');
-        if (bgCharRaffle) bgCharRaffle.classList.remove('active');
-        if (bgCharRoulette) bgCharRoulette.classList.remove('active');
         renderPollOptionsList();
         renderPollVisualBars();
+      } else if (tab === 'game') {
+        if (boardTiles.length === 0) {
+          initNewGameRound();
+        }
       }
     }
     tabRaffleBtn.addEventListener('click', () => switchMainTab('raffle'));
     tabRouletteBtn.addEventListener('click', () => switchMainTab('roulette'));
     tabPollBtn.addEventListener('click', () => switchMainTab('poll'));
+    if (tabGameBtn) tabGameBtn.addEventListener('click', () => switchMainTab('game'));
 
     function switchRouletteMode(mode) {
       currentRouletteMode = mode;
@@ -5535,9 +5980,654 @@
       convertPollResultModalRouletteBtn.addEventListener('click', convertCheesePollToRoulette);
     }
 
-    exportPollSummaryBtn.addEventListener('click', exportPollSummary);
-    exportPollVotersBtn.addEventListener('click', exportPollVoters);
-    exportPollResultModalBtn.addEventListener('click', exportPollSummary);
+    // ==========================================
+    // ⚡ VOLTORB FLIP BATTLE SYSTEM ENGINE (찌리리공 뒤집기)
+    // ==========================================
+    const gamePhaseBadge = document.getElementById('gamePhaseBadge');
+    const gameLevelSelect = document.getElementById('gameLevelSelect');
+    const gameVoteDurationSelect = document.getElementById('gameVoteDurationSelect');
+
+    const gameStreamerScoreText = document.getElementById('gameStreamerScoreText');
+    const gameStreamerStatusTag = document.getElementById('gameStreamerStatusTag');
+    const gameViewersScoreText = document.getElementById('gameViewersScoreText');
+    const gameViewersStatusTag = document.getElementById('gameViewersStatusTag');
+    const gameCurrentCoinsText = document.getElementById('gameCurrentCoinsText');
+    const gameRemainingTargetCards = document.getElementById('gameRemainingTargetCards');
+
+    const startGameStreamerBtn = document.getElementById('startGameStreamerBtn');
+    const startGameViewersBtn = document.getElementById('startGameViewersBtn');
+    const gameCashOutBtn = document.getElementById('gameCashOutBtn');
+    const resetGameBtn = document.getElementById('resetGameBtn');
+    const toggleMemoModeBtn = document.getElementById('toggleMemoModeBtn');
+    const memoModeStateText = document.getElementById('memoModeStateText');
+    const showShowdownResultBtn = document.getElementById('showShowdownResultBtn');
+
+    const gameBoardRoundLevelBadge = document.getElementById('gameBoardRoundLevelBadge');
+    const gameInstructionText = document.getElementById('gameInstructionText');
+    const voltorbBoardContainer = document.getElementById('voltorbBoardContainer');
+
+    const gameViewersVotingHud = document.getElementById('gameViewersVotingHud');
+    const gameVotingTimerText = document.getElementById('gameVotingTimerText');
+    const gameVotingTimerFill = document.getElementById('gameVotingTimerFill');
+    const gameTopVotedCandidatesList = document.getElementById('gameTopVotedCandidatesList');
+
+    const gameResultModal = document.getElementById('gameResultModal');
+    const gameResultChampionTrophy = document.getElementById('gameResultChampionTrophy');
+    const gameResultWinnerHeader = document.getElementById('gameResultWinnerHeader');
+    const gameModalStreamerCoins = document.getElementById('gameModalStreamerCoins');
+    const gameModalStreamerDetail = document.getElementById('gameModalStreamerDetail');
+    const gameModalViewersCoins = document.getElementById('gameModalViewersCoins');
+    const gameModalViewersDetail = document.getElementById('gameModalViewersDetail');
+    const gameModalSummaryText = document.getElementById('gameModalSummaryText');
+    const gameModalNextRoundBtn = document.getElementById('gameModalNextRoundBtn');
+    const closeGameResultModalBtn = document.getElementById('closeGameResultModalBtn');
+
+    // Voltorb Flip Level Configuration Table
+    const VOLTORB_LEVEL_CONFIGS = {
+      1: { total2: 3, total3: 1, voltorbs: 6 },
+      2: { total2: 4, total3: 2, voltorbs: 7 },
+      3: { total2: 4, total3: 3, voltorbs: 8 },
+      4: { total2: 3, total3: 5, voltorbs: 8 },
+      5: { total2: 5, total3: 5, voltorbs: 10 },
+      6: { total2: 3, total3: 7, voltorbs: 10 },
+      7: { total2: 7, total3: 4, voltorbs: 10 },
+      8: { total2: 6, total3: 6, voltorbs: 10 }
+    };
+
+    let gameLevel = 1;
+    let gamePhase = 'idle'; // 'idle' | 'streamer' | 'viewers' | 'ended'
+    let isMemoMode = false;
+    let activeMemoTool = 1; // 1 | 2 | 3 | 'v'
+
+    let boardTiles = []; // 25 elements: { index, numIdx, row, col, coord, val, flipped, memos }
+    let rowSums = [0, 0, 0, 0, 0];
+    let rowVoltorbs = [0, 0, 0, 0, 0];
+    let colSums = [0, 0, 0, 0, 0];
+    let colVoltorbs = [0, 0, 0, 0, 0];
+    let totalTargetCards = 0;
+    let currentBoardCoins = 0;
+    let remainingTargetCardsCount = 0;
+
+    let streamerResult = { score: 0, flippedCount: 0, status: 'none' };
+    let viewersResult = { score: 0, flippedCount: 0, status: 'none' };
+
+    let viewersVotingTimerInterval = null;
+    let viewersVotingRemainingSeconds = 5.0;
+    let viewersVotingTotalDuration = 5.0;
+    let currentVoteCounts = {}; // coordKey -> count
+    let currentVoteUsers = new Map(); // uid -> coordKey
+
+    function initNewGameRound(keepScores = false) {
+      clearInterval(viewersVotingTimerInterval);
+      if (!keepScores) {
+        streamerResult = { score: 0, flippedCount: 0, status: 'none' };
+        viewersResult = { score: 0, flippedCount: 0, status: 'none' };
+        gameStreamerScoreText.innerText = '0';
+        gameStreamerStatusTag.className = 'badge-tag';
+        gameStreamerStatusTag.style.background = 'rgba(255,255,255,0.08)';
+        gameStreamerStatusTag.style.color = 'var(--text-sub)';
+        gameStreamerStatusTag.innerText = '대기';
+
+        gameViewersScoreText.innerText = '0';
+        gameViewersStatusTag.className = 'badge-tag';
+        gameViewersStatusTag.style.background = 'rgba(255,255,255,0.08)';
+        gameViewersStatusTag.style.color = 'var(--text-sub)';
+        gameViewersStatusTag.innerText = '대기';
+
+        showShowdownResultBtn.style.display = 'none';
+      }
+
+      gameLevel = parseInt(gameLevelSelect.value, 10) || 1;
+      gameBoardRoundLevelBadge.innerText = `Lv.${gameLevel}`;
+      gamePhase = 'idle';
+      gamePhaseBadge.className = 'live-badge-pill offline';
+      gamePhaseBadge.innerText = '대기 중';
+      gameInstructionText.innerText = '[스트리머 턴 시작] 버튼을 눌러 게임을 시작하세요.';
+      gameViewersVotingHud.style.display = 'none';
+
+      generateVoltorbBoard(gameLevel);
+      updateBoardStatsUI();
+      renderBoardUI();
+    }
+
+    function generateVoltorbBoard(lvl) {
+      const cfg = VOLTORB_LEVEL_CONFIGS[lvl] || VOLTORB_LEVEL_CONFIGS[1];
+      const count2 = cfg.total2;
+      const count3 = cfg.total3;
+      const count0 = cfg.voltorbs;
+      const count1 = 25 - (count2 + count3 + count0);
+
+      const pool = [
+        ...Array(count0).fill(0),
+        ...Array(count2).fill(2),
+        ...Array(count3).fill(3),
+        ...Array(count1).fill(1)
+      ];
+
+      for (let i = pool.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [pool[i], pool[j]] = [pool[j], pool[i]];
+      }
+
+      boardTiles = [];
+      rowSums = [0, 0, 0, 0, 0];
+      rowVoltorbs = [0, 0, 0, 0, 0];
+      colSums = [0, 0, 0, 0, 0];
+      colVoltorbs = [0, 0, 0, 0, 0];
+
+      const colLetters = ['A', 'B', 'C', 'D', 'E'];
+
+      for (let r = 0; r < 5; r++) {
+        for (let c = 0; c < 5; c++) {
+          const idx = r * 5 + c;
+          const val = pool[idx];
+          const coord = `${colLetters[c]}${r + 1}`;
+          const numIdx = idx + 1;
+
+          boardTiles.push({
+            index: idx,
+            numIdx: numIdx,
+            row: r,
+            col: c,
+            coord: coord,
+            val: val,
+            flipped: false,
+            memos: { 1: false, 2: false, 3: false, v: false }
+          });
+
+          rowSums[r] += val;
+          if (val === 0) rowVoltorbs[r]++;
+          colSums[c] += val;
+          if (val === 0) colVoltorbs[c]++;
+        }
+      }
+
+      totalTargetCards = count2 + count3;
+      remainingTargetCardsCount = totalTargetCards;
+      currentBoardCoins = 0;
+    }
+
+    function renderBoardUI() {
+      if (!voltorbBoardContainer) return;
+      voltorbBoardContainer.innerHTML = '';
+
+      for (let r = 0; r < 5; r++) {
+        // 5 Tiles for this row
+        for (let c = 0; c < 5; c++) {
+          const idx = r * 5 + c;
+          const tile = boardTiles[idx];
+          const tileEl = document.createElement('div');
+          tileEl.className = `voltorb-tile ${tile.flipped ? 'flipped' : ''}`;
+          tileEl.id = `voltorbTile_${idx}`;
+          tileEl.onclick = () => handleTileClick(idx);
+
+          tileEl.innerHTML = `
+            <div class="voltorb-tile-inner">
+              <div class="voltorb-tile-front">
+                <span class="voltorb-coord-badge">${tile.coord}</span>
+                <div class="voltorb-memo-grid">
+                  <span class="memo-mark m-1 ${tile.memos[1] ? 'active' : ''}">1</span>
+                  <span class="memo-mark m-2 ${tile.memos[2] ? 'active' : ''}">2</span>
+                  <span class="memo-mark m-3 ${tile.memos[3] ? 'active' : ''}">3</span>
+                  <span class="memo-mark m-v ${tile.memos['v'] ? 'active' : ''}">⚡</span>
+                </div>
+              </div>
+              <div class="voltorb-tile-back val-${tile.val}">
+                ${tile.val === 0 ? '🔴' : (tile.val === 1 ? '1' : `x${tile.val}`)}
+              </div>
+            </div>
+          `;
+          voltorbBoardContainer.appendChild(tileEl);
+        }
+
+        // Row Hint Card (on the right)
+        const rowHint = document.createElement('div');
+        rowHint.className = `voltorb-hint-card hint-color-${r}`;
+        rowHint.innerHTML = `
+          <div class="hint-row-val">
+            <span class="hint-coin-icon">🪙</span>
+            <span>${String(rowSums[r]).padStart(2, '0')}</span>
+          </div>
+          <div class="hint-row-val">
+            <span class="hint-voltorb-icon">🔴</span>
+            <span>${rowVoltorbs[r]}</span>
+          </div>
+        `;
+        voltorbBoardContainer.appendChild(rowHint);
+      }
+
+      // Bottom 5 Column Hint Cards
+      for (let c = 0; c < 5; c++) {
+        const colHint = document.createElement('div');
+        colHint.className = `voltorb-hint-card hint-color-${c}`;
+        colHint.innerHTML = `
+          <div class="hint-row-val">
+            <span class="hint-coin-icon">🪙</span>
+            <span>${String(colSums[c]).padStart(2, '0')}</span>
+          </div>
+          <div class="hint-row-val">
+            <span class="hint-voltorb-icon">🔴</span>
+            <span>${colVoltorbs[c]}</span>
+          </div>
+        `;
+        voltorbBoardContainer.appendChild(colHint);
+      }
+
+      // Bottom-Right Corner Panel (Memo Selector)
+      const cornerPanel = document.createElement('div');
+      cornerPanel.className = 'voltorb-corner-panel';
+      cornerPanel.innerHTML = `
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2px;">
+          <button type="button" class="memo-select-btn ${activeMemoTool === 1 ? 'active' : ''}" onclick="selectMemoTool(1)">1</button>
+          <button type="button" class="memo-select-btn ${activeMemoTool === 2 ? 'active' : ''}" onclick="selectMemoTool(2)" style="color: #f59e0b;">2</button>
+          <button type="button" class="memo-select-btn ${activeMemoTool === 3 ? 'active' : ''}" onclick="selectMemoTool(3)" style="color: #38bdf8;">3</button>
+          <button type="button" class="memo-select-btn ${activeMemoTool === 'v' ? 'active' : ''}" onclick="selectMemoTool('v')" style="color: #ef4444;">⚡</button>
+        </div>
+      `;
+      voltorbBoardContainer.appendChild(cornerPanel);
+    }
+
+    function selectMemoTool(tool) {
+      activeMemoTool = tool;
+      if (!isMemoMode) {
+        isMemoMode = true;
+        memoModeStateText.innerText = 'ON';
+        memoModeStateText.style.color = 'var(--chzzk-green)';
+        showToast(`메모 모드가 켜졌습니다! [${tool === 'v' ? '⚡ 폭탄' : tool}] 마킹 가능`, '📝');
+      }
+      renderBoardUI();
+    }
+
+    function updateBoardStatsUI() {
+      gameCurrentCoinsText.innerText = currentBoardCoins.toLocaleString();
+      gameRemainingTargetCards.innerText = Math.max(0, remainingTargetCardsCount);
+    }
+
+    function handleTileClick(idx) {
+      if (gamePhase !== 'streamer') return;
+      const tile = boardTiles[idx];
+      if (!tile || tile.flipped) return;
+
+      if (isMemoMode) {
+        tile.memos[activeMemoTool] = !tile.memos[activeMemoTool];
+        renderBoardUI();
+        return;
+      }
+
+      flipTile(tile, 'streamer');
+    }
+
+    function flipTile(tile, player = 'streamer') {
+      if (tile.flipped) return;
+      tile.flipped = true;
+
+      if (player === 'streamer') streamerResult.flippedCount++;
+      else viewersResult.flippedCount++;
+
+      if (tile.val === 0) {
+        // Explode!
+        currentBoardCoins = 0;
+        updateBoardStatsUI();
+        renderBoardUI();
+
+        if (player === 'streamer') {
+          streamerResult.score = 0;
+          streamerResult.status = 'exploded';
+          gameStreamerScoreText.innerText = '0';
+          gameStreamerStatusTag.className = 'badge-tag';
+          gameStreamerStatusTag.style.background = 'rgba(239, 68, 68, 0.2)';
+          gameStreamerStatusTag.style.color = '#ef4444';
+          gameStreamerStatusTag.innerText = '💥 폭발 (0 코인)';
+          showToast('💥 찌리리공이 폭발했습니다! (스트리머: 0 코인)', '💣');
+          endStreamerTurn();
+        } else {
+          viewersResult.score = 0;
+          viewersResult.status = 'exploded';
+          gameViewersScoreText.innerText = '0';
+          gameViewersStatusTag.className = 'badge-tag';
+          gameViewersStatusTag.style.background = 'rgba(239, 68, 68, 0.2)';
+          gameViewersStatusTag.style.color = '#ef4444';
+          gameViewersStatusTag.innerText = '💥 폭발 (0 코인)';
+          showToast('💥 시청자 연합이 찌리리공을 밟아 폭발했습니다! (0 코인)', '💣');
+          endViewersTurn();
+        }
+        revealEntireBoard();
+        return;
+      }
+
+      // Safe tile: 1, 2, 3
+      if (currentBoardCoins === 0) {
+        currentBoardCoins = tile.val;
+      } else {
+        if (tile.val > 1) {
+          currentBoardCoins *= tile.val;
+        }
+      }
+
+      if (tile.val >= 2) {
+        remainingTargetCardsCount--;
+      }
+
+      updateBoardStatsUI();
+      renderBoardUI();
+
+      // Check Clear
+      if (remainingTargetCardsCount <= 0) {
+        if (player === 'streamer') {
+          streamerResult.score = currentBoardCoins;
+          streamerResult.status = 'cleared';
+          gameStreamerScoreText.innerText = streamerResult.score.toLocaleString();
+          gameStreamerStatusTag.className = 'badge-tag';
+          gameStreamerStatusTag.style.background = 'rgba(0, 255, 163, 0.2)';
+          gameStreamerStatusTag.style.color = 'var(--chzzk-green)';
+          gameStreamerStatusTag.innerText = '🏆 클리어!';
+          showToast(`🎉 축하합니다! 스트리머가 보드를 클리어했습니다! (${streamerResult.score.toLocaleString()} 코인)`, '👑');
+          endStreamerTurn();
+        } else {
+          viewersResult.score = currentBoardCoins;
+          viewersResult.status = 'cleared';
+          gameViewersScoreText.innerText = viewersResult.score.toLocaleString();
+          gameViewersStatusTag.className = 'badge-tag';
+          gameViewersStatusTag.style.background = 'rgba(56, 189, 248, 0.2)';
+          gameViewersStatusTag.style.color = '#38bdf8';
+          gameViewersStatusTag.innerText = '🏆 클리어!';
+          showToast(`🎉 시청자 연합이 보드를 완벽하게 클리어했습니다! (${viewersResult.score.toLocaleString()} 코인)`, '👥');
+          endViewersTurn();
+        }
+        revealEntireBoard();
+      }
+    }
+
+    function revealEntireBoard() {
+      boardTiles.forEach(t => { t.flipped = true; });
+      renderBoardUI();
+    }
+
+    // --- Streamer Phase ---
+    function startStreamerTurn() {
+      gamePhase = 'streamer';
+      gamePhaseBadge.className = 'live-badge-pill live';
+      gamePhaseBadge.innerText = '👑 1단계: 스트리머 턴';
+      gameInstructionText.innerText = '스트리머 턴 진행 중: 타일을 클릭하여 2배·3배 카드를 찾아내세요!';
+      
+      boardTiles.forEach(t => {
+        t.flipped = false;
+        t.memos = { 1: false, 2: false, 3: false, v: false };
+      });
+      remainingTargetCardsCount = totalTargetCards;
+      currentBoardCoins = 0;
+      updateBoardStatsUI();
+      renderBoardUI();
+
+      gameStreamerStatusTag.className = 'badge-tag';
+      gameStreamerStatusTag.style.background = 'rgba(255, 215, 0, 0.2)';
+      gameStreamerStatusTag.style.color = '#ffd700';
+      gameStreamerStatusTag.innerText = '플레이 중';
+
+      showToast('스트리머의 턴이 시작되었습니다! 행/열 힌트를 보고 타일을 뒤집어보세요.', '👑');
+    }
+
+    function endStreamerTurn() {
+      gamePhase = 'idle';
+      gamePhaseBadge.className = 'live-badge-pill offline';
+      gamePhaseBadge.innerText = '스트리머 턴 완료';
+      gameInstructionText.innerText = '스트리머 턴이 완료되었습니다! [👥 시청자 투표 턴 시작] 버튼을 눌러 시청자 차례를 진행하세요.';
+    }
+
+    // Cash Out (그만둔다)
+    function cashOutGame() {
+      if (gamePhase === 'streamer') {
+        streamerResult.score = currentBoardCoins;
+        streamerResult.status = 'cashed_out';
+        gameStreamerScoreText.innerText = streamerResult.score.toLocaleString();
+        gameStreamerStatusTag.className = 'badge-tag';
+        gameStreamerStatusTag.style.background = 'rgba(255, 215, 0, 0.2)';
+        gameStreamerStatusTag.style.color = '#ffd700';
+        gameStreamerStatusTag.innerText = `🛑 ${streamerResult.score} 코인 확보`;
+        showToast(`🛑 스트리머가 ${streamerResult.score.toLocaleString()} 코인을 안전하게 확보하고 마감했습니다!`, '💰');
+        endStreamerTurn();
+        revealEntireBoard();
+      } else if (gamePhase === 'viewers') {
+        viewersResult.score = currentBoardCoins;
+        viewersResult.status = 'cashed_out';
+        gameViewersScoreText.innerText = viewersResult.score.toLocaleString();
+        gameViewersStatusTag.className = 'badge-tag';
+        gameViewersStatusTag.style.background = 'rgba(56, 189, 248, 0.2)';
+        gameViewersStatusTag.style.color = '#38bdf8';
+        gameViewersStatusTag.innerText = `🛑 ${viewersResult.score} 코인 확보`;
+        showToast(`🛑 시청자 연합이 ${viewersResult.score.toLocaleString()} 코인을 확보하고 마감했습니다!`, '💰');
+        endViewersTurn();
+        revealEntireBoard();
+      }
+    }
+
+    // --- Viewers Phase (Chat Collective Intelligence Voting) ---
+    function startViewersTurn() {
+      if (!ws || ws.readyState !== WebSocket.OPEN) {
+        showToast('시청자 투표 턴을 진행하려면 방송에 먼저 연결해 주세요.', '⚠️');
+      }
+
+      gamePhase = 'viewers';
+      gamePhaseBadge.className = 'live-badge-pill live';
+      gamePhaseBadge.style.background = 'linear-gradient(135deg, #0284c7, #0369a1)';
+      gamePhaseBadge.innerText = '👥 2단계: 시청자 투표 턴';
+      gameInstructionText.innerText = '시청자 투표 턴: 시청자들이 채팅으로 좌표(A1~E5)를 입력하면 다수결로 타일이 오픈됩니다!';
+
+      boardTiles.forEach(t => {
+        t.flipped = false;
+        t.memos = { 1: false, 2: false, 3: false, v: false };
+      });
+      remainingTargetCardsCount = totalTargetCards;
+      currentBoardCoins = 0;
+      updateBoardStatsUI();
+      renderBoardUI();
+
+      gameViewersStatusTag.className = 'badge-tag';
+      gameViewersStatusTag.style.background = 'rgba(56, 189, 248, 0.2)';
+      gameViewersStatusTag.style.color = '#38bdf8';
+      gameViewersStatusTag.innerText = '투표 진행 중';
+
+      showToast('시청자 집단지성 투표 턴이 시작되었습니다! 채팅창에 좌표를 입력하세요.', '👥');
+      startNextViewersVoteRound();
+    }
+
+    function endViewersTurn() {
+      gamePhase = 'ended';
+      clearInterval(viewersVotingTimerInterval);
+      gameViewersVotingHud.style.display = 'none';
+
+      gamePhaseBadge.className = 'live-badge-pill offline';
+      gamePhaseBadge.innerText = '대결 종료';
+      gameInstructionText.innerText = '대결이 종료되었습니다! [🏆 최종 결과 발표] 버튼을 눌러 승자를 확인하세요.';
+      showShowdownResultBtn.style.display = 'inline-flex';
+
+      showShowdownResult();
+    }
+
+    function startNextViewersVoteRound() {
+      if (gamePhase !== 'viewers') return;
+
+      const unflippedTiles = boardTiles.filter(t => !t.flipped);
+      if (unflippedTiles.length === 0 || remainingTargetCardsCount <= 0) {
+        endViewersTurn();
+        return;
+      }
+
+      currentVoteUsers.clear();
+      currentVoteCounts = {};
+      viewersVotingTotalDuration = parseFloat(gameVoteDurationSelect.value) || 5.0;
+      viewersVotingRemainingSeconds = viewersVotingTotalDuration;
+
+      gameViewersVotingHud.style.display = 'block';
+      renderVotingHudUI();
+
+      clearInterval(viewersVotingTimerInterval);
+      const stepMs = 100;
+      viewersVotingTimerInterval = setInterval(() => {
+        viewersVotingRemainingSeconds -= (stepMs / 1000);
+        if (viewersVotingRemainingSeconds <= 0) {
+          viewersVotingRemainingSeconds = 0;
+          clearInterval(viewersVotingTimerInterval);
+          executeViewersVotedTile();
+        }
+        renderVotingHudUI();
+      }, stepMs);
+    }
+
+    function handleLiveGameChatVote(nickname, msg, uid, now) {
+      if (gamePhase !== 'viewers') return;
+      if (!msg) return;
+
+      const clean = msg.trim().toUpperCase().replace(/\s+/g, '');
+      let targetTile = null;
+
+      const coordMatch = clean.match(/^([A-E])([1-5])$/);
+      if (coordMatch) {
+        const colLetter = coordMatch[1];
+        const rowNum = parseInt(coordMatch[2], 10) - 1;
+        const colNum = ['A', 'B', 'C', 'D', 'E'].indexOf(colLetter);
+        const idx = rowNum * 5 + colNum;
+        targetTile = boardTiles[idx];
+      } else if (/^[1-9]$|^1[0-9]$|^2[0-5]$/.test(clean)) {
+        const num = parseInt(clean, 10);
+        targetTile = boardTiles[num - 1];
+      }
+
+      if (targetTile && !targetTile.flipped) {
+        currentVoteUsers.set(uid, targetTile.coord);
+        recomputeVoteCounts();
+        renderVotingHudUI();
+      }
+    }
+
+    function recomputeVoteCounts() {
+      currentVoteCounts = {};
+      for (const [uid, coord] of currentVoteUsers.entries()) {
+        currentVoteCounts[coord] = (currentVoteCounts[coord] || 0) + 1;
+      }
+    }
+
+    function renderVotingHudUI() {
+      if (!gameViewersVotingHud) return;
+
+      gameVotingTimerText.innerText = `${Math.max(0, viewersVotingRemainingSeconds).toFixed(1)}s`;
+      const fillPct = (Math.max(0, viewersVotingRemainingSeconds) / viewersVotingTotalDuration) * 100;
+      gameVotingTimerFill.style.width = `${fillPct}%`;
+
+      const totalVotes = currentVoteUsers.size;
+      const sortedCandidates = Object.entries(currentVoteCounts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 4);
+
+      if (sortedCandidates.length === 0) {
+        gameTopVotedCandidatesList.innerHTML = `<div style="color: var(--text-sub); text-align: center; padding: 4px 0;">시청자들이 채팅창에 좌표(예: A1, B3, C5)를 입력하면 실시간 집계됩니다.</div>`;
+        return;
+      }
+
+      let html = '';
+      sortedCandidates.forEach(([coord, count], i) => {
+        const pct = totalVotes > 0 ? Math.round((count / totalVotes) * 100) : 0;
+        html += `
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-weight: 800; color: ${i === 0 ? '#ffd700' : '#fff'}; width: 28px;">${coord}</span>
+            <div style="flex: 1; height: 12px; background: rgba(255,255,255,0.08); border-radius: 6px; overflow: hidden;">
+              <div style="height: 100%; width: ${pct}%; background: ${i === 0 ? 'linear-gradient(90deg, #ffd700, #ff8800)' : 'linear-gradient(90deg, #38bdf8, #0284c7)'}; transition: width 0.15s;"></div>
+            </div>
+            <span style="font-size: 10px; color: var(--text-sub); width: 60px; text-align: right;">${count}표 (${pct}%)</span>
+          </div>
+        `;
+      });
+      gameTopVotedCandidatesList.innerHTML = html;
+    }
+
+    function executeViewersVotedTile() {
+      if (gamePhase !== 'viewers') return;
+
+      const unflipped = boardTiles.filter(t => !t.flipped);
+      if (unflipped.length === 0) {
+        endViewersTurn();
+        return;
+      }
+
+      let bestCoord = null;
+      let maxVotes = -1;
+
+      for (const t of unflipped) {
+        const votes = currentVoteCounts[t.coord] || 0;
+        if (votes > maxVotes) {
+          maxVotes = votes;
+          bestCoord = t.coord;
+        }
+      }
+
+      let targetTile = null;
+      if (maxVotes > 0 && bestCoord) {
+        targetTile = unflipped.find(t => t.coord === bestCoord);
+      } else {
+        targetTile = unflipped[Math.floor(Math.random() * unflipped.length)];
+      }
+
+      if (targetTile) {
+        flipTile(targetTile, 'viewers');
+        if (gamePhase === 'viewers' && remainingTargetCardsCount > 0 && viewersResult.status !== 'exploded') {
+          setTimeout(() => {
+            startNextViewersVoteRound();
+          }, 1200);
+        }
+      }
+    }
+
+    // --- Showdown Result Modal ---
+    function showShowdownResult() {
+      gameResultModal.classList.add('active');
+      gameModalStreamerCoins.innerText = streamerResult.score.toLocaleString();
+      gameModalStreamerDetail.innerText = `${streamerResult.flippedCount}개 타일 오픈 (${streamerResult.status === 'cleared' ? '🏆 클리어' : streamerResult.status === 'exploded' ? '💥 폭발' : '🛑 안전 마감'})`;
+
+      gameModalViewersCoins.innerText = viewersResult.score.toLocaleString();
+      gameModalViewersDetail.innerText = `${viewersResult.flippedCount}개 타일 오픈 (${viewersResult.status === 'cleared' ? '🏆 클리어' : viewersResult.status === 'exploded' ? '💥 폭발' : '🛑 안전 마감'})`;
+
+      if (streamerResult.score > viewersResult.score) {
+        gameResultChampionTrophy.innerText = '👑';
+        gameResultWinnerHeader.innerText = '스트리머의 대승리!';
+        gameResultWinnerHeader.style.color = '#ffd700';
+        gameModalSummaryText.innerText = `스트리머가 ${streamerResult.score.toLocaleString()} 코인을 획득하여 시청자 연합(${viewersResult.score.toLocaleString()} 코인)을 꺾고 승리했습니다!`;
+      } else if (viewersResult.score > streamerResult.score) {
+        gameResultChampionTrophy.innerText = '👥';
+        gameResultWinnerHeader.innerText = '시청자 연합의 집단지성 승리!';
+        gameResultWinnerHeader.style.color = '#38bdf8';
+        gameModalSummaryText.innerText = `시청자들이 실시간 투표 집단지성으로 ${viewersResult.score.toLocaleString()} 코인을 획득하여 스트리머(${streamerResult.score.toLocaleString()} 코인)를 꺾었습니다!`;
+      } else {
+        gameResultChampionTrophy.innerText = '🤝';
+        gameResultWinnerHeader.innerText = '황금빛 무승부!';
+        gameResultWinnerHeader.style.color = '#00ffa3';
+        gameModalSummaryText.innerText = `스트리머와 시청자 연합이 모두 ${streamerResult.score.toLocaleString()} 코인으로 동점을 기록했습니다!`;
+      }
+
+      triggerConfetti();
+    }
+
+    // Event Listeners
+    startGameStreamerBtn.addEventListener('click', startStreamerTurn);
+    startGameViewersBtn.addEventListener('click', startViewersTurn);
+    gameCashOutBtn.addEventListener('click', cashOutGame);
+    resetGameBtn.addEventListener('click', () => initNewGameRound(false));
+    showShowdownResultBtn.addEventListener('click', showShowdownResult);
+
+    toggleMemoModeBtn.addEventListener('click', () => {
+      isMemoMode = !isMemoMode;
+      memoModeStateText.innerText = isMemoMode ? 'ON' : 'OFF';
+      memoModeStateText.style.color = isMemoMode ? 'var(--chzzk-green)' : 'var(--text-sub)';
+      showToast(`메모 모드: ${isMemoMode ? 'ON (타일을 누르면 메모가 토글됩니다)' : 'OFF (타일을 누르면 뒤집힙니다)'}`, '📝');
+    });
+
+    gameLevelSelect.addEventListener('change', () => initNewGameRound(false));
+    gameModalNextRoundBtn.addEventListener('click', () => {
+      gameResultModal.classList.remove('active');
+      initNewGameRound(false);
+    });
+    closeGameResultModalBtn.addEventListener('click', () => {
+      gameResultModal.classList.remove('active');
+    });
 
     window.addEventListener('resize', () => {
       if (confettiCanvas) {
@@ -5549,6 +6639,7 @@
     // Initialize
     renderManualRouletteRows();
     renderPollOptionsList();
+    initNewGameRound(false);
   </script>
 </body>
 </html>
