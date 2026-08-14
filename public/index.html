@@ -1230,13 +1230,19 @@
     }
     /* 📊 Live Poll Styles */
     .poll-grid {
-      display: grid;
-      grid-template-columns: 420px 1fr;
-      gap: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
     }
 
-    @media (max-width: 1024px) {
-      .poll-grid {
+    .poll-config-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .poll-config-columns {
         grid-template-columns: 1fr;
       }
     }
@@ -1898,182 +1904,192 @@
 
     <!-- 📊 MAIN TAB 3: 실시간 투표 시스템 (Poll View) -->
     <div id="pollView" class="poll-grid" style="display: none;">
-      <!-- Left Panel: Poll Configuration & Controls -->
+      <!-- TOP PANEL: Poll Configuration & Controls (상부 설정 및 제어) -->
       <div class="panel">
-        <div class="panel-title">
-          <span>📊 실시간 투표 설정 및 제어</span>
-        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+          <!-- Sub Tabs: General Chat vs Cheese Donation -->
+          <div class="sub-tabs" style="margin-bottom: 0;">
+            <button type="button" id="pollModeChatTabBtn" class="sub-tab-btn active">✍️ 일반 채팅 투표</button>
+            <button type="button" id="pollModeCheeseTabBtn" class="sub-tab-btn">🧀 치즈 도네이션 투표</button>
+          </div>
 
-        <!-- Sub Tabs: General Chat vs Cheese Donation -->
-        <div class="sub-tabs">
-          <button type="button" id="pollModeChatTabBtn" class="sub-tab-btn active">✍️ 일반 채팅 투표</button>
-          <button type="button" id="pollModeCheeseTabBtn" class="sub-tab-btn">🧀 치즈 도네이션 투표</button>
-        </div>
-
-        <!-- Poll Question Input -->
-        <div class="form-group" style="margin-bottom: 12px;">
-          <label>투표 주제 (질문)</label>
-          <input type="text" id="pollTitleInput" placeholder="예: 오늘 2부 게임 뭐할까요?, 찬반 투표 등" value="오늘 2부 콘텐츠 무엇을 할까요?" style="font-weight: 700;">
-        </div>
-
-        <!-- Quick Presets -->
-        <div style="margin-bottom: 10px;">
-          <div style="font-size: 11px; color: var(--text-sub); margin-bottom: 5px;">⚡ 빠른 추천 프리셋</div>
-          <div style="display: flex; flex-wrap: wrap; gap: 4px;">
-            <button type="button" class="btn-chip btn-chip-secondary" id="presetPollOxBtn" style="padding: 3px 8px; font-size: 11px;">⭕ O / ❌ X</button>
-            <button type="button" class="btn-chip btn-chip-secondary" id="presetPollYesNoBtn" style="padding: 3px 8px; font-size: 11px;">👍 찬성 / 👎 반대</button>
-            <button type="button" class="btn-chip btn-chip-secondary" id="presetPoll123Btn" style="padding: 3px 8px; font-size: 11px;">1번 / 2번 / 3번</button>
+          <!-- Common Timer Option -->
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 12px; color: var(--text-sub); font-weight: 700;">⏱️ 타이머</span>
+            <select id="pollDurationSelect" style="padding: 6px 12px; font-size: 12px; background: #080c14; border: 1px solid var(--border-color); color: #fff; border-radius: 6px;">
+              <option value="0" selected>⏳ 무제한 (수동 마감)</option>
+              <option value="30">⚡ 30초</option>
+              <option value="60">⏱️ 1분</option>
+              <option value="120">⏱️ 2분</option>
+              <option value="180">⏱️ 3분</option>
+              <option value="300">⏱️ 5분</option>
+            </select>
           </div>
         </div>
 
-        <!-- Poll Options Container -->
-        <div class="form-group" style="margin-bottom: 12px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <label style="margin-bottom: 0; font-size: 13px;">선택지 목록 (2~10개)</label>
-            <span id="pollOptionCount" style="color: var(--chzzk-green); font-size: 11px; font-weight: 700;">총 2개 항목</span>
+        <!-- Question & Presets Row -->
+        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 10px; padding: 12px 14px; margin-bottom: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 8px;">
+            <label style="margin-bottom: 0; font-size: 13px; font-weight: 800; color: #fff;">투표 주제 (질문)</label>
+            <div style="display: flex; align-items: center; gap: 4px;">
+              <span style="font-size: 11px; color: var(--text-sub); margin-right: 4px;">추천 프리셋:</span>
+              <button type="button" class="btn-chip btn-chip-secondary" id="presetPollOxBtn" style="padding: 3px 8px; font-size: 11px;">⭕ O / ❌ X</button>
+              <button type="button" class="btn-chip btn-chip-secondary" id="presetPollYesNoBtn" style="padding: 3px 8px; font-size: 11px;">👍 찬성 / 👎 반대</button>
+              <button type="button" class="btn-chip btn-chip-secondary" id="presetPoll123Btn" style="padding: 3px 8px; font-size: 11px;">1번 / 2번 / 3번</button>
+            </div>
+          </div>
+          <input type="text" id="pollTitleInput" placeholder="예: 오늘 2부 게임 뭐할까요?, 찬반 투표 등" value="오늘 2부 콘텐츠 무엇을 할까요?" style="font-weight: 700; width: 100%;">
+        </div>
+
+        <!-- 2-Column Config Layout: Left = Options List, Right = Mode Settings -->
+        <div class="poll-config-columns">
+          <!-- Left: Options List -->
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <label style="margin-bottom: 0; font-size: 13px; font-weight: 700;">선택지 목록 (2~10개)</label>
+              <span id="pollOptionCount" style="color: var(--chzzk-green); font-size: 11px; font-weight: 700;">총 2개 항목</span>
+            </div>
+
+            <div id="pollOptionsList" class="roulette-items-list" style="max-height: 140px;">
+              <!-- Dynamic option rows -->
+            </div>
+
+            <div style="display: flex; gap: 8px; margin-top: 8px;">
+              <button type="button" id="addPollOptionBtn" class="btn btn-secondary" style="flex: 1; padding: 6px 10px; font-size: 12px;">
+                ➕ 선택지 추가 (Enter)
+              </button>
+              <button type="button" id="clearAllPollOptionsBtn" class="btn-chip btn-chip-danger" style="padding: 6px 10px; font-size: 12px;">
+                🗑️ 전체 삭제
+              </button>
+            </div>
           </div>
 
-          <div id="pollOptionsList" class="roulette-items-list" style="max-height: 200px;">
-            <!-- Dynamic option rows -->
-          </div>
+          <!-- Right: Mode Detailed Settings -->
+          <div>
+            <!-- 1. General Chat Poll Settings -->
+            <div id="pollChatConfigBox">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <div class="form-group" style="margin-bottom: 6px;">
+                  <label>투표 참여 방식</label>
+                  <select id="pollVoteTypeSelect">
+                    <option value="both" selected>🔢 번호 + 키워드 둘 다</option>
+                    <option value="numberOnly">🔢 번호만 인정 (!1, 1, 2...)</option>
+                    <option value="keywordOnly">🔤 선택지 키워드만</option>
+                  </select>
+                </div>
 
-          <div style="display: flex; gap: 8px; margin-top: 8px;">
-            <button type="button" id="addPollOptionBtn" class="btn btn-secondary" style="flex: 1; padding: 8px 12px; font-size: 12px;">
-              ➕ 선택지 추가 (Enter)
-            </button>
-            <button type="button" id="clearAllPollOptionsBtn" class="btn-chip btn-chip-danger" style="padding: 8px 12px; font-size: 12px;">
-              🗑️ 전체 삭제
-            </button>
+                <div class="form-group" style="margin-bottom: 6px;">
+                  <label>중복 투표 규정</label>
+                  <select id="pollDuplicateModeSelect">
+                    <option value="single" selected>🔒 1인 1표 고정</option>
+                    <option value="allowRevote">🔄 재투표 허용 (변경)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-top: 6px; margin-bottom: 0;">
+                <label>참여 자격 필터</label>
+                <select id="pollAudienceFilterSelect">
+                  <option value="all" selected>👥 전체 시청자 누구나 참여</option>
+                  <option value="subscriber">⭐ 구독자만 참여 가능</option>
+                  <option value="donator">🧀 치즈 후원자만 참여 가능</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- 2. Cheese Donation Poll Settings -->
+            <div id="pollCheeseConfigBox" style="display: none;">
+              <div style="background: rgba(0, 255, 163, 0.06); border: 1px solid rgba(0, 255, 163, 0.2); border-radius: 8px; padding: 8px 10px; margin-bottom: 8px;">
+                <div style="font-size: 11px; color: var(--chzzk-green); font-weight: 700; margin-bottom: 2px;">
+                  🧀 치즈 도네이션 배틀 투표
+                </div>
+                <div style="font-size: 10px; color: var(--text-sub); line-height: 1.3;">
+                  시청자가 치즈 후원 시 메시지에 선택지 번호/키워드를 넣으면 해당 항목에 실시간 누적됩니다.
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label>최소 후원 치즈</label>
+                  <select id="pollMinCheeseSelect">
+                    <option value="1">전체 (1치즈+)</option>
+                    <option value="1000" selected>1,000 치즈 이상</option>
+                    <option value="5000">5,000 치즈 이상</option>
+                    <option value="10000">10,000 치즈 이상</option>
+                  </select>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label>치즈 집계 방식</label>
+                  <select id="pollCheeseWeightSelect">
+                    <option value="amount" selected>💰 금액 비례 (1치즈=1표)</option>
+                    <option value="count">🎟️ 건수 기준 (1도네=1표)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
         <hr style="border-color: var(--border-color); margin: 14px 0;">
 
-        <!-- 1. General Chat Poll Settings -->
-        <div id="pollChatConfigBox">
-          <div class="panel-title" style="font-size: 13px; margin-bottom: 8px;">⚙️ 채팅 투표 상세 옵션</div>
-
-          <div class="form-group" style="margin-bottom: 8px;">
-            <label>투표 참여 방식</label>
-            <select id="pollVoteTypeSelect">
-              <option value="both" selected>🔢 번호(!1, 1) + 키워드 둘 다 인정</option>
-              <option value="numberOnly">🔢 번호만 인정 (!1, 1, 2, 3...)</option>
-              <option value="keywordOnly">🔤 선택지 키워드만 인정</option>
-            </select>
+        <!-- Action Control Buttons Bar -->
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+          <div style="display: flex; gap: 8px; flex: 1; max-width: 480px;">
+            <button type="button" id="startPollBtn" class="btn btn-primary" style="flex: 1; padding: 10px 16px; font-size: 13px; font-weight: 800;">
+              ▶️ 투표 시작
+            </button>
+            <button type="button" id="pausePollBtn" class="btn btn-secondary" style="display: none; padding: 10px 14px; font-size: 12px;">
+              ⏸️ 일시 정지
+            </button>
+            <button type="button" id="stopPollBtn" class="btn btn-danger" style="display: none; padding: 10px 14px; font-size: 12px; font-weight: 800;">
+              ⏹️ 투표 마감
+            </button>
+            <button type="button" id="resetPollBtn" class="btn-chip btn-chip-secondary" style="padding: 10px 14px; font-size: 12px;">
+              🔄 초기화
+            </button>
           </div>
 
-          <div class="form-group" style="margin-bottom: 8px;">
-            <label>중복 투표 규정</label>
-            <select id="pollDuplicateModeSelect">
-              <option value="single" selected>🔒 1인 1표 고정 (첫 투표만 인정)</option>
-              <option value="allowRevote">🔄 재투표 허용 (마지막 입력 번호로 변경)</option>
-            </select>
+          <!-- Special Actions & Export -->
+          <div style="display: flex; gap: 6px; align-items: center;">
+            <button type="button" id="convertPollToRouletteBtn" class="btn-chip" style="padding: 9px 14px; font-size: 12px; font-weight: 800; background: linear-gradient(135deg, #7928ca, #ff0080); color: #fff; border: none; box-shadow: 0 4px 12px rgba(121, 40, 202, 0.4);" title="현재 투표(치즈) 항목과 가중치를 룰렛으로 즉시 전환합니다">
+              <span>🎰</span>
+              <span>룰렛으로 전환</span>
+            </button>
+            <button type="button" id="exportPollSummaryBtn" class="btn-chip btn-chip-secondary" style="padding: 9px 12px; font-size: 11px;">
+              📊 결과 엑셀 저장
+            </button>
+            <button type="button" id="exportPollVotersBtn" class="btn-chip btn-chip-secondary" style="padding: 9px 12px; font-size: 11px;">
+              👥 투표자 명단
+            </button>
           </div>
-
-          <div class="form-group" style="margin-bottom: 8px;">
-            <label>참여 자격 필터</label>
-            <select id="pollAudienceFilterSelect">
-              <option value="all" selected>👥 전체 시청자 누구나</option>
-              <option value="subscriber">⭐ 구독자만 참여</option>
-              <option value="donator">🧀 치즈 후원자만 참여</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- 2. Cheese Donation Poll Settings -->
-        <div id="pollCheeseConfigBox" style="display: none;">
-          <div style="background: rgba(0, 255, 163, 0.06); border: 1px solid rgba(0, 255, 163, 0.2); border-radius: 8px; padding: 10px 12px; margin-bottom: 10px;">
-            <div style="font-size: 12px; color: var(--chzzk-green); font-weight: 700; margin-bottom: 3px;">
-              🧀 치즈 도네이션 배틀 투표
-            </div>
-            <div style="font-size: 11px; color: var(--text-sub); line-height: 1.4;">
-              시청자가 치즈 후원 시 <b>후원 메시지에 선택지 번호나 키워드</b>를 넣으면 후원 치즈가 해당 선택지로 즉시 집계됩니다.
-            </div>
-          </div>
-
-          <div class="form-group" style="margin-bottom: 8px;">
-            <label>최소 후원 치즈 기준</label>
-            <select id="pollMinCheeseSelect">
-              <option value="1">전체 후원 (1치즈 이상 모두 집계)</option>
-              <option value="1000" selected>1,000 치즈 이상</option>
-              <option value="5000">5,000 치즈 이상</option>
-              <option value="10000">10,000 치즈 이상</option>
-            </select>
-          </div>
-
-          <div class="form-group" style="margin-bottom: 8px;">
-            <label>치즈 집계 방식</label>
-            <select id="pollCheeseWeightSelect">
-              <option value="amount" selected>💰 치즈 금액 비례 누적 (1치즈 = 1표)</option>
-              <option value="count">🎟️ 후원 건수 기준 (1도네 = 1표)</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Common Timer Option -->
-        <div class="form-group" style="margin-top: 8px; margin-bottom: 12px;">
-          <label>투표 제한 시간 (타이머)</label>
-          <select id="pollDurationSelect">
-            <option value="0" selected>⏳ 무제한 (수동 마감)</option>
-            <option value="30">⚡ 30초</option>
-            <option value="60">⏱️ 1분</option>
-            <option value="120">⏱️ 2분</option>
-            <option value="180">⏱️ 3분</option>
-            <option value="300">⏱️ 5분</option>
-          </select>
-        </div>
-
-        <!-- Action Control Buttons -->
-        <div style="display: flex; gap: 8px; margin-top: 14px;">
-          <button type="button" id="startPollBtn" class="btn btn-primary" style="flex: 1; padding: 12px; font-size: 14px; font-weight: 800;">
-            ▶️ 투표 시작
-          </button>
-          <button type="button" id="pausePollBtn" class="btn btn-secondary" style="display: none; padding: 12px; font-size: 13px;">
-            ⏸️ 일시 정지
-          </button>
-          <button type="button" id="stopPollBtn" class="btn btn-danger" style="display: none; padding: 12px; font-size: 13px; font-weight: 800;">
-            ⏹️ 투표 마감
-          </button>
-          <button type="button" id="resetPollBtn" class="btn-chip btn-chip-secondary" style="padding: 12px 14px; font-size: 12px;">
-            🔄 초기화
-          </button>
-        </div>
-
-        <!-- Export Buttons -->
-        <div style="display: flex; gap: 6px; margin-top: 10px;">
-          <button type="button" id="exportPollSummaryBtn" class="btn-chip btn-chip-secondary" style="flex: 1; padding: 6px 8px; font-size: 11px;">
-            📊 투표 요약 엑셀 저장
-          </button>
-          <button type="button" id="exportPollVotersBtn" class="btn-chip btn-chip-secondary" style="flex: 1; padding: 6px 8px; font-size: 11px;">
-            👥 투표자 명단 엑셀 저장
-          </button>
         </div>
       </div>
 
-      <!-- Right Panel: Live Visual Voting Stage -->
+      <!-- BOTTOM PANEL: Live Visual Voting Stage & Results (하부 실시간 결과 화면) -->
       <div class="panel" style="display: flex; flex-direction: column;">
         <div class="panel-title" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
           <div style="display: flex; align-items: center; gap: 8px;">
-            <span>📊 실시간 투표 현황</span>
+            <span>📊 실시간 투표 현황 및 집계 결과</span>
             <span id="pollStatusBadge" class="live-badge-pill offline" style="font-size: 11px;">대기 중</span>
           </div>
-          <div style="display: flex; align-items: center; gap: 12px; font-size: 12px; color: var(--text-sub);">
-            <span>총 참여: <b id="pollTotalVotesCount" style="color: var(--chzzk-green); font-size: 15px; font-family: 'Outfit';">0</b><span id="pollVoteUnitText">표</span></span>
+          <div style="display: flex; align-items: center; gap: 14px; font-size: 12px; color: var(--text-sub);">
+            <span>총 참여: <b id="pollTotalVotesCount" style="color: var(--chzzk-green); font-size: 16px; font-family: 'Outfit';">0</b><span id="pollVoteUnitText">표</span></span>
             <span id="pollTimerDisplay" style="font-family: 'Outfit'; font-weight: 700; color: #ffd700; display: none;">남은 시간: 00:00</span>
           </div>
         </div>
 
         <!-- Big Question Banner -->
         <div style="background: linear-gradient(135deg, rgba(0, 255, 163, 0.12) 0%, rgba(121, 40, 202, 0.15) 100%); border: 1px solid rgba(0, 255, 163, 0.25); border-radius: 12px; padding: 14px 18px; margin-bottom: 16px;">
-          <div style="font-size: 11px; color: var(--chzzk-green); font-weight: 800; letter-spacing: 0.5px; margin-bottom: 4px;">Q. LIVE POLL</div>
-          <div id="pollActiveQuestionText" style="font-size: 18px; font-weight: 800; color: #fff;">투표를 시작하면 주제가 여기에 표시됩니다.</div>
+          <div style="font-size: 11px; color: var(--chzzk-green); font-weight: 800; letter-spacing: 0.5px; margin-bottom: 4px;">Q. LIVE POLL QUESTION</div>
+          <div id="pollActiveQuestionText" style="font-size: 19px; font-weight: 800; color: #fff;">투표를 시작하면 주제가 여기에 표시됩니다.</div>
           <div id="pollTimerGaugeTrack" class="poll-timer-gauge-track" style="display: none;">
             <div id="pollTimerGaugeFill" class="poll-timer-gauge-fill"></div>
           </div>
         </div>
 
         <!-- Live Visual Bars Container -->
-        <div id="pollVisualBarsContainer" style="flex: 1; display: flex; flex-direction: column; justify-content: flex-start; min-height: 220px;">
+        <div id="pollVisualBarsContainer" style="flex: 1; display: flex; flex-direction: column; justify-content: flex-start; min-height: 180px;">
           <!-- Dynamically populated real-time bar items -->
         </div>
 
@@ -2081,9 +2097,9 @@
         <div style="margin-top: 16px; border-top: 1px solid var(--border-color); padding-top: 12px;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
             <span style="font-size: 11px; font-weight: 700; color: var(--text-sub);">⚡ 실시간 투표 유입 로그</span>
-            <span id="pollFeedCount" style="font-size: 10px; color: var(--text-sub);">최신 20건</span>
+            <span id="pollFeedCount" style="font-size: 10px; color: var(--text-sub);">최신 0건</span>
           </div>
-          <div id="pollLiveFeedBox" style="max-height: 90px; overflow-y: auto; background: #080c14; border: 1px solid var(--border-color); border-radius: 8px; padding: 6px 10px; display: flex; flex-wrap: wrap; gap: 6px;">
+          <div id="pollLiveFeedBox" style="max-height: 80px; overflow-y: auto; background: #080c14; border: 1px solid var(--border-color); border-radius: 8px; padding: 6px 10px; display: flex; flex-wrap: wrap; gap: 6px;">
             <div style="color: var(--text-sub); font-size: 11px; padding: 8px 0; width: 100%; text-align: center;">투표가 시작되면 실시간 투표 참여자가 여기에 표시됩니다.</div>
           </div>
         </div>
@@ -2298,7 +2314,10 @@
         <!-- Rank rows -->
       </div>
 
-      <div style="display: flex; gap: 8px; justify-content: center;">
+      <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+        <button type="button" id="convertPollResultModalRouletteBtn" class="btn-chip" style="padding: 10px 16px; font-size: 12px; background: linear-gradient(135deg, #7928ca, #ff0080); color: #fff; font-weight: 800; border: none;">
+          🎰 룰렛으로 전환하기
+        </button>
         <button type="button" id="exportPollResultModalBtn" class="btn-chip btn-chip-primary" style="padding: 10px 16px; font-size: 12px; background: #107c41; color: #fff;">
           📊 결과 엑셀 저장
         </button>
@@ -4640,6 +4659,7 @@
     const pausePollBtn = document.getElementById('pausePollBtn');
     const stopPollBtn = document.getElementById('stopPollBtn');
     const resetPollBtn = document.getElementById('resetPollBtn');
+    const convertPollToRouletteBtn = document.getElementById('convertPollToRouletteBtn');
     const exportPollSummaryBtn = document.getElementById('exportPollSummaryBtn');
     const exportPollVotersBtn = document.getElementById('exportPollVotersBtn');
 
@@ -4658,6 +4678,7 @@
     const pollResultWinnerTitle = document.getElementById('pollResultWinnerTitle');
     const pollResultStatsText = document.getElementById('pollResultStatsText');
     const pollResultBreakdownList = document.getElementById('pollResultBreakdownList');
+    const convertPollResultModalRouletteBtn = document.getElementById('convertPollResultModalRouletteBtn');
     const exportPollResultModalBtn = document.getElementById('exportPollResultModalBtn');
     const closePollResultModalBtn = document.getElementById('closePollResultModalBtn');
 
@@ -5287,6 +5308,61 @@
       a.click();
       document.body.removeChild(a);
       showToast(`총 ${pollUserVotes.size}명의 투표자 명단을 저장했습니다.`, '👥');
+    }
+
+    // Convert Poll / Cheese Battle Items to Visual Roulette Wheel
+    function convertCheesePollToRoulette() {
+      const validOptions = pollOptions.filter(o => o.text && o.text.trim().length > 0);
+      if (validOptions.length < 2) {
+        showToast('룰렛으로 전환할 투표 선택지가 최소 2개 이상 필요합니다.', '⚠️');
+        return;
+      }
+
+      // Build converted roulette rows from poll options with current votes/cheese as weights
+      const convertedRows = validOptions.map(opt => {
+        let score = pollOptionVotes.get(opt.id) || 0;
+        let weight = score > 0 ? score : 1;
+        return {
+          text: opt.text.trim(),
+          weight: weight
+        };
+      });
+
+      // Check if manualRouletteRows already has existing items
+      const existingCount = manualRouletteRows.filter(r => r.text && r.text.trim().length > 0).length;
+      let shouldAppend = false;
+
+      if (existingCount > 0) {
+        const userChoice = confirm(
+          `⚠️ 기존에 작성된 룰렛 항목이 ${existingCount}개 있습니다.\n\n` +
+          `• [확인] : 기존 룰렛 뒤에 투표 항목(${convertedRows.length}개)을 이어서 추가 (누적)\n` +
+          `• [취소] : 기존 룰렛을 지우고 투표 항목(${convertedRows.length}개)으로 새로 덮어쓰기 (교체)`
+        );
+        shouldAppend = userChoice;
+      }
+
+      if (shouldAppend) {
+        manualRouletteRows = manualRouletteRows.concat(convertedRows);
+        showToast(`기존 룰렛에 투표 항목 ${convertedRows.length}개가 추가되었습니다! (총 ${manualRouletteRows.length}개)`, '➕');
+      } else {
+        manualRouletteRows = convertedRows;
+        showToast(`치즈 투표 항목 ${convertedRows.length}개가 룰렛으로 전환되었습니다!`, '🎰');
+      }
+
+      if (pollResultModal) pollResultModal.classList.remove('active');
+
+      // Switch directly to roulette tab
+      switchMainTab('roulette');
+      switchRouletteMode('manual');
+      renderManualRouletteRows();
+      drawRouletteWheel();
+    }
+
+    if (convertPollToRouletteBtn) {
+      convertPollToRouletteBtn.addEventListener('click', convertCheesePollToRoulette);
+    }
+    if (convertPollResultModalRouletteBtn) {
+      convertPollResultModalRouletteBtn.addEventListener('click', convertCheesePollToRoulette);
     }
 
     exportPollSummaryBtn.addEventListener('click', exportPollSummary);
