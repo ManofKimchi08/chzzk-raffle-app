@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>치지직 대규모 시청자 추첨 & 룰렛 시스템 | Chzzk Mega Raffle & Roulette</title>
+  <title>치지직 대규모 시청자 추첨 & 룰렛 & 찌리리공 배틀 v4.1.0 | Chzzk Mega Raffle & Voltorb Flip</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
@@ -1527,7 +1527,8 @@
     .memo-mark.m-1 { color: #ffffff; justify-content: flex-start; align-items: flex-start; }
     .memo-mark.m-2 { color: #f59e0b; justify-content: flex-end; align-items: flex-start; }
     .memo-mark.m-3 { color: #38bdf8; justify-content: flex-start; align-items: flex-end; }
-    .memo-mark.m-v { color: #ef4444; justify-content: flex-end; align-items: flex-end; }
+    .memo-mark.m-v { justify-content: flex-end; align-items: flex-end; }
+    .memo-mark.m-v img { width: 10px; height: 10px; object-fit: contain; }
 
     /* Flipped back side */
     .voltorb-tile-back {
@@ -1562,6 +1563,9 @@
       background: linear-gradient(135deg, #dc2626, #991b1b);
       border-color: #f87171;
       color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       animation: voltorbExplode 0.4s ease forwards;
     }
 
@@ -1599,7 +1603,19 @@
     }
 
     .hint-coin-icon { font-size: 12px; margin-right: 2px; }
-    .hint-voltorb-icon { font-size: 13px; margin-right: 2px; }
+    .hint-voltorb-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      margin-right: 2px;
+    }
+    .hint-voltorb-icon img {
+      width: 16px;
+      height: 16px;
+      object-fit: contain;
+    }
 
     /* Corner Memo Master Toggle Panel */
     .voltorb-corner-panel {
@@ -6271,11 +6287,11 @@
                   <span class="memo-mark m-1 ${tile.memos[1] ? 'active' : ''}">1</span>
                   <span class="memo-mark m-2 ${tile.memos[2] ? 'active' : ''}">2</span>
                   <span class="memo-mark m-3 ${tile.memos[3] ? 'active' : ''}">3</span>
-                  <span class="memo-mark m-v ${tile.memos['v'] ? 'active' : ''}">⚡</span>
+                  <span class="memo-mark m-v ${tile.memos['v'] ? 'active' : ''}"><img src="voltorb-icon.png" alt="V"></span>
                 </div>
               </div>
               <div class="voltorb-tile-back val-${tile.val}">
-                ${tile.val === 0 ? '🔴' : (tile.val === 1 ? '1' : `x${tile.val}`)}
+                ${tile.val === 0 ? '<img src="voltorb-icon.png" alt="찌리리공" style="width: 40px; height: 40px; object-fit: contain; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.6));">' : (tile.val === 1 ? '1' : `x${tile.val}`)}
               </div>
             </div>
           `;
@@ -6291,7 +6307,7 @@
             <span>${String(rowSums[r]).padStart(2, '0')}</span>
           </div>
           <div class="hint-row-val">
-            <span class="hint-voltorb-icon">🔴</span>
+            <span class="hint-voltorb-icon"><img src="voltorb-icon.png" alt="찌리리공"></span>
             <span>${rowVoltorbs[r]}</span>
           </div>
         `;
@@ -6308,7 +6324,7 @@
             <span>${String(colSums[c]).padStart(2, '0')}</span>
           </div>
           <div class="hint-row-val">
-            <span class="hint-voltorb-icon">🔴</span>
+            <span class="hint-voltorb-icon"><img src="voltorb-icon.png" alt="찌리리공"></span>
             <span>${colVoltorbs[c]}</span>
           </div>
         `;
@@ -6323,7 +6339,7 @@
           <button type="button" class="memo-select-btn ${activeMemoTool === 1 ? 'active' : ''}" onclick="selectMemoTool(1)">1</button>
           <button type="button" class="memo-select-btn ${activeMemoTool === 2 ? 'active' : ''}" onclick="selectMemoTool(2)" style="color: #f59e0b;">2</button>
           <button type="button" class="memo-select-btn ${activeMemoTool === 3 ? 'active' : ''}" onclick="selectMemoTool(3)" style="color: #38bdf8;">3</button>
-          <button type="button" class="memo-select-btn ${activeMemoTool === 'v' ? 'active' : ''}" onclick="selectMemoTool('v')" style="color: #ef4444;">⚡</button>
+          <button type="button" class="memo-select-btn ${activeMemoTool === 'v' ? 'active' : ''}" onclick="selectMemoTool('v')"><img src="voltorb-icon.png" alt="V" style="width: 14px; height: 14px; object-fit: contain;"></button>
         </div>
       `;
       voltorbBoardContainer.appendChild(cornerPanel);
@@ -6335,7 +6351,7 @@
         isMemoMode = true;
         memoModeStateText.innerText = 'ON';
         memoModeStateText.style.color = 'var(--chzzk-green)';
-        showToast(`메모 모드가 켜졌습니다! [${tool === 'v' ? '⚡ 폭탄' : tool}] 마킹 가능`, '📝');
+        showToast(`메모 모드가 켜졌습니다! [${tool === 'v' ? '찌리리공 폭탄' : tool}] 마킹 가능`, '📝');
       }
       renderBoardUI();
     }
