@@ -942,13 +942,19 @@
 
     /* 🎰 Visual Roulette Styles */
     .roulette-grid {
-      display: grid;
-      grid-template-columns: 400px 1fr;
-      gap: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
     }
 
-    @media (max-width: 1024px) {
-      .roulette-grid {
+    .roulette-config-columns {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .roulette-config-columns {
         grid-template-columns: 1fr;
       }
     }
@@ -1724,147 +1730,153 @@
 
     <!-- 🎰 MAIN TAB 2: 비주얼 룰렛 시스템 (Roulette View) -->
     <div id="rouletteView" class="roulette-grid" style="display: none;">
-      <!-- Left Panel: Roulette Settings & Management -->
+      <!-- TOP PANEL: Roulette Settings & Management (상부 설정 및 관리) -->
       <div class="panel">
-        <div class="panel-title">
-          <span>🎰 룰렛 항목 및 세부 설정</span>
-        </div>
-
-        <!-- Sub Tabs: Manual vs Cheese Donation -->
-        <div class="sub-tabs">
-          <button type="button" id="rouletteManualTabBtn" class="sub-tab-btn active">✍️ 수동 항목 입력</button>
-          <button type="button" id="rouletteDonationTabBtn" class="sub-tab-btn">🧀 치즈 도네이션 연동</button>
-        </div>
-
-        <!-- 1. Manual Input Mode (Clean, Direct & Excel Import/Export) -->
-        <div id="rouletteManualBox">
-          <div class="form-group" style="margin-bottom: 12px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-              <label style="margin-bottom: 0; font-size: 13px;">룰렛 항목 목록 (칸별 직접 관리)</label>
-              <span id="manualItemCount" style="color: var(--chzzk-green); font-size: 11px; font-weight: 700;">총 0개 항목</span>
-            </div>
-
-            <!-- Excel/CSV Import & Export Action Bar -->
-            <div style="display: flex; gap: 6px; margin-bottom: 10px;">
-              <input type="file" id="rouletteImportFileInput" accept=".csv, .xlsx, .xls, .txt, .tsv" style="display: none;">
-              <button type="button" id="importRouletteFileBtn" class="btn-chip" style="flex: 1.2; padding: 7px 10px; font-size: 11px; background: rgba(0, 255, 163, 0.12); color: var(--chzzk-green); border-color: rgba(0, 255, 163, 0.35); font-weight: 700;">
-                📂 엑셀/CSV 불러오기
-              </button>
-              <button type="button" id="exportRouletteItemsBtn" class="btn-chip btn-chip-secondary" style="flex: 1; padding: 7px 10px; font-size: 11px; font-weight: 700;">
-                💾 엑셀 저장
-              </button>
-              <button type="button" id="downloadRouletteTemplateBtn" class="btn-chip btn-chip-secondary" style="padding: 7px 8px; font-size: 11px;" title="룰렛 항목 엑셀 샘플 양식 다운로드">
-                📄 양식
-              </button>
-            </div>
-            
-            <!-- Dynamic Interactive Item Rows Container -->
-            <div id="rouletteItemsContainer" class="roulette-items-list" style="max-height: 240px;">
-              <!-- Dynamically populated rows -->
-            </div>
-
-            <div style="display: flex; gap: 8px; margin-top: 10px;">
-              <button type="button" id="addRouletteRowBtn" class="btn btn-secondary" style="flex: 1; padding: 10px 14px; font-size: 13px;">
-                ➕ 새 항목 칸 추가 (Enter)
-              </button>
-              <button type="button" id="clearAllRouletteRowsBtn" class="btn-chip btn-chip-danger" style="padding: 10px 14px; font-size: 12px;">
-                🗑️ 전체 삭제
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2. Cheese Donation Live Integration Mode (Focused on Donation Messages) -->
-        <div id="rouletteDonationBox" style="display: none;">
-          <div style="background: rgba(0, 255, 163, 0.06); border: 1px solid rgba(0, 255, 163, 0.2); border-radius: 8px; padding: 12px; margin-bottom: 14px;">
-            <div style="font-size: 12px; color: var(--chzzk-green); font-weight: 700; margin-bottom: 4px;">
-              📡 치즈 후원 메시지 실시간 룰렛 연동
-            </div>
-            <div style="font-size: 11px; color: var(--text-sub); line-height: 1.4;">
-              방송이 연결된 상태에서 시청자가 치즈를 후원하면 <b>후원 메시지(추천 벌칙/미션/메뉴 등)</b>가 룰렛 원판에 실시간으로 등록됩니다.
-            </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+          <!-- Sub Tabs: Manual vs Cheese Donation -->
+          <div class="sub-tabs" style="margin-bottom: 0;">
+            <button type="button" id="rouletteManualTabBtn" class="sub-tab-btn active">✍️ 수동 항목 입력</button>
+            <button type="button" id="rouletteDonationTabBtn" class="sub-tab-btn">🧀 치즈 도네이션 연동</button>
           </div>
 
-          <div class="form-group">
-            <label>최소 후원 치즈 기준</label>
-            <select id="minDonationCheeseSelect">
-              <option value="1">전체 후원 (1치즈 이상 모두 수집)</option>
-              <option value="1000" selected>1,000 치즈 이상</option>
-              <option value="5000">5,000 치즈 이상</option>
-              <option value="10000">10,000 치즈 이상</option>
-              <option value="50000">50,000 치즈 이상</option>
-              <option value="100000">100,000 치즈 이상 (10만 치즈)</option>
+          <!-- Quick Actions & Duration in Header -->
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 12px; color: var(--text-sub); font-weight: 700;">⏱️ 회전 시간</span>
+            <select id="spinDurationSelect" style="padding: 6px 12px; font-size: 12px; background: #080c14; border: 1px solid var(--border-color); color: #fff; border-radius: 6px;">
+              <option value="3">⚡ 빠르게 (3초)</option>
+              <option value="5" selected>🎯 표준 (5초)</option>
+              <option value="8">🔥 극적인 긴장감 (8초)</option>
             </select>
           </div>
-
-          <div class="toggle-row" style="margin-top: 10px;">
-            <span class="toggle-label" style="font-size: 12px;">💰 후원 금액 비례 칸 크기 확장 (가중치 연동)</span>
-            <input type="checkbox" id="donationWeightToggle" checked style="width: 18px; height: 18px; cursor: pointer;">
-          </div>
-
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; margin-bottom: 6px;">
-            <span style="font-size: 12px; font-weight: 700; color: var(--text-sub);">실시간 수집된 후원 메시지 (<span id="donationItemCount" style="color: var(--chzzk-green);">0</span>건)</span>
-            <button type="button" id="clearDonationsBtn" class="btn-chip btn-chip-danger" style="padding: 2px 6px; font-size: 10px;">목록 비우기</button>
-          </div>
-          <div id="donationFeedList" style="max-height: 120px; overflow-y: auto; background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; padding: 6px; font-size: 11px;">
-            <div style="text-align: center; color: var(--text-sub); padding: 16px 0;">아직 수집된 도네이션이 없습니다.</div>
-          </div>
         </div>
 
-        <hr style="border-color: var(--border-color); margin: 16px 0;">
+        <!-- 2-Column Config Layout: Left = Items Management, Right = Mode Settings & History -->
+        <div class="roulette-config-columns">
+          <!-- Left Column: Item Management & Excel Actions -->
+          <div>
+            <!-- Manual Mode Items Box -->
+            <div id="rouletteManualBox">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <label style="margin-bottom: 0; font-size: 13px; font-weight: 700;">룰렛 항목 목록 (칸별 직접 관리)</label>
+                <span id="manualItemCount" style="color: var(--chzzk-green); font-size: 11px; font-weight: 700;">총 0개 항목</span>
+              </div>
 
-        <!-- Common Roulette Options -->
-        <div class="panel-title" style="font-size: 13px; margin-bottom: 6px;">⚙️ 룰렛 세부 설정</div>
+              <!-- Excel/CSV Import & Export Action Bar -->
+              <div style="display: flex; gap: 6px; margin-bottom: 8px;">
+                <input type="file" id="rouletteImportFileInput" accept=".csv, .xlsx, .xls, .txt, .tsv" style="display: none;">
+                <button type="button" id="importRouletteFileBtn" class="btn-chip" style="flex: 1.2; padding: 6px 10px; font-size: 11px; background: rgba(0, 255, 163, 0.12); color: var(--chzzk-green); border-color: rgba(0, 255, 163, 0.35); font-weight: 700;">
+                  📂 엑셀/CSV 불러오기
+                </button>
+                <button type="button" id="exportRouletteItemsBtn" class="btn-chip btn-chip-secondary" style="flex: 1; padding: 6px 10px; font-size: 11px; font-weight: 700;">
+                  💾 엑셀 저장
+                </button>
+                <button type="button" id="downloadRouletteTemplateBtn" class="btn-chip btn-chip-secondary" style="padding: 6px 8px; font-size: 11px;" title="룰렛 항목 엑셀 샘플 양식 다운로드">
+                  📄 양식
+                </button>
+              </div>
 
-        <div class="toggle-row">
-          <span class="toggle-label" style="font-size: 12px;">🗑️ 당첨된 항목 룰렛에서 자동 제거</span>
-          <input type="checkbox" id="autoRemoveWonItemToggle" style="width: 18px; height: 18px; cursor: pointer;">
-        </div>
+              <!-- Dynamic Interactive Item Rows Container -->
+              <div id="rouletteItemsContainer" class="roulette-items-list" style="max-height: 140px;">
+                <!-- Dynamically populated rows -->
+              </div>
 
-        <div class="toggle-row">
-          <span class="toggle-label" style="font-size: 12px;">🔊 회전 효과음 (Web Audio 틱 사운드)</span>
-          <input type="checkbox" id="rouletteSoundToggle" checked style="width: 18px; height: 18px; cursor: pointer;">
-        </div>
+              <div style="display: flex; gap: 8px; margin-top: 8px;">
+                <button type="button" id="addRouletteRowBtn" class="btn btn-secondary" style="flex: 1; padding: 6px 10px; font-size: 12px;">
+                  ➕ 새 항목 칸 추가 (Enter)
+                </button>
+                <button type="button" id="clearAllRouletteRowsBtn" class="btn-chip btn-chip-danger" style="padding: 6px 10px; font-size: 12px;">
+                  🗑️ 전체 삭제
+                </button>
+              </div>
+            </div>
 
-        <div class="form-group" style="margin-top: 8px;">
-          <label>회전 시간 (긴장감 조절)</label>
-          <select id="spinDurationSelect">
-            <option value="3">⚡ 빠르게 (3초)</option>
-            <option value="5" selected>🎯 표준 (5초)</option>
-            <option value="8">🔥 극적인 긴장감 (8초)</option>
-          </select>
-        </div>
+            <!-- Cheese Donation Mode Items Box -->
+            <div id="rouletteDonationBox" style="display: none;">
+              <div style="background: rgba(0, 255, 163, 0.06); border: 1px solid rgba(0, 255, 163, 0.2); border-radius: 8px; padding: 8px 10px; margin-bottom: 8px;">
+                <div style="font-size: 11px; color: var(--chzzk-green); font-weight: 700; margin-bottom: 2px;">
+                  📡 치즈 후원 메시지 실시간 룰렛 연동
+                </div>
+                <div style="font-size: 10px; color: var(--text-sub); line-height: 1.3;">
+                  방송 연결 중 후원된 치즈 메시지가 룰렛 원판에 실시간 등록됩니다.
+                </div>
+              </div>
 
-        <!-- Roulette History Table -->
-        <div style="margin-top: 14px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-            <span style="font-size: 12px; font-weight: 700; color: var(--text-sub);">📜 룰렛 당첨 히스토리</span>
-            <div style="display: flex; gap: 6px;">
-              <button type="button" id="exportRouletteHistoryBtn" class="btn-chip btn-chip-primary" style="padding: 2px 8px; font-size: 10px; background: #107c41; color: #fff;">📊 엑셀 저장</button>
-              <button type="button" id="clearRouletteHistoryBtn" class="btn-chip btn-chip-secondary" style="padding: 2px 6px; font-size: 10px;">초기화</button>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 6px;">
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label>최소 후원 치즈 기준</label>
+                  <select id="minDonationCheeseSelect">
+                    <option value="1">전체 후원 (1치즈+)</option>
+                    <option value="1000" selected>1,000 치즈 이상</option>
+                    <option value="5000">5,000 치즈 이상</option>
+                    <option value="10000">10,000 치즈 이상</option>
+                    <option value="50000">50,000 치즈 이상</option>
+                    <option value="100000">100,000 치즈 이상</option>
+                  </select>
+                </div>
+
+                <div class="toggle-row" style="margin-top: 18px; margin-bottom: 0;">
+                  <span class="toggle-label" style="font-size: 11px;">💰 금액 비례 가중치</span>
+                  <input type="checkbox" id="donationWeightToggle" checked style="width: 16px; height: 16px; cursor: pointer;">
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px; margin-bottom: 4px;">
+                <span style="font-size: 11px; font-weight: 700; color: var(--text-sub);">실시간 수집된 후원 (<span id="donationItemCount" style="color: var(--chzzk-green);">0</span>건)</span>
+                <button type="button" id="clearDonationsBtn" class="btn-chip btn-chip-danger" style="padding: 2px 6px; font-size: 10px;">목록 비우기</button>
+              </div>
+              <div id="donationFeedList" style="max-height: 90px; overflow-y: auto; background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; padding: 6px; font-size: 11px;">
+                <div style="text-align: center; color: var(--text-sub); padding: 12px 0;">아직 수집된 도네이션이 없습니다.</div>
+              </div>
             </div>
           </div>
-          <div class="table-container" style="max-height: 120px;">
-            <table>
-              <thead>
-                <tr>
-                  <th style="width: 45px;">회차</th>
-                  <th>당첨 항목</th>
-                  <th style="width: 75px;">시간</th>
-                </tr>
-              </thead>
-              <tbody id="rouletteHistoryBody">
-                <tr><td colspan="3" style="text-align:center; color: var(--text-sub); font-size: 11px; padding: 14px 0;">아직 룰렛 결과가 없습니다.</td></tr>
-              </tbody>
-            </table>
+
+          <!-- Right Column: Roulette Detailed Toggles & History Table -->
+          <div>
+            <div class="panel-title" style="font-size: 13px; margin-bottom: 6px;">⚙️ 룰렛 옵션 및 히스토리</div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+              <div class="toggle-row" style="margin-bottom: 0;">
+                <span class="toggle-label" style="font-size: 11px;">🗑️ 당첨 항목 자동 제거</span>
+                <input type="checkbox" id="autoRemoveWonItemToggle" style="width: 16px; height: 16px; cursor: pointer;">
+              </div>
+
+              <div class="toggle-row" style="margin-bottom: 0;">
+                <span class="toggle-label" style="font-size: 11px;">🔊 회전 틱 사운드</span>
+                <input type="checkbox" id="rouletteSoundToggle" checked style="width: 16px; height: 16px; cursor: pointer;">
+              </div>
+            </div>
+
+            <!-- Roulette History Table -->
+            <div style="margin-top: 6px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <span style="font-size: 11px; font-weight: 700; color: var(--text-sub);">📜 룰렛 당첨 히스토리</span>
+                <div style="display: flex; gap: 4px;">
+                  <button type="button" id="exportRouletteHistoryBtn" class="btn-chip btn-chip-primary" style="padding: 2px 6px; font-size: 10px; background: #107c41; color: #fff;">📊 엑셀 저장</button>
+                  <button type="button" id="clearRouletteHistoryBtn" class="btn-chip btn-chip-secondary" style="padding: 2px 6px; font-size: 10px;">초기화</button>
+                </div>
+              </div>
+              <div class="table-container" style="max-height: 120px;">
+                <table>
+                  <thead>
+                    <tr>
+                      <th style="width: 45px;">회차</th>
+                      <th>당첨 항목</th>
+                      <th style="width: 75px;">시간</th>
+                    </tr>
+                  </thead>
+                  <tbody id="rouletteHistoryBody">
+                    <tr><td colspan="3" style="text-align:center; color: var(--text-sub); font-size: 11px; padding: 14px 0;">아직 룰렛 결과가 없습니다.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
-
       </div>
 
-      <!-- Right Panel: Big Canvas Roulette Stage -->
+      <!-- BOTTOM PANEL: Big Canvas Roulette Stage & Spin Controls (하부 룰렛 원판 및 돌리기 스테이지) -->
       <div class="panel" style="display: flex; flex-direction: column; align-items: center; justify-content: flex-start;">
-        <div class="panel-title" style="align-self: flex-start; margin-bottom: 16px;">🎯 비주얼 룰렛 원판</div>
+        <div class="panel-title" style="align-self: flex-start; margin-bottom: 16px;">🎯 비주얼 룰렛 원판 및 돌리기 스테이지</div>
 
         <div class="roulette-stage-wrapper">
           <div class="roulette-wheel-container">
@@ -3812,7 +3824,7 @@
         tabRouletteBtn.classList.add('active');
         tabRaffleBtn.classList.remove('active');
         tabPollBtn.classList.remove('active');
-        rouletteView.style.display = 'grid';
+        rouletteView.style.display = 'flex';
         raffleView.style.display = 'none';
         pollView.style.display = 'none';
         if (bgCharRoulette) bgCharRoulette.classList.add('active');
@@ -3827,7 +3839,7 @@
         tabPollBtn.classList.add('active');
         tabRaffleBtn.classList.remove('active');
         tabRouletteBtn.classList.remove('active');
-        pollView.style.display = 'grid';
+        pollView.style.display = 'flex';
         raffleView.style.display = 'none';
         rouletteView.style.display = 'none';
         if (bgCharPoll) bgCharPoll.classList.add('active');
