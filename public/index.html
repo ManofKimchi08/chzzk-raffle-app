@@ -1954,10 +1954,13 @@
 
     // Helper: Extract Channel ID
     function extractChannelId(input) {
+      if (!input) return '';
       input = input.trim();
-      const match = input.match(/chzzk\.naver\.com\/live\/([a-zA-Z0-9]+)/);
-      if (match && match[1]) return match[1];
-      return input.replace(/[^a-zA-Z0-9]/g, '');
+      const hexMatch = input.match(/[a-fA-F0-9]{32}/);
+      if (hexMatch) return hexMatch[0];
+      const urlMatch = input.match(/chzzk\.naver\.com\/(?:live\/)?([a-zA-Z0-9]+)/);
+      if (urlMatch && urlMatch[1]) return urlMatch[1];
+      return input.replace(/https?:\/\//i, '').split('/')[0].split('?')[0].trim();
     }
 
     function getChzzkChatServers(chatCid) {
@@ -1970,7 +1973,8 @@
       return [
         `wss://kr-ss${serverNum}.chat.naver.com/chat`,
         `wss://kr-ss1.chat.naver.com/chat`,
-        `wss://kr-ss2.chat.naver.com/chat`
+        `wss://kr-ss2.chat.naver.com/chat`,
+        `wss://kr-ss3.chat.naver.com/chat`
       ];
     }
 
@@ -1993,7 +1997,7 @@
     connectBtn.addEventListener('click', async () => {
       currentChannelId = extractChannelId(channelInput.value);
       if (!currentChannelId) {
-        alert('올바른 치지직 채널 ID 또는 URL을 입력해주세요.');
+        alert('올바른 치지직 채널 ID 또는 방송 URL을 입력해주세요.');
         return;
       }
 
@@ -2009,11 +2013,11 @@
       setStatus('connecting', '치지직 방송 접근 토큰 요청 중...');
 
       try {
-        const res = await fetch(`/api/chzzk/?channelId=${currentChannelId}`);
+        const res = await fetch(`/api/chzzk/?channelId=${encodeURIComponent(currentChannelId)}`);
         const data = await res.json();
 
-        if (data.error) {
-          alert('오류: ' + data.error);
+        if (!res.ok || data.error) {
+          alert('오류: ' + (data.error || '방송 정보를 불러올 수 없습니다.'));
           setStatus('disconnected', '연결 실패');
           return;
         }
@@ -2032,12 +2036,27 @@
     }
 
     function connectWebSocketServer() {
+      if (!currentChatChannelId || !currentAccessToken) {
+        setStatus('disconnected', '접근 토큰 없음');
+        return;
+      }
+
       const serverList = getChzzkChatServers(currentChatChannelId);
       const targetWsUrl = serverList[serverIndexOffset % serverList.length];
 
-      setStatus('connecting', `웹소켓 서버 접속 중...`);
+      setStatus('connecting', `웹소켓 접속 중...`);
 
-      ws = new WebSocket(targetWsUrl);
+      if (ws) {
+        try { ws.close(); } catch (e) {}
+      }
+
+      try {
+        ws = new WebSocket(targetWsUrl);
+      } catch (err) {
+        console.error('WebSocket init error:', err);
+        setStatus('connecting', '웹소켓 재연결 준비 중...');
+        return;
+      }
 
       ws.onopen = () => {
         const connectPayload = {
@@ -2067,20 +2086,25 @@
         try {
           const data = JSON.parse(event.data);
 
-          // Connection confirmed
-          if (data.cmd === 10100) {
-            setStatus('connected', `🟢 [${currentChannelName}] 실시간 수집 중`);
-            reconnectAttempts = 0;
+          // Connection ACK
+          if (data.cmd === 10100 || data.cmd === 10000 || data.cmd === 0) {
+            if (data.cmd === 10100 || data.cmd === 10000) {
+              setStatus('connected', `🟢 [${currentChannelName}] 실시간 수집 중`);
+              reconnectAttempts = 0;
+            }
           }
 
-          // Live Chat Messages
-          if (data.cmd === 93101 && data.bdy) {
+          // Live Chat / Donation / Sub Messages (93101, 93102, 93103, 93104)
+          if ((data.cmd === 93101 || data.cmd === 93102 || data.cmd === 93103 || data.cmd === 93104) && Array.isArray(data.bdy)) {
             data.bdy.forEach(item => processChatMessage(item));
           }
-        } catch (e) {}
+        } catch (e) {
+          console.error('Error parsing WS message:', e);
+        }
       };
 
-      ws.onerror = () => {
+      ws.onerror = (e) => {
+        console.warn('WebSocket error:', e);
         if (!isManualDisconnect) setStatus('connecting', '웹소켓 재연결 시도 중...');
       };
 
@@ -2110,10 +2134,10 @@
       liveStatusPollingInterval = setInterval(async () => {
         if (!isConnected || isManualDisconnect) return;
         try {
-          const res = await fetch(`/api/chzzk/?channelId=${currentChannelId}`);
+          const res = await fetch(`/api/chzzk/?channelId=${encodeURIComponent(currentChannelId)}`);
           const data = await res.json();
-          if (data && data.status === 'CLOSE') {
-            setStatus('disconnected', `방송 종료됨 (${currentChannelName})`);
+          if (data && data.channelName) {
+            currentChannelName = data.channelName;
           }
         } catch (e) {}
       }, 30000);

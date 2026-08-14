@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+import re
 import urllib.request
 import urllib.error
 import http.server
@@ -9,7 +10,7 @@ import webbrowser
 import threading
 from urllib.parse import urlparse, parse_qs
 
-PORT = 8000
+DEFAULT_PORT = 8000
 
 # Base directory for static files (supports PyInstaller onefile bundle)
 if getattr(sys, 'frozen', False):
@@ -18,6 +19,20 @@ else:
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 WEB_DIR = os.path.join(BASE_DIR, 'public')
+
+def extract_channel_id(raw_input):
+    if not raw_input:
+        return ''
+    raw_input = raw_input.strip()
+    # 32-character hex ID (standard Chzzk channel ID)
+    hex_match = re.search(r'[a-fA-F0-9]{32}', raw_input)
+    if hex_match:
+        return hex_match.group(0)
+    # URL path match
+    url_match = re.search(r'chzzk\.naver\.com/(?:live/)?([a-zA-Z0-9]+)', raw_input)
+    if url_match:
+        return url_match.group(1)
+    return re.sub(r'[^a-zA-Z0-9]', '', raw_input)
 
 class ChzzkProxyHandler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
@@ -39,33 +54,45 @@ class ChzzkProxyHandler(http.server.SimpleHTTPRequestHandler):
         # Proxy Chzzk API requests to avoid browser CORS issues
         if parsed.path.startswith('/api/chzzk/'):
             qs = parse_qs(parsed.query)
-            channel_id = qs.get('channelId', [''])[0]
+            raw_channel_id = qs.get('channelId', [''])[0]
+            channel_id = extract_channel_id(raw_channel_id)
             
             if not channel_id:
-                self.send_json({'error': 'Missing channelId'}, status=400)
+                self.send_json({'error': '유효한 채널 ID 또는 방송 URL을 입력해주세요.'}, status=400)
                 return
 
             try:
                 # 1. Fetch live detail
                 detail_url = f"https://api.chzzk.naver.com/service/v2/channels/{channel_id}/live-detail"
                 req = urllib.request.Request(detail_url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'})
-                with urllib.request.urlopen(req) as resp:
+                with urllib.request.urlopen(req, timeout=10) as resp:
                     detail_data = json.loads(resp.read().decode('utf-8'))
 
                 chat_cid = detail_data.get('content', {}).get('chatChannelId')
-                status = detail_data.get('content', {}).get('status')
+                status = detail_data.get('content', {}).get('status', 'CLOSE')
                 live_title = detail_data.get('content', {}).get('liveTitle', '')
                 channel_name = detail_data.get('content', {}).get('channel', {}).get('channelName', '')
                 concurrent_user_count = detail_data.get('content', {}).get('concurrentUserCount', 0)
 
+                # Fallback if chatChannelId is missing from live-detail
                 if not chat_cid:
-                    self.send_json({'error': '채팅 채널 ID를 찾을 수 없습니다. 방송 중인지 확인해 주세요.'}, status=404)
+                    try:
+                        chan_url = f"https://api.chzzk.naver.com/service/v1/channels/{channel_id}"
+                        c_req = urllib.request.Request(chan_url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'})
+                        with urllib.request.urlopen(c_req, timeout=10) as c_resp:
+                            chan_data = json.loads(c_resp.read().decode('utf-8'))
+                            channel_name = chan_data.get('content', {}).get('channelName', channel_name)
+                    except Exception:
+                        pass
+
+                if not chat_cid:
+                    self.send_json({'error': '채팅 채널 ID를 찾을 수 없습니다. 올바른 치지직 채널인지 확인해 주세요.'}, status=404)
                     return
 
                 # 2. Fetch chat access token
                 token_url = f"https://comm-api.game.naver.com/nng_main/v1/chats/access-token?channelId={chat_cid}&chatType=STREAMING"
                 t_req = urllib.request.Request(token_url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'})
-                with urllib.request.urlopen(t_req) as t_resp:
+                with urllib.request.urlopen(t_req, timeout=10) as t_resp:
                     token_data = json.loads(t_resp.read().decode('utf-8'))
 
                 access_token = token_data.get('content', {}).get('accessToken')
@@ -74,7 +101,7 @@ class ChzzkProxyHandler(http.server.SimpleHTTPRequestHandler):
                 res_payload = {
                     'channelId': channel_id,
                     'chatChannelId': chat_cid,
-                    'channelName': channel_name,
+                    'channelName': channel_name or '치지직 방송',
                     'liveTitle': live_title,
                     'status': status,
                     'concurrentUserCount': concurrent_user_count,
@@ -82,8 +109,10 @@ class ChzzkProxyHandler(http.server.SimpleHTTPRequestHandler):
                     'extraToken': extra_token
                 }
                 self.send_json(res_payload)
+            except urllib.error.HTTPError as he:
+                self.send_json({'error': f'치지직 API 호출 오류 ({he.code})'}, status=he.code)
             except Exception as e:
-                self.send_json({'error': str(e)}, status=500)
+                self.send_json({'error': f'서버 통신 오류: {str(e)}'}, status=500)
             return
 
         return super().do_GET()
@@ -96,17 +125,33 @@ class ChzzkProxyHandler(http.server.SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(content)
 
+def find_available_port(start_port=8000, max_attempts=50):
+    import socket
+    for p in range(start_port, start_port + max_attempts):
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            try:
+                s.bind(('', p))
+                return p
+            except OSError:
+                continue
+    return start_port
+
+class ReusableTCPServer(socketserver.TCPServer):
+    allow_reuse_address = True
+
 if __name__ == '__main__':
-    server_address = ('', PORT)
+    port = find_available_port(DEFAULT_PORT)
+    server_address = ('', port)
+    
     print(f"==================================================")
-    print(f" 🚀 치지직 대규모 시청자 추첨 앱 서버가 실행되었습니다!")
-    print(f" 👉 브라우저 주소: http://localhost:{PORT}")
+    print(f" 🚀 치지직 대규모 시청자 추첨 & 룰렛 앱이 실행되었습니다!")
+    print(f" 👉 브라우저 주소: http://localhost:{port}")
     print(f"==================================================")
     
     # Automatically open browser window
-    threading.Timer(1.0, lambda: webbrowser.open(f'http://localhost:{PORT}')).start()
+    threading.Timer(0.8, lambda: webbrowser.open(f'http://localhost:{port}')).start()
 
-    with socketserver.TCPServer(server_address, ChzzkProxyHandler) as httpd:
+    with ReusableTCPServer(server_address, ChzzkProxyHandler) as httpd:
         try:
             httpd.serve_forever()
         except KeyboardInterrupt:
