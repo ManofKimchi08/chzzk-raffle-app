@@ -896,22 +896,27 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 72px;
-      height: 72px;
-      background: radial-gradient(circle at 35% 35%, #fff 0%, #cbd5e1 40%, #475569 90%);
-      border: 3px solid #1e293b;
+      width: 78px;
+      height: 78px;
+      background: radial-gradient(circle at 35% 35%, #1e293b 0%, #0f172a 70%, #020617 100%);
+      border: 3px solid var(--chzzk-green);
       border-radius: 50%;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.6), inset 0 2px 4px rgba(255,255,255,0.8);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.8), 0 0 15px rgba(0, 255, 163, 0.4), inset 0 2px 4px rgba(255,255,255,0.2);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 11px;
-      font-weight: 800;
-      font-family: 'Outfit', sans-serif;
-      color: #0f172a;
-      letter-spacing: 0.5px;
       z-index: 5;
       pointer-events: none;
+      overflow: hidden;
+    }
+
+    .wheel-center-img {
+      width: 82%;
+      height: 82%;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+      pointer-events: none;
+      user-select: none;
     }
 
     .roulette-spin-btn {
@@ -1590,8 +1595,10 @@
             <!-- HTML5 2D Canvas for High-Resolution Spinning Wheel -->
             <canvas id="rouletteCanvas" width="600" height="600"></canvas>
 
-            <!-- Metallic Center Hub -->
-            <div class="wheel-center-hub">SPIN</div>
+            <!-- Metallic Center Hub with Mascot Character -->
+            <div class="wheel-center-hub">
+              <img src="center_character.png" alt="Center Mascot" class="wheel-center-img">
+            </div>
           </div>
 
           <!-- Spin Action Button -->
@@ -2759,14 +2766,7 @@
     let currentWinnerObject = null;
     let lastTickSliceIndex = -1;
 
-    let manualRouletteRows = [
-      { text: '치킨 1마리', weight: 1 },
-      { text: '피자 1판', weight: 1 },
-      { text: '문화상품권 5천원', weight: 1 },
-      { text: '스타벅스 아메리카노', weight: 1 },
-      { text: '꽝', weight: 2 },
-      { text: '꽝', weight: 2 }
-    ];
+    let manualRouletteRows = [];
 
     const WHEEL_COLORS = [
       { bg: '#00ffa3', text: '#051911' },
@@ -3116,25 +3116,39 @@
 
       rouletteCtx.clearRect(0, 0, canvasWidth, canvasHeight);
 
-      if (items.length === 0) {
+      if (items.length < 2) {
         rouletteCtx.save();
         rouletteCtx.beginPath();
         rouletteCtx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-        rouletteCtx.fillStyle = '#1e293b';
+        rouletteCtx.fillStyle = '#121826';
         rouletteCtx.fill();
         rouletteCtx.lineWidth = 6;
-        rouletteCtx.strokeStyle = '#334155';
+        rouletteCtx.strokeStyle = '#26334d';
         rouletteCtx.stroke();
 
-        rouletteCtx.fillStyle = '#94a3b8';
-        rouletteCtx.font = 'bold 20px Pretendard, sans-serif';
+        // Decorative subtle inner ring
+        rouletteCtx.beginPath();
+        rouletteCtx.arc(centerX, centerY, radius - 20, 0, 2 * Math.PI);
+        rouletteCtx.lineWidth = 2;
+        rouletteCtx.strokeStyle = 'rgba(0, 255, 163, 0.15)';
+        rouletteCtx.stroke();
+
+        // Guide text shifted below center mascot hub to eliminate overlap
+        rouletteCtx.fillStyle = '#e2e8f0';
+        rouletteCtx.font = 'bold 17px Pretendard, sans-serif';
         rouletteCtx.textAlign = 'center';
         rouletteCtx.textBaseline = 'middle';
-        rouletteCtx.fillText('항목을 2개 이상 입력하세요', centerX, centerY);
+        rouletteCtx.fillText('항목을 2개 이상 입력하세요', centerX, centerY + 85);
+
+        rouletteCtx.fillStyle = '#64748b';
+        rouletteCtx.font = '13px Pretendard, sans-serif';
+        rouletteCtx.fillText('좌측에서 항목 칸을 추가하거나 프리셋을 선택하세요', centerX, centerY + 115);
         rouletteCtx.restore();
 
         spinRouletteBtn.disabled = true;
-        currentRouletteItemPreview.innerText = '항목을 2개 이상 입력해주세요.';
+        currentRouletteItemPreview.innerText = items.length === 0 
+          ? '좌측에서 항목 칸을 추가하거나 프리셋을 선택해주세요.' 
+          : '룰렛을 돌리려면 최소 2개 이상의 항목이 필요합니다.';
         return;
       }
 
