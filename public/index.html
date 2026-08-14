@@ -1115,6 +1115,11 @@
           <span class="chip-indicator"></span>
           <span>👥 전체 참여자</span>
         </button>
+        <button type="button" class="filter-chip-btn" id="chipKeywordToggle" onclick="toggleFilter('keyword')">
+          <span class="chip-indicator"></span>
+          <span>💬 참여 키워드 필터</span>
+          <span id="keywordChipBadge" class="chip-badge" style="display: none;"></span>
+        </button>
         <button type="button" class="filter-chip-btn" id="chipDonorToggle" onclick="toggleFilter('donor')">
           <span class="chip-indicator"></span>
           <span>🧀 치즈 후원자 필터</span>
@@ -1129,6 +1134,35 @@
             <span>🚫 중복 방지 & 제외 관리</span>
             <span id="excludeBadge" class="chip-badge">기본 중복제외 ON</span>
           </button>
+        </div>
+      </div>
+
+      <!-- Detail Panel 0: Participation Keyword Filter -->
+      <div id="keywordFilterPanel" class="filter-accordion-panel" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 13px; font-weight: 800; color: var(--chzzk-green);">💬 특정 참여 키워드 조건 설정</span>
+            <span style="font-size: 11px; color: var(--text-sub);">(지정한 키워드를 채팅에 입력한 시청자만 추첨)</span>
+          </div>
+          <button type="button" class="btn-chip btn-chip-secondary" onclick="toggleFilter('keyword')">✕ 필터 끄기</button>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div>
+            <label>참여 키워드 입력 (예: !추첨, !참여, 1번)</label>
+            <input type="text" id="keywordInput" placeholder="예: !추첨, !참여" style="margin-bottom: 8px;">
+            <div class="radio-group">
+              <label class="radio-label">
+                <input type="radio" name="keywordMatchMode" value="exact" checked> 완전 일치 (예: "!추첨" 단독 채팅)
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="keywordMatchMode" value="partial"> 부분 일치 (예: "!추첨합니다" 포함 채팅)
+              </label>
+            </div>
+          </div>
+          <div style="font-size: 11px; color: var(--text-sub); display: flex; flex-direction: column; justify-content: center; line-height: 1.5; background: rgba(0,255,163,0.04); padding: 12px; border-radius: 8px; border: 1px solid rgba(0,255,163,0.1);">
+            <div>💡 <b>회차별 키워드 즉시 변경 가능</b></div>
+            <div style="margin-top: 4px;">방송 연결을 끊지 않고도 1회차 `!치킨`, 2회차 `!피자` 등 키워드를 변경하면 실시간 응모자 수가 즉시 다시 계산됩니다.</div>
+          </div>
         </div>
       </div>
 
@@ -1547,7 +1581,7 @@
       <div class="modal-header">
         <div style="display: flex; align-items: center; gap: 10px;">
           <span style="font-size: 24px;">📡</span>
-          <div style="font-size: 17px; font-weight: 800; color: #fff;">치지직 방송 연결 설정</div>
+          <div style="font-size: 17px; font-weight: 800; color: #fff;">치지직 방송 연결</div>
         </div>
         <button type="button" class="modal-close-btn" id="closeConnectModalBtn">✕</button>
       </div>
@@ -1557,26 +1591,16 @@
           <label>치지직 방송 URL 또는 채널 ID</label>
           <input type="text" id="channelInput" placeholder="https://chzzk.naver.com/live/채널ID 또는 채널ID" value="1ad5aa0f6c6741b072528fad5e5e76b1">
         </div>
-
-        <div class="form-group">
-          <label>참여 키워드 (공백시 모든 채팅 수집)</label>
-          <input type="text" id="keywordInput" placeholder="예: !추첨, !참여">
-          <div class="radio-group">
-            <label class="radio-label">
-              <input type="radio" name="keywordMatchMode" value="exact" checked> 완전 일치 (예: !추첨)
-            </label>
-            <label class="radio-label">
-              <input type="radio" name="keywordMatchMode" value="partial"> 부분 일치 (예: !추첨합니다)
-            </label>
-          </div>
+        <div style="font-size: 11px; color: var(--text-sub); line-height: 1.5; background: rgba(0, 255, 163, 0.05); padding: 12px; border-radius: 8px; border: 1px solid rgba(0, 255, 163, 0.15);">
+          💡 방송 주소(URL) 또는 채널 ID를 입력하여 실시간 채팅 및 도네이션 서버에 연결합니다. 연결 후 참여 키워드나 후원/구독자 필터는 메인 화면에서 자유롭게 설정하실 수 있습니다.
         </div>
       </div>
 
       <div class="modal-footer">
         <button type="button" id="connectModalCancelBtn" class="btn btn-secondary" style="padding: 10px 16px; font-size: 13px;">닫기</button>
         <button type="button" id="connectBtn" class="btn btn-primary" style="flex: 1; padding: 10px 16px; font-size: 13px;">
-          <span>🚀</span>
-          <span>실시간 수집 시작</span>
+          <span>📡</span>
+          <span>치지직 방송 연결하기</span>
         </button>
       </div>
     </div>
@@ -1678,8 +1702,13 @@
     const drawerChatCount = document.getElementById('drawerChatCount');
 
     // Advanced Filter Elements & State
+    let isKeywordFilterActive = false;
     let isDonorFilterActive = false;
     let isSubFilterActive = false;
+
+    const keywordFilterPanel = document.getElementById('keywordFilterPanel');
+    const keywordInput = document.getElementById('keywordInput');
+    const keywordChipBadge = document.getElementById('keywordChipBadge');
 
     const donorFilterPanel = document.getElementById('donorFilterPanel');
     const donorLevelSelect = document.getElementById('donorLevelSelect');
@@ -1730,7 +1759,12 @@
     // 🎯 FILTER & EXCLUSION TOGGLE CONTROLS
     // ==========================================
     function toggleFilter(type) {
-      if (type === 'donor') {
+      if (type === 'keyword') {
+        isKeywordFilterActive = !isKeywordFilterActive;
+        if (isKeywordFilterActive && keywordInput.value.trim() === '') {
+          setTimeout(() => keywordInput.focus(), 60);
+        }
+      } else if (type === 'donor') {
         isDonorFilterActive = !isDonorFilterActive;
       } else if (type === 'sub') {
         isSubFilterActive = !isSubFilterActive;
@@ -1740,6 +1774,8 @@
 
     function setFilterMode(mode) {
       if (mode === 'all') {
+        isKeywordFilterActive = false;
+        keywordInput.value = '';
         isDonorFilterActive = false;
         isSubFilterActive = false;
         updateFilterUI();
@@ -1754,16 +1790,30 @@
 
     function updateFilterUI() {
       const chipAll = document.getElementById('chipAllToggle');
+      const chipKeyword = document.getElementById('chipKeywordToggle');
       const chipDonor = document.getElementById('chipDonorToggle');
       const chipSub = document.getElementById('chipSubToggle');
 
+      // Keyword Filter UI
+      chipKeyword.classList.toggle('active', isKeywordFilterActive);
+      keywordFilterPanel.style.display = isKeywordFilterActive ? 'block' : 'none';
+      if (isKeywordFilterActive && keywordInput.value.trim().length > 0) {
+        keywordChipBadge.style.display = 'inline-block';
+        keywordChipBadge.innerText = `"${keywordInput.value.trim()}"`;
+      } else {
+        keywordChipBadge.style.display = 'none';
+      }
+
+      // Donor Filter UI
       chipDonor.classList.toggle('active', isDonorFilterActive);
       donorFilterPanel.style.display = isDonorFilterActive ? 'block' : 'none';
 
+      // Sub Filter UI
       chipSub.classList.toggle('active', isSubFilterActive);
       subFilterPanel.style.display = isSubFilterActive ? 'block' : 'none';
 
-      const isAll = !isDonorFilterActive && !isSubFilterActive;
+      // All Mode Toggle
+      const isAll = !isKeywordFilterActive && !isDonorFilterActive && !isSubFilterActive;
       chipAll.classList.toggle('active', isAll);
 
       updateFilteredStats();
@@ -1789,6 +1839,17 @@
         excludeBadge.style.color = 'var(--chzzk-green)';
       }
     }
+
+    keywordInput.addEventListener('input', () => {
+      if (keywordInput.value.trim().length > 0) {
+        isKeywordFilterActive = true;
+      }
+      updateFilterUI();
+    });
+
+    document.querySelectorAll('input[name="keywordMatchMode"]').forEach(r => {
+      r.addEventListener('change', updateFilteredStats);
+    });
 
     donorLevelSelect.addEventListener('change', updateFilteredStats);
     minSubMonths.addEventListener('input', updateFilteredStats);
@@ -2123,6 +2184,20 @@
         });
 
         updateFilteredStats();
+      } else {
+        const p = participants.get(uid);
+        p.msg = msgText;
+        p.time = now;
+        if (isSubscriber) {
+          p.isSubscriber = true;
+          p.subMonth = subMonth;
+          p.subTier = subTier;
+        }
+        if (isDonator) {
+          p.isDonator = true;
+          p.donatorLevel = Math.max(p.donatorLevel, donatorLevel);
+        }
+        updateFilteredStats();
       }
 
       // Parse and Handle Live Cheese Donation for Roulette
@@ -2190,7 +2265,7 @@
     function getEligibleParticipants() {
       const all = Array.from(participants.values());
       
-      const targetKeyword = keywordInput.value.trim();
+      const targetKeyword = (isKeywordFilterActive && keywordInput) ? keywordInput.value.trim() : '';
       const matchModeRadio = document.querySelector('input[name="keywordMatchMode"]:checked');
       const matchMode = matchModeRadio ? matchModeRadio.value : 'exact';
 
