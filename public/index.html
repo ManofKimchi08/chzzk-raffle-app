@@ -579,6 +579,249 @@
       font-size: 12px !important;
       border-radius: 6px !important;
     }
+
+    /* Navigation Tabs */
+    .nav-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+      background: rgba(18, 22, 32, 0.6);
+      padding: 6px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      width: fit-content;
+    }
+
+    .nav-tab-btn {
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-sub);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .nav-tab-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-tab-btn.active {
+      background: linear-gradient(135deg, rgba(0, 255, 163, 0.15), rgba(121, 40, 202, 0.2));
+      color: var(--chzzk-green);
+      border-color: rgba(0, 255, 163, 0.4);
+      box-shadow: 0 0 16px rgba(0, 255, 163, 0.15);
+    }
+
+    /* Sub Tabs (Manual / Donation Roulette) */
+    .sub-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 16px;
+      background: #0f172a;
+      padding: 4px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    .sub-tab-btn {
+      flex: 1;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      border-radius: 6px;
+      border: none;
+      background: transparent;
+      color: var(--text-sub);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .sub-tab-btn.active {
+      background: #1e293b;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Roulette Stage & Canvas */
+    .roulette-stage-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 30px 20px;
+      background: radial-gradient(circle at center, rgba(121, 40, 202, 0.12) 0%, rgba(10, 12, 16, 0.9) 70%);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+    }
+
+    .roulette-wheel-container {
+      position: relative;
+      width: 480px;
+      height: 480px;
+      max-width: 100%;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #rouletteCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      filter: drop-shadow(0 0 24px rgba(0, 0, 0, 0.8));
+    }
+
+    .wheel-pointer {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 32px;
+      height: 46px;
+      z-index: 10;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.8));
+    }
+
+    .wheel-center-hub {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 72px;
+      height: 72px;
+      background: radial-gradient(circle at 35% 35%, #fff 0%, #cbd5e1 40%, #475569 90%);
+      border: 3px solid #1e293b;
+      border-radius: 50%;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.6), inset 0 2px 4px rgba(255,255,255,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      font-family: 'Outfit', sans-serif;
+      color: #0f172a;
+      letter-spacing: 0.5px;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    .roulette-spin-btn {
+      width: 100%;
+      max-width: 380px;
+      padding: 16px 24px;
+      font-size: 18px;
+      font-weight: 800;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--chzzk-green), #00b894);
+      color: #000;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 6px 24px var(--chzzk-green-glow);
+      transition: all 0.2s;
+      margin-top: 24px;
+    }
+
+    .roulette-spin-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0, 255, 163, 0.5);
+    }
+
+    .roulette-spin-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Preset Badge Buttons */
+    .preset-btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .preset-btn {
+      padding: 5px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      color: var(--text-sub);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .preset-btn:hover {
+      background: rgba(0, 255, 163, 0.12);
+      color: var(--chzzk-green);
+      border-color: rgba(0, 255, 163, 0.3);
+    }
+
+    /* Modal for Winner */
+    .roulette-modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .roulette-modal-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .roulette-modal-content {
+      background: #121620;
+      border: 2px solid var(--chzzk-green);
+      border-radius: 20px;
+      padding: 36px 30px;
+      max-width: 480px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 0 50px rgba(0, 255, 163, 0.35);
+      transform: scale(0.9);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+    }
+
+    .roulette-modal-backdrop.active .roulette-modal-content {
+      transform: scale(1);
+    }
+
+    #confettiCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 999;
+    }
   </style>
 </head>
 <body>
@@ -587,7 +830,7 @@
     <header>
       <div class="logo-group">
         <div class="logo-badge">CHZZK</div>
-        <h1>치지직 대규모 시청자 추첨 시스템</h1>
+        <h1>치지직 대규모 시청자 추첨 & 룰렛 시스템</h1>
       </div>
       <div class="status-badge">
         <div id="statusDot" class="status-dot"></div>
@@ -595,7 +838,20 @@
       </div>
     </header>
 
-    <div class="grid">
+    <!-- Top Navigation Tabs -->
+    <div class="nav-tabs">
+      <button type="button" id="tabRaffleBtn" class="nav-tab-btn active">
+        <span>🎟️</span>
+        <span>시청자 대규모 추첨기</span>
+      </button>
+      <button type="button" id="tabRouletteBtn" class="nav-tab-btn">
+        <span>🎰</span>
+        <span>비주얼 룰렛 시스템</span>
+      </button>
+    </div>
+
+    <!-- 🎟️ Raffle View (Tab 1) -->
+    <div id="raffleView" class="grid">
       <!-- Left Panel: Setup & Advanced Filters -->
       <div class="panel">
         <div class="panel-title">📡 방송 연결 설정</div>
@@ -837,7 +1093,192 @@
 
       </div>
     </div>
+
+    <!-- 🎰 Roulette View (Tab 2) -->
+    <div id="rouletteView" class="grid" style="display: none;">
+      <!-- Left Panel: Roulette Settings & Item Management -->
+      <div class="panel">
+        <div class="panel-title">🎰 룰렛 설정 및 항목 관리</div>
+
+        <!-- Sub Tabs: Manual vs Donation -->
+        <div class="sub-tabs">
+          <button type="button" id="rouletteManualTabBtn" class="sub-tab-btn active">✍️ 수동 항목 입력</button>
+          <button type="button" id="rouletteDonationTabBtn" class="sub-tab-btn">🧀 치즈 도네이션 연동</button>
+        </div>
+
+        <!-- 1. Manual Input Mode -->
+        <div id="rouletteManualBox">
+          <div class="form-group">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label style="margin-bottom: 0;">룰렛 항목 입력 (한 줄에 하나씩)</label>
+              <span id="manualItemCount" style="color: var(--chzzk-green); font-size: 11px; font-weight: 700;">총 0개 항목</span>
+            </div>
+            <div class="preset-btn-group">
+              <span style="font-size: 11px; color: var(--text-sub); display: flex; align-items: center;">⚡ 프리셋:</span>
+              <button type="button" class="preset-btn" onclick="loadRoulettePreset('prizes')">🎁 경품 세트</button>
+              <button type="button" class="preset-btn" onclick="loadRoulettePreset('penalties')">🔥 벌칙 세트</button>
+              <button type="button" class="preset-btn" onclick="loadRoulettePreset('food')">🍱 메뉴 선택</button>
+              <button type="button" class="preset-btn" onclick="importRaffleToRoulette()" style="color: var(--chzzk-green); border-color: rgba(0,255,163,0.3);">👥 추첨 참여자 불러오기</button>
+            </div>
+            <textarea id="rouletteManualInput" rows="7" placeholder="한 줄에 하나씩 입력하세요.&#10;예:&#10;치킨 1마리&#10;문화상품권 5천원&#10;꽝&#10;스타벅스 아메리카노&#10;꽝" style="width: 100%; background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; color: #fff; padding: 10px; font-size: 13px; resize: vertical; line-height: 1.5;"></textarea>
+          </div>
+        </div>
+
+        <!-- 2. Donation Auto-Populate Mode -->
+        <div id="rouletteDonationBox" style="display: none;">
+          <div style="background: rgba(0, 255, 163, 0.06); border: 1px solid rgba(0, 255, 163, 0.2); border-radius: 8px; padding: 12px; margin-bottom: 14px;">
+            <div style="font-size: 12px; color: var(--chzzk-green); font-weight: 700; margin-bottom: 4px;">
+              📡 치즈 도네이션 실시간 자동 수집 모드
+            </div>
+            <div style="font-size: 11px; color: var(--text-sub); line-height: 1.4;">
+              방송이 연결된 상태에서 시청자가 치즈를 후원하면 룰렛 원판에 실시간으로 항목이 자동 등록됩니다.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>룰렛 등록 기준</label>
+            <div class="radio-group" style="margin-bottom: 10px;">
+              <label class="radio-label">
+                <input type="radio" name="donationItemType" value="nickname" checked> 👤 후원자 닉네임 (후원자 대상 뽑기)
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="donationItemType" value="msg"> 💬 후원 메시지 (추천 벌칙/미션 모음)
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>최소 후원 치즈 기준</label>
+            <select id="minDonationCheeseSelect" style="width: 100%; background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; color: #fff; padding: 8px 12px; font-size: 13px;">
+              <option value="1">전체 후원 (1치즈 이상 모두 수집)</option>
+              <option value="1000" selected>1,000 치즈 이상</option>
+              <option value="5000">5,000 치즈 이상</option>
+              <option value="10000">10,000 치즈 이상</option>
+              <option value="50000">50,000 치즈 이상</option>
+              <option value="100000">100,000 치즈 이상 (10만 치즈)</option>
+            </select>
+          </div>
+
+          <div class="toggle-row" style="margin-top: 10px;">
+            <span class="toggle-label">💰 후원 금액 비례 칸 크기 확장 (가중치 연동)</span>
+            <input type="checkbox" id="donationWeightToggle" checked style="width: 18px; height: 18px; cursor: pointer;">
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; margin-bottom: 6px;">
+            <span style="font-size: 12px; font-weight: 700; color: var(--text-sub);">실시간 수집된 도네이션 (<span id="donationItemCount" style="color: var(--chzzk-green);">0</span>건)</span>
+            <button type="button" id="clearDonationsBtn" class="btn-sm" style="padding: 3px 8px; font-size: 11px; background: rgba(255, 71, 87, 0.2); border-color: rgba(255, 71, 87, 0.4); color: #ff6b81;">목록 비우기</button>
+          </div>
+          <div id="donationFeedList" style="max-height: 140px; overflow-y: auto; background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; padding: 8px; font-size: 11px;">
+            <div style="text-align: center; color: var(--text-sub); padding: 20px 0;">아직 수집된 도네이션이 없습니다.</div>
+          </div>
+        </div>
+
+        <hr style="border-color: var(--border-color); margin: 16px 0;">
+
+        <!-- Common Roulette Options -->
+        <div class="panel-title" style="font-size: 13px; margin-bottom: 8px;">⚙️ 룰렛 상세 설정</div>
+
+        <div class="toggle-row">
+          <span class="toggle-label">🗑️ 당첨된 항목 룰렛에서 자동 제거</span>
+          <input type="checkbox" id="autoRemoveWonItemToggle" style="width: 18px; height: 18px; cursor: pointer;">
+        </div>
+
+        <div class="toggle-row">
+          <span class="toggle-label">🔊 회전 효과음 (Web Audio 틱 사운드)</span>
+          <input type="checkbox" id="rouletteSoundToggle" checked style="width: 18px; height: 18px; cursor: pointer;">
+        </div>
+
+        <div class="form-group" style="margin-top: 10px;">
+          <label>회전 시간 (긴장감 조절)</label>
+          <select id="spinDurationSelect" style="width: 100%; background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; color: #fff; padding: 8px 12px; font-size: 13px;">
+            <option value="3">⚡ 빠르게 (3초)</option>
+            <option value="5" selected>🎯 표준 (5초)</option>
+            <option value="8">🔥 극적인 긴장감 (8초)</option>
+          </select>
+        </div>
+
+        <!-- Roulette History Table -->
+        <div style="margin-top: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <span style="font-size: 12px; font-weight: 700; color: var(--text-sub);">📜 룰렛 당첨 히스토리</span>
+            <button type="button" id="clearRouletteHistoryBtn" class="btn-sm" style="padding: 2px 6px; font-size: 10px;">초기화</button>
+          </div>
+          <div class="table-container" style="max-height: 140px;">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 45px;">회차</th>
+                  <th>당첨 항목</th>
+                  <th style="width: 75px;">시간</th>
+                </tr>
+              </thead>
+              <tbody id="rouletteHistoryBody">
+                <tr><td colspan="3" style="text-align:center; color: var(--text-sub); font-size: 11px; padding: 16px 0;">아직 룰렛 결과가 없습니다.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Panel: Big Visual Canvas Roulette Stage -->
+      <div class="panel" style="display: flex; flex-direction: column; align-items: center; justify-content: flex-start;">
+        <div class="panel-title" style="align-self: flex-start; margin-bottom: 16px;">🎯 비주얼 룰렛 원판</div>
+
+        <div class="roulette-stage-wrapper" style="width: 100%;">
+          <div class="roulette-wheel-container">
+            <!-- Golden Top Pointer Pin -->
+            <svg class="wheel-pointer" viewBox="0 0 32 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M16 46L3.00962 16.75C-0.839355 8.08975 5.51105 0 15.0192 0H16.9808C26.4889 0 32.8394 8.08975 28.9904 16.75L16 46Z" fill="url(#pointerGrad)" filter="drop-shadow(0px 4px 6px rgba(0,0,0,0.6))"/>
+              <circle cx="16" cy="14" r="5" fill="#121620" stroke="#00ffa3" stroke-width="2"/>
+              <defs>
+                <linearGradient id="pointerGrad" x1="16" y1="0" x2="16" y2="46" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#00ffa3"/>
+                  <stop offset="1" stop-color="#00b894"/>
+                </linearGradient>
+              </defs>
+            </svg>
+
+            <!-- HTML5 2D Canvas for High-Resolution Spinning Wheel -->
+            <canvas id="rouletteCanvas" width="600" height="600"></canvas>
+
+            <!-- Metallic Center Hub -->
+            <div class="wheel-center-hub">SPIN</div>
+          </div>
+
+          <!-- Spin Action Button -->
+          <button type="button" id="spinRouletteBtn" class="roulette-spin-btn">
+            <span>🎰</span>
+            <span id="spinBtnText">룰렛 돌리기 (SPIN)</span>
+          </button>
+          
+          <div id="currentRouletteItemPreview" style="margin-top: 14px; font-size: 13px; color: var(--text-sub); text-align: center; min-height: 20px;">
+            항목을 입력하고 돌리기 버튼을 눌러주세요.
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+
+  <!-- Roulette Winner Modal Backdrop -->
+  <div id="rouletteWinnerModal" class="roulette-modal-backdrop">
+    <div class="roulette-modal-content">
+      <div style="font-size: 44px; margin-bottom: 8px;">🎉</div>
+      <div style="font-size: 13px; color: var(--chzzk-green); font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;">Roulette Winner</div>
+      <div id="rouletteWinnerTitle" style="font-size: 26px; font-weight: 800; color: #fff; margin: 12px 0 16px 0; word-break: break-word; text-shadow: 0 0 20px rgba(0,255,163,0.4);">
+        치킨 1마리
+      </div>
+      <div id="rouletteWinnerSub" style="font-size: 13px; color: var(--text-sub); margin-bottom: 22px;">
+        축하합니다! 룰렛 당첨이 완료되었습니다.
+      </div>
+      <div style="display: flex; gap: 8px; justify-content: center;">
+        <button type="button" id="closeRouletteModalBtn" class="btn btn-primary" style="flex: 1; padding: 12px 16px;">확인</button>
+        <button type="button" id="removeAndCloseRouletteModalBtn" class="btn btn-danger" style="flex: 1; padding: 12px 14px; font-size: 12px;">이 항목 원판에서 제거</button>
+      </div>
+    </div>
+  </div>
+
+  <canvas id="confettiCanvas"></canvas>
 
   <script>
     // State management
@@ -1321,7 +1762,37 @@
         updateFilteredStats();
       }
 
+      // Parse and Handle Live Cheese Donation for Roulette
+      const donationInfo = parseLiveDonation(item, profileData);
+      if (donationInfo.isDonation) {
+        handleLiveDonation(nickname, msgText, uid, donationInfo.payAmount, now);
+      }
+
       addChatToFeed(nickname, msgText, now, isSubscriber, isDonator);
+    }
+
+    function parseLiveDonation(item, profileData) {
+      let isDonation = item.msgTypeCode === 10 || item.msgTypeCode === '10' || item.msgTypeCode === 11 || item.msgTypeCode === '11';
+      let payAmount = 0;
+      let donationType = 'CHAT';
+
+      if (item.extras) {
+        try {
+          const extras = typeof item.extras === 'string' ? JSON.parse(item.extras) : item.extras;
+          if (extras.payAmount || extras.donationAmount || extras.cheeseAmount || extras.amount) {
+            isDonation = true;
+            payAmount = Number(extras.payAmount || extras.donationAmount || extras.cheeseAmount || extras.amount || 0);
+            donationType = extras.donationType || 'CHAT';
+          }
+        } catch (e) {}
+      }
+
+      if (!isDonation && profileData && profileData.streamingProperty && profileData.streamingProperty.donation) {
+        isDonation = true;
+        payAmount = Number(profileData.streamingProperty.donation.amount || 0);
+      }
+
+      return { isDonation, payAmount, donationType };
     }
 
     // Dual Condition Verification:
@@ -1661,6 +2132,692 @@
         drawBtn.disabled = true;
       }
     });
+
+    // ==========================================
+    // 🎰 VISUAL ROULETTE SYSTEM ENGINE
+    // ==========================================
+
+    // Navigation Tabs Elements
+    const tabRaffleBtn = document.getElementById('tabRaffleBtn');
+    const tabRouletteBtn = document.getElementById('tabRouletteBtn');
+    const raffleView = document.getElementById('raffleView');
+    const rouletteView = document.getElementById('rouletteView');
+
+    // Roulette Sub Tabs & Boxes
+    const rouletteManualTabBtn = document.getElementById('rouletteManualTabBtn');
+    const rouletteDonationTabBtn = document.getElementById('rouletteDonationTabBtn');
+    const rouletteManualBox = document.getElementById('rouletteManualBox');
+    const rouletteDonationBox = document.getElementById('rouletteDonationBox');
+
+    // Inputs & Controls
+    const rouletteManualInput = document.getElementById('rouletteManualInput');
+    const manualItemCountEl = document.getElementById('manualItemCount');
+    const minDonationCheeseSelect = document.getElementById('minDonationCheeseSelect');
+    const donationWeightToggle = document.getElementById('donationWeightToggle');
+    const donationItemCountEl = document.getElementById('donationItemCount');
+    const donationFeedList = document.getElementById('donationFeedList');
+    const clearDonationsBtn = document.getElementById('clearDonationsBtn');
+
+    const autoRemoveWonItemToggle = document.getElementById('autoRemoveWonItemToggle');
+    const rouletteSoundToggle = document.getElementById('rouletteSoundToggle');
+    const spinDurationSelect = document.getElementById('spinDurationSelect');
+    const spinRouletteBtn = document.getElementById('spinRouletteBtn');
+    const spinBtnText = document.getElementById('spinBtnText');
+    const currentRouletteItemPreview = document.getElementById('currentRouletteItemPreview');
+
+    // Canvas & Stage
+    const rouletteCanvas = document.getElementById('rouletteCanvas');
+    const rouletteCtx = rouletteCanvas.getContext('2d');
+    const confettiCanvas = document.getElementById('confettiCanvas');
+    const confettiCtx = confettiCanvas.getContext('2d');
+
+    // Winner Modal & History
+    const rouletteWinnerModal = document.getElementById('rouletteWinnerModal');
+    const rouletteWinnerTitle = document.getElementById('rouletteWinnerTitle');
+    const rouletteWinnerSub = document.getElementById('rouletteWinnerSub');
+    const closeRouletteModalBtn = document.getElementById('closeRouletteModalBtn');
+    const removeAndCloseRouletteModalBtn = document.getElementById('removeAndCloseRouletteModalBtn');
+    const rouletteHistoryBody = document.getElementById('rouletteHistoryBody');
+    const clearRouletteHistoryBtn = document.getElementById('clearRouletteHistoryBtn');
+
+    // State Variables
+    let currentRouletteMode = 'manual'; // 'manual' | 'donation'
+    let donationRouletteList = []; // [{ nickname, msg, amount, time, uid }]
+    let rouletteHistory = []; // [{ round, item, time }]
+    let rouletteRound = 0;
+    let isRouletteSpinning = false;
+    let currentWheelAngle = 0; // in radians
+    let currentWinnerObject = null;
+    let lastTickSliceIndex = -1;
+
+    // Vibrant Modern Color Palette
+    const WHEEL_COLORS = [
+      { bg: '#00ffa3', text: '#051911' }, // Chzzk Green
+      { bg: '#a855f7', text: '#ffffff' }, // Purple
+      { bg: '#3b82f6', text: '#ffffff' }, // Blue
+      { bg: '#ec4899', text: '#ffffff' }, // Pink
+      { bg: '#f59e0b', text: '#0f172a' }, // Amber
+      { bg: '#06b6d4', text: '#082f49' }, // Cyan
+      { bg: '#10b981', text: '#ffffff' }, // Emerald
+      { bg: '#6366f1', text: '#ffffff' }, // Indigo
+      { bg: '#f43f5e', text: '#ffffff' }, // Rose
+      { bg: '#8b5cf6', text: '#ffffff' }, // Violet
+      { bg: '#eab308', text: '#1c1917' }, // Yellow
+      { bg: '#d946ef', text: '#ffffff' }, // Fuchsia
+      { bg: '#0ea5e9', text: '#ffffff' }, // Sky
+      { bg: '#84cc16', text: '#142704' }, // Lime
+      { bg: '#14b8a6', text: '#042f2e' }  // Teal
+    ];
+
+    // Initial manual items placeholder
+    rouletteManualInput.value = "치킨 1마리\n피자 1판\n문화상품권 5천원\n스타벅스 아메리카노\n꽝\n꽝";
+
+    // 1. Navigation Tab Switching
+    function switchMainTab(tab) {
+      if (tab === 'raffle') {
+        tabRaffleBtn.classList.add('active');
+        tabRouletteBtn.classList.remove('active');
+        raffleView.style.display = 'grid';
+        rouletteView.style.display = 'none';
+      } else {
+        tabRouletteBtn.classList.add('active');
+        tabRaffleBtn.classList.remove('active');
+        rouletteView.style.display = 'grid';
+        raffleView.style.display = 'none';
+        drawRouletteWheel();
+      }
+    }
+    tabRaffleBtn.addEventListener('click', () => switchMainTab('raffle'));
+    tabRouletteBtn.addEventListener('click', () => switchMainTab('roulette'));
+
+    // 2. Roulette Sub-Tab Switching
+    function switchRouletteMode(mode) {
+      currentRouletteMode = mode;
+      if (mode === 'manual') {
+        rouletteManualTabBtn.classList.add('active');
+        rouletteDonationTabBtn.classList.remove('active');
+        rouletteManualBox.style.display = 'block';
+        rouletteDonationBox.style.display = 'none';
+      } else {
+        rouletteDonationTabBtn.classList.add('active');
+        rouletteManualTabBtn.classList.remove('active');
+        rouletteDonationBox.style.display = 'block';
+        rouletteManualBox.style.display = 'none';
+      }
+      drawRouletteWheel();
+    }
+    rouletteManualTabBtn.addEventListener('click', () => switchRouletteMode('manual'));
+    rouletteDonationTabBtn.addEventListener('click', () => switchRouletteMode('donation'));
+
+    // 3. Preset Loader
+    const PRESETS = {
+      prizes: "치킨 1마리\n피자 1판\n문화상품권 1만원\n스타벅스 아메리카노\n꽝\n꽝",
+      penalties: "노래 1곡 완창\n팔굽혀펴기 10회\n애교 3종 세트\n음소거 10분\n노방종 1시간 추가\n벌칙 면제",
+      food: "치킨\n피자\n햄버거\n짜장면 / 짬뽕\n삼겹살 / 제육\n국밥 / 찌개\n마라탕\n다이어트 샐러드"
+    };
+
+    function loadRoulettePreset(type) {
+      if (PRESETS[type]) {
+        rouletteManualInput.value = PRESETS[type];
+        updateManualItemCount();
+        drawRouletteWheel();
+      }
+    }
+
+    function importRaffleToRoulette() {
+      const eligible = getEligibleParticipants();
+      if (eligible.length === 0) {
+        alert('현재 추첨 조건에 맞는 유효 참여자가 없습니다. 먼저 방송을 연결하고 참여자를 수집해주세요.');
+        return;
+      }
+      rouletteManualInput.value = eligible.map(p => p.nickname).join('\n');
+      updateManualItemCount();
+      drawRouletteWheel();
+      alert(`현재 유효 응모자 ${eligible.length.toLocaleString()}명의 닉네임을 룰렛 항목으로 불러왔습니다!`);
+    }
+
+    // Manual Input Listener
+    function updateManualItemCount() {
+      const items = getActiveRouletteItems();
+      manualItemCountEl.innerText = `총 ${items.length}개 항목`;
+    }
+    rouletteManualInput.addEventListener('input', () => {
+      updateManualItemCount();
+      drawRouletteWheel();
+    });
+
+    // 4. Live Donation Handling
+    function handleLiveDonation(nickname, msg, uid, amount, timeStr) {
+      const minReqCheese = Number(minDonationCheeseSelect.value) || 1;
+      if (amount < minReqCheese) return;
+
+      const itemEntry = {
+        nickname: nickname,
+        msg: msg || '(메시지 없음)',
+        amount: amount,
+        time: timeStr,
+        uid: uid
+      };
+
+      donationRouletteList.push(itemEntry);
+      renderDonationFeed();
+
+      if (currentRouletteMode === 'donation') {
+        drawRouletteWheel();
+      }
+    }
+
+    function renderDonationFeed() {
+      donationItemCountEl.innerText = donationRouletteList.length.toLocaleString();
+      if (donationRouletteList.length === 0) {
+        donationFeedList.innerHTML = '<div style="text-align: center; color: var(--text-sub); padding: 20px 0;">아직 수집된 도네이션이 없습니다.</div>';
+        return;
+      }
+
+      donationFeedList.innerHTML = '';
+      donationRouletteList.slice(-20).reverse().forEach((d, idx) => {
+        const div = document.createElement('div');
+        div.style.cssText = 'padding: 6px 8px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center;';
+        div.innerHTML = `
+          <div>
+            <span style="color: var(--chzzk-green); font-weight: 700;">🧀 ${d.amount.toLocaleString()}치즈</span>
+            <span style="font-weight: 700; margin-left: 4px;">${escapeHtml(d.nickname)}</span>
+            <span style="color: var(--text-sub); margin-left: 6px;">${escapeHtml(d.msg)}</span>
+          </div>
+          <button type="button" class="btn-sm" style="padding: 2px 6px; font-size: 10px; background: rgba(255,255,255,0.1);" onclick="removeDonationEntry(${donationRouletteList.length - 1 - idx})">삭제</button>
+        `;
+        donationFeedList.appendChild(div);
+      });
+    }
+
+    function removeDonationEntry(idx) {
+      if (idx >= 0 && idx < donationRouletteList.length) {
+        donationRouletteList.splice(idx, 1);
+        renderDonationFeed();
+        drawRouletteWheel();
+      }
+    }
+
+    clearDonationsBtn.addEventListener('click', () => {
+      if (donationRouletteList.length === 0) return;
+      if (confirm('수집된 도네이션 룰렛 목록을 모두 비우시겠습니까?')) {
+        donationRouletteList = [];
+        renderDonationFeed();
+        drawRouletteWheel();
+      }
+    });
+
+    document.querySelectorAll('input[name="donationItemType"]').forEach(r => {
+      r.addEventListener('change', () => {
+        if (currentRouletteMode === 'donation') drawRouletteWheel();
+      });
+    });
+    donationWeightToggle.addEventListener('change', () => {
+      if (currentRouletteMode === 'donation') drawRouletteWheel();
+    });
+    minDonationCheeseSelect.addEventListener('change', () => {
+      if (currentRouletteMode === 'donation') drawRouletteWheel();
+    });
+
+    // 5. Get Active Roulette Items with Weights
+    function getActiveRouletteItems() {
+      if (currentRouletteMode === 'manual') {
+        const rawLines = rouletteManualInput.value.split('\n')
+          .map(l => l.trim())
+          .filter(l => l.length > 0);
+        
+        return rawLines.map((line, idx) => {
+          let text = line;
+          let weight = 1;
+          // Check if user entered "Item:Weight" (e.g. "꽝:3" or "치킨:1")
+          if (line.includes(':')) {
+            const parts = line.split(':');
+            const possibleWeight = Number(parts[parts.length - 1].trim());
+            if (!isNaN(possibleWeight) && possibleWeight > 0) {
+              weight = possibleWeight;
+              text = parts.slice(0, -1).join(':').trim();
+            }
+          }
+          return {
+            id: idx,
+            text: text,
+            weight: weight,
+            originalLine: line
+          };
+        });
+      } else {
+        // Donation Mode
+        const itemType = document.querySelector('input[name="donationItemType"]:checked').value;
+        const useWeight = donationWeightToggle.checked;
+        const minReq = Number(minDonationCheeseSelect.value) || 1;
+
+        const filtered = donationRouletteList.filter(d => d.amount >= minReq);
+
+        return filtered.map((d, idx) => {
+          let text = itemType === 'nickname' ? d.nickname : (d.msg || d.nickname);
+          let weight = useWeight ? Math.max(1, Math.round(d.amount / 1000)) : 1;
+          return {
+            id: idx,
+            text: text,
+            weight: weight,
+            donor: d
+          };
+        });
+      }
+    }
+
+    // 6. Web Audio API SFX Synthesizer (Zero External Dependencies)
+    let audioCtx = null;
+
+    function playTickSound() {
+      if (!rouletteSoundToggle.checked) return;
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(900 + Math.random() * 200, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.035);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.035);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.035);
+      } catch (e) {}
+    }
+
+    function playFanfareSound() {
+      if (!rouletteSoundToggle.checked) return;
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+        notes.forEach((freq, i) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, audioCtx.currentTime + i * 0.1);
+          gain.gain.setValueAtTime(0, audioCtx.currentTime + i * 0.1);
+          gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + i * 0.1 + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + i * 0.1 + 0.4);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(audioCtx.currentTime + i * 0.1);
+          osc.stop(audioCtx.currentTime + i * 0.1 + 0.45);
+        });
+      } catch (e) {}
+    }
+
+    // 7. HTML5 2D Canvas Wheel Drawing Engine
+    function drawRouletteWheel() {
+      const items = getActiveRouletteItems();
+      const canvasWidth = rouletteCanvas.width;
+      const canvasHeight = rouletteCanvas.height;
+      const centerX = canvasWidth / 2;
+      const centerY = canvasHeight / 2;
+      const radius = centerX - 12;
+
+      rouletteCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+      if (items.length === 0) {
+        // Draw Empty Placeholder Wheel
+        rouletteCtx.save();
+        rouletteCtx.beginPath();
+        rouletteCtx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+        rouletteCtx.fillStyle = '#1e293b';
+        rouletteCtx.fill();
+        rouletteCtx.lineWidth = 6;
+        rouletteCtx.strokeStyle = '#334155';
+        rouletteCtx.stroke();
+
+        rouletteCtx.fillStyle = '#94a3b8';
+        rouletteCtx.font = 'bold 20px Pretendard, sans-serif';
+        rouletteCtx.textAlign = 'center';
+        rouletteCtx.textBaseline = 'middle';
+        rouletteCtx.fillText('항목을 2개 이상 입력하세요', centerX, centerY);
+        rouletteCtx.restore();
+
+        spinRouletteBtn.disabled = true;
+        currentRouletteItemPreview.innerText = '항목을 2개 이상 입력해주세요.';
+        return;
+      }
+
+      spinRouletteBtn.disabled = isRouletteSpinning;
+      currentRouletteItemPreview.innerText = `현재 총 ${items.length}개 항목 등록됨`;
+
+      const totalWeight = items.reduce((acc, it) => acc + it.weight, 0);
+      let currentAngle = currentWheelAngle;
+
+      // 1. Draw Slices
+      items.forEach((item, index) => {
+        const sliceAngle = (item.weight / totalWeight) * 2 * Math.PI;
+        const colorObj = WHEEL_COLORS[index % WHEEL_COLORS.length];
+
+        rouletteCtx.save();
+        rouletteCtx.beginPath();
+        rouletteCtx.moveTo(centerX, centerY);
+        rouletteCtx.arc(centerX, centerY, radius, currentAngle, currentAngle + sliceAngle);
+        rouletteCtx.closePath();
+
+        // Slice background
+        rouletteCtx.fillStyle = colorObj.bg;
+        rouletteCtx.fill();
+
+        // Slice dividing border
+        rouletteCtx.lineWidth = 2.5;
+        rouletteCtx.strokeStyle = '#0a0c10';
+        rouletteCtx.stroke();
+
+        // 2. Draw Slice Text rotated along radius
+        const midAngle = currentAngle + sliceAngle / 2;
+        rouletteCtx.save();
+        rouletteCtx.translate(centerX, centerY);
+        rouletteCtx.rotate(midAngle);
+        rouletteCtx.textAlign = 'right';
+        rouletteCtx.textBaseline = 'middle';
+        rouletteCtx.fillStyle = colorObj.text;
+
+        // Dynamic font size adjustment
+        let fontSize = 15;
+        if (items.length > 24) fontSize = 10;
+        else if (items.length > 16) fontSize = 12;
+        else if (items.length > 8) fontSize = 14;
+
+        rouletteCtx.font = `bold ${fontSize}px Pretendard, sans-serif`;
+
+        // Truncate text if needed
+        let displayText = item.text;
+        const maxTextWidth = radius - 70;
+        if (rouletteCtx.measureText(displayText).width > maxTextWidth) {
+          while (rouletteCtx.measureText(displayText + '...').width > maxTextWidth && displayText.length > 1) {
+            displayText = displayText.slice(0, -1);
+          }
+          displayText += '...';
+        }
+
+        rouletteCtx.fillText(displayText, radius - 35, 0);
+        rouletteCtx.restore();
+
+        rouletteCtx.restore();
+
+        currentAngle += sliceAngle;
+      });
+
+      // 2. Outer Ring Glow & Border
+      rouletteCtx.save();
+      rouletteCtx.beginPath();
+      rouletteCtx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+      rouletteCtx.lineWidth = 8;
+      rouletteCtx.strokeStyle = '#121620';
+      rouletteCtx.stroke();
+
+      rouletteCtx.beginPath();
+      rouletteCtx.arc(centerX, centerY, radius - 4, 0, 2 * Math.PI);
+      rouletteCtx.lineWidth = 2;
+      rouletteCtx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+      rouletteCtx.stroke();
+      rouletteCtx.restore();
+    }
+
+    // 8. Physics Deceleration Spin Engine
+    function easeOutQuart(x) {
+      return 1 - Math.pow(1 - x, 4);
+    }
+
+    function getSliceIndexAtTopPointer(angle, items) {
+      const totalWeight = items.reduce((acc, it) => acc + it.weight, 0);
+      // Top pointer is at -PI / 2 (or 3*PI/2)
+      let pointerAngle = (1.5 * Math.PI - angle) % (2 * Math.PI);
+      if (pointerAngle < 0) pointerAngle += 2 * Math.PI;
+
+      let accumulatedAngle = 0;
+      for (let i = 0; i < items.length; i++) {
+        const sliceAngle = (items[i].weight / totalWeight) * 2 * Math.PI;
+        if (pointerAngle >= accumulatedAngle && pointerAngle < accumulatedAngle + sliceAngle) {
+          return i;
+        }
+        accumulatedAngle += sliceAngle;
+      }
+      return 0;
+    }
+
+    function spinRoulette() {
+      const items = getActiveRouletteItems();
+      if (items.length < 2) {
+        alert('룰렛을 돌리려면 최소 2개 이상의 항목이 필요합니다.');
+        return;
+      }
+      if (isRouletteSpinning) return;
+
+      isRouletteSpinning = true;
+      spinRouletteBtn.disabled = true;
+      spinBtnText.innerText = '룰렛 회전 중...';
+
+      const durationSec = Number(spinDurationSelect.value) || 5;
+      const durationMs = durationSec * 1000;
+
+      // Calculate a random target spin: 5 to 10 full turns + random landing angle
+      const startAngle = currentWheelAngle;
+      const fullRotations = (5 + Math.floor(Math.random() * 5)) * 2 * Math.PI;
+      const randomExtraAngle = Math.random() * 2 * Math.PI;
+      const targetAngle = startAngle + fullRotations + randomExtraAngle;
+
+      const startTime = performance.now();
+      lastTickSliceIndex = -1;
+
+      function animateSpin(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / durationMs, 1);
+        const easeProgress = easeOutQuart(progress);
+
+        currentWheelAngle = startAngle + (targetAngle - startAngle) * easeProgress;
+        drawRouletteWheel();
+
+        // Collision detection for ticker sound
+        const currentSliceIdx = getSliceIndexAtTopPointer(currentWheelAngle, items);
+        if (currentSliceIdx !== lastTickSliceIndex) {
+          lastTickSliceIndex = currentSliceIdx;
+          playTickSound();
+        }
+
+        if (progress < 1) {
+          requestAnimationFrame(animateSpin);
+        } else {
+          // Finished Spin!
+          isRouletteSpinning = false;
+          spinRouletteBtn.disabled = false;
+          spinBtnText.innerText = '룰렛 돌리기 (SPIN)';
+
+          const winningIndex = getSliceIndexAtTopPointer(currentWheelAngle, items);
+          currentWinnerObject = items[winningIndex];
+
+          showRouletteWinner(currentWinnerObject);
+        }
+      }
+
+      requestAnimationFrame(animateSpin);
+    }
+
+    spinRouletteBtn.addEventListener('click', spinRoulette);
+
+    // 9. Winner Celebration & History Logging
+    function showRouletteWinner(winner) {
+      rouletteRound++;
+      playFanfareSound();
+      launchConfetti();
+
+      rouletteWinnerTitle.innerText = winner.text;
+      rouletteWinnerSub.innerText = `🎉 제 ${rouletteRound}회차 룰렛 당첨이 완료되었습니다!`;
+      rouletteWinnerModal.classList.add('active');
+
+      // Log to History Table
+      const now = new Date().toLocaleTimeString('ko-KR');
+      rouletteHistory.unshift({
+        round: rouletteRound,
+        text: winner.text,
+        time: now
+      });
+      renderRouletteHistory();
+
+      // Check Auto Remove Option
+      if (autoRemoveWonItemToggle.checked) {
+        removeWinningItem(winner);
+      }
+    }
+
+    function renderRouletteHistory() {
+      if (rouletteHistory.length === 0) {
+        rouletteHistoryBody.innerHTML = '<tr><td colspan="3" style="text-align:center; color: var(--text-sub); font-size: 11px; padding: 16px 0;">아직 룰렛 결과가 없습니다.</td></tr>';
+        return;
+      }
+
+      rouletteHistoryBody.innerHTML = '';
+      rouletteHistory.forEach(h => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><span class="rank-num">${h.round}</span></td>
+          <td style="font-weight: 700; color: #fff;">${escapeHtml(h.text)}</td>
+          <td style="color: var(--text-sub); font-size: 11px;">${h.time}</td>
+        `;
+        rouletteHistoryBody.appendChild(tr);
+      });
+    }
+
+    clearRouletteHistoryBtn.addEventListener('click', () => {
+      if (rouletteHistory.length === 0) return;
+      if (confirm('룰렛 당첨 히스토리를 초기화하시겠습니까?')) {
+        rouletteHistory = [];
+        rouletteRound = 0;
+        renderRouletteHistory();
+      }
+    });
+
+    function removeWinningItem(winner) {
+      if (currentRouletteMode === 'manual') {
+        const lines = rouletteManualInput.value.split('\n');
+        // Remove first matching line
+        const removeIdx = lines.findIndex(l => {
+          let t = l.trim();
+          if (t.includes(':')) {
+            t = t.split(':').slice(0, -1).join(':').trim();
+          }
+          return t === winner.text;
+        });
+        if (removeIdx !== -1) {
+          lines.splice(removeIdx, 1);
+          rouletteManualInput.value = lines.join('\n');
+          updateManualItemCount();
+          drawRouletteWheel();
+        }
+      } else {
+        // Donation Mode
+        const removeIdx = donationRouletteList.findIndex(d => {
+          const itemType = document.querySelector('input[name="donationItemType"]:checked').value;
+          const t = itemType === 'nickname' ? d.nickname : (d.msg || d.nickname);
+          return t === winner.text;
+        });
+        if (removeIdx !== -1) {
+          donationRouletteList.splice(removeIdx, 1);
+          renderDonationFeed();
+          drawRouletteWheel();
+        }
+      }
+    }
+
+    closeRouletteModalBtn.addEventListener('click', () => {
+      rouletteWinnerModal.classList.remove('active');
+    });
+
+    removeAndCloseRouletteModalBtn.addEventListener('click', () => {
+      if (currentWinnerObject) {
+        removeWinningItem(currentWinnerObject);
+      }
+      rouletteWinnerModal.classList.remove('active');
+    });
+
+    // 10. Particle Confetti Engine
+    let confettiParticles = [];
+    let isConfettiRunning = false;
+
+    function launchConfetti() {
+      confettiCanvas.width = window.innerWidth;
+      confettiCanvas.height = window.innerHeight;
+      confettiParticles = [];
+
+      const colors = ['#00ffa3', '#a855f7', '#ff0080', '#0070f3', '#f59e0b', '#fff'];
+
+      for (let i = 0; i < 140; i++) {
+        confettiParticles.push({
+          x: confettiCanvas.width / 2 + (Math.random() - 0.5) * 200,
+          y: confettiCanvas.height / 2 + (Math.random() - 0.5) * 100,
+          vx: (Math.random() - 0.5) * 18,
+          vy: (Math.random() - 0.8) * 22,
+          size: Math.random() * 8 + 6,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          rotation: Math.random() * 360,
+          vRotation: (Math.random() - 0.5) * 12,
+          opacity: 1
+        });
+      }
+
+      if (!isConfettiRunning) {
+        isConfettiRunning = true;
+        animateConfetti();
+      }
+    }
+
+    function animateConfetti() {
+      confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+      let aliveCount = 0;
+
+      confettiParticles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.45; // gravity
+        p.vx *= 0.98; // air drag
+        p.rotation += p.vRotation;
+        p.opacity -= 0.007;
+
+        if (p.opacity > 0) {
+          aliveCount++;
+          confettiCtx.save();
+          confettiCtx.translate(p.x, p.y);
+          confettiCtx.rotate((p.rotation * Math.PI) / 180);
+          confettiCtx.fillStyle = p.color;
+          confettiCtx.globalAlpha = Math.max(0, p.opacity);
+          confettiCtx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+          confettiCtx.restore();
+        }
+      });
+
+      if (aliveCount > 0) {
+        requestAnimationFrame(animateConfetti);
+      } else {
+        isConfettiRunning = false;
+        confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+      }
+    }
+
+    window.addEventListener('resize', () => {
+      if (confettiCanvas) {
+        confettiCanvas.width = window.innerWidth;
+        confettiCanvas.height = window.innerHeight;
+      }
+    });
+
+    // Initial Wheel Draw
+    updateManualItemCount();
+    drawRouletteWheel();
   </script>
 </body>
 </html>
