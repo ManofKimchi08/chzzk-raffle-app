@@ -1812,6 +1812,70 @@
         </div>
       </div>
 
+      <!-- 🔊 Real-time TTS Voice Settings Box -->
+      <div style="background: #0d1525; border: 1px solid rgba(0, 255, 163, 0.25); border-radius: 10px; padding: 12px 14px; margin-bottom: 12px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 16px;">🔊</span>
+            <span style="font-size: 13px; font-weight: 800; color: #fff;">실시간 새 채팅 음성(TTS) 출력</span>
+            <span id="ttsStatusPill" class="badge-tag" style="background: rgba(0, 255, 163, 0.15); color: var(--chzzk-green); font-size: 10px; font-weight: 800;">ON</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <input type="checkbox" id="ttsEnabledToggle" checked style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--chzzk-green);" title="TTS 켜기/끄기">
+            <button type="button" id="ttsConfigCollapseBtn" class="btn-chip btn-chip-secondary" style="padding: 2px 8px; font-size: 11px;">⚙️ 음성 설정</button>
+          </div>
+        </div>
+
+        <!-- Collapsible TTS Detail Config -->
+        <div id="ttsDetailConfigPanel" style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255, 255, 255, 0.08); display: block;">
+          <!-- Voice Selector -->
+          <div class="form-group" style="margin-bottom: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+              <label style="margin-bottom: 0; font-size: 11px; color: var(--text-sub);">TTS 음성 선택 (Voice)</label>
+              <button type="button" id="testTtsBtn" class="btn-chip" style="padding: 2px 8px; font-size: 10px; background: rgba(0, 255, 163, 0.15); color: var(--chzzk-green); border-color: rgba(0,255,163,0.3);">▶️ 미리듣기</button>
+            </div>
+            <select id="ttsVoiceSelect" style="font-size: 12px; padding: 6px 10px; height: auto; background: #080c14; border: 1px solid var(--border-color); color: #fff; border-radius: 6px; width: 100%;">
+              <option value="">기본 시스템 음성 로딩 중...</option>
+            </select>
+          </div>
+
+          <!-- Speed, Pitch, Volume Sliders -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 8px;">
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-sub); margin-bottom: 3px;">
+                <span>속도 (Rate)</span>
+                <span id="ttsRateVal" style="color: var(--chzzk-green); font-weight: 700;">1.0x</span>
+              </div>
+              <input type="range" id="ttsRateRange" min="0.5" max="2.0" step="0.1" value="1.0" style="width: 100%; accent-color: var(--chzzk-green); cursor: pointer;">
+            </div>
+
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-sub); margin-bottom: 3px;">
+                <span>음높이 (Pitch)</span>
+                <span id="ttsPitchVal" style="color: var(--chzzk-green); font-weight: 700;">1.0x</span>
+              </div>
+              <input type="range" id="ttsPitchRange" min="0.5" max="1.5" step="0.1" value="1.0" style="width: 100%; accent-color: var(--chzzk-green); cursor: pointer;">
+            </div>
+
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-sub); margin-bottom: 3px;">
+                <span>음량 (Volume)</span>
+                <span id="ttsVolumeVal" style="color: var(--chzzk-green); font-weight: 700;">100%</span>
+              </div>
+              <input type="range" id="ttsVolumeRange" min="0" max="100" step="5" value="100" style="width: 100%; accent-color: var(--chzzk-green); cursor: pointer;">
+            </div>
+          </div>
+
+          <!-- Format Options -->
+          <div style="display: flex; gap: 16px; align-items: center; margin-top: 10px; font-size: 11px;">
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; color: #cbd5e1; margin-bottom: 0;">
+              <input type="checkbox" id="ttsIncludeNickToggle" checked style="accent-color: var(--chzzk-green); cursor: pointer; width: 14px; height: 14px;">
+              <span>닉네임 함께 읽기 (예: "홍길동 님: 안녕하세요")</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
       <!-- Chat History Stream Box -->
       <div class="modal-body" style="padding: 0;">
         <div id="userChatModalFeed" class="user-chat-stream-box">
@@ -1901,6 +1965,21 @@
     const closeUserChatModalBtn = document.getElementById('closeUserChatModalBtn');
     const closeUserChatModalBottomBtn = document.getElementById('closeUserChatModalBottomBtn');
     const copyUserUidBtn = document.getElementById('copyUserUidBtn');
+
+    // Real-time Chat TTS Elements
+    const ttsEnabledToggle = document.getElementById('ttsEnabledToggle');
+    const ttsStatusPill = document.getElementById('ttsStatusPill');
+    const ttsConfigCollapseBtn = document.getElementById('ttsConfigCollapseBtn');
+    const ttsDetailConfigPanel = document.getElementById('ttsDetailConfigPanel');
+    const ttsVoiceSelect = document.getElementById('ttsVoiceSelect');
+    const testTtsBtn = document.getElementById('testTtsBtn');
+    const ttsRateRange = document.getElementById('ttsRateRange');
+    const ttsRateVal = document.getElementById('ttsRateVal');
+    const ttsPitchRange = document.getElementById('ttsPitchRange');
+    const ttsPitchVal = document.getElementById('ttsPitchVal');
+    const ttsVolumeRange = document.getElementById('ttsVolumeRange');
+    const ttsVolumeVal = document.getElementById('ttsVolumeVal');
+    const ttsIncludeNickToggle = document.getElementById('ttsIncludeNickToggle');
 
     // Live Broadcast State & Elements
     let isChannelLive = false;
@@ -2978,11 +3057,22 @@
       userChatModalMsgCount.innerText = curCount.toLocaleString();
 
       userChatModalFeed.scrollTop = userChatModalFeed.scrollHeight;
+
+      // 🔊 Real-time TTS Readout for Live Incoming Messages
+      if (isLive && ttsEnabledToggle.checked) {
+        const textToRead = ttsIncludeNickToggle.checked
+          ? `${item.nickname} 님, ${item.msg}`
+          : item.msg;
+        speakTTS(textToRead);
+      }
     }
 
     function closeUserChatModal() {
       userChatModal.classList.remove('active');
       activeTrackingUserUID = null;
+      if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
     }
 
     closeUserChatModalBtn.addEventListener('click', closeUserChatModal);
@@ -3003,6 +3093,182 @@
         }, 1500);
       });
     });
+
+    // ==========================================
+    // 🔊 REAL-TIME TTS (TEXT-TO-SPEECH) ENGINE
+    // ==========================================
+    let availableVoices = [];
+
+    function populateTTSVoices() {
+      if (!window.speechSynthesis) return;
+      availableVoices = window.speechSynthesis.getVoices();
+      if (!ttsVoiceSelect) return;
+
+      const savedVoiceURI = localStorage.getItem('chzzk_tts_voice_uri') || '';
+
+      ttsVoiceSelect.innerHTML = '';
+
+      if (availableVoices.length === 0) {
+        ttsVoiceSelect.innerHTML = '<option value="">시스템 음성을 지원하지 않거나 로딩 중입니다.</option>';
+        return;
+      }
+
+      // Group voices: Korean vs Others
+      const koreanVoices = availableVoices.filter(v => 
+        (v.lang && v.lang.toLowerCase().startsWith('ko')) ||
+        v.name.includes('Korean') ||
+        v.name.includes('한국어') ||
+        v.name.includes('Heami') ||
+        v.name.includes('SunHi') ||
+        v.name.includes('InJoon')
+      );
+      const otherVoices = availableVoices.filter(v => !koreanVoices.includes(v));
+
+      if (koreanVoices.length > 0) {
+        const koGroup = document.createElement('optgroup');
+        koGroup.label = '🇰🇷 한국어 추천 음성';
+        koreanVoices.forEach(v => {
+          const opt = document.createElement('option');
+          opt.value = v.voiceURI || v.name;
+          opt.innerText = `${v.name} (${v.lang})`;
+          if (savedVoiceURI ? (v.voiceURI === savedVoiceURI || v.name === savedVoiceURI) : false) {
+            opt.selected = true;
+          }
+          koGroup.appendChild(opt);
+        });
+        ttsVoiceSelect.appendChild(koGroup);
+      }
+
+      if (otherVoices.length > 0) {
+        const otherGroup = document.createElement('optgroup');
+        otherGroup.label = '🌐 기타 언어 음성';
+        otherVoices.slice(0, 40).forEach(v => {
+          const opt = document.createElement('option');
+          opt.value = v.voiceURI || v.name;
+          opt.innerText = `${v.name} (${v.lang})`;
+          if (savedVoiceURI && (v.voiceURI === savedVoiceURI || v.name === savedVoiceURI)) {
+            opt.selected = true;
+          }
+          otherGroup.appendChild(opt);
+        });
+        ttsVoiceSelect.appendChild(otherGroup);
+      }
+
+      // If nothing was selected and we have korean voices, default to first korean voice
+      if (!ttsVoiceSelect.value && koreanVoices.length > 0) {
+        ttsVoiceSelect.selectedIndex = 0;
+      }
+    }
+
+    if (window.speechSynthesis) {
+      populateTTSVoices();
+      if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = populateTTSVoices;
+      }
+    }
+
+    function speakTTS(text, forceTest = false) {
+      if (!window.speechSynthesis) return;
+      if (!forceTest && !ttsEnabledToggle.checked) return;
+
+      try {
+        window.speechSynthesis.cancel(); // Cancel previous utterance for snappy response
+
+        const cleanText = text.replace(/https?:\/\/\S+/gi, '링크').trim();
+        if (!cleanText) return;
+
+        const utter = new SpeechSynthesisUtterance(cleanText);
+        
+        // Find selected voice
+        const selectedVoiceURI = ttsVoiceSelect.value;
+        if (selectedVoiceURI && availableVoices.length > 0) {
+          const voice = availableVoices.find(v => (v.voiceURI === selectedVoiceURI || v.name === selectedVoiceURI));
+          if (voice) {
+            utter.voice = voice;
+            utter.lang = voice.lang;
+          }
+        }
+
+        utter.rate = parseFloat(ttsRateRange.value) || 1.0;
+        utter.pitch = parseFloat(ttsPitchRange.value) || 1.0;
+        utter.volume = (parseFloat(ttsVolumeRange.value) || 100) / 100;
+
+        window.speechSynthesis.speak(utter);
+      } catch (e) {
+        console.warn('TTS playback error:', e);
+      }
+    }
+
+    // TTS UI Event Listeners
+    ttsEnabledToggle.addEventListener('change', () => {
+      const isOn = ttsEnabledToggle.checked;
+      ttsStatusPill.innerText = isOn ? 'ON' : 'OFF';
+      ttsStatusPill.style.background = isOn ? 'rgba(0, 255, 163, 0.15)' : 'rgba(255, 255, 255, 0.1)';
+      ttsStatusPill.style.color = isOn ? 'var(--chzzk-green)' : 'var(--text-sub)';
+      localStorage.setItem('chzzk_tts_enabled', isOn ? '1' : '0');
+    });
+
+    ttsConfigCollapseBtn.addEventListener('click', () => {
+      const isHidden = ttsDetailConfigPanel.style.display === 'none';
+      ttsDetailConfigPanel.style.display = isHidden ? 'block' : 'none';
+      ttsConfigCollapseBtn.innerText = isHidden ? '⚙️ 설정 접기' : '⚙️ 음성 설정';
+    });
+
+    ttsVoiceSelect.addEventListener('change', () => {
+      localStorage.setItem('chzzk_tts_voice_uri', ttsVoiceSelect.value);
+    });
+
+    ttsRateRange.addEventListener('input', (e) => {
+      ttsRateVal.innerText = `${parseFloat(e.target.value).toFixed(1)}x`;
+      localStorage.setItem('chzzk_tts_rate', e.target.value);
+    });
+
+    ttsPitchRange.addEventListener('input', (e) => {
+      ttsPitchVal.innerText = `${parseFloat(e.target.value).toFixed(1)}x`;
+      localStorage.setItem('chzzk_tts_pitch', e.target.value);
+    });
+
+    ttsVolumeRange.addEventListener('input', (e) => {
+      ttsVolumeVal.innerText = `${e.target.value}%`;
+      localStorage.setItem('chzzk_tts_volume', e.target.value);
+    });
+
+    ttsIncludeNickToggle.addEventListener('change', () => {
+      localStorage.setItem('chzzk_tts_include_nick', ttsIncludeNickToggle.checked ? '1' : '0');
+    });
+
+    testTtsBtn.addEventListener('click', () => {
+      speakTTS('안녕하세요! 당첨자 실시간 채팅 음성 테스트입니다.', true);
+    });
+
+    // Load saved TTS settings from localStorage
+    function loadSavedTTSSettings() {
+      const savedEnabled = localStorage.getItem('chzzk_tts_enabled');
+      if (savedEnabled !== null) {
+        ttsEnabledToggle.checked = savedEnabled === '1';
+        ttsEnabledToggle.dispatchEvent(new Event('change'));
+      }
+      const savedRate = localStorage.getItem('chzzk_tts_rate');
+      if (savedRate) {
+        ttsRateRange.value = savedRate;
+        ttsRateVal.innerText = `${parseFloat(savedRate).toFixed(1)}x`;
+      }
+      const savedPitch = localStorage.getItem('chzzk_tts_pitch');
+      if (savedPitch) {
+        ttsPitchRange.value = savedPitch;
+        ttsPitchVal.innerText = `${parseFloat(savedPitch).toFixed(1)}x`;
+      }
+      const savedVolume = localStorage.getItem('chzzk_tts_volume');
+      if (savedVolume) {
+        ttsVolumeRange.value = savedVolume;
+        ttsVolumeVal.innerText = `${savedVolume}%`;
+      }
+      const savedNick = localStorage.getItem('chzzk_tts_include_nick');
+      if (savedNick !== null) {
+        ttsIncludeNickToggle.checked = savedNick === '1';
+      }
+    }
+    loadSavedTTSSettings();
 
     // ==========================================
     // 🎰 VISUAL ROULETTE SYSTEM ENGINE
