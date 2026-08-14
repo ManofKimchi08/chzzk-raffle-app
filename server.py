@@ -68,11 +68,16 @@ class ChzzkProxyHandler(http.server.SimpleHTTPRequestHandler):
                 with urllib.request.urlopen(req, timeout=10) as resp:
                     detail_data = json.loads(resp.read().decode('utf-8'))
 
-                chat_cid = detail_data.get('content', {}).get('chatChannelId')
-                status = detail_data.get('content', {}).get('status', 'CLOSE')
-                live_title = detail_data.get('content', {}).get('liveTitle', '')
-                channel_name = detail_data.get('content', {}).get('channel', {}).get('channelName', '')
-                concurrent_user_count = detail_data.get('content', {}).get('concurrentUserCount', 0)
+                content_obj = detail_data.get('content', {})
+                chat_cid = content_obj.get('chatChannelId')
+                status = content_obj.get('status', 'CLOSE')
+                is_live = (status == 'OPEN')
+                live_title = content_obj.get('liveTitle', '')
+                channel_name = content_obj.get('channel', {}).get('channelName', '')
+                concurrent_user_count = content_obj.get('concurrentUserCount', 0)
+                category = content_obj.get('liveCategoryValue', '')
+                open_date = content_obj.get('openDate', '')
+                channel_image = content_obj.get('channel', {}).get('channelImageUrl', '')
 
                 # Fallback if chatChannelId is missing from live-detail
                 if not chat_cid:
@@ -82,6 +87,7 @@ class ChzzkProxyHandler(http.server.SimpleHTTPRequestHandler):
                         with urllib.request.urlopen(c_req, timeout=10) as c_resp:
                             chan_data = json.loads(c_resp.read().decode('utf-8'))
                             channel_name = chan_data.get('content', {}).get('channelName', channel_name)
+                            channel_image = chan_data.get('content', {}).get('channelImageUrl', channel_image)
                     except Exception:
                         pass
 
@@ -104,7 +110,11 @@ class ChzzkProxyHandler(http.server.SimpleHTTPRequestHandler):
                     'channelName': channel_name or '치지직 방송',
                     'liveTitle': live_title,
                     'status': status,
+                    'isLive': is_live,
                     'concurrentUserCount': concurrent_user_count,
+                    'category': category,
+                    'openDate': open_date,
+                    'channelImageUrl': channel_image,
                     'accessToken': access_token,
                     'extraToken': extra_token
                 }

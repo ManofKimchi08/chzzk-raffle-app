@@ -253,6 +253,37 @@
       border-radius: 10px;
     }
 
+    .live-badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      line-height: 1.2;
+    }
+
+    .live-badge-pill.live {
+      background: rgba(239, 68, 68, 0.2);
+      color: #ff4d4d;
+      border: 1px solid rgba(239, 68, 68, 0.5);
+      box-shadow: 0 0 8px rgba(239, 68, 68, 0.35);
+      animation: livePulseGlow 1.6s infinite alternate ease-in-out;
+    }
+
+    .live-badge-pill.offline {
+      background: rgba(148, 163, 184, 0.15);
+      color: #94a3b8;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+    }
+
+    @keyframes livePulseGlow {
+      from { box-shadow: 0 0 4px rgba(239, 68, 68, 0.2); }
+      to { box-shadow: 0 0 12px rgba(239, 68, 68, 0.6); }
+    }
+
     /* Cards & Grids */
     .panel {
       background: var(--bg-card);
@@ -1085,7 +1116,9 @@
       <div class="header-right">
         <div class="smart-connection-chip">
           <div id="statusDot" class="status-dot"></div>
+          <span id="statusLiveBadge" class="live-badge-pill offline" style="display: none;">OFFLINE</span>
           <span id="statusText" style="font-weight: 700; color: #fff;">방송 미연결</span>
+          <span id="statusViewerInfo" style="font-size: 11px; color: var(--text-sub); display: none;"></span>
           <button type="button" id="openConnectModalBtn" class="btn-chip btn-chip-primary">
             <span>📡</span>
             <span id="connectBtnLabel">방송 연결</span>
@@ -1591,6 +1624,19 @@
           <label>치지직 방송 URL 또는 채널 ID</label>
           <input type="text" id="channelInput" placeholder="https://chzzk.naver.com/live/채널ID 또는 채널ID" value="1ad5aa0f6c6741b072528fad5e5e76b1">
         </div>
+        
+        <!-- Live Status Streamer Preview Card -->
+        <div id="modalStreamerCard" style="display: none; margin-bottom: 12px; padding: 12px 14px; background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border-color); border-radius: 10px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span id="modalLiveBadge" class="live-badge-pill live">🔴 LIVE</span>
+              <span id="modalChannelName" style="font-size: 13px; font-weight: 800; color: #fff;">-</span>
+            </div>
+            <span id="modalViewerCount" style="font-size: 11px; color: var(--chzzk-green); font-weight: 700;"></span>
+          </div>
+          <div id="modalLiveTitle" style="font-size: 11px; color: var(--text-sub); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></div>
+        </div>
+
         <div style="font-size: 11px; color: var(--text-sub); line-height: 1.5; background: rgba(0, 255, 163, 0.05); padding: 12px; border-radius: 8px; border: 1px solid rgba(0, 255, 163, 0.15);">
           💡 방송 주소(URL) 또는 채널 ID를 입력하여 실시간 채팅 및 도네이션 서버에 연결합니다. 연결 후 참여 키워드나 후원/구독자 필터는 메인 화면에서 자유롭게 설정하실 수 있습니다.
         </div>
@@ -1613,6 +1659,7 @@
       <div style="display: flex; align-items: center; gap: 8px;">
         <span style="font-size: 18px;">💬</span>
         <span style="font-weight: 700; font-size: 14px; color: #fff;">실시간 채팅 & 후원 피드</span>
+        <span id="drawerLiveBadge" class="live-badge-pill offline" style="display: none;">OFFLINE</span>
         <span id="drawerChatCount" class="badge-tag" style="background: rgba(0,255,163,0.15); color: var(--chzzk-green);">0</span>
       </div>
       <button type="button" class="modal-close-btn" id="closeChatDrawerBtn">✕</button>
@@ -1699,6 +1746,20 @@
     const closeChatDrawerBtn = document.getElementById('closeChatDrawerBtn');
     const chatBadgeCount = document.getElementById('chatBadgeCount');
     const drawerChatCount = document.getElementById('drawerChatCount');
+
+    // Live Broadcast State & Elements
+    let isChannelLive = false;
+    let currentLiveTitle = '';
+    let currentViewerCount = 0;
+
+    const statusLiveBadge = document.getElementById('statusLiveBadge');
+    const statusViewerInfo = document.getElementById('statusViewerInfo');
+    const drawerLiveBadge = document.getElementById('drawerLiveBadge');
+    const modalStreamerCard = document.getElementById('modalStreamerCard');
+    const modalLiveBadge = document.getElementById('modalLiveBadge');
+    const modalChannelName = document.getElementById('modalChannelName');
+    const modalViewerCount = document.getElementById('modalViewerCount');
+    const modalLiveTitle = document.getElementById('modalLiveTitle');
 
     // Advanced Filter Elements & State
     let isKeywordFilterActive = false;
@@ -1977,18 +2038,82 @@
       ];
     }
 
-    function setStatus(status, text) {
+    function updateLiveStatusUI(isLive, channelName, liveTitle, viewerCount) {
+      if (isLive !== undefined && isLive !== null) isChannelLive = !!isLive;
+      if (channelName) currentChannelName = channelName;
+      if (liveTitle !== undefined) currentLiveTitle = liveTitle;
+      if (viewerCount !== undefined) currentViewerCount = viewerCount;
+
+      if (isConnected) {
+        statusLiveBadge.style.display = 'inline-flex';
+        statusViewerInfo.style.display = 'inline';
+        if (drawerLiveBadge) drawerLiveBadge.style.display = 'inline-flex';
+
+        if (isChannelLive) {
+          statusLiveBadge.className = 'live-badge-pill live';
+          statusLiveBadge.innerHTML = '🔴 LIVE';
+          if (drawerLiveBadge) {
+            drawerLiveBadge.className = 'live-badge-pill live';
+            drawerLiveBadge.innerHTML = '🔴 LIVE';
+          }
+          statusText.innerText = currentChannelName;
+          statusViewerInfo.innerText = `(👀 ${currentViewerCount.toLocaleString()}명)`;
+          statusViewerInfo.title = currentLiveTitle ? `[생방송] ${currentLiveTitle}` : '생방송 진행 중';
+        } else {
+          statusLiveBadge.className = 'live-badge-pill offline';
+          statusLiveBadge.innerHTML = '⚪ OFFLINE';
+          if (drawerLiveBadge) {
+            drawerLiveBadge.className = 'live-badge-pill offline';
+            drawerLiveBadge.innerHTML = '⚪ OFFLINE';
+          }
+          statusText.innerText = currentChannelName;
+          statusViewerInfo.innerText = '(오프라인)';
+          statusViewerInfo.title = '현재 방송 중이 아닙니다 (대기 중).';
+        }
+
+        // Update modal preview card
+        if (modalStreamerCard) {
+          modalStreamerCard.style.display = 'block';
+          modalChannelName.innerText = currentChannelName;
+          if (isChannelLive) {
+            modalLiveBadge.className = 'live-badge-pill live';
+            modalLiveBadge.innerHTML = '🔴 생방송 중';
+            modalViewerCount.innerText = `👀 시청자 ${currentViewerCount.toLocaleString()}명`;
+            modalLiveTitle.innerText = currentLiveTitle || '치지직 라이브';
+          } else {
+            modalLiveBadge.className = 'live-badge-pill offline';
+            modalLiveBadge.innerHTML = '⚪ 방송 오프라인';
+            modalViewerCount.innerText = '방송 대기';
+            modalLiveTitle.innerText = currentLiveTitle ? `최근 방송: ${currentLiveTitle}` : '현재 방송 중이 아닙니다.';
+          }
+        }
+      } else {
+        statusLiveBadge.style.display = 'none';
+        statusViewerInfo.style.display = 'none';
+        if (drawerLiveBadge) drawerLiveBadge.style.display = 'none';
+      }
+    }
+
+    function setStatus(status, text, liveData = null) {
       statusDot.className = 'status-dot ' + status;
-      statusText.innerText = text;
       
       if (status === 'connected') {
         isConnected = true;
         connectBtnLabel.innerText = '방송 변경';
         disconnectBtn.style.display = 'inline-flex';
+        if (liveData) {
+          updateLiveStatusUI(liveData.isLive, liveData.channelName, liveData.liveTitle, liveData.concurrentUserCount);
+        } else {
+          updateLiveStatusUI(isChannelLive, currentChannelName, currentLiveTitle, currentViewerCount);
+        }
       } else {
         isConnected = false;
         connectBtnLabel.innerText = '방송 연결';
         disconnectBtn.style.display = 'none';
+        statusText.innerText = text;
+        statusLiveBadge.style.display = 'none';
+        statusViewerInfo.style.display = 'none';
+        if (drawerLiveBadge) drawerLiveBadge.style.display = 'none';
       }
     }
 
@@ -2024,6 +2149,9 @@
         currentChannelName = data.channelName || '치지직 방송';
         currentChatChannelId = data.chatChannelId;
         currentAccessToken = data.accessToken;
+        isChannelLive = !!data.isLive;
+        currentLiveTitle = data.liveTitle || '';
+        currentViewerCount = data.concurrentUserCount || 0;
 
         startLiveStatusPolling();
         connectWebSocketServer();
@@ -2088,7 +2216,12 @@
           // Connection ACK
           if (data.cmd === 10100 || data.cmd === 10000 || data.cmd === 0) {
             if (data.cmd === 10100 || data.cmd === 10000) {
-              setStatus('connected', `🟢 [${currentChannelName}] 실시간 수집 중`);
+              setStatus('connected', currentChannelName, {
+                isLive: isChannelLive,
+                channelName: currentChannelName,
+                liveTitle: currentLiveTitle,
+                concurrentUserCount: currentViewerCount
+              });
               reconnectAttempts = 0;
             }
           }
@@ -2135,11 +2268,11 @@
         try {
           const res = await fetch(`/api/chzzk/?channelId=${encodeURIComponent(currentChannelId)}`);
           const data = await res.json();
-          if (data && data.channelName) {
-            currentChannelName = data.channelName;
+          if (data) {
+            updateLiveStatusUI(data.isLive, data.channelName, data.liveTitle, data.concurrentUserCount);
           }
         } catch (e) {}
-      }, 30000);
+      }, 20000);
     }
 
     // Donator Level Parser
