@@ -1455,92 +1455,28 @@
       <!-- Left Panel: Roulette Settings & Management -->
       <div class="panel">
         <div class="panel-title">
-          <span>🎰 룰렛 설정 및 항목 관리</span>
+          <span>🎰 룰렛 항목 및 세부 설정</span>
         </div>
 
-        <!-- Sub Tabs: Manual vs Donation -->
-        <div class="sub-tabs">
-          <button type="button" id="rouletteManualTabBtn" class="sub-tab-btn active">✍️ 수동 항목 입력</button>
-          <button type="button" id="rouletteDonationTabBtn" class="sub-tab-btn">🧀 치즈 도네이션 연동</button>
-        </div>
-
-        <!-- 1. Manual Input Mode -->
-        <div id="rouletteManualBox">
-          <div class="form-group">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-              <label style="margin-bottom: 0;">룰렛 항목 목록 (칸별 직접 관리)</label>
-              <span id="manualItemCount" style="color: var(--chzzk-green); font-size: 11px; font-weight: 700;">총 0개 항목</span>
-            </div>
-            <div class="preset-btn-group">
-              <span style="font-size: 11px; color: var(--text-sub); display: flex; align-items: center;">⚡ 프리셋:</span>
-              <button type="button" class="preset-btn" onclick="loadRoulettePreset('prizes')">🎁 경품 세트</button>
-              <button type="button" class="preset-btn" onclick="loadRoulettePreset('penalties')">🔥 벌칙 세트</button>
-              <button type="button" class="preset-btn" onclick="loadRoulettePreset('food')">🍱 메뉴 선택</button>
-              <button type="button" class="preset-btn" onclick="importRaffleToRoulette()" style="color: var(--chzzk-green); border-color: rgba(0,255,163,0.3);">👥 추첨 참여자 불러오기</button>
-            </div>
-            
-            <!-- Dynamic Interactive Item Rows Container -->
-            <div id="rouletteItemsContainer" class="roulette-items-list">
-              <!-- Dynamically populated rows -->
-            </div>
-
-            <div style="display: flex; gap: 8px; margin-top: 8px;">
-              <button type="button" id="addRouletteRowBtn" class="btn btn-secondary" style="flex: 1; padding: 8px 12px; font-size: 12px;">
-                ➕ 새 항목 칸 추가 (Enter)
-              </button>
-              <button type="button" id="clearAllRouletteRowsBtn" class="btn-chip btn-chip-danger" style="padding: 8px 12px; font-size: 12px;">
-                🗑️ 전체 삭제
-              </button>
-            </div>
+        <!-- Direct Manual Item Management -->
+        <div class="form-group" style="margin-bottom: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <label style="margin-bottom: 0; font-size: 13px;">룰렛 항목 목록 (칸별 직접 관리)</label>
+            <span id="manualItemCount" style="color: var(--chzzk-green); font-size: 11px; font-weight: 700;">총 0개 항목</span>
           </div>
-        </div>
-
-        <!-- 2. Donation Auto-Populate Mode -->
-        <div id="rouletteDonationBox" style="display: none;">
-          <div style="background: rgba(0, 255, 163, 0.06); border: 1px solid rgba(0, 255, 163, 0.2); border-radius: 8px; padding: 12px; margin-bottom: 14px;">
-            <div style="font-size: 12px; color: var(--chzzk-green); font-weight: 700; margin-bottom: 4px;">
-              📡 치즈 도네이션 실시간 자동 수집 모드
-            </div>
-            <div style="font-size: 11px; color: var(--text-sub); line-height: 1.4;">
-              방송이 연결된 상태에서 시청자가 치즈를 후원하면 룰렛 원판에 실시간으로 항목이 자동 등록됩니다.
-            </div>
+          
+          <!-- Dynamic Interactive Item Rows Container -->
+          <div id="rouletteItemsContainer" class="roulette-items-list" style="max-height: 280px;">
+            <!-- Dynamically populated rows -->
           </div>
 
-          <div class="form-group">
-            <label>룰렛 등록 기준</label>
-            <div class="radio-group" style="margin-bottom: 10px;">
-              <label class="radio-label">
-                <input type="radio" name="donationItemType" value="nickname" checked> 👤 후원자 닉네임 (후원자 대상 뽑기)
-              </label>
-              <label class="radio-label">
-                <input type="radio" name="donationItemType" value="msg"> 💬 후원 메시지 (추천 벌칙/미션 모음)
-              </label>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label>최소 후원 치즈 기준</label>
-            <select id="minDonationCheeseSelect">
-              <option value="1">전체 후원 (1치즈 이상 모두 수집)</option>
-              <option value="1000" selected>1,000 치즈 이상</option>
-              <option value="5000">5,000 치즈 이상</option>
-              <option value="10000">10,000 치즈 이상</option>
-              <option value="50000">50,000 치즈 이상</option>
-              <option value="100000">100,000 치즈 이상 (10만 치즈)</option>
-            </select>
-          </div>
-
-          <div class="toggle-row" style="margin-top: 10px;">
-            <span class="toggle-label" style="font-size: 12px;">💰 후원 금액 비례 칸 크기 확장 (가중치 연동)</span>
-            <input type="checkbox" id="donationWeightToggle" checked style="width: 18px; height: 18px; cursor: pointer;">
-          </div>
-
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; margin-bottom: 6px;">
-            <span style="font-size: 12px; font-weight: 700; color: var(--text-sub);">실시간 수집된 도네이션 (<span id="donationItemCount" style="color: var(--chzzk-green);">0</span>건)</span>
-            <button type="button" id="clearDonationsBtn" class="btn-chip btn-chip-danger" style="padding: 2px 6px; font-size: 10px;">목록 비우기</button>
-          </div>
-          <div id="donationFeedList" style="max-height: 120px; overflow-y: auto; background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; padding: 6px; font-size: 11px;">
-            <div style="text-align: center; color: var(--text-sub); padding: 16px 0;">아직 수집된 도네이션이 없습니다.</div>
+          <div style="display: flex; gap: 8px; margin-top: 10px;">
+            <button type="button" id="addRouletteRowBtn" class="btn btn-secondary" style="flex: 1; padding: 10px 14px; font-size: 13px;">
+              ➕ 새 항목 칸 추가 (Enter)
+            </button>
+            <button type="button" id="clearAllRouletteRowsBtn" class="btn-chip btn-chip-danger" style="padding: 10px 14px; font-size: 12px;">
+              🗑️ 전체 삭제
+            </button>
           </div>
         </div>
 
@@ -2381,37 +2317,7 @@
         updateFilteredStats();
       }
 
-      // Parse and Handle Live Cheese Donation for Roulette
-      const donationInfo = parseLiveDonation(item, profileData);
-      if (donationInfo.isDonation) {
-        handleLiveDonation(nickname, msgText, uid, donationInfo.payAmount, now);
-      }
-
       addChatToFeed(nickname, msgText, now, isSubscriber, isDonator);
-    }
-
-    function parseLiveDonation(item, profileData) {
-      let isDonation = item.msgTypeCode === 10 || item.msgTypeCode === '10' || item.msgTypeCode === 11 || item.msgTypeCode === '11';
-      let payAmount = 0;
-      let donationType = 'CHAT';
-
-      if (item.extras) {
-        try {
-          const extras = typeof item.extras === 'string' ? JSON.parse(item.extras) : item.extras;
-          if (extras.payAmount || extras.donationAmount || extras.cheeseAmount || extras.amount) {
-            isDonation = true;
-            payAmount = Number(extras.payAmount || extras.donationAmount || extras.cheeseAmount || extras.amount || 0);
-            donationType = extras.donationType || 'CHAT';
-          }
-        } catch (e) {}
-      }
-
-      if (!isDonation && profileData && profileData.streamingProperty && profileData.streamingProperty.donation) {
-        isDonation = true;
-        payAmount = Number(profileData.streamingProperty.donation.amount || 0);
-      }
-
-      return { isDonation, payAmount, donationType };
     }
 
     function isExcluded(p) {
@@ -2741,21 +2647,10 @@
     const bgCharRaffle = document.getElementById('bgCharRaffle');
     const bgCharRoulette = document.getElementById('bgCharRoulette');
 
-    const rouletteManualTabBtn = document.getElementById('rouletteManualTabBtn');
-    const rouletteDonationTabBtn = document.getElementById('rouletteDonationTabBtn');
-    const rouletteManualBox = document.getElementById('rouletteManualBox');
-    const rouletteDonationBox = document.getElementById('rouletteDonationBox');
-
     const rouletteItemsContainer = document.getElementById('rouletteItemsContainer');
     const manualItemCountEl = document.getElementById('manualItemCount');
     const addRouletteRowBtn = document.getElementById('addRouletteRowBtn');
     const clearAllRouletteRowsBtn = document.getElementById('clearAllRouletteRowsBtn');
-
-    const minDonationCheeseSelect = document.getElementById('minDonationCheeseSelect');
-    const donationWeightToggle = document.getElementById('donationWeightToggle');
-    const donationItemCountEl = document.getElementById('donationItemCount');
-    const donationFeedList = document.getElementById('donationFeedList');
-    const clearDonationsBtn = document.getElementById('clearDonationsBtn');
 
     const autoRemoveWonItemToggle = document.getElementById('autoRemoveWonItemToggle');
     const rouletteSoundToggle = document.getElementById('rouletteSoundToggle');
@@ -2777,8 +2672,6 @@
     const rouletteHistoryBody = document.getElementById('rouletteHistoryBody');
     const clearRouletteHistoryBtn = document.getElementById('clearRouletteHistoryBtn');
 
-    let currentRouletteMode = 'manual';
-    let donationRouletteList = [];
     let rouletteHistory = [];
     let rouletteRound = 0;
     let isRouletteSpinning = false;
@@ -2830,25 +2723,6 @@
     }
     tabRaffleBtn.addEventListener('click', () => switchMainTab('raffle'));
     tabRouletteBtn.addEventListener('click', () => switchMainTab('roulette'));
-
-    function switchRouletteMode(mode) {
-      currentRouletteMode = mode;
-      if (mode === 'manual') {
-        rouletteManualTabBtn.classList.add('active');
-        rouletteDonationTabBtn.classList.remove('active');
-        rouletteManualBox.style.display = 'block';
-        rouletteDonationBox.style.display = 'none';
-        renderManualRouletteRows();
-      } else {
-        rouletteDonationTabBtn.classList.add('active');
-        rouletteManualTabBtn.classList.remove('active');
-        rouletteDonationBox.style.display = 'block';
-        rouletteManualBox.style.display = 'none';
-        drawRouletteWheel();
-      }
-    }
-    rouletteManualTabBtn.addEventListener('click', () => switchRouletteMode('manual'));
-    rouletteDonationTabBtn.addEventListener('click', () => switchRouletteMode('donation'));
 
     function renderManualRouletteRows() {
       if (!rouletteItemsContainer) return;
@@ -2931,155 +2805,19 @@
     addRouletteRowBtn.addEventListener('click', () => addManualRouletteRow('', 1, true));
     clearAllRouletteRowsBtn.addEventListener('click', clearAllManualRouletteRows);
 
-    const PRESETS = {
-      prizes: [
-        { text: '치킨 1마리', weight: 1 },
-        { text: '피자 1판', weight: 1 },
-        { text: '문화상품권 1만원', weight: 1 },
-        { text: '스타벅스 아메리카노', weight: 1 },
-        { text: '꽝', weight: 2 },
-        { text: '꽝', weight: 2 }
-      ],
-      penalties: [
-        { text: '노래 1곡 완창', weight: 1 },
-        { text: '팔굽혀펴기 10회', weight: 1 },
-        { text: '애교 3종 세트', weight: 1 },
-        { text: '음소거 10분', weight: 1 },
-        { text: '노방종 1시간 추가', weight: 1 },
-        { text: '벌칙 면제', weight: 1 }
-      ],
-      food: [
-        { text: '치킨', weight: 1 },
-        { text: '피자', weight: 1 },
-        { text: '햄버거', weight: 1 },
-        { text: '짜장면 / 짬뽕', weight: 1 },
-        { text: '삼겹살 / 제육', weight: 1 },
-        { text: '국밥 / 찌개', weight: 1 },
-        { text: '마라탕', weight: 1 },
-        { text: '다이어트 샐러드', weight: 1 }
-      ]
-    };
-
-    function loadRoulettePreset(type) {
-      if (PRESETS[type]) {
-        manualRouletteRows = JSON.parse(JSON.stringify(PRESETS[type]));
-        renderManualRouletteRows();
-      }
-    }
-
-    function importRaffleToRoulette() {
-      const eligible = getEligibleParticipants();
-      if (eligible.length === 0) {
-        alert('현재 추첨 조건에 맞는 유효 참여자가 없습니다. 먼저 방송을 연결하고 참여자를 수집해주세요.');
-        return;
-      }
-      manualRouletteRows = eligible.map(p => ({ text: p.nickname, weight: 1 }));
-      renderManualRouletteRows();
-      alert(`현재 유효 응모자 ${eligible.length.toLocaleString()}명의 닉네임 칸을 룰렛에 생성했습니다!`);
-    }
-
     function updateManualItemCount() {
       const items = getActiveRouletteItems();
       manualItemCountEl.innerText = `총 ${items.length}개 항목`;
     }
 
-    function handleLiveDonation(nickname, msg, uid, amount, timeStr) {
-      const minReqCheese = Number(minDonationCheeseSelect.value) || 1;
-      if (amount < minReqCheese) return;
-
-      donationRouletteList.push({
-        nickname: nickname,
-        msg: msg || '(메시지 없음)',
-        amount: amount,
-        time: timeStr,
-        uid: uid
-      });
-      renderDonationFeed();
-
-      if (currentRouletteMode === 'donation') {
-        drawRouletteWheel();
-      }
-    }
-
-    function renderDonationFeed() {
-      donationItemCountEl.innerText = donationRouletteList.length.toLocaleString();
-      if (donationRouletteList.length === 0) {
-        donationFeedList.innerHTML = '<div style="text-align: center; color: var(--text-sub); padding: 16px 0;">아직 수집된 도네이션이 없습니다.</div>';
-        return;
-      }
-
-      donationFeedList.innerHTML = '';
-      donationRouletteList.slice(-20).reverse().forEach((d, idx) => {
-        const div = document.createElement('div');
-        div.style.cssText = 'padding: 4px 6px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center;';
-        div.innerHTML = `
-          <div>
-            <span style="color: var(--chzzk-green); font-weight: 700;">🧀 ${d.amount.toLocaleString()}</span>
-            <span style="font-weight: 700; margin-left: 4px;">${escapeHtml(d.nickname)}</span>
-            <span style="color: var(--text-sub); margin-left: 4px;">${escapeHtml(d.msg)}</span>
-          </div>
-          <button type="button" class="btn-chip btn-chip-danger" style="padding: 1px 4px; font-size: 9px;" onclick="removeDonationEntry(${donationRouletteList.length - 1 - idx})">✕</button>
-        `;
-        donationFeedList.appendChild(div);
-      });
-    }
-
-    function removeDonationEntry(idx) {
-      if (idx >= 0 && idx < donationRouletteList.length) {
-        donationRouletteList.splice(idx, 1);
-        renderDonationFeed();
-        drawRouletteWheel();
-      }
-    }
-
-    clearDonationsBtn.addEventListener('click', () => {
-      if (donationRouletteList.length === 0) return;
-      if (confirm('수집된 도네이션 룰렛 목록을 모두 비우시겠습니까?')) {
-        donationRouletteList = [];
-        renderDonationFeed();
-        drawRouletteWheel();
-      }
-    });
-
-    document.querySelectorAll('input[name="donationItemType"]').forEach(r => {
-      r.addEventListener('change', () => {
-        if (currentRouletteMode === 'donation') drawRouletteWheel();
-      });
-    });
-    donationWeightToggle.addEventListener('change', () => {
-      if (currentRouletteMode === 'donation') drawRouletteWheel();
-    });
-    minDonationCheeseSelect.addEventListener('change', () => {
-      if (currentRouletteMode === 'donation') drawRouletteWheel();
-    });
-
     function getActiveRouletteItems() {
-      if (currentRouletteMode === 'manual') {
-        return manualRouletteRows
-          .filter(r => r.text && r.text.trim().length > 0)
-          .map((r, idx) => ({
-            id: idx,
-            text: r.text.trim(),
-            weight: r.weight || 1
-          }));
-      } else {
-        const itemType = document.querySelector('input[name="donationItemType"]:checked').value;
-        const useWeight = donationWeightToggle.checked;
-        const minReq = Number(minDonationCheeseSelect.value) || 1;
-
-        const filtered = donationRouletteList.filter(d => d.amount >= minReq);
-
-        return filtered.map((d, idx) => {
-          let text = itemType === 'nickname' ? d.nickname : (d.msg || d.nickname);
-          let weight = useWeight ? Math.max(1, Math.round(d.amount / 1000)) : 1;
-          return {
-            id: idx,
-            text: text,
-            weight: weight,
-            donor: d
-          };
-        });
-      }
+      return manualRouletteRows
+        .filter(r => r.text && r.text.trim().length > 0)
+        .map((r, idx) => ({
+          id: idx,
+          text: r.text.trim(),
+          weight: r.weight || 1
+        }));
     }
 
     // Audio SFX Synthesizer
