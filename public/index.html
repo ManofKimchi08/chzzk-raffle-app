@@ -3654,10 +3654,7 @@
         return;
       }
 
-      manualRouletteRows = parsedRows;
-      renderManualRouletteRows();
-      drawRouletteWheel();
-      showToast(`[${fileName}] ${parsedRows.length}개 항목을 불러왔습니다!`, '🎉');
+      applyImportedRouletteRows(parsedRows, fileName);
     }
 
     function parseRouletteArrayData(arrayData, fileName) {
@@ -3684,10 +3681,32 @@
         return;
       }
 
-      manualRouletteRows = parsedRows;
+      applyImportedRouletteRows(parsedRows, fileName);
+    }
+
+    function applyImportedRouletteRows(parsedRows, fileName) {
+      const existingCount = manualRouletteRows.filter(r => r.text && r.text.trim().length > 0).length;
+      let shouldAppend = false;
+
+      if (existingCount > 0) {
+        const userChoice = confirm(
+          `현재 룰렛에 작성된 항목이 ${existingCount}개 있습니다.\n\n` +
+          `• [확인] : 기존 항목 뒤에 이어서 추가 (누적)\n` +
+          `• [취소] : 기존 항목을 지우고 새로 덮어쓰기 (교체)`
+        );
+        shouldAppend = userChoice;
+      }
+
+      if (shouldAppend) {
+        manualRouletteRows = manualRouletteRows.concat(parsedRows);
+        showToast(`[${fileName}] 기존 항목에 ${parsedRows.length}개가 추가되었습니다! (총 ${manualRouletteRows.length}개)`, '➕');
+      } else {
+        manualRouletteRows = parsedRows;
+        showToast(`[${fileName}] ${parsedRows.length}개 항목으로 덮어썼습니다!`, '🎉');
+      }
+
       renderManualRouletteRows();
       drawRouletteWheel();
-      showToast(`[${fileName}] ${parsedRows.length}개 항목을 불러왔습니다!`, '🎉');
     }
 
     exportRouletteHistoryBtn.addEventListener('click', () => {
