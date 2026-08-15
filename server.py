@@ -5,10 +5,15 @@ import re
 import urllib.request
 import urllib.error
 import http.server
-import socketserver
 import webbrowser
 import threading
 from urllib.parse import urlparse, parse_qs
+
+# Prevent Windows noconsole stdout/stderr NoneType crashes
+if sys.stdout is None:
+    sys.stdout = open(os.devnull, 'w')
+if sys.stderr is None:
+    sys.stderr = open(os.devnull, 'w')
 
 DEFAULT_PORT = 8000
 
@@ -18,7 +23,11 @@ if getattr(sys, 'frozen', False):
 else:
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-WEB_DIR = os.path.join(BASE_DIR, 'public')
+candidate_web_dir = os.path.join(BASE_DIR, 'public')
+if os.path.exists(candidate_web_dir):
+    WEB_DIR = candidate_web_dir
+else:
+    WEB_DIR = BASE_DIR
 
 def extract_channel_id(raw_input):
     if not raw_input:
@@ -37,6 +46,17 @@ def extract_channel_id(raw_input):
 class ChzzkProxyHandler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=WEB_DIR, **kwargs)
+
+    def log_message(self, format, *args):
+        # Safe logging that never throws if stderr is redirected/closed
+        try:
+            if sys.stderr:
+                sys.stderr.write("%s - - [%s] %s\n" %
+                                 (self.address_string(),
+                                  self.log_date_time_string(),
+                                  format % args))
+        except Exception:
+            pass
 
     def end_headers(self):
         self.send_header('Access-Control-Allow-Origin', '*')
@@ -146,8 +166,9 @@ def find_available_port(start_port=8000, max_attempts=50):
                 continue
     return start_port
 
-class ReusableTCPServer(socketserver.TCPServer):
+class ReusableThreadingServer(http.server.ThreadingHTTPServer):
     allow_reuse_address = True
+    daemon_threads = True
 
 if __name__ == '__main__':
     port = find_available_port(DEFAULT_PORT)
@@ -161,7 +182,7 @@ if __name__ == '__main__':
     # Automatically open browser window
     threading.Timer(0.8, lambda: webbrowser.open(f'http://localhost:{port}')).start()
 
-    with ReusableTCPServer(server_address, ChzzkProxyHandler) as httpd:
+    with ReusableThreadingServer(server_address, ChzzkProxyHandler) as httpd:
         try:
             httpd.serve_forever()
         except KeyboardInterrupt:
