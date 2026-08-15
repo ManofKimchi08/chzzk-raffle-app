@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>치지직 대규모 시청자 추첨 & 룰렛 & 포켓몬 3v3 팀 배틀 v4.3.2 | Chzzk Mega Raffle & Pokemon Battle</title>
+  <title>치지직 대규모 시청자 추첨 & 룰렛 & 포켓몬 배틀 v4.5.0 | Chzzk Mega Raffle & Pokemon Battle</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
@@ -1947,6 +1947,12 @@
       opacity: 0.5;
       cursor: not-allowed;
     }
+    .poke-move-btn.selected {
+      border: 2px solid var(--chzzk-green) !important;
+      background: rgba(0, 255, 163, 0.22) !important;
+      box-shadow: 0 0 16px rgba(0, 255, 163, 0.45) !important;
+      transform: translateY(-2px);
+    }
 
     .poke-dialog-box {
       background: rgba(4, 8, 16, 0.95);
@@ -2052,6 +2058,12 @@
       opacity: 0.4;
       cursor: not-allowed;
       filter: grayscale(1);
+    }
+    .poke-switch-card.selected {
+      border: 2px solid #38bdf8 !important;
+      background: rgba(56, 189, 248, 0.22) !important;
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.45) !important;
+      transform: translateX(4px);
     }
 
     /* Slot Tab Pill */
@@ -2672,26 +2684,22 @@
               </div>
 
               <div style="display: flex; align-items: center; gap: 6px;">
-                <span style="font-size: 12px; color: var(--text-sub); font-weight: 700;" id="pokeStreamerDurationLabel">⏱️ 스트리머 턴</span>
-                <select id="pokeStreamerDurationSelect" style="padding: 6px 10px; font-size: 12px; background: #080c14; border: 1px solid var(--border-color); color: #fff; border-radius: 6px; font-weight: 700;" onchange="syncPokeStreamerDuration(this.value)">
+                <span style="font-size: 12px; color: #ffd700; font-weight: 700;">⏱️ 턴 제한 시간 (동시 선택)</span>
+                <select id="pokeVoteDurationSelect" style="padding: 6px 10px; font-size: 12px; background: #080c14; border: 1px solid var(--border-color); color: #ffd700; border-radius: 6px; font-weight: 700;" onchange="syncPokeVoteDuration(this.value)">
                   <option value="10">⚡ 10초 (초고속)</option>
                   <option value="15">⚡ 15초</option>
                   <option value="20">⏱️ 20초</option>
-                  <option value="30" selected>⏱️ 30초</option>
+                  <option value="30" selected>⏱️ 30초 (기본)</option>
                   <option value="45">⏱️ 45초</option>
                   <option value="60">⏱️ 60초</option>
                 </select>
-              </div>
-
-              <div style="display: flex; align-items: center; gap: 6px;">
-                <span style="font-size: 12px; color: var(--text-sub); font-weight: 700;">⏱️ 시청자 턴</span>
-                <select id="pokeVoteDurationSelect" style="padding: 6px 10px; font-size: 12px; background: #080c14; border: 1px solid var(--border-color); color: #fff; border-radius: 6px; font-weight: 700;" onchange="syncPokeVoteDuration(this.value)">
-                  <option value="10">⚡ 10초 (초고속)</option>
-                  <option value="15">⚡ 15초</option>
-                  <option value="20">⏱️ 20초</option>
-                  <option value="30" selected>⏱️ 30초</option>
-                  <option value="45">⏱️ 45초</option>
-                  <option value="60">⏱️ 60초</option>
+                <select id="pokeStreamerDurationSelect" style="display: none;">
+                  <option value="10">10</option>
+                  <option value="15">15</option>
+                  <option value="20">20</option>
+                  <option value="30" selected>30</option>
+                  <option value="45">45</option>
+                  <option value="60">60</option>
                 </select>
               </div>
 
@@ -2945,28 +2953,14 @@
           <!-- Bottom Action Deck & Dialogue Box -->
           <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; width: 100%; align-items: stretch;">
             
-            <!-- Left: Interactive Dialogue & Commentary Log -->
+            <!-- Left: Interactive Dialogue & Real-time Viewers Voting Deck -->
             <div style="display: flex; flex-direction: column; gap: 8px;">
               <div class="poke-dialog-box" id="arenaDialogueText">
-                배틀이 시작되었습니다! 스트리머의 기술 또는 교체를 선택하세요.
+                배틀이 시작되었습니다! 스트리머와 시청자가 행동을 동시에 선택합니다.
               </div>
               
-              <!-- Streamer Turn Active Timer HUD -->
-              <div id="arenaStreamerTimerHud" style="background: rgba(8, 12, 20, 0.95); border: 1px solid rgba(255, 215, 0, 0.4); border-radius: 10px; padding: 10px 14px; display: none;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                  <div style="display: flex; align-items: center; gap: 6px;">
-                    <span class="live-dot" style="background: #ffd700;"></span>
-                    <span id="arenaStreamerTimerTitle" style="font-size: 12px; font-weight: 800; color: #ffd700;">👑 스트리머 선택 제한시간</span>
-                  </div>
-                  <span id="arenaStreamerTimerText" style="font-family: 'Outfit'; font-weight: 800; color: #ffd700; font-size: 13px;">30.0s</span>
-                </div>
-                <div style="width: 100%; height: 5px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden;">
-                  <div id="arenaStreamerTimerFill" style="height: 100%; width: 100%; background: linear-gradient(90deg, #ffd700, #ff8800); transition: width 0.1s linear;"></div>
-                </div>
-              </div>
-
-              <!-- Real-time Viewers Voting HUD (Shown when viewers turn) -->
-              <div id="arenaViewersVoteHud" style="background: rgba(8, 12, 20, 0.95); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 10px; padding: 10px 14px; display: none;">
+              <!-- Real-time Viewers Voting & Turn Timer HUD -->
+              <div id="arenaViewersVoteHud" style="background: rgba(8, 12, 20, 0.95); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 10px; padding: 10px 14px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
                   <div style="display: flex; align-items: center; gap: 6px;">
                     <span class="live-dot" style="background: #38bdf8;"></span>
@@ -2986,6 +2980,12 @@
 
             <!-- Right: Action Tabs & Selection Deck -->
             <div style="display: flex; flex-direction: column; gap: 6px;">
+              
+              <!-- Streamer Current Selection Status Badge -->
+              <div id="streamerActionStatusBadge" style="background: rgba(255, 215, 0, 0.1); border: 1px dashed rgba(255, 215, 0, 0.4); border-radius: 8px; padding: 6px 10px; font-size: 11px; color: #ffd700; text-align: center; font-weight: 800;">
+                👑 스트리머: 행동 선택 대기 중...
+              </div>
+
               <div id="streamerActionTabsBar" style="display: flex; gap: 6px;">
                 <button type="button" id="pokeActionMovesTabBtn" class="filter-chip-btn active" style="flex: 1; justify-content: center; padding: 8px 12px; font-size: 12px; font-weight: 800;" onclick="switchPokeActionTab('moves')">
                   ⚔️ 기술 선택
@@ -3015,6 +3015,11 @@
               <div id="arenaSwitchButtonsDeck" style="display: none; flex-direction: column; gap: 6px;">
                 <!-- 2 Teammates Cards dynamically populated -->
               </div>
+
+              <!-- Optional Fast Forward / Quick Execute Button -->
+              <button type="button" id="arenaQuickExecuteBtn" class="btn btn-primary" style="padding: 8px 14px; font-size: 11px; font-weight: 800; width: 100%; display: none; margin-top: 4px; box-shadow: 0 2px 12px rgba(0,255,163,0.3);" onclick="finishSimultaneousPokeTurn()">
+                ⚡ 즉시 배틀 진행 (남은 시간 생략)
+              </button>
             </div>
           </div>
         </div>
@@ -3699,29 +3704,25 @@
                 <option value="1v1">👑 1v1 단판 에이스 배틀</option>
               </select>
             </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-              <div class="form-group" style="margin-bottom: 0;">
-                <label>⏱️ 시청자 턴 투표 시간</label>
-                <select id="drawerPokeVoteDurationSelect" onchange="syncPokeVoteDuration(this.value)">
-                  <option value="10">⚡ 10초 (초고속)</option>
-                  <option value="15">⚡ 15초</option>
-                  <option value="20">⏱️ 20초 (여유)</option>
-                  <option value="30" selected>⏱️ 30초 (기본)</option>
-                  <option value="45">⏱️ 45초</option>
-                  <option value="60">⏱️ 60초</option>
-                </select>
-              </div>
-              <div class="form-group" style="margin-bottom: 0;">
-                <label>⏱️ 스트리머 턴 시간</label>
-                <select id="drawerPokeStreamerDurationSelect" onchange="syncPokeStreamerDuration(this.value)">
-                  <option value="10">⚡ 10초 (초고속)</option>
-                  <option value="15">⚡ 15초</option>
-                  <option value="20">⏱️ 20초 (여유)</option>
-                  <option value="30" selected>⏱️ 30초 (기본)</option>
-                  <option value="45">⏱️ 45초</option>
-                  <option value="60">⏱️ 60초</option>
-                </select>
-              </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label>⏱️ 턴 제한 시간 (동시 선택)</label>
+              <select id="drawerPokeVoteDurationSelect" onchange="syncPokeVoteDuration(this.value)">
+                <option value="10">⚡ 10초 (초고속)</option>
+                <option value="15">⚡ 15초</option>
+                <option value="20">⏱️ 20초 (여유)</option>
+                <option value="30" selected>⏱️ 30초 (기본)</option>
+                <option value="45">⏱️ 45초</option>
+                <option value="60">⏱️ 60초</option>
+              </select>
+              <select id="drawerPokeStreamerDurationSelect" style="display: none;" onchange="syncPokeStreamerDuration(this.value)">
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="30" selected>30</option>
+                <option value="45">45</option>
+                <option value="60">60</option>
+              </select>
+              <div style="font-size: 10px; color: var(--text-sub); margin-top: 4px;">스트리머와 시청자가 동시에 행동을 선택하는 제한 시간입니다.</div>
             </div>
           </div>
         </div>
@@ -9251,7 +9252,7 @@
     }
 
     function toggleStreamerMega() {
-      if (pokeBattleState.phase !== 'streamer_turn') return;
+      if (pokeBattleState.phase !== 'simultaneous_turn' && pokeBattleState.phase !== 'streamer_turn') return;
       const sSlot = streamerTeam[streamerActiveIdx];
       const megaForm = getAvailableMegaEvolution(sSlot.pokemon, sSlot.item);
       if (!megaForm || streamerTeamHasMegaEvolved || sSlot.isMega) {
@@ -9268,26 +9269,139 @@
         pill.innerText = streamerMegaSelected ? '🧬 MEGA ON' : 'OFF';
       }
 
+      if (pokeBattleState.streamerAction && pokeBattleState.streamerAction.type === 'move') {
+        pokeBattleState.streamerAction.isMega = streamerMegaSelected;
+        updateStreamerActionStatusUI();
+      }
+
+      renderStreamerMovesDeck();
+
       if (streamerMegaSelected) {
-        showToast(`🧬 [${megaForm.nameKo}] 메가진화 준비 완료! 기술을 선택하면 메가진화와 동시에 공격합니다.`, '✨');
+        showToast(`🧬 [${megaForm.nameKo}] 메가진화 활성화! 기술 선택 시 메가진화와 동시에 공격합니다.`, '✨');
       } else {
         showToast('메가진화가 취소되었습니다.', '⚪');
       }
     }
 
-    // --- Streamer Turn Execution with Timer ---
-    function startStreamerPokeTurn() {
-      pokeBattleState.phase = 'streamer_turn';
-      document.getElementById('pokeBattlePhaseBadge').innerText = `👑 1단계: ${getStreamerName()} 행동 선택`;
-      document.getElementById('pokeBattlePhaseBadge').style.background = 'linear-gradient(135deg, #ffd700, #ff8800)';
-      document.getElementById('arenaViewersVoteHud').style.display = 'none';
+    function updateStreamerActionStatusUI() {
+      const badge = document.getElementById('streamerActionStatusBadge');
+      if (!badge) return;
 
-      const sSlot = streamerTeam[streamerActiveIdx];
-      setBattleDialogue(`👑 <b>[${getStreamerName()}]</b>의 <b>${sSlot.pokemon.name}</b>은(는) 무엇을 할까? (기술 또는 교체 선택)`);
+      if (!pokeBattleState.streamerAction) {
+        badge.innerHTML = `👑 <b>${getStreamerName()}</b>: 행동 선택 대기 중...`;
+        badge.style.color = '#ffd700';
+        badge.style.background = 'rgba(255, 215, 0, 0.1)';
+        badge.style.borderColor = 'rgba(255, 215, 0, 0.4)';
+      } else if (pokeBattleState.streamerAction.type === 'move') {
+        const m = pokeBattleState.streamerAction.move;
+        const isMega = pokeBattleState.streamerAction.isMega;
+        badge.innerHTML = `👑 <b>${getStreamerName()} 선택</b>: [${isMega ? '🧬 MEGA ' : ''}${m.name}] 완료! <span style="font-size: 10px; color: #4ade80;">(종료 시 실행)</span>`;
+        badge.style.color = '#00ffa3';
+        badge.style.background = 'rgba(0, 255, 163, 0.15)';
+        badge.style.borderColor = '#00ffa3';
+      } else if (pokeBattleState.streamerAction.type === 'switch') {
+        const tp = pokeBattleState.streamerAction.targetPokemon;
+        badge.innerHTML = `👑 <b>${getStreamerName()} 교체</b>: [${tp.name}] 완료! <span style="font-size: 10px; color: #38bdf8;">(종료 시 실행)</span>`;
+        badge.style.color = '#38bdf8';
+        badge.style.background = 'rgba(56, 189, 248, 0.15)';
+        badge.style.borderColor = '#38bdf8';
+      }
+    }
 
+    // --- Simultaneous Turn Selection Engine ---
+    function startSimultaneousPokeTurn() {
+      pokeBattleState.phase = 'simultaneous_turn';
+      pokeBattleState.streamerAction = null;
+      pokeBattleState.viewersAction = null;
+      streamerMegaSelected = false;
+
+      pokeVoteUsers.clear();
+      pokeVoteCounts = {};
+
+      const roundBadge = document.getElementById('pokeBattleRoundBadge');
+      if (roundBadge) roundBadge.innerText = `⚔️ ROUND ${pokeBattleState.round}`;
+
+      const phaseBadge = document.getElementById('pokeBattlePhaseBadge');
+      if (phaseBadge) {
+        phaseBadge.innerText = '⚔️ 턴 행동 동시 선택 중';
+        phaseBadge.style.background = 'linear-gradient(135deg, #6366f1, #00ffa3)';
+      }
+
+      setBattleDialogue(`⚔️ <b>Round ${pokeBattleState.round}</b>: 스트리머와 시청자가 행동을 동시에 선택합니다!`);
+
+      const quickBtn = document.getElementById('arenaQuickExecuteBtn');
+      if (quickBtn) quickBtn.style.display = 'none';
+
+      updateStreamerActionStatusUI();
+
+      // Setup Streamer Right Deck
       switchPokeActionTab('moves');
+      renderStreamerMovesDeck();
+      renderStreamerSwitchDeck();
 
-      // Check Mega Evolution availability
+      // Setup Viewers Left Deck
+      const hud = document.getElementById('arenaViewersVoteHud');
+      if (hud) hud.style.display = 'block';
+
+      const vSlot = viewersTeam[viewersActiveIdx];
+      const vMega = getAvailableMegaEvolution(vSlot.pokemon, vSlot.item);
+      const canMega = vMega && !viewersTeamHasMegaEvolved && !vSlot.isMega;
+
+      const switchGuides = [];
+      let switchCounter = 5;
+      if (pokeBattleMode === '3v3') {
+        for (let i = 0; i < 3; i++) {
+          if (i !== viewersActiveIdx && !viewersTeam[i].fainted) {
+            switchGuides.push(`[<b>${switchCounter}</b>: ${i+1}번 ${viewersTeam[i].pokemon.name}]`);
+            switchCounter++;
+          }
+        }
+      }
+
+      const instr = document.getElementById('arenaVoteInstructionText');
+      if (instr) {
+        instr.innerHTML = canMega
+          ? `(채팅: <b>1</b>~<b>4</b> / <b>메가1</b>~<b>메가4</b> / <b>5</b>, <b>6</b> 교체)`
+          : (pokeBattleMode === '3v3' && switchGuides.length > 0 ? `(채팅에 <b>1</b>~<b>4</b> 기술 / <b>5</b>, <b>6</b> 교체)` : `(채팅에 <b>1</b>~<b>4</b> 기술 입력)`);
+      }
+
+      renderPokeVotingBarsUI();
+
+      // Unified Single Turn Countdown Timer
+      pokeBattleState.turnTimerTotal = parseFloat(document.getElementById('pokeVoteDurationSelect')?.value || document.getElementById('drawerPokeVoteDurationSelect')?.value || 30.0) || 30.0;
+      pokeBattleState.turnTimerRemaining = pokeBattleState.turnTimerTotal;
+      pokeBattleState.viewersTimerTotal = pokeBattleState.turnTimerTotal;
+      pokeBattleState.viewersTimerRemaining = pokeBattleState.turnTimerTotal;
+      renderTurnTimerUI();
+
+      clearInterval(pokeBattleState.turnTimerInterval);
+      clearInterval(pokeBattleState.viewersTimerInterval);
+      clearInterval(pokeBattleState.streamerTimerInterval);
+
+      const stepMs = 100;
+      pokeBattleState.turnTimerInterval = setInterval(() => {
+        pokeBattleState.turnTimerRemaining -= (stepMs / 1000);
+        pokeBattleState.viewersTimerRemaining = pokeBattleState.turnTimerRemaining;
+        if (pokeBattleState.turnTimerRemaining <= 0) {
+          pokeBattleState.turnTimerRemaining = 0;
+          pokeBattleState.viewersTimerRemaining = 0;
+          clearInterval(pokeBattleState.turnTimerInterval);
+          finishSimultaneousPokeTurn();
+        }
+        renderTurnTimerUI();
+      }, stepMs);
+    }
+
+    // Alias for backwards compatibility
+    function startStreamerPokeTurn() {
+      startSimultaneousPokeTurn();
+    }
+    function startViewersPokeVote() {
+      // In simultaneous mode, viewers vote is initiated inside startSimultaneousPokeTurn
+    }
+
+    function renderStreamerMovesDeck() {
+      const sSlot = streamerTeam[streamerActiveIdx];
       const megaForm = getAvailableMegaEvolution(sSlot.pokemon, sSlot.item);
       const megaContainer = document.getElementById('streamerMegaToggleContainer');
       const megaBtnTitle = document.getElementById('streamerMegaBtnTitle');
@@ -9313,10 +9427,11 @@
           const isChoiceLocked = sSlot.choiceMove && sSlot.choiceMove.name !== m.name;
           const isAssaultVestBlocked = sSlot.item === 'assault_vest' && m.category === '변화';
           const disabled = isChoiceLocked || isAssaultVestBlocked;
+          const isSelected = pokeBattleState.streamerAction && pokeBattleState.streamerAction.type === 'move' && pokeBattleState.streamerAction.moveIdx === i;
           return `
-            <button type="button" class="poke-move-btn" ${disabled ? 'disabled' : ''} onclick="handleStreamerMoveSelect(${i})">
+            <button type="button" class="poke-move-btn ${isSelected ? 'selected' : ''}" ${disabled ? 'disabled' : ''} onclick="handleStreamerMoveSelect(${i})">
               <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-weight: 800; font-size: 13px; color: #fff;">${i+1}. ${m.name}</span>
+                <span style="font-weight: 800; font-size: 13px; color: ${isSelected ? '#00ffa3' : '#fff'};">${i+1}. ${m.name} ${isSelected ? '✓' : ''}</span>
                 <span class="type-badge type-${m.type}" style="font-size: 9px; padding: 1px 4px;">${m.type}</span>
               </div>
               <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-sub);">
@@ -9329,157 +9444,195 @@
           `;
         }).join('');
       }
-
-      // Streamer Timer
-      const streamerHud = document.getElementById('arenaStreamerTimerHud');
-      if (streamerHud) streamerHud.style.display = 'block';
-
-      pokeBattleState.streamerTimerTotal = parseFloat(document.getElementById('pokeStreamerDurationSelect').value) || 30.0;
-      pokeBattleState.streamerTimerRemaining = pokeBattleState.streamerTimerTotal;
-      renderStreamerTimerUI();
-
-      clearInterval(pokeBattleState.streamerTimerInterval);
-      const stepMs = 100;
-      pokeBattleState.streamerTimerInterval = setInterval(() => {
-        pokeBattleState.streamerTimerRemaining -= (stepMs / 1000);
-        if (pokeBattleState.streamerTimerRemaining <= 0) {
-          pokeBattleState.streamerTimerRemaining = 0;
-          clearInterval(pokeBattleState.streamerTimerInterval);
-          handleStreamerTimeout();
-        }
-        renderStreamerTimerUI();
-      }, stepMs);
     }
 
-    function renderStreamerTimerUI() {
-      const tText = document.getElementById('arenaStreamerTimerText');
-      const tFill = document.getElementById('arenaStreamerTimerFill');
-      if (tText) tText.innerText = `${Math.max(0, pokeBattleState.streamerTimerRemaining).toFixed(1)}s`;
+    function renderStreamerSwitchDeck() {
+      const container = document.getElementById('arenaSwitchButtonsDeck');
+      if (!container) return;
+
+      const candidates = [];
+      for (let i = 0; i < 3; i++) {
+        if (i !== streamerActiveIdx) {
+          candidates.push({ idx: i, slot: streamerTeam[i] });
+        }
+      }
+
+      container.innerHTML = candidates.map(c => {
+        const p = c.slot.pokemon;
+        const it = getItemObj(c.slot.item);
+        const hpPct = Math.round((c.slot.currentHP / c.slot.maxHP) * 100);
+        const isFainted = c.slot.fainted;
+        const isSelected = pokeBattleState.streamerAction && pokeBattleState.streamerAction.type === 'switch' && pokeBattleState.streamerAction.targetIdx === c.idx;
+        return `
+          <div class="poke-switch-card ${isFainted ? 'disabled' : ''} ${isSelected ? 'selected' : ''}" onclick="${isFainted ? '' : `handleStreamerSwitchSelect(${c.idx})`}">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <img src="${p.sprite_front}" alt="${p.name}" style="width: 38px; height: 38px; object-fit: contain;">
+              <div>
+                <div style="font-weight: 800; color: ${isSelected ? '#38bdf8' : '#fff'}; font-size: 13px;">${c.idx + 1}번. ${p.name} ${isSelected ? '✓' : ''}</div>
+                <div style="display: flex; gap: 4px; align-items: center; margin-top: 2px;">
+                  ${p.types.map(t => `<span class="type-badge type-${t}" style="font-size: 8px; padding: 1px 4px;">${t}</span>`).join('')}
+                  <span class="poke-item-badge" style="font-size: 9px; padding: 1px 6px;">${it.emoji} ${it.name}</span>
+                </div>
+              </div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 12px; font-weight: 800; color: ${isFainted ? '#ef4444' : '#4ade80'};">${isFainted ? '💀 기절' : `HP ${c.slot.currentHP}/${c.slot.maxHP} (${hpPct}%)`}</div>
+              ${isFainted ? '' : `<span class="badge-tag" style="background: rgba(0,255,163,0.2); color: ${isSelected ? '#38bdf8' : 'var(--chzzk-green)'}; font-size: 10px; margin-top: 2px;">${isSelected ? '선택됨' : '🔄 교체 출전'}</span>`}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderTurnTimerUI() {
+      const tText = document.getElementById('arenaVotingTimerText');
+      const tFill = document.getElementById('arenaVotingTimerFill');
+      if (tText) tText.innerText = `${Math.max(0, pokeBattleState.turnTimerRemaining).toFixed(1)}s`;
       if (tFill) {
-        const pct = (Math.max(0, pokeBattleState.streamerTimerRemaining) / pokeBattleState.streamerTimerTotal) * 100;
+        const pct = (Math.max(0, pokeBattleState.turnTimerRemaining) / pokeBattleState.turnTimerTotal) * 100;
         tFill.style.width = `${pct}%`;
       }
     }
 
-    function handleStreamerTimeout() {
-      if (pokeBattleState.phase !== 'streamer_turn') return;
-      const sSlot = streamerTeam[streamerActiveIdx];
-      
-      let validMoveIdx = 0;
-      if (sSlot.choiceMove) {
-        const idx = sSlot.pokemon.moves.findIndex(m => m.name === sSlot.choiceMove.name);
-        if (idx !== -1) validMoveIdx = idx;
-      } else {
-        const available = sSlot.pokemon.moves
-          .map((m, idx) => ({ m, idx }))
-          .filter(x => !(sSlot.item === 'assault_vest' && x.m.category === '변화'));
-        if (available.length > 0) {
-          validMoveIdx = available[Math.floor(Math.random() * available.length)].idx;
-        }
-      }
-
-      showToast(`⏱️ ${getStreamerName()} 선택 시간 초과! [${sSlot.pokemon.moves[validMoveIdx].name}] 자동 발동`, '🎲');
-      handleStreamerMoveSelect(validMoveIdx);
+    function renderViewersVotingTimer() {
+      renderTurnTimerUI();
+    }
+    function renderStreamerTimerUI() {
+      renderTurnTimerUI();
     }
 
     function handleStreamerMoveSelect(moveIdx) {
-      if (pokeBattleState.phase !== 'streamer_turn') return;
-      clearInterval(pokeBattleState.streamerTimerInterval);
-      document.getElementById('arenaStreamerTimerHud').style.display = 'none';
-
+      if (pokeBattleState.phase !== 'simultaneous_turn' && pokeBattleState.phase !== 'streamer_turn') return;
       const sSlot = streamerTeam[streamerActiveIdx];
       const move = sSlot.pokemon.moves[moveIdx];
       const willMega = streamerMegaSelected && !streamerTeamHasMegaEvolved && getAvailableMegaEvolution(sSlot.pokemon, sSlot.item);
-      
+
       pokeBattleState.streamerAction = { type: 'move', moveIdx, move, isMega: !!willMega };
 
-      showToast(`${getStreamerName()} ${willMega ? '🧬 메가진화 + ' : ''}[${move.name}] 선택 완료! 시청자 투표가 시작됩니다.`, '🎯');
-      startViewersPokeVote();
+      renderStreamerMovesDeck();
+      renderStreamerSwitchDeck();
+      updateStreamerActionStatusUI();
+
+      const quickBtn = document.getElementById('arenaQuickExecuteBtn');
+      if (quickBtn) quickBtn.style.display = 'block';
+
+      showToast(`👑 ${getStreamerName()} ${willMega ? '🧬 메가진화 + ' : ''}[${move.name}] 선택 완료!`, '🎯');
     }
 
     function handleStreamerSwitchSelect(targetIdx) {
-      if (pokeBattleState.phase !== 'streamer_turn') return;
+      if (pokeBattleState.phase !== 'simultaneous_turn' && pokeBattleState.phase !== 'streamer_turn') return;
       if (streamerTeam[targetIdx].fainted) return;
-      clearInterval(pokeBattleState.streamerTimerInterval);
-      document.getElementById('arenaStreamerTimerHud').style.display = 'none';
 
       pokeBattleState.streamerAction = { type: 'switch', targetIdx, targetPokemon: streamerTeam[targetIdx].pokemon, isMega: false };
-      showToast(`${getStreamerName()} [${streamerTeam[targetIdx].pokemon.name}](으)로 교체 선택! 시청자 투표가 시작됩니다.`, '🔄');
-      startViewersPokeVote();
+
+      renderStreamerMovesDeck();
+      renderStreamerSwitchDeck();
+      updateStreamerActionStatusUI();
+
+      const quickBtn = document.getElementById('arenaQuickExecuteBtn');
+      if (quickBtn) quickBtn.style.display = 'block';
+
+      showToast(`👑 ${getStreamerName()} [${streamerTeam[targetIdx].pokemon.name}](으)로 교체 선택 완료!`, '🔄');
     }
 
-    // --- Viewers Vote with Mega Evolution, Move & Switch Options ---
-    function startViewersPokeVote() {
-      pokeBattleState.phase = 'viewers_vote';
-      document.getElementById('pokeBattlePhaseBadge').innerText = '👥 2단계: 시청자 행동 투표';
-      document.getElementById('pokeBattlePhaseBadge').style.background = 'linear-gradient(135deg, #0284c7, #0369a1)';
+    function finishSimultaneousPokeTurn() {
+      if (pokeBattleState.phase !== 'simultaneous_turn' && pokeBattleState.phase !== 'viewers_vote') return;
+      clearInterval(pokeBattleState.turnTimerInterval);
 
-      pokeVoteUsers.clear();
-      pokeVoteCounts = {};
+      // 1. Resolve Streamer Action
+      const sSlot = streamerTeam[streamerActiveIdx];
+      if (!pokeBattleState.streamerAction) {
+        let validMoveIdx = 0;
+        if (sSlot.choiceMove) {
+          const idx = sSlot.pokemon.moves.findIndex(m => m.name === sSlot.choiceMove.name);
+          if (idx !== -1) validMoveIdx = idx;
+        } else {
+          const available = sSlot.pokemon.moves
+            .map((m, idx) => ({ m, idx }))
+            .filter(x => !(sSlot.item === 'assault_vest' && x.m.category === '변화'));
+          if (available.length > 0) {
+            validMoveIdx = available[Math.floor(Math.random() * available.length)].idx;
+          }
+        }
+        const move = sSlot.pokemon.moves[validMoveIdx];
+        const willMega = streamerMegaSelected && !streamerTeamHasMegaEvolved && getAvailableMegaEvolution(sSlot.pokemon, sSlot.item);
+        pokeBattleState.streamerAction = { type: 'move', moveIdx: validMoveIdx, move, isMega: !!willMega };
+        showToast(`⏱️ ${getStreamerName()} 선택 시간 초과! [${move.name}] 자동 발동`, '🎲');
+      }
 
-      const hud = document.getElementById('arenaViewersVoteHud');
-      if (hud) hud.style.display = 'block';
-
+      // 2. Resolve Viewers Vote Action
       const vSlot = viewersTeam[viewersActiveIdx];
+      const validCandidateKeys = [];
       const vMega = getAvailableMegaEvolution(vSlot.pokemon, vSlot.item);
       const canMega = vMega && !viewersTeamHasMegaEvolved && !vSlot.isMega;
 
-      // Build switch guide text
-      const switchGuides = [];
+      vSlot.pokemon.moves.forEach((m, i) => {
+        const isLocked = vSlot.choiceMove && vSlot.choiceMove.name !== m.name;
+        const isAV = vSlot.item === 'assault_vest' && m.category === '변화';
+        if (!isLocked && !isAV) {
+          validCandidateKeys.push(`move_${i + 1}`);
+          if (canMega) validCandidateKeys.push(`mega_${i + 1}`);
+        }
+      });
+
       let switchCounter = 5;
+      const switchIndexMap = {};
       if (pokeBattleMode === '3v3') {
         for (let i = 0; i < 3; i++) {
-          if (i !== viewersActiveIdx && !viewersTeam[i].fainted) {
-            switchGuides.push(`[<b>${switchCounter}</b>: ${i+1}번 ${viewersTeam[i].pokemon.name}]`);
+          if (i !== viewersActiveIdx) {
+            if (!viewersTeam[i].fainted) {
+              validCandidateKeys.push(`switch_${switchCounter}`);
+              switchIndexMap[`switch_${switchCounter}`] = i;
+            }
             switchCounter++;
           }
         }
       }
 
-      const instr = document.getElementById('arenaVoteInstructionText');
-      if (instr) {
-        instr.innerHTML = canMega
-          ? `(채팅: <b>1</b>~<b>4</b> / <b>메가1</b>~<b>메가4</b> / <b>5</b>, <b>6</b> 교체)`
-          : (pokeBattleMode === '3v3' && switchGuides.length > 0 ? `(채팅에 <b>1</b>~<b>4</b> 기술 / <b>5</b>, <b>6</b> 교체)` : `(채팅에 <b>1</b>~<b>4</b> 기술 입력)`);
+      let maxVotes = 0;
+      let topChoices = [];
+      for (const key of validCandidateKeys) {
+        const v = pokeVoteCounts[key] || 0;
+        if (v > maxVotes) {
+          maxVotes = v;
+          topChoices = [key];
+        } else if (v === maxVotes && maxVotes > 0) {
+          topChoices.push(key);
+        }
       }
 
-      const megaNotice = canMega ? ` (🧬 <b>메가1~4</b> 입력 시 메가진화+공격)` : '';
-      const switchPrompt = switchGuides.length > 0 ? ` 또는 교체 ${switchGuides.join(' / ')}` : '';
-      setBattleDialogue(`👥 <b>시청자 턴</b>: 채팅창에 기술 [<b>1~4</b>]${megaNotice}${switchPrompt}을 입력하세요!`);
+      let pickedKey = 'move_1';
+      if (maxVotes > 0 && topChoices.length > 0) {
+        pickedKey = topChoices[Math.floor(Math.random() * topChoices.length)];
+      } else {
+        pickedKey = validCandidateKeys[Math.floor(Math.random() * validCandidateKeys.length)] || 'move_1';
+      }
 
-      pokeBattleState.viewersTimerTotal = parseFloat(document.getElementById('pokeVoteDurationSelect').value) || 30.0;
-      pokeBattleState.viewersTimerRemaining = pokeBattleState.viewersTimerTotal;
-      renderViewersVotingTimer();
-      renderPokeVotingBarsUI();
+      if (pickedKey.startsWith('move_')) {
+        const moveIdx = parseInt(pickedKey.replace('move_', ''), 10) - 1;
+        const move = vSlot.pokemon.moves[moveIdx];
+        pokeBattleState.viewersAction = { type: 'move', moveIdx, move, isMega: false };
+      } else if (pickedKey.startsWith('mega_')) {
+        const moveIdx = parseInt(pickedKey.replace('mega_', ''), 10) - 1;
+        const move = vSlot.pokemon.moves[moveIdx];
+        pokeBattleState.viewersAction = { type: 'move', moveIdx, move, isMega: true };
+      } else if (pickedKey.startsWith('switch_')) {
+        const targetIdx = switchIndexMap[pickedKey];
+        pokeBattleState.viewersAction = { type: 'switch', targetIdx, targetPokemon: viewersTeam[targetIdx].pokemon, isMega: false };
+      }
 
-      clearInterval(pokeBattleState.viewersTimerInterval);
-      const stepMs = 100;
-      pokeBattleState.viewersTimerInterval = setInterval(() => {
-        pokeBattleState.viewersTimerRemaining -= (stepMs / 1000);
-        if (pokeBattleState.viewersTimerRemaining <= 0) {
-          pokeBattleState.viewersTimerRemaining = 0;
-          clearInterval(pokeBattleState.viewersTimerInterval);
-          finishViewersPokeVote();
-        }
-        renderViewersVotingTimer();
-      }, stepMs);
+      executeBattleTurnSequence();
     }
 
-    function renderViewersVotingTimer() {
-      const tText = document.getElementById('arenaVotingTimerText');
-      const tFill = document.getElementById('arenaVotingTimerFill');
-      if (tText) tText.innerText = `${Math.max(0, pokeBattleState.viewersTimerRemaining).toFixed(1)}s`;
-      if (tFill) {
-        const pct = (Math.max(0, pokeBattleState.viewersTimerRemaining) / pokeBattleState.viewersTimerTotal) * 100;
-        tFill.style.width = `${pct}%`;
-      }
+    function finishViewersPokeVote() {
+      finishSimultaneousPokeTurn();
     }
 
     function handleLivePokeBattleChatVote(nickname, msg, uid, now) {
       if (!pokeBattleState.active) return;
 
-      // Case A: Normal Turn Viewers Vote
-      if (pokeBattleState.phase === 'viewers_vote') {
+      // Case A: Normal Turn Viewers Vote (Simultaneous)
+      if (pokeBattleState.phase === 'simultaneous_turn' || pokeBattleState.phase === 'viewers_vote') {
         const clean = msg.trim().toUpperCase().replace(/\s+/g, '');
         const vSlot = viewersTeam[viewersActiveIdx];
         const vMega = getAvailableMegaEvolution(vSlot.pokemon, vSlot.item);
@@ -10129,7 +10282,7 @@
       pokeBattleState.round++;
       pokeBattleState.stats.totalRounds++;
       updateArenaHPBars();
-      startStreamerPokeTurn();
+      startSimultaneousPokeTurn();
     }
 
     // --- Faint Phase & Replacement Selection ---
@@ -10245,7 +10398,7 @@
 
       pokeBattleState.round++;
       pokeBattleState.stats.totalRounds++;
-      startStreamerPokeTurn();
+      startSimultaneousPokeTurn();
     }
 
     function openViewersFaintSwitchVote(aliveSlots) {
@@ -10376,7 +10529,7 @@
 
       pokeBattleState.round++;
       pokeBattleState.stats.totalRounds++;
-      startStreamerPokeTurn();
+      startSimultaneousPokeTurn();
     }
 
     // --- Victory & Result Screen ---
