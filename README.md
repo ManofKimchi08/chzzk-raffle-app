@@ -68,13 +68,13 @@
 ## 🚀 빠른 시작 (Quick Start)
 
 ### 1. 무설치 실행 파일로 바로 실행 (Windows)
-1. **[Releases](https://github.com/dlwjdxor/chzzk-raffle-app/releases)**에서 최신 `치지직추첨기.exe` 파일을 다운로드합니다.
+1. **[Releases](https://github.com/ManofKimchi08/chzzk-raffle-app/releases)**에서 최신 `chzzk-raffle-app-v4.4.0.exe` (또는 `chzzk-raffle-app-windows-x64.exe`) 파일을 다운로드합니다.
 2. 다운로드한 `.exe` 파일을 더블 클릭하여 실행하면 브라우저 대시보드가 자동으로 열립니다.
 
 ### 2. Python 소스 코드로 실행 (Windows / macOS / Linux)
 Python 3.9 이상이 설치되어 있다면 별도의 외장 패키지 설치 없이 바로 구동됩니다:
 ```bash
-git clone https://github.com/dlwjdxor/chzzk-raffle-app.git
+git clone https://github.com/ManofKimchi08/chzzk-raffle-app.git
 cd chzzk-raffle-app
 python server.py
 ```
@@ -88,6 +88,24 @@ python server.py
 pip install pyinstaller
 pyinstaller --noconfirm --clean --onefile --windowed --name "치지직추첨기" --add-data "public;public" server.py
 ```
+
+---
+
+## 📚 참고 외부 자료 및 오픈소스 출처 (References & Credits)
+
+본 프로젝트는 다음과 같은 공식 API, 오픈소스 데이터 세트, 스프라이트 리소스 및 웹 표준 기술을 활용하여 제작되었습니다.
+
+| 구분 (Category) | 리소스 및 출처 (Resource & Link) | 사용 용도 및 설명 (Description) |
+| :--- | :--- | :--- |
+| **치지직 방송 API** | **[NAVER CHZZK](https://chzzk.naver.com/)** | 치지직 공식 Live Detail REST API 및 실시간 채팅 웹소켓(`wss://kr-ss1.chat.naver.com/chat`) 연동 |
+| **포켓몬 데이터** | **[PokéAPI](https://pokeapi.co/)** | 포켓몬 213마리 공식 도감 번호, 기본 종족치(HP/공격/방어/특공/특방/스피드), 타입 및 기술 메타데이터 |
+| **포켓몬 스프라이트** | **[Pokémon Showdown](https://play.pokemonshowdown.com/)** | 포켓몬 배틀 전면 애니메이션 스프라이트 및 스트리머 진영 전용 메가진화 46종 후방(Back) 스프라이트 에셋 |
+| **포켓몬 위키** | **[Bulbapedia](https://bulbapedia.bulbagarden.net/)** / **[포켓몬 위키](https://pokemon.fandom.com/ko/)** | 포켓몬 및 기술/지닌도구 한국어 공식 번역명, 18개 상성 타입 차트 및 메가진화 메카닉 레퍼런스 |
+| **미니게임 규칙** | **Pokémon HeartGold / SoulSilver** | 5×5 찌리리공 뒤집기 (Voltorb Flip) 미니게임 규칙 및 코인/지뢰 계산 알고리즘 |
+| **오디오 엔진** | **[Web Audio API (MDN)](https://developer.mozilla.org/ko/docs/Web/API/Web_Audio_API)** | 외부 음원 파일 의존성 없는 브라우저 내장 오디오 신디사이저 (룰렛 틱틱 사운드, 당첨 팡파레 효과음 실시간 합성) |
+| **렌더링 엔진** | **HTML5 Canvas 2D Context** | 비주얼 룰렛 원판 물리 감속 렌더링, 찌리리공 보드, Confetti 파티클 폭죽 애니메이션 |
+| **타이포그래피** | **[Google Fonts](https://fonts.google.com/)** | `Outfit`, `Pretendard`, `Noto Sans KR` 웹 폰트 |
+| **패키징 도구** | **[PyInstaller](https://pyinstaller.org/)** | Windows 무설치 단일 독립 실행 파일(`.exe`) 빌드 |
 
 ---
 
