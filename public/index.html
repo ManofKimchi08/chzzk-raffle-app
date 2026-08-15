@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>치지직 대규모 시청자 추첨 & 룰렛 & 포켓몬 3v3 팀 배틀 v4.3.1 | Chzzk Mega Raffle & Pokemon Battle</title>
+  <title>치지직 대규모 시청자 추첨 & 룰렛 & 포켓몬 3v3 팀 배틀 v4.3.2 | Chzzk Mega Raffle & Pokemon Battle</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
@@ -2003,6 +2003,7 @@
       <div class="header-right">
         <div class="smart-connection-chip">
           <div id="statusDot" class="status-dot"></div>
+          <img id="headerChannelAvatar" src="" alt="Profile" style="width: 22px; height: 22px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--chzzk-green); display: none;">
           <span id="statusLiveBadge" class="live-badge-pill offline" style="display: none;">OFFLINE</span>
           <span id="statusText" style="font-weight: 700; color: #fff;">방송 미연결</span>
           <span id="statusViewerInfo" style="font-size: 11px; color: var(--text-sub); display: none;"></span>
@@ -2817,10 +2818,13 @@
           <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; align-items: center; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px 20px; margin-bottom: 14px;">
             <!-- Left: Streamer Score Card -->
             <div style="display: flex; align-items: center; gap: 12px;">
-              <div style="font-size: 32px;">👑</div>
+              <div style="position: relative; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
+                <span id="gameStreamerCrown" style="font-size: 32px;">👑</span>
+                <img id="gameStreamerAvatarImg" src="" alt="Streamer" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid #ffd700; display: none;">
+              </div>
               <div>
                 <div style="display: flex; align-items: center; gap: 6px;">
-                  <span style="font-size: 12px; color: #ffd700; font-weight: 800;">PLAYER 1 (스트리머)</span>
+                  <span id="gameStreamerPlayerLabel" style="font-size: 12px; color: #ffd700; font-weight: 800;">PLAYER 1 (스트리머)</span>
                   <span id="gameStreamerSetWinsBadge" class="badge-tag" style="background: rgba(255, 215, 0, 0.2); color: #ffd700; font-size: 11px; font-weight: 900; display: none;">⭐ 0승</span>
                 </div>
                 <div style="display: flex; align-items: baseline; gap: 6px; margin-top: 2px;">
@@ -2952,7 +2956,7 @@
               </div>
 
               <div style="display: flex; align-items: center; gap: 6px;">
-                <span style="font-size: 12px; color: var(--text-sub); font-weight: 700;">⏱️ 스트리머 턴</span>
+                <span style="font-size: 12px; color: var(--text-sub); font-weight: 700;" id="pokeStreamerDurationLabel">⏱️ 스트리머 턴</span>
                 <select id="pokeStreamerDurationSelect" style="padding: 6px 10px; font-size: 12px; background: #080c14; border: 1px solid var(--border-color); color: #fff; border-radius: 6px; font-weight: 700;">
                   <option value="15">⚡ 15초</option>
                   <option value="20">⏱️ 20초</option>
@@ -2986,7 +2990,10 @@
             <div class="poke-card-preview" id="streamerPokeCard">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; width: 100%;">
                 <div style="display: flex; align-items: center; gap: 6px;">
-                  <span class="badge-tag" style="background: rgba(255, 215, 0, 0.2); color: #ffd700; font-size: 11px; font-weight: 800;">👑 스트리머 팀</span>
+                  <span class="badge-tag" id="pokeStreamerSetupBadge" style="background: rgba(255, 215, 0, 0.2); color: #ffd700; font-size: 11px; font-weight: 800; display: flex; align-items: center; gap: 5px;">
+                    <img id="pokeStreamerSetupAvatar" src="" alt="Streamer" style="width: 16px; height: 16px; border-radius: 50%; object-fit: cover; border: 1px solid #ffd700; display: none;">
+                    <span id="pokeStreamerSetupName">👑 스트리머 팀</span>
+                  </span>
                   <span id="streamerPokeNumber" style="font-size: 11px; color: var(--text-sub); font-weight: 700;">#006</span>
                 </div>
 
@@ -3119,7 +3126,10 @@
           <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 10px;">
             <!-- Left: Streamer Team Pokéball HUD -->
             <div style="display: flex; align-items: center; gap: 10px;">
-              <span class="badge-tag" style="background: rgba(255, 215, 0, 0.2); color: #ffd700; font-size: 11px; font-weight: 800;">👑 스트리머</span>
+              <span class="badge-tag" id="arenaStreamerTeamBadge" style="background: rgba(255, 215, 0, 0.2); color: #ffd700; font-size: 11px; font-weight: 800; display: flex; align-items: center; gap: 5px;">
+                <img id="arenaStreamerTopAvatar" src="" alt="Streamer" style="width: 16px; height: 16px; border-radius: 50%; object-fit: cover; border: 1px solid #ffd700; display: none;">
+                <span id="arenaStreamerTopName">👑 스트리머</span>
+              </span>
               <div id="arenaStreamerBallsHUD" class="poke-ball-row"></div>
             </div>
 
@@ -3147,7 +3157,10 @@
                 <div class="poke-status-box" id="arenaStreamerStatusBox" style="margin-bottom: 20px;">
                   <div style="display: flex; justify-content: space-between; align-items: center;">
                     <div style="display: flex; align-items: center; gap: 6px;">
-                      <span style="font-size: 11px; color: #ffd700; font-weight: 800;">👑 스트리머</span>
+                      <span id="arenaStreamerStatusLabel" style="font-size: 11px; color: #ffd700; font-weight: 800; display: flex; align-items: center; gap: 4px;">
+                        <img id="arenaStreamerStatusAvatar" src="" alt="Streamer" style="width: 14px; height: 14px; border-radius: 50%; object-fit: cover; border: 1px solid #ffd700; display: none;">
+                        <span id="arenaStreamerStatusName">👑 스트리머</span>
+                      </span>
                       <span id="arenaStreamerName" style="font-weight: 900; color: #fff; font-size: 14px;">리자몽</span>
                     </div>
                     <span style="font-size: 11px; color: var(--text-sub); font-weight: 700;">Lv.50</span>
@@ -3225,7 +3238,7 @@
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
                   <div style="display: flex; align-items: center; gap: 6px;">
                     <span class="live-dot" style="background: #ffd700;"></span>
-                    <span style="font-size: 12px; font-weight: 800; color: #ffd700;">👑 스트리머 선택 제한시간</span>
+                    <span id="arenaStreamerTimerTitle" style="font-size: 12px; font-weight: 800; color: #ffd700;">👑 스트리머 선택 제한시간</span>
                   </div>
                   <span id="arenaStreamerTimerText" style="font-family: 'Outfit'; font-weight: 800; color: #ffd700; font-size: 13px;">30.0s</span>
                 </div>
@@ -3385,6 +3398,7 @@
         <div id="modalStreamerCard" style="display: none; margin-bottom: 12px; padding: 12px 14px; background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border-color); border-radius: 10px;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
             <div style="display: flex; align-items: center; gap: 8px;">
+              <img id="modalStreamerAvatar" src="" alt="Profile" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--chzzk-green); display: none;">
               <span id="modalLiveBadge" class="live-badge-pill live">🔴 LIVE</span>
               <span id="modalChannelName" style="font-size: 13px; font-weight: 800; color: #fff;">-</span>
             </div>
@@ -3649,7 +3663,101 @@
     let currentChannelId = '';
     let currentChatChannelId = '';
     let currentChannelName = '';
+    let currentChannelImageUrl = '';
     let currentAccessToken = '';
+
+    function getStreamerName() {
+      return (isConnected && currentChannelName && currentChannelName.trim()) ? currentChannelName : '스트리머';
+    }
+
+    function getStreamerAvatar() {
+      return (isConnected && currentChannelImageUrl) ? currentChannelImageUrl : '';
+    }
+
+    function updateStreamerProfileUI() {
+      const name = getStreamerName();
+      const avatar = getStreamerAvatar();
+
+      // 1. Header connection pill avatar
+      const headerAvatar = document.getElementById('headerChannelAvatar');
+      if (headerAvatar) {
+        if (avatar) {
+          headerAvatar.src = avatar;
+          headerAvatar.style.display = 'inline-block';
+        } else {
+          headerAvatar.style.display = 'none';
+        }
+      }
+
+      // 2. Voltorb Flip (찌리리공 뒤집기)
+      const voltorbPlayerLabel = document.getElementById('gameStreamerPlayerLabel');
+      if (voltorbPlayerLabel) voltorbPlayerLabel.innerText = `PLAYER 1 (${name})`;
+
+      const voltorbCrown = document.getElementById('gameStreamerCrown');
+      const voltorbAvatar = document.getElementById('gameStreamerAvatarImg');
+      if (voltorbAvatar && voltorbCrown) {
+        if (avatar) {
+          voltorbAvatar.src = avatar;
+          voltorbAvatar.style.display = 'block';
+          voltorbCrown.style.display = 'none';
+        } else {
+          voltorbAvatar.style.display = 'none';
+          voltorbCrown.style.display = 'block';
+        }
+      }
+
+      const startStreamerBtn = document.getElementById('startGameStreamerBtn');
+      if (startStreamerBtn) {
+        startStreamerBtn.innerHTML = `⚔️ 배틀 시작 (${escapeHtml(name)} 선공)`;
+      }
+
+      // 3. Pokemon Battle Setup
+      const pokeSetupName = document.getElementById('pokeStreamerSetupName');
+      if (pokeSetupName) pokeSetupName.innerText = `👑 ${name} 팀`;
+
+      const pokeSetupAvatar = document.getElementById('pokeStreamerSetupAvatar');
+      if (pokeSetupAvatar) {
+        if (avatar) {
+          pokeSetupAvatar.src = avatar;
+          pokeSetupAvatar.style.display = 'inline-block';
+        } else {
+          pokeSetupAvatar.style.display = 'none';
+        }
+      }
+
+      const pokeDurationLabel = document.getElementById('pokeStreamerDurationLabel');
+      if (pokeDurationLabel) pokeDurationLabel.innerText = `⏱️ ${name} 턴`;
+
+      // 4. Pokemon Battle Arena
+      const arenaTopName = document.getElementById('arenaStreamerTopName');
+      if (arenaTopName) arenaTopName.innerText = `👑 ${name}`;
+
+      const arenaTopAvatar = document.getElementById('arenaStreamerTopAvatar');
+      if (arenaTopAvatar) {
+        if (avatar) {
+          arenaTopAvatar.src = avatar;
+          arenaTopAvatar.style.display = 'inline-block';
+        } else {
+          arenaTopAvatar.style.display = 'none';
+        }
+      }
+
+      const arenaStatusName = document.getElementById('arenaStreamerStatusName');
+      if (arenaStatusName) arenaStatusName.innerText = `👑 ${name}`;
+
+      const arenaStatusAvatar = document.getElementById('arenaStreamerStatusAvatar');
+      if (arenaStatusAvatar) {
+        if (avatar) {
+          arenaStatusAvatar.src = avatar;
+          arenaStatusAvatar.style.display = 'inline-block';
+        } else {
+          arenaStatusAvatar.style.display = 'none';
+        }
+      }
+
+      const arenaTimerTitle = document.getElementById('arenaStreamerTimerTitle');
+      if (arenaTimerTitle) arenaTimerTitle.innerText = `👑 ${name} 선택 제한시간`;
+    }
 
     let participants = new Map(); // uid -> participant Object
     let userChatHistory = new Map(); // uid -> Array of full chat history
@@ -4014,11 +4122,14 @@
       ];
     }
 
-    function updateLiveStatusUI(isLive, channelName, liveTitle, viewerCount) {
+    function updateLiveStatusUI(isLive, channelName, liveTitle, viewerCount, channelImage) {
       if (isLive !== undefined && isLive !== null) isChannelLive = !!isLive;
       if (channelName) currentChannelName = channelName;
       if (liveTitle !== undefined) currentLiveTitle = liveTitle;
       if (viewerCount !== undefined) currentViewerCount = viewerCount;
+      if (channelImage !== undefined && channelImage !== null) currentChannelImageUrl = channelImage;
+
+      updateStreamerProfileUI();
 
       if (isConnected) {
         statusLiveBadge.style.display = 'inline-flex';
@@ -4051,6 +4162,15 @@
         if (modalStreamerCard) {
           modalStreamerCard.style.display = 'block';
           modalChannelName.innerText = currentChannelName;
+          const modalAvatar = document.getElementById('modalStreamerAvatar');
+          if (modalAvatar) {
+            if (currentChannelImageUrl) {
+              modalAvatar.src = currentChannelImageUrl;
+              modalAvatar.style.display = 'inline-block';
+            } else {
+              modalAvatar.style.display = 'none';
+            }
+          }
           if (isChannelLive) {
             modalLiveBadge.className = 'live-badge-pill live';
             modalLiveBadge.innerHTML = '🔴 생방송 중';
@@ -4078,9 +4198,9 @@
         connectBtnLabel.innerText = '방송 변경';
         disconnectBtn.style.display = 'inline-flex';
         if (liveData) {
-          updateLiveStatusUI(liveData.isLive, liveData.channelName, liveData.liveTitle, liveData.concurrentUserCount);
+          updateLiveStatusUI(liveData.isLive, liveData.channelName, liveData.liveTitle, liveData.concurrentUserCount, liveData.channelImageUrl);
         } else {
-          updateLiveStatusUI(isChannelLive, currentChannelName, currentLiveTitle, currentViewerCount);
+          updateLiveStatusUI(isChannelLive, currentChannelName, currentLiveTitle, currentViewerCount, currentChannelImageUrl);
         }
       } else {
         isConnected = false;
@@ -4090,6 +4210,8 @@
         statusLiveBadge.style.display = 'none';
         statusViewerInfo.style.display = 'none';
         if (drawerLiveBadge) drawerLiveBadge.style.display = 'none';
+        currentChannelImageUrl = '';
+        updateStreamerProfileUI();
       }
     }
 
@@ -4125,10 +4247,12 @@
         currentChannelName = data.channelName || '치지직 방송';
         currentChatChannelId = data.chatChannelId;
         currentAccessToken = data.accessToken;
+        currentChannelImageUrl = data.channelImageUrl || '';
         isChannelLive = !!data.isLive;
         currentLiveTitle = data.liveTitle || '';
         currentViewerCount = data.concurrentUserCount || 0;
 
+        updateStreamerProfileUI();
         startLiveStatusPolling();
         connectWebSocketServer();
 
@@ -4245,7 +4369,7 @@
           const res = await fetch(`/api/chzzk/?channelId=${encodeURIComponent(currentChannelId)}`);
           const data = await res.json();
           if (data) {
-            updateLiveStatusUI(data.isLive, data.channelName, data.liveTitle, data.concurrentUserCount);
+            updateLiveStatusUI(data.isLive, data.channelName, data.liveTitle, data.concurrentUserCount, data.channelImageUrl);
           }
         } catch (e) {}
       }, 20000);
@@ -7200,7 +7324,7 @@
           gameViewersStatusTag.style.color = '#38bdf8';
           gameViewersStatusTag.innerText = '🏆 승리!';
 
-          showToast('💥 스트리머가 찌리리공을 밟아 폭발했습니다! 시청자 연합 승리!', '💣');
+          showToast(`💥 ${getStreamerName()}님이 찌리리공을 밟아 폭발했습니다! 시청자 연합 승리!`, '💣');
         } else {
           viewersResult.score = 0;
           viewersResult.status = 'exploded';
@@ -7217,7 +7341,7 @@
           gameStreamerStatusTag.style.color = '#ffd700';
           gameStreamerStatusTag.innerText = '🏆 승리!';
 
-          showToast('💥 시청자 연합이 찌리리공을 밟아 폭발했습니다! 스트리머 승리!', '💣');
+          showToast(`💥 시청자 연합이 찌리리공을 밟아 폭발했습니다! ${getStreamerName()} 승리!`, '💣');
         }
 
         endBattle();
@@ -7265,12 +7389,12 @@
 
       // Turn Alternation: Pass to the other player automatically!
       if (player === 'streamer') {
-        showToast(`👑 스트리머: ${tile.coord} [${tile.val === 1 ? '1' : 'x' + tile.val}] 오픈! 시청자 턴으로 전환됩니다.`, '➡️');
+        showToast(`👑 ${getStreamerName()}: ${tile.coord} [${tile.val === 1 ? '1' : 'x' + tile.val}] 오픈! 시청자 턴으로 전환됩니다.`, '➡️');
         setTimeout(() => {
           if (gamePhase !== 'ended' && gamePhase !== 'idle') startViewersTurn();
         }, 1200);
       } else {
-        showToast(`👥 시청자 연합: ${tile.coord} [${tile.val === 1 ? '1' : 'x' + tile.val}] 오픈! 스트리머 턴으로 전환됩니다.`, '➡️');
+        showToast(`👥 시청자 연합: ${tile.coord} [${tile.val === 1 ? '1' : 'x' + tile.val}] 오픈! ${getStreamerName()} 턴으로 전환됩니다.`, '➡️');
         setTimeout(() => {
           if (gamePhase !== 'ended' && gamePhase !== 'idle') startStreamerTurn();
         }, 1200);
@@ -7291,9 +7415,9 @@
       gamePhaseBadge.className = 'live-badge-pill live';
       gamePhaseBadge.style.background = 'linear-gradient(135deg, #eab308, #ca8a04)';
       gamePhaseBadge.innerText = gameTurnLimit > 0 
-        ? `👑 스트리머 턴 (${streamerTurnCount + 1}/${gameTurnLimit})`
-        : '👑 1단계: 스트리머 턴';
-      gameInstructionText.innerText = '스트리머 턴: 타일을 1장 선택하세요 (시간 초과 시 랜덤 자동 오픈됩니다)';
+        ? `👑 ${getStreamerName()} 턴 (${streamerTurnCount + 1}/${gameTurnLimit})`
+        : `👑 1단계: ${getStreamerName()} 턴`;
+      gameInstructionText.innerText = `${getStreamerName()} 턴: 타일을 1장 선택하세요 (시간 초과 시 랜덤 자동 오픈됩니다)`;
 
       gameStreamerStatusTag.className = 'badge-tag';
       gameStreamerStatusTag.style.background = 'rgba(255, 215, 0, 0.2)';
@@ -7310,10 +7434,10 @@
       gameHudLiveDot.style.background = '#ffd700';
       gameHudTitle.style.color = '#ffd700';
       gameHudTitle.innerText = gameTurnLimit > 0 
-        ? `👑 스트리머 턴 [${streamerTurnCount + 1}/${gameTurnLimit}턴]`
-        : '👑 스트리머 턴 (타일 1장 선택)';
+        ? `👑 ${getStreamerName()} 턴 [${streamerTurnCount + 1}/${gameTurnLimit}턴]`
+        : `👑 ${getStreamerName()} 턴 (타일 1장 선택)`;
       gameHudSubTitle.innerText = '(타일을 클릭하세요. 시간 초과 시 랜덤 오픈)';
-      gameTopVotedCandidatesList.innerHTML = '<div style="color: #ffd700; text-align: center; padding: 4px 0; font-weight: 700;">스트리머가 신중하게 카드를 고르는 중입니다...</div>';
+      gameTopVotedCandidatesList.innerHTML = `<div style="color: #ffd700; text-align: center; padding: 4px 0; font-weight: 700;">${getStreamerName()}님이 신중하게 카드를 고르는 중입니다...</div>`;
 
       currentTurnTotalDuration = parseFloat(gameVoteDurationSelect.value) || 30.0;
       currentTurnRemainingSeconds = currentTurnTotalDuration;
@@ -7326,7 +7450,7 @@
           currentTurnRemainingSeconds = 0;
           clearInterval(currentTurnTimerInterval);
           // Streamer Timeout -> Pick random unflipped card
-          showToast('⏰ 스트리머 시간 초과! 랜덤 카드가 자동으로 오픈됩니다!', '⚠️');
+          showToast(`⏰ ${getStreamerName()} 시간 초과! 랜덤 카드가 자동으로 오픈됩니다!`, '⚠️');
           const unflipped = boardTiles.filter(t => !t.flipped);
           if (unflipped.length > 0) {
             const randomTile = unflipped[Math.floor(Math.random() * unflipped.length)];
@@ -7540,7 +7664,7 @@
 
       if (gamePhase === 'streamer') {
         streamerResult.status = 'cashed_out';
-        showToast(`🛑 스트리머가 ${streamerResult.score} 코인을 안전하게 확보하고 마감했습니다!`, '💰');
+        showToast(`🛑 ${getStreamerName()}님이 ${streamerResult.score} 코인을 안전하게 확보하고 마감했습니다!`, '💰');
       } else if (gamePhase === 'viewers') {
         viewersResult.status = 'cashed_out';
         showToast(`🛑 시청자 연합이 ${viewersResult.score} 코인을 안전하게 확보하고 마감했습니다!`, '💰');
@@ -7596,6 +7720,10 @@
     // --- Showdown Result Modal ---
     function showShowdownResult() {
       gameResultModal.classList.add('active');
+      const sName = getStreamerName();
+      const modalStreamerLabel = document.getElementById('gameModalStreamerLabel');
+      if (modalStreamerLabel) modalStreamerLabel.innerText = `👑 ${sName}`;
+
       gameModalStreamerCoins.innerText = streamerResult.score.toLocaleString();
       gameModalStreamerDetail.innerText = `${streamerResult.flippedCount}개 타일 오픈 (${streamerResult.status === 'cleared' ? '🏆 클리어' : streamerResult.status === 'exploded' ? '💥 폭발' : streamerResult.status === 'turn_end' ? '🏁 턴 완료' : streamerResult.status === 'survived' ? '🛡️ 생존' : '🛑 안전 마감'})`;
 
@@ -7616,11 +7744,11 @@
         // Final Champion Decided!
         gameResultChampionTrophy.innerText = '🏆';
         if (matchStreamerWins > matchViewersWins) {
-          gameResultWinnerHeader.innerText = matchFormat === 'single' ? '스트리머의 대승리!' : `👑 스트리머 최종 매치 우승!`;
+          gameResultWinnerHeader.innerText = matchFormat === 'single' ? `${sName}의 대승리!` : `👑 ${sName} 최종 매치 우승!`;
           gameResultWinnerHeader.style.color = '#ffd700';
           gameModalSummaryText.innerText = matchFormat === 'single'
-            ? `스트리머가 ${streamerResult.score.toLocaleString()} 코인을 획득하여 승리했습니다!`
-            : `[${fmtName}] 스트리머가 세트 스코어 ${matchStreamerWins} : ${matchViewersWins}로 최종 우승을 차지했습니다!`;
+            ? `${sName}님이 ${streamerResult.score.toLocaleString()} 코인을 획득하여 승리했습니다!`
+            : `[${fmtName}] ${sName}님이 세트 스코어 ${matchStreamerWins} : ${matchViewersWins}로 최종 우승을 차지했습니다!`;
         } else if (matchViewersWins > matchStreamerWins) {
           gameResultWinnerHeader.innerText = matchFormat === 'single' ? '시청자 연합의 집단지성 승리!' : `👥 시청자 연합 최종 매치 우승!`;
           gameResultWinnerHeader.style.color = '#38bdf8';
@@ -7640,14 +7768,14 @@
           startStreamerTurn();
         };
 
-        triggerConfetti();
+        launchConfetti();
       } else {
         // Intermediate Round Result (Next Round Pending)
         gameResultChampionTrophy.innerText = '🔥';
         if (lastRoundWinner === 'streamer') {
-          gameResultWinnerHeader.innerText = `🔥 ${matchCurrentRound}세트 승리: 스트리머!`;
+          gameResultWinnerHeader.innerText = `🔥 ${matchCurrentRound}세트 승리: ${sName}!`;
           gameResultWinnerHeader.style.color = '#ffd700';
-          gameModalSummaryText.innerText = `스트리머가 이번 라운드를 가져가며 세트 스코어 👑 ${matchStreamerWins} : ${matchViewersWins} 👥 가 되었습니다!`;
+          gameModalSummaryText.innerText = `${sName}님이 이번 라운드를 가져가며 세트 스코어 👑 ${matchStreamerWins} : ${matchViewersWins} 👥 가 되었습니다!`;
         } else if (lastRoundWinner === 'viewers') {
           gameResultWinnerHeader.innerText = `🔥 ${matchCurrentRound}세트 승리: 시청자 연합!`;
           gameResultWinnerHeader.style.color = '#38bdf8';
@@ -7979,7 +8107,7 @@
       const label = document.getElementById('pokemonPickerTargetLabel');
       if (label) {
         label.innerText = target === 'streamer' 
-          ? `👑 스트리머 [${pokeBattleMode === '3v3' ? `${pokePickerSlotIdx+1}번 포켓몬` : '에이스'}]을 선택하세요`
+          ? `👑 ${getStreamerName()} [${pokeBattleMode === '3v3' ? `${pokePickerSlotIdx+1}번 포켓몬` : '에이스'}]을 선택하세요`
           : `👥 시청자 연합 [${pokeBattleMode === '3v3' ? `${pokePickerSlotIdx+1}번 포켓몬` : '에이스'}]을 선택하세요`;
       }
       filterPokemonGrid();
@@ -8316,12 +8444,12 @@
     // --- Streamer Turn Execution with Timer ---
     function startStreamerPokeTurn() {
       pokeBattleState.phase = 'streamer_turn';
-      document.getElementById('pokeBattlePhaseBadge').innerText = '👑 1단계: 스트리머 행동 선택';
+      document.getElementById('pokeBattlePhaseBadge').innerText = `👑 1단계: ${getStreamerName()} 행동 선택`;
       document.getElementById('pokeBattlePhaseBadge').style.background = 'linear-gradient(135deg, #ffd700, #ff8800)';
       document.getElementById('arenaViewersVoteHud').style.display = 'none';
 
       const sSlot = streamerTeam[streamerActiveIdx];
-      setBattleDialogue(`👑 <b>${sSlot.pokemon.name}</b>은(는) 무엇을 할까? (기술 또는 교체 선택)`);
+      setBattleDialogue(`👑 <b>[${getStreamerName()}]</b>의 <b>${sSlot.pokemon.name}</b>은(는) 무엇을 할까? (기술 또는 교체 선택)`);
 
       switchPokeActionTab('moves');
 
@@ -8396,7 +8524,7 @@
         }
       }
 
-      showToast(`⏱️ 스트리머 선택 시간 초과! [${sSlot.pokemon.moves[validMoveIdx].name}] 자동 발동`, '🎲');
+      showToast(`⏱️ ${getStreamerName()} 선택 시간 초과! [${sSlot.pokemon.moves[validMoveIdx].name}] 자동 발동`, '🎲');
       handleStreamerMoveSelect(validMoveIdx);
     }
 
@@ -8409,7 +8537,7 @@
       const move = sSlot.pokemon.moves[moveIdx];
       pokeBattleState.streamerAction = { type: 'move', moveIdx, move };
 
-      showToast(`스트리머 [${move.name}] 선택 완료! 시청자 투표가 시작됩니다.`, '🎯');
+      showToast(`${getStreamerName()} [${move.name}] 선택 완료! 시청자 투표가 시작됩니다.`, '🎯');
       startViewersPokeVote();
     }
 
@@ -8420,7 +8548,7 @@
       document.getElementById('arenaStreamerTimerHud').style.display = 'none';
 
       pokeBattleState.streamerAction = { type: 'switch', targetIdx, targetPokemon: streamerTeam[targetIdx].pokemon };
-      showToast(`스트리머 [${streamerTeam[targetIdx].pokemon.name}](으)로 교체 선택! 시청자 투표가 시작됩니다.`, '🔄');
+      showToast(`${getStreamerName()} [${streamerTeam[targetIdx].pokemon.name}](으)로 교체 선택! 시청자 투표가 시작됩니다.`, '🔄');
       startViewersPokeVote();
     }
 
@@ -8792,7 +8920,7 @@
         streamerTeam[streamerActiveIdx].choiceMove = null; // Reset choice lock on switch
         streamerActiveIdx = targetIdx;
         const sP = streamerTeam[targetIdx].pokemon;
-        setBattleDialogue(`👑 <b>스트리머</b>는 <b>[${sP.name}]</b>(으)로 교체했다!`);
+        setBattleDialogue(`👑 <b>[${getStreamerName()}]</b>은(는) <b>[${sP.name}]</b>(으)로 교체했다!`);
         updateArenaActivePokemonUI();
         renderArenaTeamBallsHUD();
         updateArenaHPBars();
@@ -9052,7 +9180,7 @@
       const subTitle = document.getElementById('pokeFaintSwitchSubTitle');
       const list = document.getElementById('pokeFaintSwitchCandidatesList');
 
-      if (title) title.innerText = '👑 스트리머: 다음 출전 포켓몬 선택';
+      if (title) title.innerText = `👑 ${getStreamerName()}: 다음 출전 포켓몬 선택`;
       if (subTitle) subTitle.innerText = '포켓몬이 쓰러졌습니다! 경기장에 투입할 다음 포켓몬을 선택하세요.';
 
       if (list) {
@@ -9124,7 +9252,7 @@
       const spr = document.getElementById('arenaStreamerSprite');
       if (spr) spr.classList.remove('poke-sprite-fainted');
 
-      setBattleDialogue(`👑 <b>스트리머</b>는 <b>[${streamerTeam[idx].pokemon.name}]</b>(을)를 출전시켰다!`);
+      setBattleDialogue(`👑 <b>[${getStreamerName()}]</b>은(는) <b>[${streamerTeam[idx].pokemon.name}]</b>(을)를 출전시켰다!`);
       await new Promise(r => setTimeout(r, 1000));
 
       pokeBattleState.round++;
@@ -9277,11 +9405,11 @@
       const statsBox = document.getElementById('pokeResultStatsBox');
 
       if (title) {
-        title.innerText = isStreamerWinner ? '👑 스트리머의 대승리!' : '👥 시청자 연합의 집단지성 승리!';
+        title.innerText = isStreamerWinner ? `👑 ${getStreamerName()}의 대승리!` : '👥 시청자 연합의 집단지성 승리!';
         title.style.color = isStreamerWinner ? '#ffd700' : '#38bdf8';
       }
       if (subTitle) {
-        subTitle.innerText = `${isStreamerWinner ? '스트리머' : '시청자 연합'}이 상대의 모든 포켓몬을 쓰러뜨리고 매치 챔피언에 올랐습니다!`;
+        subTitle.innerText = `${isStreamerWinner ? getStreamerName() : '시청자 연합'}이 상대의 모든 포켓몬을 쓰러뜨리고 매치 챔피언에 올랐습니다!`;
       }
       if (sprite && mvpSlot && mvpSlot.pokemon) {
         sprite.src = mvpSlot.pokemon.sprite_front;
@@ -9290,14 +9418,14 @@
         statsBox.innerHTML = `
           <div>⚔️ 배틀 모드: <b>${pokeBattleMode === '3v3' ? '3v3 팀 엔트리 교체 배틀' : '1v1 에이스 배틀'}</b></div>
           <div>⚔️ 총 진행 라운드: <b>${pokeBattleState.round}라운드</b></div>
-          <div>👑 스트리머 총 데미지: <b style="color: #ffd700;">${pokeBattleState.stats.streamerDamage}</b></div>
+          <div>👑 ${getStreamerName()} 총 데미지: <b style="color: #ffd700;">${pokeBattleState.stats.streamerDamage}</b></div>
           <div>👥 시청자 연합 총 데미지: <b style="color: #38bdf8;">${pokeBattleState.stats.viewersDamage}</b></div>
           <div>💥 급소(크리티컬) 발생: <b>${pokeBattleState.stats.crits}회</b> / 약점 강타: <b>${pokeBattleState.stats.superEffective}회</b></div>
         `;
       }
 
       if (modal) modal.classList.add('active');
-      triggerConfetti();
+      launchConfetti();
     }
 
     function rematchPokeBattle() {
