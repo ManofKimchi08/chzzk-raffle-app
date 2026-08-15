@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>치지직 대규모 시청자 추첨 & 룰렛 & 찌리리공 배틀 v4.1.2 | Chzzk Mega Raffle & Voltorb Flip</title>
+  <title>치지직 대규모 시청자 추첨 & 룰렛 & 포켓몬 3v3 팀 배틀 v4.3.0 | Chzzk Mega Raffle & Pokemon Battle</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
@@ -1872,6 +1872,97 @@
       background: rgba(0, 255, 163, 0.15);
       box-shadow: 0 4px 12px rgba(0, 255, 163, 0.3);
     }
+
+    /* 3v3 Team Ball HUD & Indicators */
+    .poke-ball-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .poke-ball-indicator {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+      transition: all 0.3s;
+    }
+    .poke-ball-alive {
+      background: radial-gradient(circle at 35% 35%, #4ade80, #15803d);
+      border: 1px solid #86efac;
+    }
+    .poke-ball-active {
+      background: radial-gradient(circle at 35% 35%, #ffd700, #b45309);
+      border: 2px solid #fff;
+      transform: scale(1.2);
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+    }
+    .poke-ball-fainted {
+      background: #334155;
+      border: 1px solid rgba(255,255,255,0.1);
+      opacity: 0.45;
+      filter: grayscale(1);
+    }
+
+    /* Held Item Badge */
+    .poke-item-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(30, 41, 59, 0.9);
+      border: 1px solid rgba(255, 215, 0, 0.4);
+      color: #ffd700;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 12px;
+    }
+
+    /* In-battle Switch & Faint Candidate Card */
+    .poke-switch-card {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .poke-switch-card:hover:not(.disabled) {
+      border-color: var(--chzzk-green);
+      background: rgba(0, 255, 163, 0.12);
+      transform: translateX(4px);
+    }
+    .poke-switch-card.disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      filter: grayscale(1);
+    }
+
+    /* Slot Tab Pill */
+    .poke-slot-tab-btn {
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 800;
+      border-radius: 8px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      color: var(--text-sub);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .poke-slot-tab-btn.active {
+      background: linear-gradient(135deg, rgba(0, 255, 163, 0.25), rgba(0, 255, 163, 0.05));
+      border-color: var(--chzzk-green);
+      color: #fff;
+      box-shadow: 0 2px 10px rgba(0, 255, 163, 0.2);
+    }
   </style>
 </head>
 <body>
@@ -2840,49 +2931,87 @@
       </div>
 
       <!-- ============================================== -->
-      <!-- GAME 2: 포켓몬 1v1 배틀 (Pokemon 1v1 Battle System) -->
+      <!-- GAME 2: 포켓몬 배틀 (Pokemon Battle System) -->
       <!-- ============================================== -->
       <div id="pokeBattleGameSection" style="display: none; flex-direction: column; gap: 16px; width: 100%;">
         
-        <!-- STAGE A: Match Setup & Pokemon Selection (대진 설정 & 포켓몬 픽) -->
+        <!-- STAGE A: Match Setup & Team Selection (대진 설정 & 팀 엔트리 픽) -->
         <div id="pokeBattleSetupStage" class="panel">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
             <div class="panel-title" style="margin-bottom: 0;">
-              <span>⚔️ 포켓몬 1v1 턴제 집단지성 배틀 (213마리 챔피언스 엔트리)</span>
+              <span>⚔️ 포켓몬 턴제 집단지성 배틀 (213마리 챔피언스 & 지닌 도구)</span>
             </div>
             
-            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
               <div style="display: flex; align-items: center; gap: 6px;">
-                <span style="font-size: 12px; color: var(--text-sub); font-weight: 700;">⏱️ 시청자 투표 제한시간</span>
-                <select id="pokeVoteDurationSelect" style="padding: 6px 12px; font-size: 12px; background: #080c14; border: 1px solid var(--border-color); color: #fff; border-radius: 6px; font-weight: 700;">
-                  <option value="15">⚡ 15초 (스피드)</option>
-                  <option value="20">⏱️ 20초</option>
-                  <option value="30" selected>⏱️ 30초 (표준 추천)</option>
-                  <option value="45">⏱️ 45초</option>
-                  <option value="60">⏱️ 60초 (여유)</option>
+                <span style="font-size: 12px; color: var(--text-sub); font-weight: 700;">🏆 배틀 모드</span>
+                <select id="pokeBattleModeSelect" style="padding: 6px 12px; font-size: 12px; background: #080c14; border: 1px solid var(--border-color); color: #fff; border-radius: 6px; font-weight: 700;" onchange="handleBattleModeChange()">
+                  <option value="3v3" selected>⚔️ 3v3 팀 엔트리 교체 배틀</option>
+                  <option value="1v1">👑 1v1 단판 에이스 배틀</option>
                 </select>
               </div>
+
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span style="font-size: 12px; color: var(--text-sub); font-weight: 700;">⏱️ 스트리머 턴</span>
+                <select id="pokeStreamerDurationSelect" style="padding: 6px 10px; font-size: 12px; background: #080c14; border: 1px solid var(--border-color); color: #fff; border-radius: 6px; font-weight: 700;">
+                  <option value="15">⚡ 15초</option>
+                  <option value="20">⏱️ 20초</option>
+                  <option value="30" selected>⏱️ 30초</option>
+                  <option value="45">⏱️ 45초</option>
+                  <option value="60">⏱️ 60초</option>
+                </select>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span style="font-size: 12px; color: var(--text-sub); font-weight: 700;">⏱️ 시청자 턴</span>
+                <select id="pokeVoteDurationSelect" style="padding: 6px 10px; font-size: 12px; background: #080c14; border: 1px solid var(--border-color); color: #fff; border-radius: 6px; font-weight: 700;">
+                  <option value="15">⚡ 15초</option>
+                  <option value="20">⏱️ 20초</option>
+                  <option value="30" selected>⏱️ 30초</option>
+                  <option value="45">⏱️ 45초</option>
+                  <option value="60">⏱️ 60초</option>
+                </select>
+              </div>
+
+              <button type="button" class="btn-chip btn-chip-secondary" onclick="randomizeAllTeams()" style="font-size: 12px; padding: 6px 12px;">
+                🎲 양팀 전체 랜덤
+              </button>
             </div>
           </div>
 
           <!-- 2-Player Pokemon Preview Deck -->
           <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 20px; align-items: stretch; margin-bottom: 16px;">
             
-            <!-- Player 1 (Streamer) Pokemon Card -->
+            <!-- Player 1 (Streamer) Team Deck -->
             <div class="poke-card-preview" id="streamerPokeCard">
-              <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
-                <span class="badge-tag" style="background: rgba(255, 215, 0, 0.2); color: #ffd700; font-size: 11px; font-weight: 800;">👑 스트리머</span>
-                <span id="streamerPokeNumber" style="font-size: 11px; color: var(--text-sub); font-weight: 700;">#006</span>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; width: 100%;">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <span class="badge-tag" style="background: rgba(255, 215, 0, 0.2); color: #ffd700; font-size: 11px; font-weight: 800;">👑 스트리머 팀</span>
+                  <span id="streamerPokeNumber" style="font-size: 11px; color: var(--text-sub); font-weight: 700;">#006</span>
+                </div>
+
+                <!-- 3v3 Slot Tabs -->
+                <div id="streamerSlotTabsRow" style="display: flex; gap: 4px;">
+                  <button type="button" class="poke-slot-tab-btn active" id="sSlotBtn0" onclick="switchSetupSlot('streamer', 0)">1번(선발)</button>
+                  <button type="button" class="poke-slot-tab-btn" id="sSlotBtn1" onclick="switchSetupSlot('streamer', 1)">2번</button>
+                  <button type="button" class="poke-slot-tab-btn" id="sSlotBtn2" onclick="switchSetupSlot('streamer', 2)">3번</button>
+                </div>
               </div>
+
               <img id="streamerPokeSprite" src="pokemon/6.png" alt="리자몽" class="poke-sprite-large">
               <div id="streamerPokeName" style="font-size: 18px; font-weight: 900; color: #fff; margin-top: 4px;">리자몽</div>
-              <div id="streamerPokeTypes" style="display: flex; gap: 4px; margin: 6px 0 10px;">
-                <span class="type-badge type-불꽃">🔥 불꽃</span>
-                <span class="type-badge type-비행">🦅 비행</span>
-              </div>
+              <div id="streamerPokeTypes" style="display: flex; gap: 4px; margin: 4px 0 8px;"></div>
               
+              <!-- Held Item Select Dropdown -->
+              <div style="display: flex; align-items: center; gap: 6px; width: 100%; margin-bottom: 10px; background: rgba(0,0,0,0.3); padding: 6px 10px; border-radius: 8px; border: 1px solid rgba(255,215,0,0.2);">
+                <span style="font-size: 11px; color: #ffd700; font-weight: 800; white-space: nowrap;">🎒 지닌 도구:</span>
+                <select id="streamerItemSelect" class="form-control" style="padding: 4px 8px; font-size: 11px; background: #080c14; border: 1px solid var(--border-color); color: #ffd700; border-radius: 6px; flex: 1; font-weight: 700;" onchange="handleItemChange('streamer', this.value)">
+                  <!-- 20 Held Items Dynamically Populated -->
+                </select>
+              </div>
+
               <!-- Stats summary bar -->
-              <div style="width: 100%; font-size: 11px; color: var(--text-sub); margin-bottom: 12px; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 8px;">
+              <div style="width: 100%; font-size: 11px; color: var(--text-sub); margin-bottom: 10px; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 8px;">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
                   <span>HP: <b id="streamerStatHP" style="color: #4ade80;">154</b></span>
                   <span>공격: <b id="streamerStatAtk" style="color: #f87171;">134</b></span>
@@ -2896,7 +3025,7 @@
               </div>
 
               <!-- 4 Moves Preview Grid -->
-              <div id="streamerPokeMovesPreview" style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 100%; margin-bottom: 14px;">
+              <div id="streamerPokeMovesPreview" style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 100%; margin-bottom: 12px;">
                 <!-- Dynamically populated -->
               </div>
 
@@ -2904,7 +3033,7 @@
                 <button type="button" class="btn btn-secondary" style="flex: 1; padding: 8px; font-size: 12px;" onclick="openPokemonPicker('streamer')">
                   🔍 213마리 중 선택
                 </button>
-                <button type="button" class="btn-chip btn-chip-secondary" style="padding: 8px 12px; font-size: 12px;" onclick="randomizePokemon('streamer')">
+                <button type="button" class="btn-chip btn-chip-secondary" style="padding: 8px 12px; font-size: 12px;" onclick="randomizeCurrentSlot('streamer')">
                   🎲 랜덤
                 </button>
               </div>
@@ -2915,28 +3044,44 @@
               <div style="font-size: 38px; font-family: 'Outfit'; font-weight: 900; color: #ffd700; text-shadow: 0 0 20px rgba(255,215,0,0.5); letter-spacing: 2px;">
                 VS
               </div>
-              <div style="font-size: 12px; color: var(--text-sub); margin: 6px 0 16px; font-weight: 700;">
-                1v1 에이스 진검승부
+              <div id="pokeModeBannerText" style="font-size: 12px; color: var(--text-sub); margin: 6px 0 16px; font-weight: 700;">
+                3v3 팀 엔트리 교체 배틀
               </div>
               <button type="button" id="startPokeBattleBtn" class="btn btn-primary" style="padding: 14px 28px; font-size: 16px; font-weight: 900; box-shadow: 0 4px 25px rgba(0, 255, 163, 0.4);" onclick="startPokeBattle()">
                 ⚔️ 배틀 시작!
               </button>
             </div>
 
-            <!-- Player 2 (Viewers) Pokemon Card -->
+            <!-- Player 2 (Viewers) Team Deck -->
             <div class="poke-card-preview" id="viewersPokeCard">
-              <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
-                <span class="badge-tag" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; font-size: 11px; font-weight: 800;">👥 시청자 연합</span>
-                <span id="viewersPokeNumber" style="font-size: 11px; color: var(--text-sub); font-weight: 700;">#025</span>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; width: 100%;">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <span class="badge-tag" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; font-size: 11px; font-weight: 800;">👥 시청자 팀</span>
+                  <span id="viewersPokeNumber" style="font-size: 11px; color: var(--text-sub); font-weight: 700;">#025</span>
+                </div>
+
+                <!-- 3v3 Slot Tabs -->
+                <div id="viewersSlotTabsRow" style="display: flex; gap: 4px;">
+                  <button type="button" class="poke-slot-tab-btn active" id="vSlotBtn0" onclick="switchSetupSlot('viewers', 0)">1번(선발)</button>
+                  <button type="button" class="poke-slot-tab-btn" id="vSlotBtn1" onclick="switchSetupSlot('viewers', 1)">2번</button>
+                  <button type="button" class="poke-slot-tab-btn" id="vSlotBtn2" onclick="switchSetupSlot('viewers', 2)">3번</button>
+                </div>
               </div>
+
               <img id="viewersPokeSprite" src="pokemon/25.png" alt="피카츄" class="poke-sprite-large">
               <div id="viewersPokeName" style="font-size: 18px; font-weight: 900; color: #fff; margin-top: 4px;">피카츄</div>
-              <div id="viewersPokeTypes" style="display: flex; gap: 4px; margin: 6px 0 10px;">
-                <span class="type-badge type-전기">⚡ 전기</span>
-              </div>
+              <div id="viewersPokeTypes" style="display: flex; gap: 4px; margin: 4px 0 8px;"></div>
               
+              <!-- Held Item Select Dropdown -->
+              <div style="display: flex; align-items: center; gap: 6px; width: 100%; margin-bottom: 10px; background: rgba(0,0,0,0.3); padding: 6px 10px; border-radius: 8px; border: 1px solid rgba(56,189,248,0.3);">
+                <span style="font-size: 11px; color: #38bdf8; font-weight: 800; white-space: nowrap;">🎒 지닌 도구:</span>
+                <select id="viewersItemSelect" class="form-control" style="padding: 4px 8px; font-size: 11px; background: #080c14; border: 1px solid var(--border-color); color: #38bdf8; border-radius: 6px; flex: 1; font-weight: 700;" onchange="handleItemChange('viewers', this.value)">
+                  <!-- 20 Held Items Dynamically Populated -->
+                </select>
+              </div>
+
               <!-- Stats summary bar -->
-              <div style="width: 100%; font-size: 11px; color: var(--text-sub); margin-bottom: 12px; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 8px;">
+              <div style="width: 100%; font-size: 11px; color: var(--text-sub); margin-bottom: 10px; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 8px;">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
                   <span>HP: <b id="viewersStatHP" style="color: #4ade80;">110</b></span>
                   <span>공격: <b id="viewersStatAtk" style="color: #f87171;">105</b></span>
@@ -2950,7 +3095,7 @@
               </div>
 
               <!-- 4 Moves Preview Grid -->
-              <div id="viewersPokeMovesPreview" style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 100%; margin-bottom: 14px;">
+              <div id="viewersPokeMovesPreview" style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 100%; margin-bottom: 12px;">
                 <!-- Dynamically populated -->
               </div>
 
@@ -2958,7 +3103,7 @@
                 <button type="button" class="btn btn-secondary" style="flex: 1; padding: 8px; font-size: 12px;" onclick="openPokemonPicker('viewers')">
                   🔍 213마리 중 선택
                 </button>
-                <button type="button" class="btn-chip btn-chip-secondary" style="padding: 8px 12px; font-size: 12px;" onclick="randomizePokemon('viewers')">
+                <button type="button" class="btn-chip btn-chip-secondary" style="padding: 8px 12px; font-size: 12px;" onclick="randomizeCurrentSlot('viewers')">
                   🎲 랜덤
                 </button>
               </div>
@@ -2970,11 +3115,22 @@
         <div id="pokeBattleArenaStage" class="panel" style="display: none; flex-direction: column; align-items: center; gap: 16px;">
           
           <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 10px;">
+            <!-- Left: Streamer Team Pokéball HUD -->
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span class="badge-tag" style="background: rgba(255, 215, 0, 0.2); color: #ffd700; font-size: 11px; font-weight: 800;">👑 스트리머</span>
+              <div id="arenaStreamerBallsHUD" class="poke-ball-row"></div>
+            </div>
+
+            <!-- Center: Round & Phase Pill -->
             <div style="display: flex; align-items: center; gap: 8px;">
               <span id="pokeBattleRoundBadge" class="badge-tag" style="background: rgba(0, 255, 163, 0.2); color: var(--chzzk-green); font-size: 12px; font-weight: 800;">⚔️ ROUND 1</span>
-              <span id="pokeBattlePhaseBadge" class="live-badge-pill live" style="font-size: 11px;">👑 스트리머 기술 선택</span>
+              <span id="pokeBattlePhaseBadge" class="live-badge-pill live" style="font-size: 11px;">👑 스트리머 행동 선택</span>
             </div>
-            <div style="display: flex; gap: 8px;">
+
+            <!-- Right: Viewers Team Pokéball HUD -->
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <div id="arenaViewersBallsHUD" class="poke-ball-row"></div>
+              <span class="badge-tag" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; font-size: 11px; font-weight: 800;">👥 시청자 연합</span>
               <button type="button" class="btn-chip btn-chip-secondary" onclick="quitPokeBattle()">🏳️ 기권 / 새 매치</button>
             </div>
           </div>
@@ -2999,9 +3155,14 @@
                     <div id="arenaStreamerHPBar" class="poke-hp-bar" style="width: 100%;"></div>
                   </div>
 
-                  <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; margin-top: 2px;">
                     <div id="arenaStreamerTypes" style="display: flex; gap: 4px;"></div>
                     <span id="arenaStreamerHPText" style="font-family: 'Outfit'; font-weight: 800; color: #fff;">154 / 154</span>
+                  </div>
+
+                  <!-- Held Item Badge -->
+                  <div style="margin-top: 6px;" id="arenaStreamerItemContainer">
+                    <span id="arenaStreamerItemBadge" class="poke-item-badge">🎒 생명의구슬</span>
                   </div>
                 </div>
 
@@ -3034,9 +3195,14 @@
                     <div id="arenaViewersHPBar" class="poke-hp-bar" style="width: 100%;"></div>
                   </div>
 
-                  <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; margin-top: 2px;">
                     <div id="arenaViewersTypes" style="display: flex; gap: 4px;"></div>
                     <span id="arenaViewersHPText" style="font-family: 'Outfit'; font-weight: 800; color: #fff;">110 / 110</span>
+                  </div>
+
+                  <!-- Held Item Badge -->
+                  <div style="margin-top: 6px; text-align: right;" id="arenaViewersItemContainer">
+                    <span id="arenaViewersItemBadge" class="poke-item-badge" style="border-color: rgba(56,189,248,0.4); color: #38bdf8;">🎒 기합의띠</span>
                   </div>
                 </div>
               </div>
@@ -3049,16 +3215,30 @@
             <!-- Left: Interactive Dialogue & Commentary Log -->
             <div style="display: flex; flex-direction: column; gap: 8px;">
               <div class="poke-dialog-box" id="arenaDialogueText">
-                배틀이 시작되었습니다! 스트리머의 기술을 선택하세요.
+                배틀이 시작되었습니다! 스트리머의 기술 또는 교체를 선택하세요.
               </div>
               
+              <!-- Streamer Turn Active Timer HUD -->
+              <div id="arenaStreamerTimerHud" style="background: rgba(8, 12, 20, 0.95); border: 1px solid rgba(255, 215, 0, 0.4); border-radius: 10px; padding: 10px 14px; display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                  <div style="display: flex; align-items: center; gap: 6px;">
+                    <span class="live-dot" style="background: #ffd700;"></span>
+                    <span style="font-size: 12px; font-weight: 800; color: #ffd700;">👑 스트리머 선택 제한시간</span>
+                  </div>
+                  <span id="arenaStreamerTimerText" style="font-family: 'Outfit'; font-weight: 800; color: #ffd700; font-size: 13px;">30.0s</span>
+                </div>
+                <div style="width: 100%; height: 5px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden;">
+                  <div id="arenaStreamerTimerFill" style="height: 100%; width: 100%; background: linear-gradient(90deg, #ffd700, #ff8800); transition: width 0.1s linear;"></div>
+                </div>
+              </div>
+
               <!-- Real-time Viewers Voting HUD (Shown when viewers turn) -->
               <div id="arenaViewersVoteHud" style="background: rgba(8, 12, 20, 0.95); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 10px; padding: 10px 14px; display: none;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
                   <div style="display: flex; align-items: center; gap: 6px;">
                     <span class="live-dot" style="background: #38bdf8;"></span>
-                    <span style="font-size: 12px; font-weight: 800; color: #38bdf8;">시청자 기술 실시간 투표 중</span>
-                    <span style="font-size: 10px; color: var(--text-sub);">(채팅에 <b>1</b>, <b>2</b>, <b>3</b>, <b>4</b> 입력)</span>
+                    <span style="font-size: 12px; font-weight: 800; color: #38bdf8;">시청자 행동 실시간 채팅 투표 중</span>
+                    <span id="arenaVoteInstructionText" style="font-size: 10px; color: var(--text-sub);">(채팅에 <b>1</b>~<b>4</b> 기술 / <b>5</b>, <b>6</b> 교체 입력)</span>
                   </div>
                   <span id="arenaVotingTimerText" style="font-family: 'Outfit'; font-weight: 800; color: #ffd700; font-size: 13px;">30.0s</span>
                 </div>
@@ -3066,17 +3246,57 @@
                   <div id="arenaVotingTimerFill" style="height: 100%; width: 100%; background: linear-gradient(90deg, #38bdf8, #00ffa3); transition: width 0.1s linear;"></div>
                 </div>
                 <div id="arenaVoteCandidateBars" style="display: flex; flex-direction: column; gap: 4px; font-size: 11px;">
-                  <!-- Live Bars for Moves 1~4 -->
+                  <!-- Live Bars for Moves 1~4 & Switch 5, 6 -->
                 </div>
               </div>
             </div>
 
-            <!-- Right: Streamer 4 Move Buttons Deck -->
-            <div id="arenaMoveButtonsDeck" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-              <!-- 4 Move Buttons dynamically populated -->
+            <!-- Right: Action Tabs & Selection Deck -->
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <div id="streamerActionTabsBar" style="display: flex; gap: 6px;">
+                <button type="button" id="pokeActionMovesTabBtn" class="filter-chip-btn active" style="flex: 1; justify-content: center; padding: 8px 12px; font-size: 12px; font-weight: 800;" onclick="switchPokeActionTab('moves')">
+                  ⚔️ 기술 선택
+                </button>
+                <button type="button" id="pokeActionSwitchTabBtn" class="filter-chip-btn" style="flex: 1; justify-content: center; padding: 8px 12px; font-size: 12px; font-weight: 800;" onclick="switchPokeActionTab('switch')">
+                  🔄 포켓몬 교체
+                </button>
+              </div>
+
+              <!-- Streamer 4 Move Buttons Deck -->
+              <div id="arenaMoveButtonsDeck" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <!-- 4 Move Buttons dynamically populated -->
+              </div>
+
+              <!-- Streamer Teammates Switch Deck -->
+              <div id="arenaSwitchButtonsDeck" style="display: none; flex-direction: column; gap: 6px;">
+                <!-- 2 Teammates Cards dynamically populated -->
+              </div>
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔄 Pokemon Faint Switch Modal (기절 시 출전 포켓몬 선택 모달) -->
+  <div id="pokeFaintSwitchModal" class="modal-backdrop">
+    <div class="modal-content" style="max-width: 520px; text-align: center; padding: 24px;">
+      <div style="font-size: 36px; margin-bottom: 6px;">🔄</div>
+      <h3 id="pokeFaintSwitchTitle" style="font-size: 20px; font-weight: 900; color: #fff; margin-bottom: 4px;">다음 출전 포켓몬 선택</h3>
+      <p id="pokeFaintSwitchSubTitle" style="font-size: 12px; color: var(--text-sub); margin-bottom: 14px;">포켓몬이 쓰러졌습니다! 경기장에 투입할 다음 포켓몬을 선택하세요.</p>
+      
+      <!-- Countdown timer for replacement -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; font-size: 12px;">
+        <span style="font-weight: 700; color: var(--text-sub);">남은 선택 시간</span>
+        <span id="pokeFaintSwitchTimerText" style="font-weight: 900; color: #ffd700; font-family: 'Outfit';">15.0s</span>
+      </div>
+      <div style="width: 100%; height: 5px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; margin-bottom: 14px;">
+        <div id="pokeFaintSwitchTimerFill" style="height: 100%; width: 100%; background: linear-gradient(90deg, #ffd700, #ff8800); transition: width 0.1s linear;"></div>
+      </div>
+
+      <!-- Alive Teammates Grid -->
+      <div id="pokeFaintSwitchCandidatesList" style="display: flex; flex-direction: column; gap: 8px;">
+        <!-- Dynamically populated candidate cards -->
       </div>
     </div>
   </div>
@@ -7482,34 +7702,80 @@
     });
 
     // ==========================================
-    // ⚔️ POKEMON 1V1 TURN-BASED BATTLE ENGINE (포켓몬 1v1 배틀 시스템)
+    // ⚔️ POKEMON BATTLE ENGINE (3v3 TEAM & 1v1 ACE & 20 HELD ITEMS)
     // ==========================================
+    const HELD_ITEMS = [
+      { id: 'none', name: '없음', emoji: '⚪', desc: '지닌 도구 없음' },
+      { id: 'life_orb', name: '생명의구슬', emoji: '🔴', desc: '기술 위력 1.3배, 공격 시 최대 HP 10% 반동 피해' },
+      { id: 'focus_sash', name: '기합의띠', emoji: '🥋', desc: 'HP 100%에서 일격사 방지 (HP 1로 1회 생존)' },
+      { id: 'leftovers', name: '먹어남은음식', emoji: '🍎', desc: '매 턴 종료 시 최대 HP의 1/16 자동 지속 회복' },
+      { id: 'choice_scarf', name: '구애스카프', emoji: '🧣', desc: '스피드 1.5배 상승, 첫 사용 기술로 고정' },
+      { id: 'choice_band', name: '구애머리띠', emoji: '🥊', desc: '물리 공격력 1.5배 상승, 첫 기술 고정' },
+      { id: 'choice_specs', name: '구애안경', emoji: '👓', desc: '특수 공격력 1.5배 상승, 첫 기술 고정' },
+      { id: 'assault_vest', name: '돌격조끼', emoji: '🦺', desc: '특수 방어력 1.5배 상승, 변화기 사용 불가' },
+      { id: 'sitrus_berry', name: '자뭉열매', emoji: '🍋', desc: 'HP 50% 이하 피격 시 최대 HP 25% 즉시 1회 회복' },
+      { id: 'lum_berry', name: '리샘열매', emoji: '🫐', desc: '화상/마비 등 상태이상 발생 시 즉시 1회 완치' },
+      { id: 'expert_belt', name: '달인의띠', emoji: '🥋', desc: '효과 굉장한 약점 기술 위력 1.2배 상승' },
+      { id: 'rocky_helmet', name: '울퉁불퉁멧', emoji: '🪖', desc: '직접 접촉 피격 시 상대에게 최대 HP 1/6 반사 피해' },
+      { id: 'eviolite', name: '진화의휘석', emoji: '🛡️', desc: '미진화 포켓몬 방어/특수방어 1.5배 상승' },
+      { id: 'scope_lens', name: '초점렌즈', emoji: '🎯', desc: '급소(크리티컬) 공격 확률 대폭 상승' },
+      { id: 'kings_rock', name: '왕의징표석', emoji: '👑', desc: '공격 명중 시 10% 확률로 상대 풀죽음 유발' },
+      { id: 'black_sludge', name: '검은진흙', emoji: '🧪', desc: '독 타입 매 턴 HP 1/16 회복 (타 타입 1/8 피해)' },
+      { id: 'big_root', name: '큰뿌리', emoji: '🌿', desc: '흡수 기술 HP 회복량 1.3배 상승' },
+      { id: 'white_herb', name: '하양허브', emoji: '🌱', desc: '능력치 랭크 다운 발생 시 1회 원상 복구' },
+      { id: 'weakness_policy', name: '약점보험', emoji: '💥', desc: '약점 피격 시 공격/특수공격 2랭크 상승' },
+      { id: 'focus_band', name: '기합의머리띠', emoji: '🎗️', desc: '기절 위기 시 10% 확률로 HP 1 생존' }
+    ];
+
     let allPokemonData = [];
     let pokeTypeChart = {};
     let currentMinigame = 'voltorb';
-    let streamerPokemon = null;
-    let viewersPokemon = null;
+    let pokeBattleMode = '3v3'; // '3v3' or '1v1'
+    let streamerSetupSlotIdx = 0;
+    let viewersSetupSlotIdx = 0;
     let pokePickerTarget = 'streamer';
+    let pokePickerSlotIdx = 0;
     let currentPokeTypeFilter = 'all';
+
+    let streamerTeam = [
+      { pokemon: null, item: 'life_orb', currentHP: 0, maxHP: 0, fainted: false, choiceMove: null, itemUsed: false, rankAtk: 0, rankSpA: 0 },
+      { pokemon: null, item: 'choice_scarf', currentHP: 0, maxHP: 0, fainted: false, choiceMove: null, itemUsed: false, rankAtk: 0, rankSpA: 0 },
+      { pokemon: null, item: 'focus_sash', currentHP: 0, maxHP: 0, fainted: false, choiceMove: null, itemUsed: false, rankAtk: 0, rankSpA: 0 }
+    ];
+
+    let viewersTeam = [
+      { pokemon: null, item: 'focus_sash', currentHP: 0, maxHP: 0, fainted: false, choiceMove: null, itemUsed: false, rankAtk: 0, rankSpA: 0 },
+      { pokemon: null, item: 'leftovers', currentHP: 0, maxHP: 0, fainted: false, choiceMove: null, itemUsed: false, rankAtk: 0, rankSpA: 0 },
+      { pokemon: null, item: 'choice_band', currentHP: 0, maxHP: 0, fainted: false, choiceMove: null, itemUsed: false, rankAtk: 0, rankSpA: 0 }
+    ];
+
+    let streamerActiveIdx = 0;
+    let viewersActiveIdx = 0;
+    let streamerActionTab = 'moves'; // 'moves' or 'switch'
 
     let pokeBattleState = {
       active: false,
       round: 1,
       phase: 'idle',
-      streamerHP: 0,
-      streamerMaxHP: 0,
-      viewersHP: 0,
-      viewersMaxHP: 0,
-      streamerSelectedMove: null,
-      viewersSelectedMove: null,
-      timerInterval: null,
-      timerRemaining: 30,
-      timerTotal: 30,
+      streamerAction: null,
+      viewersAction: null,
+      streamerTimerInterval: null,
+      streamerTimerRemaining: 30,
+      streamerTimerTotal: 30,
+      viewersTimerInterval: null,
+      viewersTimerRemaining: 30,
+      viewersTimerTotal: 30,
+      faintTimerInterval: null,
+      faintTimerRemaining: 15,
+      faintTimerTotal: 15,
       stats: { totalRounds: 0, streamerDamage: 0, viewersDamage: 0, crits: 0, superEffective: 0 }
     };
 
     let pokeVoteUsers = new Map();
-    let pokeVoteCounts = { 1: 0, 2: 0, 3: 0, 4: 0 };
+    let pokeVoteCounts = {};
+    let faintVoteUsers = new Map();
+    let faintVoteCounts = {};
+    let currentFaintTarget = null; // 'streamer' or 'viewers'
 
     function switchMinigame(mode) {
       currentMinigame = mode;
@@ -7547,36 +7813,106 @@
       }
 
       if (allPokemonData.length > 0) {
-        streamerPokemon = allPokemonData.find(p => p.id === 6) || allPokemonData[0]; // Charizard
-        viewersPokemon = allPokemonData.find(p => p.id === 25) || allPokemonData[1] || allPokemonData[0]; // Pikachu
+        // Defaults
+        streamerTeam[0].pokemon = allPokemonData.find(p => p.id === 6) || allPokemonData[0];   // Charizard
+        streamerTeam[1].pokemon = allPokemonData.find(p => p.id === 94) || allPokemonData[1];  // Gengar
+        streamerTeam[2].pokemon = allPokemonData.find(p => p.id === 445) || allPokemonData[2]; // Garchomp or fallback
+
+        viewersTeam[0].pokemon = allPokemonData.find(p => p.id === 25) || allPokemonData[3];  // Pikachu
+        viewersTeam[1].pokemon = allPokemonData.find(p => p.id === 9) || allPokemonData[4];   // Blastoise
+        viewersTeam[2].pokemon = allPokemonData.find(p => p.id === 68) || allPokemonData[5];  // Machamp
+
+        populateItemDropdowns();
         renderPokeSetupPreview();
         renderPokemonPickerFilters();
       }
     }
 
+    function populateItemDropdowns() {
+      const sSel = document.getElementById('streamerItemSelect');
+      const vSel = document.getElementById('viewersItemSelect');
+      const optionsHtml = HELD_ITEMS.map(it => `
+        <option value="${it.id}">${it.emoji} ${it.name} - ${it.desc}</option>
+      `).join('');
+
+      if (sSel) sSel.innerHTML = optionsHtml;
+      if (vSel) vSel.innerHTML = optionsHtml;
+    }
+
+    function handleBattleModeChange() {
+      const sel = document.getElementById('pokeBattleModeSelect');
+      if (sel) pokeBattleMode = sel.value;
+      const sRow = document.getElementById('streamerSlotTabsRow');
+      const vRow = document.getElementById('viewersSlotTabsRow');
+      const banner = document.getElementById('pokeModeBannerText');
+
+      if (pokeBattleMode === '1v1') {
+        if (sRow) sRow.style.display = 'none';
+        if (vRow) vRow.style.display = 'none';
+        if (banner) banner.innerText = '1v1 에이스 진검승부';
+        streamerSetupSlotIdx = 0;
+        viewersSetupSlotIdx = 0;
+      } else {
+        if (sRow) sRow.style.display = 'flex';
+        if (vRow) vRow.style.display = 'flex';
+        if (banner) banner.innerText = '3v3 팀 엔트리 교체 배틀';
+      }
+      renderPokeSetupPreview();
+    }
+
+    function switchSetupSlot(side, slotIdx) {
+      if (side === 'streamer') {
+        streamerSetupSlotIdx = slotIdx;
+        for (let i = 0; i < 3; i++) {
+          const btn = document.getElementById(`sSlotBtn${i}`);
+          if (btn) btn.classList.toggle('active', i === slotIdx);
+        }
+      } else {
+        viewersSetupSlotIdx = slotIdx;
+        for (let i = 0; i < 3; i++) {
+          const btn = document.getElementById(`vSlotBtn${i}`);
+          if (btn) btn.classList.toggle('active', i === slotIdx);
+        }
+      }
+      renderPokeSetupPreview();
+    }
+
+    function handleItemChange(side, itemId) {
+      if (side === 'streamer') {
+        streamerTeam[streamerSetupSlotIdx].item = itemId;
+        const it = HELD_ITEMS.find(x => x.id === itemId);
+        if (it) showToast(`👑 스트리머 ${streamerSetupSlotIdx+1}번 포켓몬 도구: [${it.emoji} ${it.name}]`, '🎒');
+      } else {
+        viewersTeam[viewersSetupSlotIdx].item = itemId;
+        const it = HELD_ITEMS.find(x => x.id === itemId);
+        if (it) showToast(`👥 시청자 ${viewersSetupSlotIdx+1}번 포켓몬 도구: [${it.emoji} ${it.name}]`, '🎒');
+      }
+    }
+
     function renderPokeSetupPreview() {
-      if (!streamerPokemon || !viewersPokemon) return;
+      if (allPokemonData.length === 0) return;
+
+      const sSlot = streamerTeam[streamerSetupSlotIdx];
+      const vSlot = viewersTeam[viewersSetupSlotIdx];
 
       // Streamer Card
-      const sNum = document.getElementById('streamerPokeNumber');
-      const sSpr = document.getElementById('streamerPokeSprite');
-      const sNam = document.getElementById('streamerPokeName');
-      const sTyp = document.getElementById('streamerPokeTypes');
-      if (sNum && sSpr && sNam && sTyp) {
-        sNum.innerText = `#${String(streamerPokemon.id).padStart(3, '0')}`;
-        sSpr.src = streamerPokemon.sprite_front;
-        sNam.innerText = streamerPokemon.name;
-        sTyp.innerHTML = streamerPokemon.types.map(t => `<span class="type-badge type-${t}">${getTypeEmoji(t)} ${t}</span>`).join('');
+      if (sSlot && sSlot.pokemon) {
+        const p = sSlot.pokemon;
+        document.getElementById('streamerPokeNumber').innerText = `#${String(p.id).padStart(3, '0')}`;
+        document.getElementById('streamerPokeSprite').src = p.sprite_front;
+        document.getElementById('streamerPokeName').innerText = `${p.name} ${pokeBattleMode === '3v3' ? `(${streamerSetupSlotIdx+1}번)` : ''}`;
+        document.getElementById('streamerPokeTypes').innerHTML = p.types.map(t => `<span class="type-badge type-${t}">${getTypeEmoji(t)} ${t}</span>`).join('');
+        document.getElementById('streamerItemSelect').value = sSlot.item || 'none';
 
-        const sHP = calculateLevel50HP(streamerPokemon.stats.hp);
+        const sHP = calculateLevel50HP(p.stats.hp);
         document.getElementById('streamerStatHP').innerText = sHP;
-        document.getElementById('streamerStatAtk').innerText = streamerPokemon.stats.atk;
-        document.getElementById('streamerStatDef').innerText = streamerPokemon.stats.def;
-        document.getElementById('streamerStatSpA').innerText = streamerPokemon.stats.spa;
-        document.getElementById('streamerStatSpD').innerText = streamerPokemon.stats.spd;
-        document.getElementById('streamerStatSpe').innerText = streamerPokemon.stats.spe;
+        document.getElementById('streamerStatAtk').innerText = p.stats.atk;
+        document.getElementById('streamerStatDef').innerText = p.stats.def;
+        document.getElementById('streamerStatSpA').innerText = p.stats.spa;
+        document.getElementById('streamerStatSpD').innerText = p.stats.spd;
+        document.getElementById('streamerStatSpe').innerText = p.stats.spe;
 
-        document.getElementById('streamerPokeMovesPreview').innerHTML = streamerPokemon.moves.map((m, i) => `
+        document.getElementById('streamerPokeMovesPreview').innerHTML = p.moves.map((m, i) => `
           <div style="background: rgba(0,0,0,0.3); padding: 4px 8px; border-radius: 6px; text-align: left; font-size: 11px; border: 1px solid rgba(255,255,255,0.08);">
             <div style="display: flex; justify-content: space-between; align-items: center;">
               <span style="font-weight: 800; color: #fff;">${i+1}. ${m.name}</span>
@@ -7590,25 +7926,23 @@
       }
 
       // Viewers Card
-      const vNum = document.getElementById('viewersPokeNumber');
-      const vSpr = document.getElementById('viewersPokeSprite');
-      const vNam = document.getElementById('viewersPokeName');
-      const vTyp = document.getElementById('viewersPokeTypes');
-      if (vNum && vSpr && vNam && vTyp) {
-        vNum.innerText = `#${String(viewersPokemon.id).padStart(3, '0')}`;
-        vSpr.src = viewersPokemon.sprite_front;
-        vNam.innerText = viewersPokemon.name;
-        vTyp.innerHTML = viewersPokemon.types.map(t => `<span class="type-badge type-${t}">${getTypeEmoji(t)} ${t}</span>`).join('');
+      if (vSlot && vSlot.pokemon) {
+        const p = vSlot.pokemon;
+        document.getElementById('viewersPokeNumber').innerText = `#${String(p.id).padStart(3, '0')}`;
+        document.getElementById('viewersPokeSprite').src = p.sprite_front;
+        document.getElementById('viewersPokeName').innerText = `${p.name} ${pokeBattleMode === '3v3' ? `(${viewersSetupSlotIdx+1}번)` : ''}`;
+        document.getElementById('viewersPokeTypes').innerHTML = p.types.map(t => `<span class="type-badge type-${t}">${getTypeEmoji(t)} ${t}</span>`).join('');
+        document.getElementById('viewersItemSelect').value = vSlot.item || 'none';
 
-        const vHP = calculateLevel50HP(viewersPokemon.stats.hp);
+        const vHP = calculateLevel50HP(p.stats.hp);
         document.getElementById('viewersStatHP').innerText = vHP;
-        document.getElementById('viewersStatAtk').innerText = viewersPokemon.stats.atk;
-        document.getElementById('viewersStatDef').innerText = viewersPokemon.stats.def;
-        document.getElementById('viewersStatSpA').innerText = viewersPokemon.stats.spa;
-        document.getElementById('viewersStatSpD').innerText = viewersPokemon.stats.spd;
-        document.getElementById('viewersStatSpe').innerText = viewersPokemon.stats.spe;
+        document.getElementById('viewersStatAtk').innerText = p.stats.atk;
+        document.getElementById('viewersStatDef').innerText = p.stats.def;
+        document.getElementById('viewersStatSpA').innerText = p.stats.spa;
+        document.getElementById('viewersStatSpD').innerText = p.stats.spd;
+        document.getElementById('viewersStatSpe').innerText = p.stats.spe;
 
-        document.getElementById('viewersPokeMovesPreview').innerHTML = viewersPokemon.moves.map((m, i) => `
+        document.getElementById('viewersPokeMovesPreview').innerHTML = p.moves.map((m, i) => `
           <div style="background: rgba(0,0,0,0.3); padding: 4px 8px; border-radius: 6px; text-align: left; font-size: 11px; border: 1px solid rgba(255,255,255,0.08);">
             <div style="display: flex; justify-content: space-between; align-items: center;">
               <span style="font-weight: 800; color: #fff;">${i+1}. ${m.name}</span>
@@ -7631,13 +7965,20 @@
       return map[t] || "⚪";
     }
 
+    function getItemObj(itemId) {
+      return HELD_ITEMS.find(x => x.id === itemId) || HELD_ITEMS[0];
+    }
+
     // --- Pokemon Picker Modal (213 Pokemon Search & Filter) ---
     function openPokemonPicker(target) {
       pokePickerTarget = target;
+      pokePickerSlotIdx = target === 'streamer' ? streamerSetupSlotIdx : viewersSetupSlotIdx;
       const modal = document.getElementById('pokemonPickerModal');
       const label = document.getElementById('pokemonPickerTargetLabel');
       if (label) {
-        label.innerText = target === 'streamer' ? '👑 스트리머의 포켓몬을 선택하세요' : '👥 시청자 연합의 포켓몬을 선택하세요';
+        label.innerText = target === 'streamer' 
+          ? `👑 스트리머 [${pokeBattleMode === '3v3' ? `${pokePickerSlotIdx+1}번 포켓몬` : '에이스'}]을 선택하세요`
+          : `👥 시청자 연합 [${pokeBattleMode === '3v3' ? `${pokePickerSlotIdx+1}번 포켓몬` : '에이스'}]을 선택하세요`;
       }
       filterPokemonGrid();
       if (modal) modal.classList.add('active');
@@ -7694,7 +8035,7 @@
 
       grid.innerHTML = filtered.map(p => `
         <div class="poke-grid-item" onclick="selectPokemonFromPicker(${p.id})">
-          <img src="${p.sprite_front}" alt="${p.name}" style="width: 72px; height: 72px; object-fit: contain; image-rendering: pixelated;">
+          <img src="${p.sprite_front}" alt="${p.name}" style="width: 72px; height: 72px; object-fit: contain; image-rendering: pixelated;" onerror="this.src='pokemon/25.png'">
           <div style="font-size: 10px; color: var(--text-sub); margin-top: 2px;">#${String(p.id).padStart(3, '0')}</div>
           <div style="font-size: 13px; font-weight: 800; color: #fff; margin: 2px 0 4px;">${p.name}</div>
           <div style="display: flex; gap: 3px; flex-wrap: wrap; justify-content: center;">
@@ -7709,65 +8050,156 @@
       if (!found) return;
 
       if (pokePickerTarget === 'streamer') {
-        streamerPokemon = found;
-        showToast(`👑 스트리머 포켓몬: [${found.name}] 선택 완료!`, '🔥');
+        streamerTeam[pokePickerSlotIdx].pokemon = found;
+        showToast(`👑 스트리머 [${found.name}] 선택 완료!`, '🔥');
       } else {
-        viewersPokemon = found;
-        showToast(`👥 시청자 연합 포켓몬: [${found.name}] 선택 완료!`, '⚡');
+        viewersTeam[pokePickerSlotIdx].pokemon = found;
+        showToast(`👥 시청자 [${found.name}] 선택 완료!`, '⚡');
       }
       renderPokeSetupPreview();
       closePokemonPickerModal();
     }
 
-    function randomizePokemon(target) {
+    function randomizeCurrentSlot(target) {
       if (allPokemonData.length === 0) return;
       const rand = allPokemonData[Math.floor(Math.random() * allPokemonData.length)];
       if (target === 'streamer') {
-        streamerPokemon = rand;
-        showToast(`👑 스트리머 포켓몬: [${rand.name}] 랜덤 배정!`, '🎲');
+        streamerTeam[streamerSetupSlotIdx].pokemon = rand;
+        showToast(`👑 스트리머 ${streamerSetupSlotIdx+1}번: [${rand.name}] 랜덤 배정!`, '🎲');
       } else {
-        viewersPokemon = rand;
-        showToast(`👥 시청자 포켓몬: [${rand.name}] 랜덤 배정!`, '🎲');
+        viewersTeam[viewersSetupSlotIdx].pokemon = rand;
+        showToast(`👥 시청자 ${viewersSetupSlotIdx+1}번: [${rand.name}] 랜덤 배정!`, '🎲');
       }
+      renderPokeSetupPreview();
+    }
+
+    function randomizeAllTeams() {
+      if (allPokemonData.length < 6) return;
+      const shuffled = [...allPokemonData].sort(() => 0.5 - Math.random());
+      const itemPool = HELD_ITEMS.filter(x => x.id !== 'none').map(x => x.id);
+
+      for (let i = 0; i < 3; i++) {
+        streamerTeam[i].pokemon = shuffled[i];
+        streamerTeam[i].item = itemPool[Math.floor(Math.random() * itemPool.length)];
+        viewersTeam[i].pokemon = shuffled[i + 3];
+        viewersTeam[i].item = itemPool[Math.floor(Math.random() * itemPool.length)];
+      }
+
+      showToast('🎲 양팀 6마리 포켓몬 및 실전 지닌 도구가 모두 무작위로 구성되었습니다!', '✨');
       renderPokeSetupPreview();
     }
 
     // --- Battle Arena Execution Engine ---
     function startPokeBattle() {
-      if (!streamerPokemon || !viewersPokemon) {
-        showToast('포켓몬 데이터가 아직 로드되지 않았습니다.', '⚠️');
-        return;
+      const teamSize = pokeBattleMode === '3v3' ? 3 : 1;
+
+      for (let i = 0; i < teamSize; i++) {
+        if (!streamerTeam[i].pokemon || !viewersTeam[i].pokemon) {
+          showToast('포켓몬 엔트리가 완성되지 않았습니다.', '⚠️');
+          return;
+        }
+        // Initialize stats
+        const sP = streamerTeam[i].pokemon;
+        streamerTeam[i].maxHP = calculateLevel50HP(sP.stats.hp);
+        streamerTeam[i].currentHP = streamerTeam[i].maxHP;
+        streamerTeam[i].fainted = false;
+        streamerTeam[i].choiceMove = null;
+        streamerTeam[i].itemUsed = false;
+        streamerTeam[i].rankAtk = 0;
+        streamerTeam[i].rankSpA = 0;
+
+        const vP = viewersTeam[i].pokemon;
+        viewersTeam[i].maxHP = calculateLevel50HP(vP.stats.hp);
+        viewersTeam[i].currentHP = viewersTeam[i].maxHP;
+        viewersTeam[i].fainted = false;
+        viewersTeam[i].choiceMove = null;
+        viewersTeam[i].itemUsed = false;
+        viewersTeam[i].rankAtk = 0;
+        viewersTeam[i].rankSpA = 0;
       }
+
+      streamerActiveIdx = 0;
+      viewersActiveIdx = 0;
+      streamerActionTab = 'moves';
 
       pokeBattleState.active = true;
       pokeBattleState.round = 1;
       pokeBattleState.phase = 'streamer_turn';
-      pokeBattleState.streamerMaxHP = calculateLevel50HP(streamerPokemon.stats.hp);
-      pokeBattleState.streamerHP = pokeBattleState.streamerMaxHP;
-      pokeBattleState.viewersMaxHP = calculateLevel50HP(viewersPokemon.stats.hp);
-      pokeBattleState.viewersHP = pokeBattleState.viewersMaxHP;
+      pokeBattleState.streamerAction = null;
+      pokeBattleState.viewersAction = null;
       pokeBattleState.stats = { totalRounds: 0, streamerDamage: 0, viewersDamage: 0, crits: 0, superEffective: 0 };
 
       // Switch views
       document.getElementById('pokeBattleSetupStage').style.display = 'none';
       document.getElementById('pokeBattleArenaStage').style.display = 'flex';
 
-      // Setup Arena Sprites and status boxes
-      document.getElementById('arenaStreamerName').innerText = streamerPokemon.name;
-      document.getElementById('arenaStreamerSprite').src = streamerPokemon.sprite_back || streamerPokemon.sprite_front;
-      document.getElementById('arenaStreamerTypes').innerHTML = streamerPokemon.types.map(t => `<span class="type-badge type-${t}" style="font-size: 9px; padding: 1px 4px;">${t}</span>`).join('');
-      
-      document.getElementById('arenaViewersName').innerText = viewersPokemon.name;
-      document.getElementById('arenaViewersSprite').src = viewersPokemon.sprite_front;
-      document.getElementById('arenaViewersTypes').innerHTML = viewersPokemon.types.map(t => `<span class="type-badge type-${t}" style="font-size: 9px; padding: 1px 4px;">${t}</span>`).join('');
-
-      updateArenaUI();
+      updateArenaActivePokemonUI();
+      renderArenaTeamBallsHUD();
+      updateArenaHPBars();
       startStreamerPokeTurn();
     }
 
-    function updateArenaUI() {
-      const sPct = Math.max(0, (pokeBattleState.streamerHP / pokeBattleState.streamerMaxHP) * 100);
-      const vPct = Math.max(0, (pokeBattleState.viewersHP / pokeBattleState.viewersMaxHP) * 100);
+    function updateArenaActivePokemonUI() {
+      const sSlot = streamerTeam[streamerActiveIdx];
+      const vSlot = viewersTeam[viewersActiveIdx];
+      const sP = sSlot.pokemon;
+      const vP = vSlot.pokemon;
+
+      document.getElementById('arenaStreamerName').innerText = sP.name;
+      document.getElementById('arenaStreamerSprite').src = sP.sprite_back || sP.sprite_front;
+      document.getElementById('arenaStreamerTypes').innerHTML = sP.types.map(t => `<span class="type-badge type-${t}" style="font-size: 9px; padding: 1px 4px;">${t}</span>`).join('');
+      
+      const sItem = getItemObj(sSlot.item);
+      const sItemBadge = document.getElementById('arenaStreamerItemBadge');
+      if (sItemBadge) {
+        sItemBadge.innerText = `${sItem.emoji} ${sItem.name}`;
+        sItemBadge.style.display = sSlot.item === 'none' ? 'none' : 'inline-flex';
+      }
+
+      document.getElementById('arenaViewersName').innerText = vP.name;
+      document.getElementById('arenaViewersSprite').src = vP.sprite_front;
+      document.getElementById('arenaViewersTypes').innerHTML = vP.types.map(t => `<span class="type-badge type-${t}" style="font-size: 9px; padding: 1px 4px;">${t}</span>`).join('');
+
+      const vItem = getItemObj(vSlot.item);
+      const vItemBadge = document.getElementById('arenaViewersItemBadge');
+      if (vItemBadge) {
+        vItemBadge.innerText = `${vItem.emoji} ${vItem.name}`;
+        vItemBadge.style.display = vSlot.item === 'none' ? 'none' : 'inline-flex';
+      }
+    }
+
+    function renderArenaTeamBallsHUD() {
+      const teamSize = pokeBattleMode === '3v3' ? 3 : 1;
+      const sHUD = document.getElementById('arenaStreamerBallsHUD');
+      const vHUD = document.getElementById('arenaViewersBallsHUD');
+
+      if (sHUD) {
+        sHUD.innerHTML = Array.from({length: teamSize}).map((_, i) => {
+          const slot = streamerTeam[i];
+          const isAct = i === streamerActiveIdx;
+          const isFaint = slot.fainted;
+          const cls = isFaint ? 'poke-ball-fainted' : (isAct ? 'poke-ball-active' : 'poke-ball-alive');
+          return `<span class="poke-ball-indicator ${cls}" title="${slot.pokemon.name} (${isFaint ? '기절' : isAct ? '출전중' : '생존'})">${isFaint ? '✕' : isAct ? '⚔️' : '●'}</span>`;
+        }).join('');
+      }
+
+      if (vHUD) {
+        vHUD.innerHTML = Array.from({length: teamSize}).map((_, i) => {
+          const slot = viewersTeam[i];
+          const isAct = i === viewersActiveIdx;
+          const isFaint = slot.fainted;
+          const cls = isFaint ? 'poke-ball-fainted' : (isAct ? 'poke-ball-active' : 'poke-ball-alive');
+          return `<span class="poke-ball-indicator ${cls}" title="${slot.pokemon.name} (${isFaint ? '기절' : isAct ? '출전중' : '생존'})">${isFaint ? '✕' : isAct ? '⚔️' : '●'}</span>`;
+        }).join('');
+      }
+    }
+
+    function updateArenaHPBars() {
+      const sSlot = streamerTeam[streamerActiveIdx];
+      const vSlot = viewersTeam[viewersActiveIdx];
+
+      const sPct = Math.max(0, (sSlot.currentHP / sSlot.maxHP) * 100);
+      const vPct = Math.max(0, (vSlot.currentHP / vSlot.maxHP) * 100);
 
       const sBar = document.getElementById('arenaStreamerHPBar');
       const vBar = document.getElementById('arenaViewersHPBar');
@@ -7783,8 +8215,8 @@
         vBar.style.background = vPct > 50 ? 'linear-gradient(90deg, #22c55e, #4ade80)' : vPct > 20 ? 'linear-gradient(90deg, #eab308, #facc15)' : 'linear-gradient(90deg, #ef4444, #f87171)';
       }
 
-      if (sText) sText.innerText = `${Math.max(0, Math.round(pokeBattleState.streamerHP))} / ${pokeBattleState.streamerMaxHP}`;
-      if (vText) vText.innerText = `${Math.max(0, Math.round(pokeBattleState.viewersHP))} / ${pokeBattleState.viewersMaxHP}`;
+      if (sText) sText.innerText = `${Math.max(0, Math.round(sSlot.currentHP))} / ${sSlot.maxHP}`;
+      if (vText) vText.innerText = `${Math.max(0, Math.round(vSlot.currentHP))} / ${vSlot.maxHP}`;
 
       document.getElementById('pokeBattleRoundBadge').innerText = `⚔️ ROUND ${pokeBattleState.round}`;
     }
@@ -7794,113 +8226,290 @@
       if (el) el.innerHTML = msg;
     }
 
+    // --- Action Tabs (Moves / Switch) ---
+    function switchPokeActionTab(tab) {
+      streamerActionTab = tab;
+      const movesBtn = document.getElementById('pokeActionMovesTabBtn');
+      const switchBtn = document.getElementById('pokeActionSwitchTabBtn');
+      const movesDeck = document.getElementById('arenaMoveButtonsDeck');
+      const switchDeck = document.getElementById('arenaSwitchButtonsDeck');
+
+      if (tab === 'moves') {
+        if (movesBtn) movesBtn.classList.add('active');
+        if (switchBtn) switchBtn.classList.remove('active');
+        if (movesDeck) movesDeck.style.display = 'grid';
+        if (switchDeck) switchDeck.style.display = 'none';
+      } else {
+        if (switchBtn) switchBtn.classList.add('active');
+        if (movesBtn) movesBtn.classList.remove('active');
+        if (movesDeck) movesDeck.style.display = 'none';
+        if (switchDeck) switchDeck.style.display = 'flex';
+        renderStreamerSwitchDeck();
+      }
+    }
+
+    function renderStreamerSwitchDeck() {
+      const switchDeck = document.getElementById('arenaSwitchButtonsDeck');
+      if (!switchDeck) return;
+
+      const teamSize = pokeBattleMode === '3v3' ? 3 : 1;
+      const candidates = [];
+      for (let i = 0; i < teamSize; i++) {
+        if (i !== streamerActiveIdx) {
+          candidates.push({ idx: i, slot: streamerTeam[i] });
+        }
+      }
+
+      if (candidates.length === 0) {
+        switchDeck.innerHTML = '<div style="color: var(--text-sub); text-align: center; padding: 20px; font-size: 12px;">교체 가능한 팀원 포켓몬이 없습니다.</div>';
+        return;
+      }
+
+      switchDeck.innerHTML = candidates.map(c => {
+        const p = c.slot.pokemon;
+        const it = getItemObj(c.slot.item);
+        const isFainted = c.slot.fainted;
+        const hpPct = Math.round((c.slot.currentHP / c.slot.maxHP) * 100);
+        return `
+          <div class="poke-switch-card ${isFainted ? 'disabled' : ''}" onclick="${isFainted ? '' : `handleStreamerSwitchSelect(${c.idx})`}">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <img src="${p.sprite_front}" alt="${p.name}" style="width: 44px; height: 44px; object-fit: contain; image-rendering: pixelated;">
+              <div>
+                <div style="font-weight: 800; font-size: 13px; color: #fff;">${p.name} <span style="font-size: 11px; color: #ffd700;">(${c.idx+1}번)</span></div>
+                <div style="display: flex; gap: 4px; margin-top: 2px;">
+                  ${p.types.map(t => `<span class="type-badge type-${t}" style="font-size: 8px; padding: 1px 4px;">${t}</span>`).join('')}
+                  <span class="poke-item-badge" style="font-size: 9px; padding: 1px 6px;">${it.emoji} ${it.name}</span>
+                </div>
+              </div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 12px; font-weight: 800; color: ${isFainted ? '#ef4444' : '#4ade80'};">${isFainted ? '💀 기절' : `HP ${c.slot.currentHP}/${c.slot.maxHP} (${hpPct}%)`}</div>
+              ${isFainted ? '' : '<span class="badge-tag" style="background: rgba(0,255,163,0.2); color: var(--chzzk-green); font-size: 10px; margin-top: 2px;">🔄 교체 출전</span>'}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // --- Streamer Turn Execution with Timer ---
     function startStreamerPokeTurn() {
       pokeBattleState.phase = 'streamer_turn';
-      document.getElementById('pokeBattlePhaseBadge').innerText = '👑 1단계: 스트리머 기술 선택';
+      document.getElementById('pokeBattlePhaseBadge').innerText = '👑 1단계: 스트리머 행동 선택';
       document.getElementById('pokeBattlePhaseBadge').style.background = 'linear-gradient(135deg, #ffd700, #ff8800)';
       document.getElementById('arenaViewersVoteHud').style.display = 'none';
-      setBattleDialogue(`👑 <b>${streamerPokemon.name}</b>은(는) 무엇을 할까? (아래 기술 1개를 선택하세요)`);
+
+      const sSlot = streamerTeam[streamerActiveIdx];
+      setBattleDialogue(`👑 <b>${sSlot.pokemon.name}</b>은(는) 무엇을 할까? (기술 또는 교체 선택)`);
+
+      switchPokeActionTab('moves');
 
       const deck = document.getElementById('arenaMoveButtonsDeck');
-      if (!deck) return;
+      if (deck) {
+        deck.innerHTML = sSlot.pokemon.moves.map((m, i) => {
+          const isChoiceLocked = sSlot.choiceMove && sSlot.choiceMove.name !== m.name;
+          const isAssaultVestBlocked = sSlot.item === 'assault_vest' && m.category === '변화';
+          const disabled = isChoiceLocked || isAssaultVestBlocked;
+          return `
+            <button type="button" class="poke-move-btn" ${disabled ? 'disabled' : ''} onclick="handleStreamerMoveSelect(${i})">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-weight: 800; font-size: 13px; color: #fff;">${i+1}. ${m.name}</span>
+                <span class="type-badge type-${m.type}" style="font-size: 9px; padding: 1px 4px;">${m.type}</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-sub);">
+                <span>${m.category === '변화' ? '🛡️ 랭크업/상태' : `위력 ${m.power}`}</span>
+                <span>명중 ${m.acc}%</span>
+              </div>
+              ${isChoiceLocked ? '<div style="font-size: 9px; color: #f43f5e;">구애도구로 기술 고정됨</div>' : ''}
+              ${isAssaultVestBlocked ? '<div style="font-size: 9px; color: #f43f5e;">돌격조끼로 변화기 불가</div>' : ''}
+            </button>
+          `;
+        }).join('');
+      }
 
-      deck.innerHTML = streamerPokemon.moves.map((m, i) => `
-        <button type="button" class="poke-move-btn" onclick="handleStreamerMoveSelect(${i})">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-weight: 800; font-size: 13px; color: #fff;">${i+1}. ${m.name}</span>
-            <span class="type-badge type-${m.type}" style="font-size: 9px; padding: 1px 4px;">${m.type}</span>
-          </div>
-          <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-sub);">
-            <span>${m.category === '변화' ? '🛡️ 랭크업/상태' : `위력 ${m.power}`}</span>
-            <span>명중 ${m.acc}%</span>
-          </div>
-        </button>
-      `).join('');
+      // Streamer Timer
+      const streamerHud = document.getElementById('arenaStreamerTimerHud');
+      if (streamerHud) streamerHud.style.display = 'block';
+
+      pokeBattleState.streamerTimerTotal = parseFloat(document.getElementById('pokeStreamerDurationSelect').value) || 30.0;
+      pokeBattleState.streamerTimerRemaining = pokeBattleState.streamerTimerTotal;
+      renderStreamerTimerUI();
+
+      clearInterval(pokeBattleState.streamerTimerInterval);
+      const stepMs = 100;
+      pokeBattleState.streamerTimerInterval = setInterval(() => {
+        pokeBattleState.streamerTimerRemaining -= (stepMs / 1000);
+        if (pokeBattleState.streamerTimerRemaining <= 0) {
+          pokeBattleState.streamerTimerRemaining = 0;
+          clearInterval(pokeBattleState.streamerTimerInterval);
+          handleStreamerTimeout();
+        }
+        renderStreamerTimerUI();
+      }, stepMs);
+    }
+
+    function renderStreamerTimerUI() {
+      const tText = document.getElementById('arenaStreamerTimerText');
+      const tFill = document.getElementById('arenaStreamerTimerFill');
+      if (tText) tText.innerText = `${Math.max(0, pokeBattleState.streamerTimerRemaining).toFixed(1)}s`;
+      if (tFill) {
+        const pct = (Math.max(0, pokeBattleState.streamerTimerRemaining) / pokeBattleState.streamerTimerTotal) * 100;
+        tFill.style.width = `${pct}%`;
+      }
+    }
+
+    function handleStreamerTimeout() {
+      if (pokeBattleState.phase !== 'streamer_turn') return;
+      const sSlot = streamerTeam[streamerActiveIdx];
+      
+      let validMoveIdx = 0;
+      if (sSlot.choiceMove) {
+        const idx = sSlot.pokemon.moves.findIndex(m => m.name === sSlot.choiceMove.name);
+        if (idx !== -1) validMoveIdx = idx;
+      } else {
+        const available = sSlot.pokemon.moves
+          .map((m, idx) => ({ m, idx }))
+          .filter(x => !(sSlot.item === 'assault_vest' && x.m.category === '변화'));
+        if (available.length > 0) {
+          validMoveIdx = available[Math.floor(Math.random() * available.length)].idx;
+        }
+      }
+
+      showToast(`⏱️ 스트리머 선택 시간 초과! [${sSlot.pokemon.moves[validMoveIdx].name}] 자동 발동`, '🎲');
+      handleStreamerMoveSelect(validMoveIdx);
     }
 
     function handleStreamerMoveSelect(moveIdx) {
       if (pokeBattleState.phase !== 'streamer_turn') return;
-      pokeBattleState.streamerSelectedMove = streamerPokemon.moves[moveIdx];
-      
-      // Disable move buttons
-      const btns = document.querySelectorAll('.poke-move-btn');
-      btns.forEach((b, i) => {
-        b.disabled = true;
-        if (i === moveIdx) b.style.borderColor = 'var(--chzzk-green)';
-      });
+      clearInterval(pokeBattleState.streamerTimerInterval);
+      document.getElementById('arenaStreamerTimerHud').style.display = 'none';
 
-      showToast(`스트리머 [${pokeBattleState.streamerSelectedMove.name}] 선택 완료! 시청자 투표가 시작됩니다.`, '🎯');
+      const sSlot = streamerTeam[streamerActiveIdx];
+      const move = sSlot.pokemon.moves[moveIdx];
+      pokeBattleState.streamerAction = { type: 'move', moveIdx, move };
+
+      showToast(`스트리머 [${move.name}] 선택 완료! 시청자 투표가 시작됩니다.`, '🎯');
       startViewersPokeVote();
     }
 
+    function handleStreamerSwitchSelect(targetIdx) {
+      if (pokeBattleState.phase !== 'streamer_turn') return;
+      if (streamerTeam[targetIdx].fainted) return;
+      clearInterval(pokeBattleState.streamerTimerInterval);
+      document.getElementById('arenaStreamerTimerHud').style.display = 'none';
+
+      pokeBattleState.streamerAction = { type: 'switch', targetIdx, targetPokemon: streamerTeam[targetIdx].pokemon };
+      showToast(`스트리머 [${streamerTeam[targetIdx].pokemon.name}](으)로 교체 선택! 시청자 투표가 시작됩니다.`, '🔄');
+      startViewersPokeVote();
+    }
+
+    // --- Viewers Vote with Move & Switch Options ---
     function startViewersPokeVote() {
       pokeBattleState.phase = 'viewers_vote';
-      document.getElementById('pokeBattlePhaseBadge').innerText = '👥 2단계: 시청자 기술 투표';
+      document.getElementById('pokeBattlePhaseBadge').innerText = '👥 2단계: 시청자 행동 투표';
       document.getElementById('pokeBattlePhaseBadge').style.background = 'linear-gradient(135deg, #0284c7, #0369a1)';
 
       pokeVoteUsers.clear();
-      pokeVoteCounts = { 1: 0, 2: 0, 3: 0, 4: 0 };
+      pokeVoteCounts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
 
       const hud = document.getElementById('arenaViewersVoteHud');
       if (hud) hud.style.display = 'block';
 
-      setBattleDialogue(`👥 <b>시청자 턴</b>: 채팅창에 기술 번호 [<b>1</b>, <b>2</b>, <b>3</b>, <b>4</b>]를 입력하세요!`);
+      const instr = document.getElementById('arenaVoteInstructionText');
+      if (instr) {
+        instr.innerHTML = pokeBattleMode === '3v3' 
+          ? `(채팅에 <b>1</b>~<b>4</b> 기술 / <b>5</b>, <b>6</b> 교체 입력)`
+          : `(채팅에 <b>1</b>~<b>4</b> 기술 번호 입력)`;
+      }
 
-      pokeBattleState.timerTotal = parseFloat(document.getElementById('pokeVoteDurationSelect').value) || 30.0;
-      pokeBattleState.timerRemaining = pokeBattleState.timerTotal;
-      renderPokeVotingTimer();
+      const vSlot = viewersTeam[viewersActiveIdx];
+      setBattleDialogue(`👥 <b>시청자 턴</b>: 채팅창에 기술 번호 [<b>1</b>~<b>4</b>] ${pokeBattleMode === '3v3' ? '또는 교체 [<b>5</b>, <b>6</b>]' : ''}를 입력하세요!`);
+
+      pokeBattleState.viewersTimerTotal = parseFloat(document.getElementById('pokeVoteDurationSelect').value) || 30.0;
+      pokeBattleState.viewersTimerRemaining = pokeBattleState.viewersTimerTotal;
+      renderViewersVotingTimer();
       renderPokeVotingBarsUI();
 
-      clearInterval(pokeBattleState.timerInterval);
+      clearInterval(pokeBattleState.viewersTimerInterval);
       const stepMs = 100;
-      pokeBattleState.timerInterval = setInterval(() => {
-        pokeBattleState.timerRemaining -= (stepMs / 1000);
-        if (pokeBattleState.timerRemaining <= 0) {
-          pokeBattleState.timerRemaining = 0;
-          clearInterval(pokeBattleState.timerInterval);
+      pokeBattleState.viewersTimerInterval = setInterval(() => {
+        pokeBattleState.viewersTimerRemaining -= (stepMs / 1000);
+        if (pokeBattleState.viewersTimerRemaining <= 0) {
+          pokeBattleState.viewersTimerRemaining = 0;
+          clearInterval(pokeBattleState.viewersTimerInterval);
           finishViewersPokeVote();
         }
-        renderPokeVotingTimer();
+        renderViewersVotingTimer();
       }, stepMs);
     }
 
-    function renderPokeVotingTimer() {
+    function renderViewersVotingTimer() {
       const tText = document.getElementById('arenaVotingTimerText');
       const tFill = document.getElementById('arenaVotingTimerFill');
-      if (tText) tText.innerText = `${Math.max(0, pokeBattleState.timerRemaining).toFixed(1)}s`;
+      if (tText) tText.innerText = `${Math.max(0, pokeBattleState.viewersTimerRemaining).toFixed(1)}s`;
       if (tFill) {
-        const pct = (Math.max(0, pokeBattleState.timerRemaining) / pokeBattleState.timerTotal) * 100;
+        const pct = (Math.max(0, pokeBattleState.viewersTimerRemaining) / pokeBattleState.viewersTimerTotal) * 100;
         tFill.style.width = `${pct}%`;
       }
     }
 
     function handleLivePokeBattleChatVote(nickname, msg, uid, now) {
-      if (!pokeBattleState.active || pokeBattleState.phase !== 'viewers_vote') return;
-      if (!msg) return;
+      if (!pokeBattleState.active) return;
 
-      const clean = msg.trim().toUpperCase().replace(/\s+/g, '');
-      let choice = null;
+      // Case A: Normal Turn Viewers Vote
+      if (pokeBattleState.phase === 'viewers_vote') {
+        const clean = msg.trim().toUpperCase().replace(/\s+/g, '');
+        let choice = null;
 
-      if (/^[1-4]$/.test(clean)) {
-        choice = parseInt(clean, 10);
-      } else {
-        // Match move names
-        viewersPokemon.moves.forEach((m, idx) => {
-          if (m.name.toUpperCase().replace(/\s+/g, '') === clean) {
-            choice = idx + 1;
+        if (/^[1-6]$/.test(clean)) {
+          choice = parseInt(clean, 10);
+        } else {
+          // Match move names
+          const vSlot = viewersTeam[viewersActiveIdx];
+          vSlot.pokemon.moves.forEach((m, idx) => {
+            if (m.name.toUpperCase().replace(/\s+/g, '') === clean) {
+              choice = idx + 1;
+            }
+          });
+          // Match switch names
+          if (pokeBattleMode === '3v3') {
+            const teamSize = 3;
+            let switchCandidateCounter = 5;
+            for (let i = 0; i < teamSize; i++) {
+              if (i !== viewersActiveIdx && !viewersTeam[i].fainted) {
+                if (viewersTeam[i].pokemon.name.toUpperCase().replace(/\s+/g, '') === clean) {
+                  choice = switchCandidateCounter;
+                }
+                switchCandidateCounter++;
+              }
+            }
           }
-        });
+        }
+
+        if (choice && choice >= 1 && choice <= 6) {
+          pokeVoteUsers.set(uid, choice);
+          recomputePokeVotes();
+          renderPokeVotingBarsUI();
+        }
+        return;
       }
 
-      if (choice && choice >= 1 && choice <= 4) {
-        pokeVoteUsers.set(uid, choice);
-        recomputePokeVotes();
-        renderPokeVotingBarsUI();
+      // Case B: Faint Replacement Viewers Vote
+      if (pokeBattleState.phase === 'faint_switch_viewers') {
+        const clean = msg.trim().toUpperCase().replace(/\s+/g, '');
+        let choice = null;
+        if (/^[1-3]$/.test(clean)) {
+          choice = parseInt(clean, 10);
+        }
+        if (choice) {
+          faintVoteUsers.set(uid, choice);
+          recomputeFaintVotes();
+          renderFaintVoteCandidatesUI();
+        }
       }
     }
 
     function recomputePokeVotes() {
-      pokeVoteCounts = { 1: 0, 2: 0, 3: 0, 4: 0 };
+      pokeVoteCounts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
       for (const [uid, choice] of pokeVoteUsers.entries()) {
         pokeVoteCounts[choice] = (pokeVoteCounts[choice] || 0) + 1;
       }
@@ -7908,17 +8517,51 @@
 
     function renderPokeVotingBarsUI() {
       const container = document.getElementById('arenaVoteCandidateBars');
-      if (!container || !viewersPokemon) return;
+      const vSlot = viewersTeam[viewersActiveIdx];
+      if (!container || !vSlot) return;
 
       const total = pokeVoteUsers.size;
+      const candidates = [];
 
-      container.innerHTML = viewersPokemon.moves.map((m, i) => {
-        const num = i + 1;
-        const count = pokeVoteCounts[num] || 0;
+      // 4 Moves
+      vSlot.pokemon.moves.forEach((m, i) => {
+        const isLocked = vSlot.choiceMove && vSlot.choiceMove.name !== m.name;
+        const isAV = vSlot.item === 'assault_vest' && m.category === '변화';
+        candidates.push({
+          num: i + 1,
+          label: `${i + 1}. ${m.name}`,
+          tag: m.type,
+          tagClass: `type-${m.type}`,
+          disabled: isLocked || isAV,
+          note: isLocked ? '고정됨' : (isAV ? '돌격조끼' : '')
+        });
+      });
+
+      // Switch Candidates (if 3v3 mode)
+      if (pokeBattleMode === '3v3') {
+        let switchCounter = 5;
+        for (let i = 0; i < 3; i++) {
+          if (i !== viewersActiveIdx) {
+            const slot = viewersTeam[i];
+            candidates.push({
+              num: switchCounter,
+              label: `${switchCounter}. [교체] ${slot.pokemon.name}`,
+              tag: slot.fainted ? '기절' : `HP ${Math.round((slot.currentHP/slot.maxHP)*100)}%`,
+              tagClass: slot.fainted ? 'badge-tag' : 'type-노말',
+              disabled: slot.fainted,
+              targetIdx: i
+            });
+            switchCounter++;
+          }
+        }
+      }
+
+      container.innerHTML = candidates.map(c => {
+        const count = pokeVoteCounts[c.num] || 0;
         const pct = total > 0 ? Math.round((count / total) * 100) : 0;
         return `
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <span style="font-weight: 800; color: #fff; width: 110px; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${num}. ${m.name}</span>
+          <div style="display: flex; align-items: center; gap: 8px; opacity: ${c.disabled ? '0.4' : '1'};">
+            <span style="font-weight: 800; color: #fff; width: 130px; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${c.label}</span>
             <div style="flex: 1; height: 10px; background: rgba(255,255,255,0.08); border-radius: 5px; overflow: hidden;">
               <div style="height: 100%; width: ${pct}%; background: linear-gradient(90deg, #38bdf8, #00ffa3); transition: width 0.15s;"></div>
             </div>
@@ -7929,86 +8572,190 @@
     }
 
     function finishViewersPokeVote() {
-      clearInterval(pokeBattleState.timerInterval);
+      clearInterval(pokeBattleState.viewersTimerInterval);
       
-      let maxVotes = 0;
-      let topChoices = [];
-      for (let i = 1; i <= 4; i++) {
-        const v = pokeVoteCounts[i] || 0;
-        if (v > maxVotes) {
-          maxVotes = v;
-          topChoices = [i];
-        } else if (v === maxVotes && maxVotes > 0) {
-          topChoices.push(i);
+      const vSlot = viewersTeam[viewersActiveIdx];
+      const validCandidateNums = [];
+
+      // Valid moves
+      vSlot.pokemon.moves.forEach((m, i) => {
+        const isLocked = vSlot.choiceMove && vSlot.choiceMove.name !== m.name;
+        const isAV = vSlot.item === 'assault_vest' && m.category === '변화';
+        if (!isLocked && !isAV) validCandidateNums.push(i + 1);
+      });
+
+      // Valid switches
+      let switchCounter = 5;
+      const switchIndexMap = {};
+      if (pokeBattleMode === '3v3') {
+        for (let i = 0; i < 3; i++) {
+          if (i !== viewersActiveIdx) {
+            if (!viewersTeam[i].fainted) {
+              validCandidateNums.push(switchCounter);
+              switchIndexMap[switchCounter] = i;
+            }
+            switchCounter++;
+          }
         }
       }
 
-      let selectedMoveIdx = 0;
-      if (maxVotes > 0 && topChoices.length > 0) {
-        const picked = topChoices[Math.floor(Math.random() * topChoices.length)];
-        selectedMoveIdx = picked - 1;
-        showToast(`시청자 최다 투표 [${viewersPokemon.moves[selectedMoveIdx].name}] (${maxVotes}표) 발동!`, '👥');
-      } else {
-        selectedMoveIdx = Math.floor(Math.random() * 4);
-        showToast(`투표 없음: [${viewersPokemon.moves[selectedMoveIdx].name}] 무작위 발동!`, '🎲');
+      let maxVotes = 0;
+      let topChoices = [];
+      for (const num of validCandidateNums) {
+        const v = pokeVoteCounts[num] || 0;
+        if (v > maxVotes) {
+          maxVotes = v;
+          topChoices = [num];
+        } else if (v === maxVotes && maxVotes > 0) {
+          topChoices.push(num);
+        }
       }
 
-      pokeBattleState.viewersSelectedMove = viewersPokemon.moves[selectedMoveIdx];
+      let pickedNum = 1;
+      if (maxVotes > 0 && topChoices.length > 0) {
+        pickedNum = topChoices[Math.floor(Math.random() * topChoices.length)];
+      } else {
+        pickedNum = validCandidateNums[Math.floor(Math.random() * validCandidateNums.length)] || 1;
+      }
+
+      if (pickedNum <= 4) {
+        const moveIdx = pickedNum - 1;
+        const move = vSlot.pokemon.moves[moveIdx];
+        pokeBattleState.viewersAction = { type: 'move', moveIdx, move };
+        showToast(`시청자 행동: [${move.name}] 발동!`, '👥');
+      } else {
+        const targetIdx = switchIndexMap[pickedNum];
+        pokeBattleState.viewersAction = { type: 'switch', targetIdx, targetPokemon: viewersTeam[targetIdx].pokemon };
+        showToast(`시청자 행동: [${viewersTeam[targetIdx].pokemon.name}](으)로 교체!`, '🔄');
+      }
+
       executeBattleTurnSequence();
     }
 
-    // --- Turn Sequence Execution ---
+    // --- Turn Sequence Execution (Switching Priority +6 & Attack Ordering) ---
     async function executeBattleTurnSequence() {
       pokeBattleState.phase = 'executing';
       document.getElementById('arenaViewersVoteHud').style.display = 'none';
 
-      const sMove = pokeBattleState.streamerSelectedMove;
-      const vMove = pokeBattleState.viewersSelectedMove;
+      const sAct = pokeBattleState.streamerAction;
+      const vAct = pokeBattleState.viewersAction;
 
-      // Determine Priority & Speed
-      const sPriority = sMove.name === '전광석화' || sMove.name === '신속' || sMove.name === '야습' || sMove.name === '기습' ? 1 : 0;
-      const vPriority = vMove.name === '전광석화' || vMove.name === '신속' || vMove.name === '야습' || vMove.name === '기습' ? 1 : 0;
+      // 1. Handle Switches First (Priority +6)
+      if (sAct.type === 'switch') {
+        await executeSwitchAnimation('streamer', sAct.targetIdx);
+      }
+      if (vAct.type === 'switch') {
+        await executeSwitchAnimation('viewers', vAct.targetIdx);
+      }
 
-      let streamerFirst = true;
-      if (sPriority > vPriority) streamerFirst = true;
-      else if (vPriority > sPriority) streamerFirst = false;
-      else streamerFirst = streamerPokemon.stats.spe >= viewersPokemon.stats.spe;
-
-      const firstActor = streamerFirst ? 'streamer' : 'viewers';
-      const secondActor = streamerFirst ? 'viewers' : 'streamer';
-
-      // First Attack
-      const firstFainted = await executeSingleAttack(firstActor);
-      if (firstFainted) {
-        finishPokeBattle(firstActor);
+      // If both switched, round ends immediately
+      if (sAct.type === 'switch' && vAct.type === 'switch') {
+        await handleRoundEndEffects();
         return;
       }
 
-      await new Promise(r => setTimeout(r, 1200));
+      // 2. Determine Action Order for Attacks
+      const sSlot = streamerTeam[streamerActiveIdx];
+      const vSlot = viewersTeam[viewersActiveIdx];
 
-      // Second Attack (if defender not fainted)
-      const secondFainted = await executeSingleAttack(secondActor);
-      if (secondFainted) {
-        finishPokeBattle(secondActor);
-        return;
+      if (sAct.type === 'move' && vAct.type === 'move') {
+        const sMove = sAct.move;
+        const vMove = vAct.move;
+
+        const sPriority = (sMove.name === '전광석화' || sMove.name === '신속' || sMove.name === '야습' || sMove.name === '기습') ? 1 : 0;
+        const vPriority = (vMove.name === '전광석화' || vMove.name === '신속' || vMove.name === '야습' || vMove.name === '기습') ? 1 : 0;
+
+        let sSpeed = sSlot.pokemon.stats.spe;
+        if (sSlot.item === 'choice_scarf') sSpeed = Math.floor(sSpeed * 1.5);
+        let vSpeed = vSlot.pokemon.stats.spe;
+        if (vSlot.item === 'choice_scarf') vSpeed = Math.floor(vSpeed * 1.5);
+
+        let streamerFirst = true;
+        if (sPriority > vPriority) streamerFirst = true;
+        else if (vPriority > sPriority) streamerFirst = false;
+        else streamerFirst = sSpeed >= vSpeed;
+
+        const firstActor = streamerFirst ? 'streamer' : 'viewers';
+        const secondActor = streamerFirst ? 'viewers' : 'streamer';
+
+        // Attack 1
+        const firstFainted = await executeSingleAttack(firstActor, streamerFirst ? sMove : vMove);
+        if (firstFainted) {
+          await handleFaintPhase(firstActor === 'streamer' ? 'viewers' : 'streamer');
+          return;
+        }
+
+        await new Promise(r => setTimeout(r, 1000));
+
+        // Attack 2 (if defender didn't faint)
+        const secondFainted = await executeSingleAttack(secondActor, streamerFirst ? vMove : sMove);
+        if (secondFainted) {
+          await handleFaintPhase(secondActor === 'streamer' ? 'viewers' : 'streamer');
+          return;
+        }
+      } else if (sAct.type === 'move' && vAct.type === 'switch') {
+        // Streamer attacks incoming switched-in Pokemon
+        const fainted = await executeSingleAttack('streamer', sAct.move);
+        if (fainted) {
+          await handleFaintPhase('viewers');
+          return;
+        }
+      } else if (sAct.type === 'switch' && vAct.type === 'move') {
+        // Viewers attack incoming switched-in Pokemon
+        const fainted = await executeSingleAttack('viewers', vAct.move);
+        if (fainted) {
+          await handleFaintPhase('streamer');
+          return;
+        }
       }
 
-      await new Promise(r => setTimeout(r, 1000));
-
-      // Round concludes, next round begins
-      pokeBattleState.round++;
-      pokeBattleState.stats.totalRounds++;
-      updateArenaUI();
-      startStreamerPokeTurn();
+      await handleRoundEndEffects();
     }
 
-    async function executeSingleAttack(actor) {
+    async function executeSwitchAnimation(side, targetIdx) {
+      if (side === 'streamer') {
+        streamerTeam[streamerActiveIdx].choiceMove = null; // Reset choice lock on switch
+        streamerActiveIdx = targetIdx;
+        const sP = streamerTeam[targetIdx].pokemon;
+        setBattleDialogue(`👑 <b>스트리머</b>는 <b>[${sP.name}]</b>(으)로 교체했다!`);
+        updateArenaActivePokemonUI();
+        renderArenaTeamBallsHUD();
+        updateArenaHPBars();
+        const spr = document.getElementById('arenaStreamerSprite');
+        if (spr) {
+          spr.style.transform = 'scale(0.5)';
+          setTimeout(() => spr.style.transform = 'scale(1)', 300);
+        }
+      } else {
+        viewersTeam[viewersActiveIdx].choiceMove = null; // Reset choice lock on switch
+        viewersActiveIdx = targetIdx;
+        const vP = viewersTeam[targetIdx].pokemon;
+        setBattleDialogue(`👥 <b>시청자 연합</b>은 <b>[${vP.name}]</b>(으)로 교체했다!`);
+        updateArenaActivePokemonUI();
+        renderArenaTeamBallsHUD();
+        updateArenaHPBars();
+        const spr = document.getElementById('arenaViewersSprite');
+        if (spr) {
+          spr.style.transform = 'scale(0.5)';
+          setTimeout(() => spr.style.transform = 'scale(1)', 300);
+        }
+      }
+      await new Promise(r => setTimeout(r, 900));
+    }
+
+    async function executeSingleAttack(actor, move) {
       const isStreamer = actor === 'streamer';
-      const attacker = isStreamer ? streamerPokemon : viewersPokemon;
-      const defender = isStreamer ? viewersPokemon : streamerPokemon;
-      const move = isStreamer ? pokeBattleState.streamerSelectedMove : pokeBattleState.viewersSelectedMove;
+      const attackerSlot = isStreamer ? streamerTeam[streamerActiveIdx] : viewersTeam[viewersActiveIdx];
+      const defenderSlot = isStreamer ? viewersTeam[viewersActiveIdx] : streamerTeam[streamerActiveIdx];
+      const attacker = attackerSlot.pokemon;
+      const defender = defenderSlot.pokemon;
       const attackerSpr = isStreamer ? document.getElementById('arenaStreamerSprite') : document.getElementById('arenaViewersSprite');
       const defenderSpr = isStreamer ? document.getElementById('arenaViewersSprite') : document.getElementById('arenaStreamerSprite');
+
+      // Choice Item Lock
+      if (attackerSlot.item === 'choice_band' || attackerSlot.item === 'choice_specs' || attackerSlot.item === 'choice_scarf') {
+        attackerSlot.choiceMove = move;
+      }
 
       // 1. Announce attack
       setBattleDialogue(`${isStreamer ? '👑' : '👥'} <b>${attacker.name}</b>의 <b>[${move.name}]</b>!`);
@@ -8026,18 +8773,31 @@
         return false;
       }
 
-      // 3. Status/Buff move handling
+      // 3. Status / Buff moves
       if (move.category === '변화' || move.power === 0) {
-        setBattleDialogue(`✨ <b>${attacker.name}</b>의 능력이 상승했다!`);
+        attackerSlot.rankAtk += 1;
+        attackerSlot.rankSpA += 1;
+        setBattleDialogue(`✨ <b>${attacker.name}</b>의 공격력과 특수공격력이 상승했다!`);
         return false;
       }
 
       // 4. Damage calculation
       const isSpecial = move.category === '특수';
-      const atkStat = isSpecial ? attacker.stats.spa : attacker.stats.atk;
-      const defStat = isSpecial ? defender.stats.spd : defender.stats.def;
+      let atkStat = isSpecial ? attacker.stats.spa : attacker.stats.atk;
+      let defStat = isSpecial ? defender.stats.spd : defender.stats.def;
 
-      // STAB (Same Type Attack Bonus)
+      // Item offensive buffs
+      if (!isSpecial && attackerSlot.item === 'choice_band') atkStat = Math.floor(atkStat * 1.5);
+      if (isSpecial && attackerSlot.item === 'choice_specs') atkStat = Math.floor(atkStat * 1.5);
+      if (attackerSlot.rankAtk > 0) atkStat = Math.floor(atkStat * (1 + 0.5 * attackerSlot.rankAtk));
+
+      // Item defensive buffs
+      if (isSpecial && defenderSlot.item === 'assault_vest') defStat = Math.floor(defStat * 1.5);
+      if (defenderSlot.item === 'eviolite' && defender.name === '피카츄') {
+        defStat = Math.floor(defStat * 1.5);
+      }
+
+      // STAB
       const stab = attacker.types.includes(move.type) ? 1.5 : 1.0;
 
       // Type Effectiveness
@@ -8048,23 +8808,41 @@
         }
       });
 
-      // Critical Hit (1/16)
-      const isCrit = Math.random() < 0.0625;
+      // Item: Expert Belt
+      if (attackerSlot.item === 'expert_belt' && typeMult >= 2.0) {
+        typeMult *= 1.2;
+      }
+
+      // Critical Hit
+      const critChance = attackerSlot.item === 'scope_lens' ? 0.125 : 0.0625;
+      const isCrit = Math.random() < critChance;
       const critMult = isCrit ? 1.5 : 1.0;
       if (isCrit) pokeBattleState.stats.crits++;
       if (typeMult >= 2.0) pokeBattleState.stats.superEffective++;
 
       // Base formula
-      const baseDmg = ((2 * 50 / 5 + 2) * move.power * (atkStat / Math.max(1, defStat)) / 50 + 2);
-      const variance = (Math.random() * (1.0 - 0.85)) + 0.85;
-      const totalDmg = Math.max(1, Math.round(baseDmg * stab * typeMult * critMult * variance));
+      let baseDmg = ((2 * 50 / 5 + 2) * move.power * (atkStat / Math.max(1, defStat)) / 50 + 2);
+      if (attackerSlot.item === 'life_orb') baseDmg *= 1.3;
 
-      // Apply damage
+      const variance = (Math.random() * (1.0 - 0.85)) + 0.85;
+      let totalDmg = Math.max(1, Math.round(baseDmg * stab * typeMult * critMult * variance));
+
+      // Focus Sash & Focus Band Check
+      let sashTriggered = false;
+      if (defenderSlot.item === 'focus_sash' && !defenderSlot.itemUsed && defenderSlot.currentHP === defenderSlot.maxHP && totalDmg >= defenderSlot.currentHP) {
+        totalDmg = defenderSlot.currentHP - 1;
+        defenderSlot.itemUsed = true;
+        sashTriggered = true;
+      } else if (defenderSlot.item === 'focus_band' && totalDmg >= defenderSlot.currentHP && Math.random() < 0.1) {
+        totalDmg = defenderSlot.currentHP - 1;
+        sashTriggered = true;
+      }
+
+      // Apply Damage
+      defenderSlot.currentHP = Math.max(0, defenderSlot.currentHP - totalDmg);
       if (isStreamer) {
-        pokeBattleState.viewersHP -= totalDmg;
         pokeBattleState.stats.streamerDamage += totalDmg;
       } else {
-        pokeBattleState.streamerHP -= totalDmg;
         pokeBattleState.stats.viewersDamage += totalDmg;
       }
 
@@ -8074,20 +8852,61 @@
         setTimeout(() => defenderSpr.classList.remove('poke-sprite-damaged'), 600);
       }
 
-      updateArenaUI();
+      updateArenaHPBars();
 
       let effText = '';
-      if (typeMult >= 2.0) effText = '<span style="color: #ffd700; font-weight: 800;">💥 효과가 굉장했다! (2배)</span>';
-      else if (typeMult <= 0.5 && typeMult > 0) effText = '<span style="color: #94a3b8;">🛡️ 효과가 별로인 듯하다... (0.5배)</span>';
-      else if (typeMult === 0) effText = '<span style="color: #ef4444;">🚫 효과가 없는 것 같다... (0배)</span>';
+      if (typeMult >= 2.0) effText = '<span style="color: #ffd700; font-weight: 800;">💥 효과가 굉장했다!</span> ';
+      else if (typeMult <= 0.5 && typeMult > 0) effText = '<span style="color: #94a3b8;">🛡️ 효과가 별로인 듯하다...</span> ';
+      else if (typeMult === 0) effText = '<span style="color: #ef4444;">🚫 효과가 없는 것 같다...</span> ';
 
       const critText = isCrit ? '<b style="color: #f43f5e;">⚡ 급소에 맞았다!</b> ' : '';
+      const sashText = sashTriggered ? '<b style="color: #38bdf8;">🥋 기합의띠로 버텼다!</b> ' : '';
 
-      setBattleDialogue(`💥 ${defender.name}에게 <b>${totalDmg}</b>의 데미지! ${critText} ${effText}`);
+      setBattleDialogue(`💥 ${defender.name}에게 <b>${totalDmg}</b>의 데미지! ${critText}${effText}${sashText}`);
+      await new Promise(r => setTimeout(r, 900));
 
-      const remainingHP = isStreamer ? pokeBattleState.viewersHP : pokeBattleState.streamerHP;
-      if (remainingHP <= 0) {
+      // Weakness Policy trigger
+      if (typeMult >= 2.0 && defenderSlot.item === 'weakness_policy' && !defenderSlot.itemUsed && defenderSlot.currentHP > 0) {
+        defenderSlot.itemUsed = true;
+        defenderSlot.rankAtk += 2;
+        defenderSlot.rankSpA += 2;
+        setBattleDialogue(`💥 <b>${defender.name}</b>의 약점보험이 발동하여 공격/특공이 대폭 상승했다!`);
+        await new Promise(r => setTimeout(r, 800));
+      }
+
+      // Rocky Helmet counter damage
+      if (defenderSlot.item === 'rocky_helmet' && move.category === '물리' && attackerSlot.currentHP > 0) {
+        const recoil = Math.max(1, Math.round(attackerSlot.maxHP / 6));
+        attackerSlot.currentHP = Math.max(0, attackerSlot.currentHP - recoil);
+        updateArenaHPBars();
+        setBattleDialogue(`🪖 <b>${attacker.name}</b>은(는) 울퉁불퉁멧에 다쳐 ${recoil}의 반사 피해를 입었다!`);
+        await new Promise(r => setTimeout(r, 800));
+      }
+
+      // Life Orb Recoil
+      if (attackerSlot.item === 'life_orb' && attackerSlot.currentHP > 0) {
+        const recoil = Math.max(1, Math.round(attackerSlot.maxHP / 10));
+        attackerSlot.currentHP = Math.max(0, attackerSlot.currentHP - recoil);
+        updateArenaHPBars();
+        setBattleDialogue(`🔴 <b>${attacker.name}</b>은(는) 생명의구슬 반동으로 조금 체력을 깎였다!`);
+        await new Promise(r => setTimeout(r, 700));
+      }
+
+      // Sitrus Berry Heal
+      if (defenderSlot.item === 'sitrus_berry' && !defenderSlot.itemUsed && defenderSlot.currentHP > 0 && defenderSlot.currentHP <= defenderSlot.maxHP * 0.5) {
+        const heal = Math.max(1, Math.round(defenderSlot.maxHP * 0.25));
+        defenderSlot.currentHP = Math.min(defenderSlot.maxHP, defenderSlot.currentHP + heal);
+        defenderSlot.itemUsed = true;
+        updateArenaHPBars();
+        setBattleDialogue(`🍋 <b>${defender.name}</b>은(는) 자뭉열매를 먹고 ${heal} HP를 회복했다!`);
+        await new Promise(r => setTimeout(r, 800));
+      }
+
+      // Faint Check
+      if (defenderSlot.currentHP <= 0) {
+        defenderSlot.fainted = true;
         if (defenderSpr) defenderSpr.classList.add('poke-sprite-fainted');
+        renderArenaTeamBallsHUD();
         await new Promise(r => setTimeout(r, 800));
         setBattleDialogue(`💀 <b>${defender.name}</b>은(는) 쓰러졌다!`);
         return true;
@@ -8096,13 +8915,283 @@
       return false;
     }
 
+    async function handleRoundEndEffects() {
+      // Leftovers & Black Sludge recovery
+      const sSlot = streamerTeam[streamerActiveIdx];
+      const vSlot = viewersTeam[viewersActiveIdx];
+
+      if (sSlot.item === 'leftovers' && sSlot.currentHP > 0 && sSlot.currentHP < sSlot.maxHP) {
+        const heal = Math.max(1, Math.round(sSlot.maxHP / 16));
+        sSlot.currentHP = Math.min(sSlot.maxHP, sSlot.currentHP + heal);
+        updateArenaHPBars();
+        setBattleDialogue(`🍎 <b>${sSlot.pokemon.name}</b>은(는) 먹어남은음식으로 체력을 조금 회복했다!`);
+        await new Promise(r => setTimeout(r, 700));
+      }
+
+      if (vSlot.item === 'leftovers' && vSlot.currentHP > 0 && vSlot.currentHP < vSlot.maxHP) {
+        const heal = Math.max(1, Math.round(vSlot.maxHP / 16));
+        vSlot.currentHP = Math.min(vSlot.maxHP, vSlot.currentHP + heal);
+        updateArenaHPBars();
+        setBattleDialogue(`🍎 <b>${vSlot.pokemon.name}</b>은(는) 먹어남은음식으로 체력을 조금 회복했다!`);
+        await new Promise(r => setTimeout(r, 700));
+      }
+
+      pokeBattleState.round++;
+      pokeBattleState.stats.totalRounds++;
+      updateArenaHPBars();
+      startStreamerPokeTurn();
+    }
+
+    // --- Faint Phase & Replacement Selection ---
+    async function handleFaintPhase(faintedSide) {
+      const teamSize = pokeBattleMode === '3v3' ? 3 : 1;
+      const team = faintedSide === 'streamer' ? streamerTeam : viewersTeam;
+      const aliveSlots = [];
+
+      for (let i = 0; i < teamSize; i++) {
+        if (!team[i].fainted && team[i].currentHP > 0) {
+          aliveSlots.push(i);
+        }
+      }
+
+      // If no alive members left -> Match Over!
+      if (aliveSlots.length === 0) {
+        const winner = faintedSide === 'streamer' ? 'viewers' : 'streamer';
+        finishPokeBattle(winner);
+        return;
+      }
+
+      // Prompt Replacement
+      currentFaintTarget = faintedSide;
+      if (faintedSide === 'streamer') {
+        openStreamerFaintSwitchModal(aliveSlots);
+      } else {
+        openViewersFaintSwitchVote(aliveSlots);
+      }
+    }
+
+    function openStreamerFaintSwitchModal(aliveSlots) {
+      pokeBattleState.phase = 'faint_switch_streamer';
+      const modal = document.getElementById('pokeFaintSwitchModal');
+      const title = document.getElementById('pokeFaintSwitchTitle');
+      const subTitle = document.getElementById('pokeFaintSwitchSubTitle');
+      const list = document.getElementById('pokeFaintSwitchCandidatesList');
+
+      if (title) title.innerText = '👑 스트리머: 다음 출전 포켓몬 선택';
+      if (subTitle) subTitle.innerText = '포켓몬이 쓰러졌습니다! 경기장에 투입할 다음 포켓몬을 선택하세요.';
+
+      if (list) {
+        list.innerHTML = aliveSlots.map(idx => {
+          const slot = streamerTeam[idx];
+          const p = slot.pokemon;
+          const it = getItemObj(slot.item);
+          return `
+            <div class="poke-switch-card" onclick="handleStreamerFaintSelect(${idx})">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <img src="${p.sprite_front}" alt="${p.name}" style="width: 48px; height: 48px; object-fit: contain; image-rendering: pixelated;">
+                <div>
+                  <div style="font-weight: 800; font-size: 14px; color: #fff;">${p.name} <span style="color: #ffd700; font-size: 11px;">(${idx+1}번)</span></div>
+                  <div style="display: flex; gap: 4px; margin-top: 2px;">
+                    ${p.types.map(t => `<span class="type-badge type-${t}" style="font-size: 8px; padding: 1px 4px;">${t}</span>`).join('')}
+                    <span class="poke-item-badge" style="font-size: 9px;">${it.emoji} ${it.name}</span>
+                  </div>
+                </div>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-size: 12px; font-weight: 800; color: #4ade80;">HP ${slot.currentHP} / ${slot.maxHP}</div>
+                <button type="button" class="btn btn-primary" style="padding: 4px 12px; font-size: 11px; margin-top: 4px;">⚡ 출전</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      if (modal) modal.classList.add('active');
+
+      // 15s Timer for Streamer
+      pokeBattleState.faintTimerTotal = 15.0;
+      pokeBattleState.faintTimerRemaining = 15.0;
+      renderFaintTimerUI();
+
+      clearInterval(pokeBattleState.faintTimerInterval);
+      pokeBattleState.faintTimerInterval = setInterval(() => {
+        pokeBattleState.faintTimerRemaining -= 0.1;
+        if (pokeBattleState.faintTimerRemaining <= 0) {
+          pokeBattleState.faintTimerRemaining = 0;
+          clearInterval(pokeBattleState.faintTimerInterval);
+          handleStreamerFaintSelect(aliveSlots[0]);
+        }
+        renderFaintTimerUI();
+      }, 100);
+    }
+
+    function renderFaintTimerUI() {
+      const tText = document.getElementById('pokeFaintSwitchTimerText');
+      const tFill = document.getElementById('pokeFaintSwitchTimerFill');
+      if (tText) tText.innerText = `${Math.max(0, pokeBattleState.faintTimerRemaining).toFixed(1)}s`;
+      if (tFill) {
+        const pct = (Math.max(0, pokeBattleState.faintTimerRemaining) / pokeBattleState.faintTimerTotal) * 100;
+        tFill.style.width = `${pct}%`;
+      }
+    }
+
+    async function handleStreamerFaintSelect(idx) {
+      clearInterval(pokeBattleState.faintTimerInterval);
+      const modal = document.getElementById('pokeFaintSwitchModal');
+      if (modal) modal.classList.remove('active');
+
+      streamerActiveIdx = idx;
+      updateArenaActivePokemonUI();
+      renderArenaTeamBallsHUD();
+      updateArenaHPBars();
+
+      const spr = document.getElementById('arenaStreamerSprite');
+      if (spr) spr.classList.remove('poke-sprite-fainted');
+
+      setBattleDialogue(`👑 <b>스트리머</b>는 <b>[${streamerTeam[idx].pokemon.name}]</b>(을)를 출전시켰다!`);
+      await new Promise(r => setTimeout(r, 1000));
+
+      pokeBattleState.round++;
+      pokeBattleState.stats.totalRounds++;
+      startStreamerPokeTurn();
+    }
+
+    function openViewersFaintSwitchVote(aliveSlots) {
+      pokeBattleState.phase = 'faint_switch_viewers';
+      faintVoteUsers.clear();
+      faintVoteCounts = {};
+      aliveSlots.forEach((slotIdx, i) => { faintVoteCounts[i + 1] = 0; });
+
+      const modal = document.getElementById('pokeFaintSwitchModal');
+      const title = document.getElementById('pokeFaintSwitchTitle');
+      const subTitle = document.getElementById('pokeFaintSwitchSubTitle');
+
+      if (title) title.innerText = '👥 시청자 연합: 다음 출전 포켓몬 투표';
+      if (subTitle) subTitle.innerText = '포켓몬이 쓰러졌습니다! 채팅창에 번호를 입력하여 다음 출전 포켓몬을 결정하세요.';
+
+      renderFaintVoteCandidatesUI(aliveSlots);
+      if (modal) modal.classList.add('active');
+
+      pokeBattleState.faintTimerTotal = 20.0;
+      pokeBattleState.faintTimerRemaining = 20.0;
+      renderFaintTimerUI();
+
+      clearInterval(pokeBattleState.faintTimerInterval);
+      pokeBattleState.faintTimerInterval = setInterval(() => {
+        pokeBattleState.faintTimerRemaining -= 0.1;
+        if (pokeBattleState.faintTimerRemaining <= 0) {
+          pokeBattleState.faintTimerRemaining = 0;
+          clearInterval(pokeBattleState.faintTimerInterval);
+          finishViewersFaintVote(aliveSlots);
+        }
+        renderFaintTimerUI();
+      }, 100);
+    }
+
+    function recomputeFaintVotes() {
+      for (const k of Object.keys(faintVoteCounts)) { faintVoteCounts[k] = 0; }
+      for (const [uid, choice] of faintVoteUsers.entries()) {
+        if (faintVoteCounts[choice] !== undefined) {
+          faintVoteCounts[choice] = (faintVoteCounts[choice] || 0) + 1;
+        }
+      }
+    }
+
+    function renderFaintVoteCandidatesUI(aliveSlots) {
+      if (!aliveSlots) {
+        aliveSlots = [];
+        for (let i = 0; i < (pokeBattleMode === '3v3' ? 3 : 1); i++) {
+          if (!viewersTeam[i].fainted) aliveSlots.push(i);
+        }
+      }
+
+      const list = document.getElementById('pokeFaintSwitchCandidatesList');
+      if (!list) return;
+
+      const total = faintVoteUsers.size;
+
+      list.innerHTML = aliveSlots.map((slotIdx, i) => {
+        const num = i + 1;
+        const slot = viewersTeam[slotIdx];
+        const p = slot.pokemon;
+        const it = getItemObj(slot.item);
+        const count = faintVoteCounts[num] || 0;
+        const pct = total > 0 ? Math.round((count / total) * 100) : 0;
+
+        return `
+          <div class="poke-switch-card" style="cursor: default;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <img src="${p.sprite_front}" alt="${p.name}" style="width: 44px; height: 44px; object-fit: contain; image-rendering: pixelated;">
+              <div>
+                <div style="font-weight: 800; font-size: 13px; color: #fff;">[${num}번] ${p.name}</div>
+                <div style="display: flex; gap: 4px; margin-top: 2px;">
+                  ${p.types.map(t => `<span class="type-badge type-${t}" style="font-size: 8px; padding: 1px 4px;">${t}</span>`).join('')}
+                  <span class="poke-item-badge" style="font-size: 9px;">${it.emoji} ${it.name}</span>
+                </div>
+              </div>
+            </div>
+            <div style="width: 140px;">
+              <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text-sub); margin-bottom: 2px;">
+                <span>채팅에 <b>${num}</b></span>
+                <span style="color: #38bdf8; font-weight: 800;">${count}표 (${pct}%)</span>
+              </div>
+              <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden;">
+                <div style="height: 100%; width: ${pct}%; background: linear-gradient(90deg, #38bdf8, #00ffa3);"></div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function finishViewersFaintVote(aliveSlots) {
+      clearInterval(pokeBattleState.faintTimerInterval);
+      const modal = document.getElementById('pokeFaintSwitchModal');
+      if (modal) modal.classList.remove('active');
+
+      let maxVotes = 0;
+      let topChoices = [];
+      aliveSlots.forEach((slotIdx, i) => {
+        const v = faintVoteCounts[i + 1] || 0;
+        if (v > maxVotes) {
+          maxVotes = v;
+          topChoices = [slotIdx];
+        } else if (v === maxVotes && maxVotes > 0) {
+          topChoices.push(slotIdx);
+        }
+      });
+
+      let chosenSlotIdx = aliveSlots[0];
+      if (maxVotes > 0 && topChoices.length > 0) {
+        chosenSlotIdx = topChoices[Math.floor(Math.random() * topChoices.length)];
+      } else {
+        chosenSlotIdx = aliveSlots[Math.floor(Math.random() * aliveSlots.length)];
+      }
+
+      viewersActiveIdx = chosenSlotIdx;
+      updateArenaActivePokemonUI();
+      renderArenaTeamBallsHUD();
+      updateArenaHPBars();
+
+      const spr = document.getElementById('arenaViewersSprite');
+      if (spr) spr.classList.remove('poke-sprite-fainted');
+
+      setBattleDialogue(`👥 <b>시청자 연합</b>은 <b>[${viewersTeam[chosenSlotIdx].pokemon.name}]</b>(을)를 출전시켰다!`);
+      await new Promise(r => setTimeout(r, 1000));
+
+      pokeBattleState.round++;
+      pokeBattleState.stats.totalRounds++;
+      startStreamerPokeTurn();
+    }
+
+    // --- Victory & Result Screen ---
     function finishPokeBattle(winnerActor) {
       pokeBattleState.active = false;
       pokeBattleState.phase = 'ended';
 
       const isStreamerWinner = winnerActor === 'streamer';
-      const winnerPoke = isStreamerWinner ? streamerPokemon : viewersPokemon;
-      const loserPoke = isStreamerWinner ? viewersPokemon : streamerPokemon;
+      const winnerTeam = isStreamerWinner ? streamerTeam : viewersTeam;
+      const mvpSlot = winnerTeam.find(s => !s.fainted) || winnerTeam[0];
 
       const modal = document.getElementById('pokeBattleResultModal');
       const title = document.getElementById('pokeResultTitle');
@@ -8115,13 +9204,14 @@
         title.style.color = isStreamerWinner ? '#ffd700' : '#38bdf8';
       }
       if (subTitle) {
-        subTitle.innerText = `${winnerPoke.name}이(가) ${loserPoke.name}을(를) 격파하고 챔피언에 올랐습니다!`;
+        subTitle.innerText = `${isStreamerWinner ? '스트리머' : '시청자 연합'}이 상대의 모든 포켓몬을 쓰러뜨리고 매치 챔피언에 올랐습니다!`;
       }
-      if (sprite) {
-        sprite.src = winnerPoke.sprite_front;
+      if (sprite && mvpSlot && mvpSlot.pokemon) {
+        sprite.src = mvpSlot.pokemon.sprite_front;
       }
       if (statsBox) {
         statsBox.innerHTML = `
+          <div>⚔️ 배틀 모드: <b>${pokeBattleMode === '3v3' ? '3v3 팀 엔트리 교체 배틀' : '1v1 에이스 배틀'}</b></div>
           <div>⚔️ 총 진행 라운드: <b>${pokeBattleState.round}라운드</b></div>
           <div>👑 스트리머 총 데미지: <b style="color: #ffd700;">${pokeBattleState.stats.streamerDamage}</b></div>
           <div>👥 시청자 연합 총 데미지: <b style="color: #38bdf8;">${pokeBattleState.stats.viewersDamage}</b></div>
@@ -8140,7 +9230,11 @@
 
     function quitPokeBattle() {
       pokeBattleState.active = false;
-      clearInterval(pokeBattleState.timerInterval);
+      clearInterval(pokeBattleState.streamerTimerInterval);
+      clearInterval(pokeBattleState.viewersTimerInterval);
+      clearInterval(pokeBattleState.faintTimerInterval);
+      const faintModal = document.getElementById('pokeFaintSwitchModal');
+      if (faintModal) faintModal.classList.remove('active');
       document.getElementById('pokeBattleArenaStage').style.display = 'none';
       document.getElementById('pokeBattleSetupStage').style.display = 'block';
     }
