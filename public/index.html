@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>치지직 대규모 시청자 추첨 & 룰렛 & 포켓몬 3v3 팀 배틀 v4.3.0 | Chzzk Mega Raffle & Pokemon Battle</title>
+  <title>치지직 대규모 시청자 추첨 & 룰렛 & 포켓몬 3v3 팀 배틀 v4.3.1 | Chzzk Mega Raffle & Pokemon Battle</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
@@ -3008,6 +3008,7 @@
                 <select id="streamerItemSelect" class="form-control" style="padding: 4px 8px; font-size: 11px; background: #080c14; border: 1px solid var(--border-color); color: #ffd700; border-radius: 6px; flex: 1; font-weight: 700;" onchange="handleItemChange('streamer', this.value)">
                   <!-- 20 Held Items Dynamically Populated -->
                 </select>
+                <button type="button" class="btn-chip btn-chip-secondary" style="font-size: 10px; padding: 4px 8px; white-space: nowrap;" onclick="randomizeSlotItem('streamer')" title="현재 슬롯 지닌 도구 무작위 선택">🎲 랜덤</button>
               </div>
 
               <!-- Stats summary bar -->
@@ -3078,6 +3079,7 @@
                 <select id="viewersItemSelect" class="form-control" style="padding: 4px 8px; font-size: 11px; background: #080c14; border: 1px solid var(--border-color); color: #38bdf8; border-radius: 6px; flex: 1; font-weight: 700;" onchange="handleItemChange('viewers', this.value)">
                   <!-- 20 Held Items Dynamically Populated -->
                 </select>
+                <button type="button" class="btn-chip btn-chip-secondary" style="font-size: 10px; padding: 4px 8px; white-space: nowrap;" onclick="randomizeSlotItem('viewers')" title="현재 슬롯 지닌 도구 무작위 선택">🎲 랜덤</button>
               </div>
 
               <!-- Stats summary bar -->
@@ -8060,15 +8062,35 @@
       closePokemonPickerModal();
     }
 
+    function randomizeSlotItem(side) {
+      const itemPool = HELD_ITEMS.filter(x => x.id !== 'none');
+      const randItem = itemPool[Math.floor(Math.random() * itemPool.length)];
+      if (side === 'streamer') {
+        streamerTeam[streamerSetupSlotIdx].item = randItem.id;
+        const sel = document.getElementById('streamerItemSelect');
+        if (sel) sel.value = randItem.id;
+        showToast(`👑 스트리머 ${streamerSetupSlotIdx+1}번 도구: [${randItem.emoji} ${randItem.name}] 랜덤 배정!`, '🎒');
+      } else {
+        viewersTeam[viewersSetupSlotIdx].item = randItem.id;
+        const sel = document.getElementById('viewersItemSelect');
+        if (sel) sel.value = randItem.id;
+        showToast(`👥 시청자 ${viewersSetupSlotIdx+1}번 도구: [${randItem.emoji} ${randItem.name}] 랜덤 배정!`, '🎒');
+      }
+    }
+
     function randomizeCurrentSlot(target) {
       if (allPokemonData.length === 0) return;
       const rand = allPokemonData[Math.floor(Math.random() * allPokemonData.length)];
+      const itemPool = HELD_ITEMS.filter(x => x.id !== 'none');
+      const randItem = itemPool[Math.floor(Math.random() * itemPool.length)];
       if (target === 'streamer') {
         streamerTeam[streamerSetupSlotIdx].pokemon = rand;
-        showToast(`👑 스트리머 ${streamerSetupSlotIdx+1}번: [${rand.name}] 랜덤 배정!`, '🎲');
+        streamerTeam[streamerSetupSlotIdx].item = randItem.id;
+        showToast(`👑 스트리머 ${streamerSetupSlotIdx+1}번: [${rand.name}] & [${randItem.name}] 랜덤 배정!`, '🎲');
       } else {
         viewersTeam[viewersSetupSlotIdx].pokemon = rand;
-        showToast(`👥 시청자 ${viewersSetupSlotIdx+1}번: [${rand.name}] 랜덤 배정!`, '🎲');
+        viewersTeam[viewersSetupSlotIdx].item = randItem.id;
+        showToast(`👥 시청자 ${viewersSetupSlotIdx+1}번: [${rand.name}] & [${randItem.name}] 랜덤 배정!`, '🎲');
       }
       renderPokeSetupPreview();
     }
@@ -8414,15 +8436,27 @@
       const hud = document.getElementById('arenaViewersVoteHud');
       if (hud) hud.style.display = 'block';
 
+      // Build switch guide text
+      const switchGuides = [];
+      let switchCounter = 5;
+      if (pokeBattleMode === '3v3') {
+        for (let i = 0; i < 3; i++) {
+          if (i !== viewersActiveIdx && !viewersTeam[i].fainted) {
+            switchGuides.push(`[<b>${switchCounter}</b>: ${i+1}번 ${viewersTeam[i].pokemon.name}]`);
+            switchCounter++;
+          }
+        }
+      }
+
       const instr = document.getElementById('arenaVoteInstructionText');
       if (instr) {
-        instr.innerHTML = pokeBattleMode === '3v3' 
-          ? `(채팅에 <b>1</b>~<b>4</b> 기술 / <b>5</b>, <b>6</b> 교체 입력)`
+        instr.innerHTML = pokeBattleMode === '3v3' && switchGuides.length > 0
+          ? `(채팅에 <b>1</b>~<b>4</b> 기술 / <b>5</b>, <b>6</b> 교체)`
           : `(채팅에 <b>1</b>~<b>4</b> 기술 번호 입력)`;
       }
 
-      const vSlot = viewersTeam[viewersActiveIdx];
-      setBattleDialogue(`👥 <b>시청자 턴</b>: 채팅창에 기술 번호 [<b>1</b>~<b>4</b>] ${pokeBattleMode === '3v3' ? '또는 교체 [<b>5</b>, <b>6</b>]' : ''}를 입력하세요!`);
+      const switchPrompt = switchGuides.length > 0 ? ` 또는 교체 ${switchGuides.join(' / ')}` : '';
+      setBattleDialogue(`👥 <b>시청자 턴</b>: 채팅창에 기술 [<b>1~4</b>]${switchPrompt} (또는 이름)을 입력하세요!`);
 
       pokeBattleState.viewersTimerTotal = parseFloat(document.getElementById('pokeVoteDurationSelect').value) || 30.0;
       pokeBattleState.viewersTimerRemaining = pokeBattleState.viewersTimerTotal;
@@ -8460,29 +8494,47 @@
         const clean = msg.trim().toUpperCase().replace(/\s+/g, '');
         let choice = null;
 
-        if (/^[1-6]$/.test(clean)) {
+        // Exact numbers 1~4
+        if (/^[1-4]$/.test(clean)) {
           choice = parseInt(clean, 10);
-        } else {
-          // Match move names
+        }
+        // Exact numbers 5~6
+        else if (/^[5-6]$/.test(clean)) {
+          choice = parseInt(clean, 10);
+        }
+
+        // Check for 3v3 switch keywords: "교체1", "1번교체", "1번", "교체2", "2번", "교체3", "3번", or Pokemon names
+        if (pokeBattleMode === '3v3') {
+          let switchCounter = 5;
+          for (let i = 0; i < 3; i++) {
+            if (i !== viewersActiveIdx && !viewersTeam[i].fainted) {
+              const slotNum = i + 1; // 1, 2, or 3
+              const pName = viewersTeam[i].pokemon.name.toUpperCase().replace(/\s+/g, '');
+              if (
+                clean === String(switchCounter) ||
+                clean === `교체${slotNum}` ||
+                clean === `${slotNum}번교체` ||
+                clean === `${slotNum}번` ||
+                clean === `${slotNum}교체` ||
+                clean === `교체${pName}` ||
+                clean === pName
+              ) {
+                choice = switchCounter;
+                break;
+              }
+              switchCounter++;
+            }
+          }
+        }
+
+        // Match move names
+        if (!choice) {
           const vSlot = viewersTeam[viewersActiveIdx];
           vSlot.pokemon.moves.forEach((m, idx) => {
             if (m.name.toUpperCase().replace(/\s+/g, '') === clean) {
               choice = idx + 1;
             }
           });
-          // Match switch names
-          if (pokeBattleMode === '3v3') {
-            const teamSize = 3;
-            let switchCandidateCounter = 5;
-            for (let i = 0; i < teamSize; i++) {
-              if (i !== viewersActiveIdx && !viewersTeam[i].fainted) {
-                if (viewersTeam[i].pokemon.name.toUpperCase().replace(/\s+/g, '') === clean) {
-                  choice = switchCandidateCounter;
-                }
-                switchCandidateCounter++;
-              }
-            }
-          }
         }
 
         if (choice && choice >= 1 && choice <= 6) {
@@ -8496,12 +8548,29 @@
       // Case B: Faint Replacement Viewers Vote
       if (pokeBattleState.phase === 'faint_switch_viewers') {
         const clean = msg.trim().toUpperCase().replace(/\s+/g, '');
-        let choice = null;
-        if (/^[1-3]$/.test(clean)) {
-          choice = parseInt(clean, 10);
+        let choiceSlotIdx = null;
+
+        const teamSize = pokeBattleMode === '3v3' ? 3 : 1;
+        for (let i = 0; i < teamSize; i++) {
+          if (!viewersTeam[i].fainted && viewersTeam[i].currentHP > 0) {
+            const slotNum = i + 1;
+            const pName = viewersTeam[i].pokemon.name.toUpperCase().replace(/\s+/g, '');
+            if (
+              clean === String(slotNum) ||
+              clean === `${slotNum}번` ||
+              clean === `${slotNum}번출전` ||
+              clean === `${slotNum}출전` ||
+              clean === pName ||
+              clean === `출전${pName}`
+            ) {
+              choiceSlotIdx = i;
+              break;
+            }
+          }
         }
-        if (choice) {
-          faintVoteUsers.set(uid, choice);
+
+        if (choiceSlotIdx !== null) {
+          faintVoteUsers.set(uid, choiceSlotIdx);
           recomputeFaintVotes();
           renderFaintVoteCandidatesUI();
         }
@@ -8530,6 +8599,7 @@
         candidates.push({
           num: i + 1,
           label: `${i + 1}. ${m.name}`,
+          subtext: `채팅: ${i + 1} / ${m.name}`,
           tag: m.type,
           tagClass: `type-${m.type}`,
           disabled: isLocked || isAV,
@@ -8543,9 +8613,11 @@
         for (let i = 0; i < 3; i++) {
           if (i !== viewersActiveIdx) {
             const slot = viewersTeam[i];
+            const slotNum = i + 1;
             candidates.push({
               num: switchCounter,
-              label: `${switchCounter}. [교체] ${slot.pokemon.name}`,
+              label: `${switchCounter}. [🔄 ${slotNum}번 교체] ${slot.pokemon.name}`,
+              subtext: `채팅: ${switchCounter} / ${slotNum}번 / ${slot.pokemon.name}`,
               tag: slot.fainted ? '기절' : `HP ${Math.round((slot.currentHP/slot.maxHP)*100)}%`,
               tagClass: slot.fainted ? 'badge-tag' : 'type-노말',
               disabled: slot.fainted,
@@ -8561,7 +8633,10 @@
         const pct = total > 0 ? Math.round((count / total) * 100) : 0;
         return `
           <div style="display: flex; align-items: center; gap: 8px; opacity: ${c.disabled ? '0.4' : '1'};">
-            <span style="font-weight: 800; color: #fff; width: 130px; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${c.label}</span>
+            <div style="width: 155px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+              <span style="font-weight: 800; color: #fff; font-size: 11px;">${c.label}</span>
+              ${c.subtext ? `<div style="font-size: 9px; color: var(--text-sub);">${c.subtext}</div>` : ''}
+            </div>
             <div style="flex: 1; height: 10px; background: rgba(255,255,255,0.08); border-radius: 5px; overflow: hidden;">
               <div style="height: 100%; width: ${pct}%; background: linear-gradient(90deg, #38bdf8, #00ffa3); transition: width 0.15s;"></div>
             </div>
@@ -8985,12 +9060,13 @@
           const slot = streamerTeam[idx];
           const p = slot.pokemon;
           const it = getItemObj(slot.item);
+          const slotNum = idx + 1;
           return `
             <div class="poke-switch-card" onclick="handleStreamerFaintSelect(${idx})">
               <div style="display: flex; align-items: center; gap: 10px;">
                 <img src="${p.sprite_front}" alt="${p.name}" style="width: 48px; height: 48px; object-fit: contain; image-rendering: pixelated;">
                 <div>
-                  <div style="font-weight: 800; font-size: 14px; color: #fff;">${p.name} <span style="color: #ffd700; font-size: 11px;">(${idx+1}번)</span></div>
+                  <div style="font-weight: 800; font-size: 14px; color: #fff;">[${slotNum}번] ${p.name}</div>
                   <div style="display: flex; gap: 4px; margin-top: 2px;">
                     ${p.types.map(t => `<span class="type-badge type-${t}" style="font-size: 8px; padding: 1px 4px;">${t}</span>`).join('')}
                     <span class="poke-item-badge" style="font-size: 9px;">${it.emoji} ${it.name}</span>
@@ -8999,7 +9075,7 @@
               </div>
               <div style="text-align: right;">
                 <div style="font-size: 12px; font-weight: 800; color: #4ade80;">HP ${slot.currentHP} / ${slot.maxHP}</div>
-                <button type="button" class="btn btn-primary" style="padding: 4px 12px; font-size: 11px; margin-top: 4px;">⚡ 출전</button>
+                <button type="button" class="btn btn-primary" style="padding: 4px 12px; font-size: 11px; margin-top: 4px;">⚡ ${slotNum}번 출전</button>
               </div>
             </div>
           `;
@@ -9060,14 +9136,15 @@
       pokeBattleState.phase = 'faint_switch_viewers';
       faintVoteUsers.clear();
       faintVoteCounts = {};
-      aliveSlots.forEach((slotIdx, i) => { faintVoteCounts[i + 1] = 0; });
+      aliveSlots.forEach(slotIdx => { faintVoteCounts[slotIdx] = 0; });
 
       const modal = document.getElementById('pokeFaintSwitchModal');
       const title = document.getElementById('pokeFaintSwitchTitle');
       const subTitle = document.getElementById('pokeFaintSwitchSubTitle');
 
       if (title) title.innerText = '👥 시청자 연합: 다음 출전 포켓몬 투표';
-      if (subTitle) subTitle.innerText = '포켓몬이 쓰러졌습니다! 채팅창에 번호를 입력하여 다음 출전 포켓몬을 결정하세요.';
+      const slotNumList = aliveSlots.map(s => `${s + 1}번`).join(', ');
+      if (subTitle) subTitle.innerText = `포켓몬이 쓰러졌습니다! 채팅창에 출전시킬 번호 [${slotNumList}] 또는 포켓몬명을 입력하세요.`;
 
       renderFaintVoteCandidatesUI(aliveSlots);
       if (modal) modal.classList.add('active');
@@ -9090,9 +9167,9 @@
 
     function recomputeFaintVotes() {
       for (const k of Object.keys(faintVoteCounts)) { faintVoteCounts[k] = 0; }
-      for (const [uid, choice] of faintVoteUsers.entries()) {
-        if (faintVoteCounts[choice] !== undefined) {
-          faintVoteCounts[choice] = (faintVoteCounts[choice] || 0) + 1;
+      for (const [uid, slotIdx] of faintVoteUsers.entries()) {
+        if (faintVoteCounts[slotIdx] !== undefined) {
+          faintVoteCounts[slotIdx] = (faintVoteCounts[slotIdx] || 0) + 1;
         }
       }
     }
@@ -9110,12 +9187,12 @@
 
       const total = faintVoteUsers.size;
 
-      list.innerHTML = aliveSlots.map((slotIdx, i) => {
-        const num = i + 1;
+      list.innerHTML = aliveSlots.map(slotIdx => {
+        const slotNum = slotIdx + 1;
         const slot = viewersTeam[slotIdx];
         const p = slot.pokemon;
         const it = getItemObj(slot.item);
-        const count = faintVoteCounts[num] || 0;
+        const count = faintVoteCounts[slotIdx] || 0;
         const pct = total > 0 ? Math.round((count / total) * 100) : 0;
 
         return `
@@ -9123,16 +9200,16 @@
             <div style="display: flex; align-items: center; gap: 10px;">
               <img src="${p.sprite_front}" alt="${p.name}" style="width: 44px; height: 44px; object-fit: contain; image-rendering: pixelated;">
               <div>
-                <div style="font-weight: 800; font-size: 13px; color: #fff;">[${num}번] ${p.name}</div>
+                <div style="font-weight: 800; font-size: 13px; color: #fff;">[${slotNum}번 슬롯] ${p.name}</div>
                 <div style="display: flex; gap: 4px; margin-top: 2px;">
                   ${p.types.map(t => `<span class="type-badge type-${t}" style="font-size: 8px; padding: 1px 4px;">${t}</span>`).join('')}
                   <span class="poke-item-badge" style="font-size: 9px;">${it.emoji} ${it.name}</span>
                 </div>
               </div>
             </div>
-            <div style="width: 140px;">
+            <div style="width: 170px;">
               <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text-sub); margin-bottom: 2px;">
-                <span>채팅에 <b>${num}</b></span>
+                <span>채팅에 <b>${slotNum}</b> 또는 <b>${p.name}</b></span>
                 <span style="color: #38bdf8; font-weight: 800;">${count}표 (${pct}%)</span>
               </div>
               <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden;">
@@ -9151,8 +9228,8 @@
 
       let maxVotes = 0;
       let topChoices = [];
-      aliveSlots.forEach((slotIdx, i) => {
-        const v = faintVoteCounts[i + 1] || 0;
+      aliveSlots.forEach(slotIdx => {
+        const v = faintVoteCounts[slotIdx] || 0;
         if (v > maxVotes) {
           maxVotes = v;
           topChoices = [slotIdx];
