@@ -11357,5 +11357,6691 @@
       "악": 2.0,
       "강철": 0.5
     }
-  }
+  },
+  "items": [
+    {
+      "id": "none",
+      "slug": "none",
+      "name": "없음",
+      "nameEn": "None",
+      "category": "none",
+      "categoryKo": "없음",
+      "emoji": "⚪",
+      "desc": "지닌 도구 없음",
+      "sprite": ""
+    },
+    {
+      "id": "potion",
+      "slug": "potion",
+      "name": "상처약",
+      "nameEn": "Potion",
+      "category": "healing",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "스프레이식의 상처약. 포켓몬 1마리의 HP를 20만큼 회복한다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/potion.png"
+    },
+    {
+      "id": "revive",
+      "slug": "revive",
+      "name": "기력의조각",
+      "nameEn": "Revive",
+      "category": "revival",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "기절해 버린 포켓몬 1마리를 건강하게 하고 HP를 절반까지 회복한다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/revive.png"
+    },
+    {
+      "id": "max_revive",
+      "slug": "max-revive",
+      "name": "기력의덩어리",
+      "nameEn": "Max Revive",
+      "category": "revival",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "기절해 버린 포켓몬 1마리를 건강하게 하고 HP를 모두 회복한다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/max-revive.png"
+    },
+    {
+      "id": "moomoo_milk",
+      "slug": "moomoo-milk",
+      "name": "튼튼밀크",
+      "nameEn": "Moomoo Milk",
+      "category": "healing",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "영양 만점의 우유. 포켓몬 1마리의 HP를 100만큼 회복한다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/moomoo-milk.png"
+    },
+    {
+      "id": "berry_juice",
+      "slug": "berry-juice",
+      "name": "나무열매쥬스",
+      "nameEn": "Berry Juice",
+      "category": "healing",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "나무열매 100% 쥬스. 포켓몬 1마리의 HP를 20만큼 회복한다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/berry-juice.png"
+    },
+    {
+      "id": "sacred_ash",
+      "slug": "sacred-ash",
+      "name": "성스러운분말",
+      "nameEn": "Sacred Ash",
+      "category": "revival",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "기절해 버린 포켓몬 전원의 HP를 모두 회복한다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/sacred-ash.png"
+    },
+    {
+      "id": "guard_spec",
+      "slug": "guard-spec",
+      "name": "이펙트가드",
+      "nameEn": "Guard Spec.",
+      "category": "stat-boosts",
+      "categoryKo": "능력강화",
+      "emoji": "⚡",
+      "desc": "배틀 중 5턴 동안 같은 편의 능력을 떨어뜨리지 않게 하는 도구.",
+      "sprite": "https://pkmnchamps.github.io/images/items/guard-spec.png"
+    },
+    {
+      "id": "dire_hit",
+      "slug": "dire-hit",
+      "name": "크리티컬커터",
+      "nameEn": "Dire Hit",
+      "category": "stat-boosts",
+      "categoryKo": "능력강화",
+      "emoji": "⚡",
+      "desc": "급소 명중률이 크게 올라간다. 한 번밖에 쓸 수 없다. 포켓몬을 볼에 넣어버리면 원래대로 되돌아간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/dire-hit.png"
+    },
+    {
+      "id": "x_attack",
+      "slug": "x-attack",
+      "name": "플러스파워",
+      "nameEn": "X Attack",
+      "category": "stat-boosts",
+      "categoryKo": "능력강화",
+      "emoji": "⚡",
+      "desc": "배틀 중인 포켓몬의 공격을 크게 올리는 도구. 포켓몬을 볼에 넣어버리면 원래대로 되돌아간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/x-attack.png"
+    },
+    {
+      "id": "x_defense",
+      "slug": "x-defense",
+      "name": "디펜드업",
+      "nameEn": "X Defense",
+      "category": "stat-boosts",
+      "categoryKo": "능력강화",
+      "emoji": "⚡",
+      "desc": "배틀 중인 포켓몬의 방어를 크게 올리는 도구. 포켓몬을 볼에 넣어버리면 원래대로 되돌아간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/x-defense.png"
+    },
+    {
+      "id": "x_speed",
+      "slug": "x-speed",
+      "name": "스피드업",
+      "nameEn": "X Speed",
+      "category": "stat-boosts",
+      "categoryKo": "능력강화",
+      "emoji": "⚡",
+      "desc": "배틀 중인 포켓몬의 스피드를 크게 올리는 도구. 포켓몬을 볼에 넣어버리면 원래대로 되돌아간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/x-speed.png"
+    },
+    {
+      "id": "x_accuracy",
+      "slug": "x-accuracy",
+      "name": "잘-맞히기",
+      "nameEn": "X Accuracy",
+      "category": "stat-boosts",
+      "categoryKo": "능력강화",
+      "emoji": "⚡",
+      "desc": "배틀 중인 포켓몬의 명중률을 크게 올리는 도구. 포켓몬을 볼에 넣어버리면 원래대로 되돌아간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/x-accuracy.png"
+    },
+    {
+      "id": "x_sp_atk",
+      "slug": "x-sp-atk",
+      "name": "스페셜업",
+      "nameEn": "X Sp. Atk",
+      "category": "stat-boosts",
+      "categoryKo": "능력강화",
+      "emoji": "⚡",
+      "desc": "배틀 중인 포켓몬의 특수공격을 크게 올리는 도구. 포켓몬을 볼에 넣어버리면 원래대로 되돌아간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/x-sp-atk.png"
+    },
+    {
+      "id": "x_sp_def",
+      "slug": "x-sp-def",
+      "name": "스페셜가드",
+      "nameEn": "X Sp. Def",
+      "category": "stat-boosts",
+      "categoryKo": "능력강화",
+      "emoji": "⚡",
+      "desc": "배틀 중인 포켓몬의 특수방어를 크게 올리는 도구. 포켓몬을 볼에 넣어버리면 원래대로 되돌아간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/x-sp-def.png"
+    },
+    {
+      "id": "red_shard",
+      "slug": "red-shard",
+      "name": "빨강조각",
+      "nameEn": "Red Shard",
+      "category": "collectibles",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "빨간 작은 조각. 옛날에 만들어진 어떤 도구의 일부인 듯하다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/red-shard.png"
+    },
+    {
+      "id": "blue_shard",
+      "slug": "blue-shard",
+      "name": "파랑조각",
+      "nameEn": "Blue Shard",
+      "category": "collectibles",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "파란 작은 조각. 옛날에 만들어진 어떤 도구의 일부인 듯하다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/blue-shard.png"
+    },
+    {
+      "id": "yellow_shard",
+      "slug": "yellow-shard",
+      "name": "노랑조각",
+      "nameEn": "Yellow Shard",
+      "category": "collectibles",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "노란 작은 조각. 옛날에 만들어진 어떤 도구의 일부인 듯하다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/yellow-shard.png"
+    },
+    {
+      "id": "green_shard",
+      "slug": "green-shard",
+      "name": "초록조각",
+      "nameEn": "Green Shard",
+      "category": "collectibles",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "초록색 작은 조각. 옛날에 만들어진 어떤 도구의 일부인 듯하다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/green-shard.png"
+    },
+    {
+      "id": "sun_stone",
+      "slug": "sun-stone",
+      "name": "태양의돌",
+      "nameEn": "Sun Stone",
+      "category": "evolution",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "어느 특정 포켓몬을 진화시키는 이상한 돌. 태양처럼 빨갛다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/sun-stone.png"
+    },
+    {
+      "id": "moon_stone",
+      "slug": "moon-stone",
+      "name": "달의돌",
+      "nameEn": "Moon Stone",
+      "category": "evolution",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "어느 특정 포켓몬을 진화시키는 이상한 돌. 밤하늘처럼 까맣다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/moon-stone.png"
+    },
+    {
+      "id": "tiny_mushroom",
+      "slug": "tiny-mushroom",
+      "name": "작은버섯",
+      "nameEn": "Tiny Mushroom",
+      "category": "loot",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "작고 진귀한 버섯. 일부 마니아 사이에서는 매우 인기가 높다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/tiny-mushroom.png"
+    },
+    {
+      "id": "big_mushroom",
+      "slug": "big-mushroom",
+      "name": "큰버섯",
+      "nameEn": "Big Mushroom",
+      "category": "loot",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "크고 진귀한 버섯. 일부 마니아 사이에서는 매우 인기가 높다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/big-mushroom.png"
+    },
+    {
+      "id": "pearl",
+      "slug": "pearl",
+      "name": "진주",
+      "nameEn": "Pearl",
+      "category": "loot",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "예쁜 은색으로 빛나는 자그마한 진주. 상점에서 싸게 팔린다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/pearl.png"
+    },
+    {
+      "id": "big_pearl",
+      "slug": "big-pearl",
+      "name": "큰진주",
+      "nameEn": "Big Pearl",
+      "category": "loot",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "예쁜 은색으로 빛나는 상당히 큰 낱알의 진주. 상점에서 비싸게 팔린다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/big-pearl.png"
+    },
+    {
+      "id": "stardust",
+      "slug": "stardust",
+      "name": "별의모래",
+      "nameEn": "Stardust",
+      "category": "loot",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "감촉이 보슬보슬한 빨갛고 예쁜 모래. 상점에서 싸게 팔린다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/stardust.png"
+    },
+    {
+      "id": "star_piece",
+      "slug": "star-piece",
+      "name": "별의조각",
+      "nameEn": "Star Piece",
+      "category": "loot",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "반짝반짝 빨갛게 빛나는 예쁜 보석 조각. 상점에서 비싸게 팔린다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/star-piece.png"
+    },
+    {
+      "id": "nugget",
+      "slug": "nugget",
+      "name": "금구슬",
+      "nameEn": "Nugget",
+      "category": "loot",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "금색으로 반짝반짝 빛나는 순금으로 만들어진 구슬. 상점에서 비싸게 팔린다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/nugget.png"
+    },
+    {
+      "id": "heart_scale",
+      "slug": "heart-scale",
+      "name": "하트비늘",
+      "nameEn": "Heart Scale",
+      "category": "collectibles",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "예쁜 하트 모양의 무척 진귀한 비늘. 받으면 좋아하는 사람도 있다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/heart-scale.png"
+    },
+    {
+      "id": "honey",
+      "slug": "honey",
+      "name": "달콤한꿀",
+      "nameEn": "Honey",
+      "category": "dex-completion",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "포켓몬이 모은 달콤한 냄새가 나는 꿀. 상점에서 싸게 팔린다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/honey.png"
+    },
+    {
+      "id": "rare_bone",
+      "slug": "rare-bone",
+      "name": "귀중한뼈",
+      "nameEn": "Rare Bone",
+      "category": "loot",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "포켓몬 고고학에 있어 매우 귀중한 뼈. 상점에서 비싸게 팔린다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/rare-bone.png"
+    },
+    {
+      "id": "oval_stone",
+      "slug": "oval-stone",
+      "name": "동글동글돌",
+      "nameEn": "Oval Stone",
+      "category": "evolution",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "어느 특정 포켓몬을 진화시키는 이상한 돌. 구슬처럼 둥글다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/oval-stone.png"
+    },
+    {
+      "id": "adamant_orb",
+      "slug": "adamant-orb",
+      "name": "금강옥",
+      "nameEn": "Adamant Orb",
+      "category": "species-specific",
+      "categoryKo": "종족특화",
+      "emoji": "🌟",
+      "desc": "디아루가에게 지니게 하면 드래곤과 강철타입 기술의 위력이 올라가는 반짝반짝 빛나는 구슬.",
+      "sprite": "https://pkmnchamps.github.io/images/items/adamant-orb.png"
+    },
+    {
+      "id": "lustrous_orb",
+      "slug": "lustrous-orb",
+      "name": "백옥",
+      "nameEn": "Lustrous Orb",
+      "category": "species-specific",
+      "categoryKo": "종족특화",
+      "emoji": "🌟",
+      "desc": "펄기아에게 지니게 하면 드래곤과 물타입 기술의 위력이 올라가는 아름답게 반짝이는 구슬.",
+      "sprite": "https://pkmnchamps.github.io/images/items/lustrous-orb.png"
+    },
+    {
+      "id": "cheri_berry",
+      "slug": "cheri-berry",
+      "name": "버치열매",
+      "nameEn": "Cheri Berry",
+      "category": "medicine",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "포켓몬에게 지니게 하면 마비를 회복한다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/cheri-berry.png"
+    },
+    {
+      "id": "chesto_berry",
+      "slug": "chesto-berry",
+      "name": "유루열매",
+      "nameEn": "Chesto Berry",
+      "category": "medicine",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "포켓몬에게 지니게 하면 잠듦을 회복한다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/chesto-berry.png"
+    },
+    {
+      "id": "pecha_berry",
+      "slug": "pecha-berry",
+      "name": "복슝열매",
+      "nameEn": "Pecha Berry",
+      "category": "medicine",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "포켓몬에게 지니게 하면 독을 회복한다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/pecha-berry.png"
+    },
+    {
+      "id": "rawst_berry",
+      "slug": "rawst-berry",
+      "name": "복분열매",
+      "nameEn": "Rawst Berry",
+      "category": "medicine",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "포켓몬에게 지니게 하면 화상을 회복한다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/rawst-berry.png"
+    },
+    {
+      "id": "aspear_berry",
+      "slug": "aspear-berry",
+      "name": "배리열매",
+      "nameEn": "Aspear Berry",
+      "category": "medicine",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "포켓몬에게 지니게 하면 얼음을 회복한다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/aspear-berry.png"
+    },
+    {
+      "id": "leppa_berry",
+      "slug": "leppa-berry",
+      "name": "과사열매",
+      "nameEn": "Leppa Berry",
+      "category": "medicine",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "포켓몬에게 지니게 하면 PP를 10만큼 회복한다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/leppa-berry.png"
+    },
+    {
+      "id": "oran_berry",
+      "slug": "oran-berry",
+      "name": "오랭열매",
+      "nameEn": "Oran Berry",
+      "category": "medicine",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "포켓몬에게 지니게 하면 HP를 10만큼 회복한다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/oran-berry.png"
+    },
+    {
+      "id": "persim_berry",
+      "slug": "persim-berry",
+      "name": "시몬열매",
+      "nameEn": "Persim Berry",
+      "category": "medicine",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "포켓몬에게 지니게 하면 혼란을 회복한다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/persim-berry.png"
+    },
+    {
+      "id": "lum_berry",
+      "slug": "lum-berry",
+      "name": "리샘열매",
+      "nameEn": "Lum Berry",
+      "category": "medicine",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "포켓몬에게 지니게 하면 모든 상태 이상을 회복한다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/lum-berry.png"
+    },
+    {
+      "id": "sitrus_berry",
+      "slug": "sitrus-berry",
+      "name": "자뭉열매",
+      "nameEn": "Sitrus Berry",
+      "category": "medicine",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "포켓몬에게 지니게 하면 HP를 조금 회복한다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/sitrus-berry.png"
+    },
+    {
+      "id": "occa_berry",
+      "slug": "occa-berry",
+      "name": "오카열매",
+      "nameEn": "Occa Berry",
+      "category": "type-protection",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "포켓몬에게 지니게 하면 효과가 뛰어난 불꽃 기술을 당했을 때 위력이 약해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/occa-berry.png"
+    },
+    {
+      "id": "passho_berry",
+      "slug": "passho-berry",
+      "name": "꼬시개열매",
+      "nameEn": "Passho Berry",
+      "category": "type-protection",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "포켓몬에게 지니게 하면 효과가 뛰어난 물 기술을 당했을 때 위력이 약해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/passho-berry.png"
+    },
+    {
+      "id": "wacan_berry",
+      "slug": "wacan-berry",
+      "name": "초나열매",
+      "nameEn": "Wacan Berry",
+      "category": "type-protection",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "포켓몬에게 지니게 하면 효과가 뛰어난 전기 기술을 당했을 때 위력이 약해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/wacan-berry.png"
+    },
+    {
+      "id": "rindo_berry",
+      "slug": "rindo-berry",
+      "name": "린드열매",
+      "nameEn": "Rindo Berry",
+      "category": "type-protection",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "포켓몬에게 지니게 하면 효과가 뛰어난 풀 기술을 당했을 때 위력이 약해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/rindo-berry.png"
+    },
+    {
+      "id": "yache_berry",
+      "slug": "yache-berry",
+      "name": "플카열매",
+      "nameEn": "Yache Berry",
+      "category": "type-protection",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "포켓몬에게 지니게 하면 효과가 뛰어난 얼음 기술을 당했을 때 위력이 약해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/yache-berry.png"
+    },
+    {
+      "id": "chople_berry",
+      "slug": "chople-berry",
+      "name": "로플열매",
+      "nameEn": "Chople Berry",
+      "category": "type-protection",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "포켓몬에게 지니게 하면 효과가 뛰어난 격투 기술을 당했을 때 위력이 약해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/chople-berry.png"
+    },
+    {
+      "id": "kebia_berry",
+      "slug": "kebia-berry",
+      "name": "으름열매",
+      "nameEn": "Kebia Berry",
+      "category": "type-protection",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "포켓몬에게 지니게 하면 효과가 뛰어난 독 기술을 당했을 때 위력이 약해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/kebia-berry.png"
+    },
+    {
+      "id": "shuca_berry",
+      "slug": "shuca-berry",
+      "name": "슈캐열매",
+      "nameEn": "Shuca Berry",
+      "category": "type-protection",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "포켓몬에게 지니게 하면 효과가 뛰어난 땅 기술을 당했을 때 위력이 약해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/shuca-berry.png"
+    },
+    {
+      "id": "coba_berry",
+      "slug": "coba-berry",
+      "name": "바코열매",
+      "nameEn": "Coba Berry",
+      "category": "type-protection",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "포켓몬에게 지니게 하면 효과가 뛰어난 비행 기술을 당했을 때 위력이 약해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/coba-berry.png"
+    },
+    {
+      "id": "payapa_berry",
+      "slug": "payapa-berry",
+      "name": "야파열매",
+      "nameEn": "Payapa Berry",
+      "category": "type-protection",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "포켓몬에게 지니게 하면 효과가 뛰어난 에스퍼 기술을 당했을 때 위력이 약해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/payapa-berry.png"
+    },
+    {
+      "id": "tanga_berry",
+      "slug": "tanga-berry",
+      "name": "리체열매",
+      "nameEn": "Tanga Berry",
+      "category": "type-protection",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "포켓몬에게 지니게 하면 효과가 뛰어난 벌레 기술을 당했을 때 위력이 약해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/tanga-berry.png"
+    },
+    {
+      "id": "charti_berry",
+      "slug": "charti-berry",
+      "name": "루미열매",
+      "nameEn": "Charti Berry",
+      "category": "type-protection",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "포켓몬에게 지니게 하면 효과가 뛰어난 바위 기술을 당했을 때 위력이 약해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/charti-berry.png"
+    },
+    {
+      "id": "kasib_berry",
+      "slug": "kasib-berry",
+      "name": "수불열매",
+      "nameEn": "Kasib Berry",
+      "category": "type-protection",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "포켓몬에게 지니게 하면 효과가 뛰어난 고스트 기술을 당했을 때 위력이 약해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/kasib-berry.png"
+    },
+    {
+      "id": "haban_berry",
+      "slug": "haban-berry",
+      "name": "하반열매",
+      "nameEn": "Haban Berry",
+      "category": "type-protection",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "포켓몬에게 지니게 하면 효과가 뛰어난 드래곤 기술을 당했을 때 위력이 약해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/haban-berry.png"
+    },
+    {
+      "id": "colbur_berry",
+      "slug": "colbur-berry",
+      "name": "마코열매",
+      "nameEn": "Colbur Berry",
+      "category": "type-protection",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "포켓몬에게 지니게 하면 효과가 뛰어난 악 기술을 당했을 때 위력이 약해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/colbur-berry.png"
+    },
+    {
+      "id": "babiri_berry",
+      "slug": "babiri-berry",
+      "name": "바리비열매",
+      "nameEn": "Babiri Berry",
+      "category": "type-protection",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "포켓몬에게 지니게 하면 효과가 뛰어난 강철 기술을 당했을 때 위력이 약해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/babiri-berry.png"
+    },
+    {
+      "id": "chilan_berry",
+      "slug": "chilan-berry",
+      "name": "카리열매",
+      "nameEn": "Chilan Berry",
+      "category": "type-protection",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "포켓몬에게 지니게 하면 노말 기술을 당했을 때 위력이 약해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/chilan-berry.png"
+    },
+    {
+      "id": "liechi_berry",
+      "slug": "liechi-berry",
+      "name": "치리열매",
+      "nameEn": "Liechi Berry",
+      "category": "in-a-pinch",
+      "categoryKo": "위기상황",
+      "emoji": "🍒",
+      "desc": "포켓몬에게 지니게 하면 위급할 때 자신의 공격이 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/liechi-berry.png"
+    },
+    {
+      "id": "ganlon_berry",
+      "slug": "ganlon-berry",
+      "name": "용아열매",
+      "nameEn": "Ganlon Berry",
+      "category": "in-a-pinch",
+      "categoryKo": "위기상황",
+      "emoji": "🍒",
+      "desc": "포켓몬에게 지니게 하면 위급할 때 자신의 방어가 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/ganlon-berry.png"
+    },
+    {
+      "id": "salac_berry",
+      "slug": "salac-berry",
+      "name": "캄라열매",
+      "nameEn": "Salac Berry",
+      "category": "in-a-pinch",
+      "categoryKo": "위기상황",
+      "emoji": "🍒",
+      "desc": "포켓몬에게 지니게 하면 위급할 때 자신의 스피드가 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/salac-berry.png"
+    },
+    {
+      "id": "petaya_berry",
+      "slug": "petaya-berry",
+      "name": "야타비열매",
+      "nameEn": "Petaya Berry",
+      "category": "in-a-pinch",
+      "categoryKo": "위기상황",
+      "emoji": "🍒",
+      "desc": "포켓몬에게 지니게 하면 위급할 때 자신의 특수공격이 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/petaya-berry.png"
+    },
+    {
+      "id": "apicot_berry",
+      "slug": "apicot-berry",
+      "name": "규살열매",
+      "nameEn": "Apicot Berry",
+      "category": "in-a-pinch",
+      "categoryKo": "위기상황",
+      "emoji": "🍒",
+      "desc": "포켓몬에게 지니게 하면 위급할 때 자신의 특수방어가 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/apicot-berry.png"
+    },
+    {
+      "id": "lansat_berry",
+      "slug": "lansat-berry",
+      "name": "랑사열매",
+      "nameEn": "Lansat Berry",
+      "category": "in-a-pinch",
+      "categoryKo": "위기상황",
+      "emoji": "🍒",
+      "desc": "포켓몬에게 지니게 하면 위급할 때 공격이 급소를 맞히기 쉬워진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/lansat-berry.png"
+    },
+    {
+      "id": "starf_berry",
+      "slug": "starf-berry",
+      "name": "스타열매",
+      "nameEn": "Starf Berry",
+      "category": "in-a-pinch",
+      "categoryKo": "위기상황",
+      "emoji": "🍒",
+      "desc": "포켓몬에게 지니게 하면 위급할 때 능력 중의 하나가 크게 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/starf-berry.png"
+    },
+    {
+      "id": "micle_berry",
+      "slug": "micle-berry",
+      "name": "미클열매",
+      "nameEn": "Micle Berry",
+      "category": "in-a-pinch",
+      "categoryKo": "위기상황",
+      "emoji": "🍒",
+      "desc": "포켓몬에게 지니게 하면 위급할 때 한 번만 기술의 명중률이 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/micle-berry.png"
+    },
+    {
+      "id": "custap_berry",
+      "slug": "custap-berry",
+      "name": "애슈열매",
+      "nameEn": "Custap Berry",
+      "category": "in-a-pinch",
+      "categoryKo": "위기상황",
+      "emoji": "🍒",
+      "desc": "포켓몬에게 지니게 하면 위급할 때 한 번만 행동이 빨라진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/custap-berry.png"
+    },
+    {
+      "id": "bright_powder",
+      "slug": "bright-powder",
+      "name": "반짝가루",
+      "nameEn": "Bright Powder",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "반짝반짝 빛나는 가루. 지니게 하면 빛이 상대를 혼란시켜 기술이 명중되기 어려워진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/bright-powder.png"
+    },
+    {
+      "id": "white_herb",
+      "slug": "white-herb",
+      "name": "하양허브",
+      "nameEn": "White Herb",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "지니게 한 포켓몬의 능력이 떨어졌을 때 한 번만 원래 상태로 돌아온다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/white-herb.png"
+    },
+    {
+      "id": "macho_brace",
+      "slug": "macho-brace",
+      "name": "교정깁스",
+      "nameEn": "Macho Brace",
+      "category": "effort-training",
+      "categoryKo": "노력치",
+      "emoji": "🏋️",
+      "desc": "단단하고 무거운 깁스. 지니게 하면 스피드는 떨어지지만 여느 때보다 강하게 키우기 쉽다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/macho-brace.png"
+    },
+    {
+      "id": "quick_claw",
+      "slug": "quick-claw",
+      "name": "선제공격손톱",
+      "nameEn": "Quick Claw",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "가볍고 날카로운 손톱. 지니게 하면 상대보다 먼저 행동할 수도 있다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/quick-claw.png"
+    },
+    {
+      "id": "mental_herb",
+      "slug": "mental-herb",
+      "name": "멘탈허브",
+      "nameEn": "Mental Herb",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "지니게 한 포켓몬은 헤롱헤롱 상태가 되었을 때 한 번만 회복한다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/mental-herb.png"
+    },
+    {
+      "id": "choice_band",
+      "slug": "choice-band",
+      "name": "구애머리띠",
+      "nameEn": "Choice Band",
+      "category": "choice",
+      "categoryKo": "스카프/안경/밴드",
+      "emoji": "🧣",
+      "desc": "기술을 구애받는 머리띠. 지니게 하면 공격은 올라가지만 똑같은 기술밖에 쓰지 못한다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/choice-band.png"
+    },
+    {
+      "id": "kings_rock",
+      "slug": "kings-rock",
+      "name": "왕의징표석",
+      "nameEn": "King’s Rock",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "지니게 하면 공격해서 데미지를 줄 때 상대를 풀죽이기도 한다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/kings-rock.png"
+    },
+    {
+      "id": "silver_powder",
+      "slug": "silver-powder",
+      "name": "은빛가루",
+      "nameEn": "Silver Powder",
+      "category": "type-enhancement",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "은색으로 반짝이는 가루. 지니게 하면 벌레타입 기술의 위력이 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/silver-powder.png"
+    },
+    {
+      "id": "cleanse_tag",
+      "slug": "cleanse-tag",
+      "name": "순결의부적",
+      "nameEn": "Cleanse Tag",
+      "category": "training",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "맨 앞의 포켓몬에게 지니게 하면 야생 포켓몬이 나타날 확률이 낮아진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/cleanse-tag.png"
+    },
+    {
+      "id": "soul_dew",
+      "slug": "soul-dew",
+      "name": "마음의물방울",
+      "nameEn": "Soul Dew",
+      "category": "species-specific",
+      "categoryKo": "종족특화",
+      "emoji": "🌟",
+      "desc": "라티오스나 라티아스에게 지니게 하면 에스퍼와 드래곤타입 기술의 위력이 올라가는 이상한 구슬.",
+      "sprite": "https://pkmnchamps.github.io/images/items/soul-dew.png"
+    },
+    {
+      "id": "deep_sea_tooth",
+      "slug": "deep-sea-tooth",
+      "name": "심해의이빨",
+      "nameEn": "Deep Sea Tooth",
+      "category": "species-specific",
+      "categoryKo": "종족특화",
+      "emoji": "🌟",
+      "desc": "진주몽에게 지니게 하면 특수공격이 올라가는 이빨. 날카로운 은색으로 빛난다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/deep-sea-tooth.png"
+    },
+    {
+      "id": "deep_sea_scale",
+      "slug": "deep-sea-scale",
+      "name": "심해의비늘",
+      "nameEn": "Deep Sea Scale",
+      "category": "species-specific",
+      "categoryKo": "종족특화",
+      "emoji": "🌟",
+      "desc": "진주몽에게 지니게 하면 특수방어가 올라가는 비늘. 연한 분홍색으로 빛난다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/deep-sea-scale.png"
+    },
+    {
+      "id": "smoke_ball",
+      "slug": "smoke-ball",
+      "name": "연막탄",
+      "nameEn": "Smoke Ball",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "지니게 한 포켓몬은 야생 포켓몬과의 배틀에서 반드시 도망칠 수 있다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/smoke-ball.png"
+    },
+    {
+      "id": "everstone",
+      "slug": "everstone",
+      "name": "변함없는돌",
+      "nameEn": "Everstone",
+      "category": "training",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "포켓몬에게 지니게 하면 지닌 동안에는 진화하지 않게 되는 이상한 돌.",
+      "sprite": "https://pkmnchamps.github.io/images/items/everstone.png"
+    },
+    {
+      "id": "focus_band",
+      "slug": "focus-band",
+      "name": "기합의머리띠",
+      "nameEn": "Focus Band",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "지니게 하면 기절할 듯한 기술을 받아도 HP를 1 남겨서 견디기도 한다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/focus-band.png"
+    },
+    {
+      "id": "lucky_egg",
+      "slug": "lucky-egg",
+      "name": "행복의알",
+      "nameEn": "Lucky Egg",
+      "category": "training",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "행복이 가득한 알. 지니게 한 포켓몬은 받을 수 있는 경험치가 조금 늘어난다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/lucky-egg.png"
+    },
+    {
+      "id": "scope_lens",
+      "slug": "scope-lens",
+      "name": "초점렌즈",
+      "nameEn": "Scope Lens",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "약점이 보이는 렌즈. 지니게 한 포켓몬의 기술이 급소에 맞기 쉬워진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/scope-lens.png"
+    },
+    {
+      "id": "metal_coat",
+      "slug": "metal-coat",
+      "name": "금속코트",
+      "nameEn": "Metal Coat",
+      "category": "type-enhancement",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "특수한 금속 장막. 지니게 하면 강철타입 기술의 위력이 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/metal-coat.png"
+    },
+    {
+      "id": "leftovers",
+      "slug": "leftovers",
+      "name": "먹다남은음식",
+      "nameEn": "Leftovers",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "지니게 하면 포켓몬의 HP가 배틀을 하는 동안 조금씩 회복된다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/leftovers.png"
+    },
+    {
+      "id": "dragon_scale",
+      "slug": "dragon-scale",
+      "name": "용의비늘",
+      "nameEn": "Dragon Scale",
+      "category": "evolution",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "단단하고 튼튼한 비늘. 드래곤타입의 포켓몬이 지니고 있는 경우가 있다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/dragon-scale.png"
+    },
+    {
+      "id": "light_ball",
+      "slug": "light-ball",
+      "name": "전기구슬",
+      "nameEn": "Light Ball",
+      "category": "species-specific",
+      "categoryKo": "종족특화",
+      "emoji": "🌟",
+      "desc": "피카츄에게 지니게 하면 공격과 특수공격의 위력이 올라가는 이상한 구슬.",
+      "sprite": "https://pkmnchamps.github.io/images/items/light-ball.png"
+    },
+    {
+      "id": "soft_sand",
+      "slug": "soft-sand",
+      "name": "부드러운모래",
+      "nameEn": "Soft Sand",
+      "category": "type-enhancement",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "만지면 보슬보슬한 모래. 지니게 하면 땅타입 기술의 위력이 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/soft-sand.png"
+    },
+    {
+      "id": "hard_stone",
+      "slug": "hard-stone",
+      "name": "딱딱한돌",
+      "nameEn": "Hard Stone",
+      "category": "type-enhancement",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "절대 깨지지 않는 돌. 지니게 하면 바위타입 기술의 위력이 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/hard-stone.png"
+    },
+    {
+      "id": "miracle_seed",
+      "slug": "miracle-seed",
+      "name": "기적의씨",
+      "nameEn": "Miracle Seed",
+      "category": "type-enhancement",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "생명이 깃든 씨앗. 지니게 하면 풀타입 기술의 위력이 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/miracle-seed.png"
+    },
+    {
+      "id": "black_glasses",
+      "slug": "black-glasses",
+      "name": "검은안경",
+      "nameEn": "Black Glasses",
+      "category": "type-enhancement",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "괴상하게 보이는 안경. 지니게 하면 악타입 기술의 위력이 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/black-glasses.png"
+    },
+    {
+      "id": "black_belt",
+      "slug": "black-belt",
+      "name": "검은띠",
+      "nameEn": "Black Belt",
+      "category": "type-enhancement",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "마음을 긴장시키는 띠. 지니게 하면 격투타입 기술의 위력이 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/black-belt.png"
+    },
+    {
+      "id": "magnet",
+      "slug": "magnet",
+      "name": "자석",
+      "nameEn": "Magnet",
+      "category": "type-enhancement",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "강력한 자석. 지니게 하면 전기타입 기술의 위력이 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/magnet.png"
+    },
+    {
+      "id": "mystic_water",
+      "slug": "mystic-water",
+      "name": "신비의물방울",
+      "nameEn": "Mystic Water",
+      "category": "type-enhancement",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "물방울 모양의 보석. 지니게 하면 물타입 기술의 위력이 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/mystic-water.png"
+    },
+    {
+      "id": "sharp_beak",
+      "slug": "sharp-beak",
+      "name": "예리한부리",
+      "nameEn": "Sharp Beak",
+      "category": "type-enhancement",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "길고 뾰족한 부리. 지니게 하면 비행타입 기술의 위력이 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/sharp-beak.png"
+    },
+    {
+      "id": "poison_barb",
+      "slug": "poison-barb",
+      "name": "독바늘",
+      "nameEn": "Poison Barb",
+      "category": "type-enhancement",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "독이 있는 작은 침. 지니게 하면 독타입 기술의 위력이 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/poison-barb.png"
+    },
+    {
+      "id": "never_melt_ice",
+      "slug": "never-melt-ice",
+      "name": "녹지않는얼음",
+      "nameEn": "Never-Melt Ice",
+      "category": "type-enhancement",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "열을 가까이하지 않게 하는 얼음. 지니게 하면 얼음타입 기술의 위력이 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/never-melt-ice.png"
+    },
+    {
+      "id": "spell_tag",
+      "slug": "spell-tag",
+      "name": "저주의부적",
+      "nameEn": "Spell Tag",
+      "category": "type-enhancement",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "괴상하고 으스스한 부적. 지니게 하면 고스트타입 기술의 위력이 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/spell-tag.png"
+    },
+    {
+      "id": "twisted_spoon",
+      "slug": "twisted-spoon",
+      "name": "휘어진스푼",
+      "nameEn": "Twisted Spoon",
+      "category": "type-enhancement",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "염동력을 담은 숟가락. 지니게 하면 에스퍼타입 기술의 위력이 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/twisted-spoon.png"
+    },
+    {
+      "id": "charcoal",
+      "slug": "charcoal",
+      "name": "목탄",
+      "nameEn": "Charcoal",
+      "category": "type-enhancement",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "물건을 태우는 연료. 지니게 하면 불꽃타입 기술의 위력이 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/charcoal.png"
+    },
+    {
+      "id": "dragon_fang",
+      "slug": "dragon-fang",
+      "name": "용의이빨",
+      "nameEn": "Dragon Fang",
+      "category": "type-enhancement",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "단단하고 날카로운 이빨. 지니게 하면 드래곤타입 기술의 위력이 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/dragon-fang.png"
+    },
+    {
+      "id": "silk_scarf",
+      "slug": "silk-scarf",
+      "name": "실크스카프",
+      "nameEn": "Silk Scarf",
+      "category": "type-enhancement",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "감촉이 좋은 스카프. 지니게 하면 노말타입 기술의 위력이 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/silk-scarf.png"
+    },
+    {
+      "id": "up_grade",
+      "slug": "up-grade",
+      "name": "업그레이드",
+      "nameEn": "Upgrade",
+      "category": "evolution",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "안에 여러 가지 정보가 가득한 투명한 기계다. 실프주식회사 제품.",
+      "sprite": "https://pkmnchamps.github.io/images/items/up-grade.png"
+    },
+    {
+      "id": "shell_bell",
+      "slug": "shell-bell",
+      "name": "조개껍질방울",
+      "nameEn": "Shell Bell",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "지니게 한 포켓몬이 공격하여 상대에게 데미지를 줬을 때 HP를 조금 회복할 수 있다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/shell-bell.png"
+    },
+    {
+      "id": "lax_incense",
+      "slug": "lax-incense",
+      "name": "무사태평향로",
+      "nameEn": "Lax Incense",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "지니게 하면 향로의 이상한 향기가 상대를 혼란시켜 기술이 명중하기 어려워진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/lax-incense.png"
+    },
+    {
+      "id": "lucky_punch",
+      "slug": "lucky-punch",
+      "name": "럭키펀치",
+      "nameEn": "Lucky Punch",
+      "category": "species-specific",
+      "categoryKo": "종족특화",
+      "emoji": "🌟",
+      "desc": "행운을 부르는 글러브다. 럭키에게 지니게 하면 기술이 급소에 맞기 쉬워진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/lucky-punch.png"
+    },
+    {
+      "id": "metal_powder",
+      "slug": "metal-powder",
+      "name": "금속파우더",
+      "nameEn": "Metal Powder",
+      "category": "species-specific",
+      "categoryKo": "종족특화",
+      "emoji": "🌟",
+      "desc": "메타몽에게 지니게 하면 방어가 올라가는 이상한 가루. 매우 잘고 단단하다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/metal-powder.png"
+    },
+    {
+      "id": "thick_club",
+      "slug": "thick-club",
+      "name": "굵은뼈",
+      "nameEn": "Thick Club",
+      "category": "species-specific",
+      "categoryKo": "종족특화",
+      "emoji": "🌟",
+      "desc": "무언가의 단단한 뼈. 탕구리 혹은 텅구리에게 지니게 하면 공격이 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/thick-club.png"
+    },
+    {
+      "id": "stick",
+      "slug": "stick",
+      "name": "대파",
+      "nameEn": "Leek",
+      "category": "species-specific",
+      "categoryKo": "종족특화",
+      "emoji": "🌟",
+      "desc": "매우 길고 단단한 줄기. 파오리에게 지니게 하면 기술이 급소에 맞기 쉬워진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/stick.png"
+    },
+    {
+      "id": "wide_lens",
+      "slug": "wide-lens",
+      "name": "광각렌즈",
+      "nameEn": "Wide Lens",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "물건이 크게 보이는 렌즈. 지니게 하면 기술의 명중률이 조금 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/wide-lens.png"
+    },
+    {
+      "id": "muscle_band",
+      "slug": "muscle-band",
+      "name": "힘의머리띠",
+      "nameEn": "Muscle Band",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "힘이 끓어오르는 머리띠. 지니게 하면 물리 기술의 위력이 조금 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/muscle-band.png"
+    },
+    {
+      "id": "wise_glasses",
+      "slug": "wise-glasses",
+      "name": "박식안경",
+      "nameEn": "Wise Glasses",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "두꺼운 렌즈를 붙인 안경. 지니게 하면 특수 기술의 위력이 조금 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/wise-glasses.png"
+    },
+    {
+      "id": "expert_belt",
+      "slug": "expert-belt",
+      "name": "달인의띠",
+      "nameEn": "Expert Belt",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "오래 사용한 까만 띠. 지니게 하면 효과가 뛰어날 때 기술의 위력이 조금 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/expert-belt.png"
+    },
+    {
+      "id": "light_clay",
+      "slug": "light-clay",
+      "name": "빛의점토",
+      "nameEn": "Light Clay",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "지니게 한 포켓몬이 빛의장막이나 리플렉터를 사용했을 때 여느 때보다 긴 시간 동안 지속된다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/light-clay.png"
+    },
+    {
+      "id": "life_orb",
+      "slug": "life-orb",
+      "name": "생명의구슬",
+      "nameEn": "Life Orb",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "지니게 하면 공격할 때마다 HP가 조금씩 줄지만 기술의 위력이 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/life-orb.png"
+    },
+    {
+      "id": "power_herb",
+      "slug": "power-herb",
+      "name": "파워풀허브",
+      "nameEn": "Power Herb",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "지니게 한 포켓몬은 한 번만 1턴째에 힘을 모으는 기술을 바로 사용할 수가 있다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/power-herb.png"
+    },
+    {
+      "id": "toxic_orb",
+      "slug": "toxic-orb",
+      "name": "맹독구슬",
+      "nameEn": "Toxic Orb",
+      "category": "bad-held-items",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "만지면 독을 발산하는 이상한 구슬. 지니게 하면 배틀 중에 맹독 상태가 된다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/toxic-orb.png"
+    },
+    {
+      "id": "flame_orb",
+      "slug": "flame-orb",
+      "name": "화염구슬",
+      "nameEn": "Flame Orb",
+      "category": "bad-held-items",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "만지면 열을 내는 이상한 구슬. 지니게 하면 배틀 중에 화상 상태가 된다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/flame-orb.png"
+    },
+    {
+      "id": "quick_powder",
+      "slug": "quick-powder",
+      "name": "스피드파우더",
+      "nameEn": "Quick Powder",
+      "category": "species-specific",
+      "categoryKo": "종족특화",
+      "emoji": "🌟",
+      "desc": "메타몽에게 지니게 하면 스피드가 올라가는 이상한 가루. 매우 잘고 단단하다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/quick-powder.png"
+    },
+    {
+      "id": "focus_sash",
+      "slug": "focus-sash",
+      "name": "기합의띠",
+      "nameEn": "Focus Sash",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "지니게 하면 HP가 꽉 찼을 때 기절할 듯한 기술을 당해도 HP 1로 한 번은 버틴다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/focus-sash.png"
+    },
+    {
+      "id": "zoom_lens",
+      "slug": "zoom-lens",
+      "name": "포커스렌즈",
+      "nameEn": "Zoom Lens",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "지니게 한 포켓몬이 상대보다도 행동하는 것이 늦을 때 기술이 명중하기 쉬워진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/zoom-lens.png"
+    },
+    {
+      "id": "metronome",
+      "slug": "metronome",
+      "name": "메트로놈",
+      "nameEn": "Metronome",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "지니게 하면 똑같은 기술을 연속으로 사용했을 때 위력이 올라간다. 그만두면 위력이 되돌아간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/metronome.png"
+    },
+    {
+      "id": "iron_ball",
+      "slug": "iron-ball",
+      "name": "검은철구",
+      "nameEn": "Iron Ball",
+      "category": "bad-held-items",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "지니게 하면 스피드가 떨어진다. 비행타입이나 부유포켓몬은 땅 기술에 맞아 버린다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/iron-ball.png"
+    },
+    {
+      "id": "lagging_tail",
+      "slug": "lagging-tail",
+      "name": "느림보꼬리",
+      "nameEn": "Lagging Tail",
+      "category": "bad-held-items",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "매우 무거운 무언가의 꼬리. 지니게 하면 여느 때보다 행동이 느려진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/lagging-tail.png"
+    },
+    {
+      "id": "destiny_knot",
+      "slug": "destiny-knot",
+      "name": "빨간실",
+      "nameEn": "Destiny Knot",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "가늘고 긴 새빨간 실. 지니게 하면 자신이 헤롱헤롱해졌을 때 상대도 헤롱헤롱해지게 된다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/destiny-knot.png"
+    },
+    {
+      "id": "black_sludge",
+      "slug": "black-sludge",
+      "name": "검은진흙",
+      "nameEn": "Black Sludge",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "지니게 하면 독타입의 포켓몬은 조금씩 HP를 회복한다. 그 이외의 타입은 HP가 줄어 버린다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/black-sludge.png"
+    },
+    {
+      "id": "icy_rock",
+      "slug": "icy-rock",
+      "name": "차가운바위",
+      "nameEn": "Icy Rock",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "지니게 한 포켓몬이 싸라기눈을 쓰면 여느 때보다 싸라기눈의 시간이 길어진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/icy-rock.png"
+    },
+    {
+      "id": "smooth_rock",
+      "slug": "smooth-rock",
+      "name": "보송보송바위",
+      "nameEn": "Smooth Rock",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "지니게 한 포켓몬이 모래바람을 쓰면 여느 때보다 모래바람의 시간이 길어진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/smooth-rock.png"
+    },
+    {
+      "id": "heat_rock",
+      "slug": "heat-rock",
+      "name": "뜨거운바위",
+      "nameEn": "Heat Rock",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "지니게 한 포켓몬이 쾌청을 쓰면 여느 때보다 쾌청의 시간이 길어진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/heat-rock.png"
+    },
+    {
+      "id": "damp_rock",
+      "slug": "damp-rock",
+      "name": "축축한바위",
+      "nameEn": "Damp Rock",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "지니게 한 포켓몬이 비바라기를 쓰면 여느 때보다 비 내리는 시간이 길어진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/damp-rock.png"
+    },
+    {
+      "id": "grip_claw",
+      "slug": "grip-claw",
+      "name": "끈기갈고리손톱",
+      "nameEn": "Grip Claw",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "지니게 하면 조이기나 김밥말이 등 데미지를 계속 주는 기술의 턴 수가 늘어난다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/grip-claw.png"
+    },
+    {
+      "id": "choice_scarf",
+      "slug": "choice-scarf",
+      "name": "구애스카프",
+      "nameEn": "Choice Scarf",
+      "category": "choice",
+      "categoryKo": "스카프/안경/밴드",
+      "emoji": "🧣",
+      "desc": "기술을 구애받는 스카프. 지니게 하면 스피드는 올라가지만 같은 기술밖에 쓸 수 없다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/choice-scarf.png"
+    },
+    {
+      "id": "sticky_barb",
+      "slug": "sticky-barb",
+      "name": "끈적끈적바늘",
+      "nameEn": "Sticky Barb",
+      "category": "bad-held-items",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "지니게 하면 매 턴 데미지를 입는다. 자신에게 접촉해온 상대에게 들러붙기도 한다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/sticky-barb.png"
+    },
+    {
+      "id": "power_bracer",
+      "slug": "power-bracer",
+      "name": "파워리스트",
+      "nameEn": "Power Bracer",
+      "category": "effort-training",
+      "categoryKo": "노력치",
+      "emoji": "🏋️",
+      "desc": "지니게 하면 스피드는 떨어지지만 여느 때보다 포켓몬의 공격을 올리면서 키우기가 쉽다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/power-bracer.png"
+    },
+    {
+      "id": "power_belt",
+      "slug": "power-belt",
+      "name": "파워벨트",
+      "nameEn": "Power Belt",
+      "category": "effort-training",
+      "categoryKo": "노력치",
+      "emoji": "🏋️",
+      "desc": "지니게 하면 스피드는 떨어지지만 여느 때보다 포켓몬의 방어를 올리면서 키우기가 쉽다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/power-belt.png"
+    },
+    {
+      "id": "power_lens",
+      "slug": "power-lens",
+      "name": "파워렌즈",
+      "nameEn": "Power Lens",
+      "category": "effort-training",
+      "categoryKo": "노력치",
+      "emoji": "🏋️",
+      "desc": "지니게 하면 스피드는 떨어지지만 여느 때보다 포켓몬의 특수공격을 올리면서 키우기가 쉽다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/power-lens.png"
+    },
+    {
+      "id": "power_band",
+      "slug": "power-band",
+      "name": "파워밴드",
+      "nameEn": "Power Band",
+      "category": "effort-training",
+      "categoryKo": "노력치",
+      "emoji": "🏋️",
+      "desc": "지니게 하면 스피드는 떨어지지만 여느 때보다 포켓몬의 특수방어를 올리면서 키우기가 쉽다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/power-band.png"
+    },
+    {
+      "id": "power_anklet",
+      "slug": "power-anklet",
+      "name": "파워앵클릿",
+      "nameEn": "Power Anklet",
+      "category": "effort-training",
+      "categoryKo": "노력치",
+      "emoji": "🏋️",
+      "desc": "지니게 하면 스피드는 떨어지지만 여느 때보다 포켓몬의 스피드를 올리면서 키우기가 쉽다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/power-anklet.png"
+    },
+    {
+      "id": "power_weight",
+      "slug": "power-weight",
+      "name": "파워웨이트",
+      "nameEn": "Power Weight",
+      "category": "effort-training",
+      "categoryKo": "노력치",
+      "emoji": "🏋️",
+      "desc": "지니게 하면 스피드는 떨어지지만 여느 때보다 포켓몬의 HP를 올리면서 키우기가 쉽다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/power-weight.png"
+    },
+    {
+      "id": "shed_shell",
+      "slug": "shed-shell",
+      "name": "아름다운허물",
+      "nameEn": "Shed Shell",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "튼튼하고 단단한 허물. 지니게 한 포켓몬은 교대 포켓몬과 반드시 교체할 수 있다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/shed-shell.png"
+    },
+    {
+      "id": "big_root",
+      "slug": "big-root",
+      "name": "큰뿌리",
+      "nameEn": "Big Root",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "지니게 하면 HP 흡수 기술을 썼을 때 여느 때보다 많은 HP를 자신이 회복할 수 있다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/big-root.png"
+    },
+    {
+      "id": "choice_specs",
+      "slug": "choice-specs",
+      "name": "구애안경",
+      "nameEn": "Choice Specs",
+      "category": "choice",
+      "categoryKo": "스카프/안경/밴드",
+      "emoji": "🧣",
+      "desc": "기술을 구애받는 안경. 지니게 하면 특수공격이 올라가지만 같은 기술밖에 쓸 수 없다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/choice-specs.png"
+    },
+    {
+      "id": "flame_plate",
+      "slug": "flame-plate",
+      "name": "불구슬플레이트",
+      "nameEn": "Flame Plate",
+      "category": "plates",
+      "categoryKo": "플레이트",
+      "emoji": "🔮",
+      "desc": "불꽃타입의 석판. 지니게 하면 불꽃타입 기술의 위력이 강해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/flame-plate.png"
+    },
+    {
+      "id": "splash_plate",
+      "slug": "splash-plate",
+      "name": "물방울플레이트",
+      "nameEn": "Splash Plate",
+      "category": "plates",
+      "categoryKo": "플레이트",
+      "emoji": "🔮",
+      "desc": "물타입의 석판. 지니게 하면 물타입 기술의 위력이 강해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/splash-plate.png"
+    },
+    {
+      "id": "zap_plate",
+      "slug": "zap-plate",
+      "name": "우뢰플레이트",
+      "nameEn": "Zap Plate",
+      "category": "plates",
+      "categoryKo": "플레이트",
+      "emoji": "🔮",
+      "desc": "전기타입의 석판. 지니게 하면 전기타입 기술의 위력이 강해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/zap-plate.png"
+    },
+    {
+      "id": "meadow_plate",
+      "slug": "meadow-plate",
+      "name": "초록플레이트",
+      "nameEn": "Meadow Plate",
+      "category": "plates",
+      "categoryKo": "플레이트",
+      "emoji": "🔮",
+      "desc": "풀타입의 석판. 지니게 하면 풀타입 기술의 위력이 강해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/meadow-plate.png"
+    },
+    {
+      "id": "icicle_plate",
+      "slug": "icicle-plate",
+      "name": "고드름플레이트",
+      "nameEn": "Icicle Plate",
+      "category": "plates",
+      "categoryKo": "플레이트",
+      "emoji": "🔮",
+      "desc": "얼음타입의 석판. 지니게 하면 얼음타입 기술의 위력이 강해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/icicle-plate.png"
+    },
+    {
+      "id": "fist_plate",
+      "slug": "fist-plate",
+      "name": "주먹플레이트",
+      "nameEn": "Fist Plate",
+      "category": "plates",
+      "categoryKo": "플레이트",
+      "emoji": "🔮",
+      "desc": "격투타입의 석판. 지니게 하면 격투타입 기술의 위력이 강해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/fist-plate.png"
+    },
+    {
+      "id": "toxic_plate",
+      "slug": "toxic-plate",
+      "name": "맹독플레이트",
+      "nameEn": "Toxic Plate",
+      "category": "plates",
+      "categoryKo": "플레이트",
+      "emoji": "🔮",
+      "desc": "독타입의 석판. 지니게 하면 독타입 기술의 위력이 강해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/toxic-plate.png"
+    },
+    {
+      "id": "earth_plate",
+      "slug": "earth-plate",
+      "name": "대지플레이트",
+      "nameEn": "Earth Plate",
+      "category": "plates",
+      "categoryKo": "플레이트",
+      "emoji": "🔮",
+      "desc": "땅타입의 석판. 지니게 하면 땅타입 기술의 위력이 강해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/earth-plate.png"
+    },
+    {
+      "id": "sky_plate",
+      "slug": "sky-plate",
+      "name": "푸른하늘플레이트",
+      "nameEn": "Sky Plate",
+      "category": "plates",
+      "categoryKo": "플레이트",
+      "emoji": "🔮",
+      "desc": "비행타입의 석판. 지니게 하면 비행타입 기술의 위력이 강해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/sky-plate.png"
+    },
+    {
+      "id": "mind_plate",
+      "slug": "mind-plate",
+      "name": "이상한플레이트",
+      "nameEn": "Mind Plate",
+      "category": "plates",
+      "categoryKo": "플레이트",
+      "emoji": "🔮",
+      "desc": "에스퍼타입의 석판. 지니게 하면 에스퍼타입 기술의 위력이 강해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/mind-plate.png"
+    },
+    {
+      "id": "insect_plate",
+      "slug": "insect-plate",
+      "name": "비단벌레플레이트",
+      "nameEn": "Insect Plate",
+      "category": "plates",
+      "categoryKo": "플레이트",
+      "emoji": "🔮",
+      "desc": "벌레타입의 석판. 지니게 하면 벌레타입 기술의 위력이 강해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/insect-plate.png"
+    },
+    {
+      "id": "stone_plate",
+      "slug": "stone-plate",
+      "name": "암석플레이트",
+      "nameEn": "Stone Plate",
+      "category": "plates",
+      "categoryKo": "플레이트",
+      "emoji": "🔮",
+      "desc": "바위타입의 석판. 지니게 하면 바위타입 기술의 위력이 강해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/stone-plate.png"
+    },
+    {
+      "id": "spooky_plate",
+      "slug": "spooky-plate",
+      "name": "원령플레이트",
+      "nameEn": "Spooky Plate",
+      "category": "plates",
+      "categoryKo": "플레이트",
+      "emoji": "🔮",
+      "desc": "고스트타입의 석판. 지니게 하면 고스트타입 기술의 위력이 강해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/spooky-plate.png"
+    },
+    {
+      "id": "draco_plate",
+      "slug": "draco-plate",
+      "name": "용의플레이트",
+      "nameEn": "Draco Plate",
+      "category": "plates",
+      "categoryKo": "플레이트",
+      "emoji": "🔮",
+      "desc": "드래곤타입의 석판. 지니게 하면 드래곤타입 기술의 위력이 강해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/draco-plate.png"
+    },
+    {
+      "id": "dread_plate",
+      "slug": "dread-plate",
+      "name": "공포플레이트",
+      "nameEn": "Dread Plate",
+      "category": "plates",
+      "categoryKo": "플레이트",
+      "emoji": "🔮",
+      "desc": "악타입의 석판. 지니게 하면 악타입 기술의 위력이 강해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/dread-plate.png"
+    },
+    {
+      "id": "iron_plate",
+      "slug": "iron-plate",
+      "name": "강철플레이트",
+      "nameEn": "Iron Plate",
+      "category": "plates",
+      "categoryKo": "플레이트",
+      "emoji": "🔮",
+      "desc": "강철타입의 석판. 지니게 하면 강철타입 기술의 위력이 강해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/iron-plate.png"
+    },
+    {
+      "id": "electirizer",
+      "slug": "electirizer",
+      "name": "에레키부스터",
+      "nameEn": "Electirizer",
+      "category": "evolution",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "엄청난 전기의 에너지가 비축되어 있는 상자. 어떤 포켓몬이 좋아하는 물건이다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/electirizer.png"
+    },
+    {
+      "id": "magmarizer",
+      "slug": "magmarizer",
+      "name": "마그마부스터",
+      "nameEn": "Magmarizer",
+      "category": "evolution",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "엄청난 마그마의 에너지가 비축되어 있는 상자. 어떤 포켓몬이 좋아하는 물건이다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/magmarizer.png"
+    },
+    {
+      "id": "razor_claw",
+      "slug": "razor-claw",
+      "name": "예리한손톱",
+      "nameEn": "Razor Claw",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "날카롭고 뾰족한 손톱. 지니게 하면 기술이 급소에 맞기 쉬워진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/razor-claw.png"
+    },
+    {
+      "id": "razor_fang",
+      "slug": "razor-fang",
+      "name": "예리한이빨",
+      "nameEn": "Razor Fang",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "날카롭고 뾰족한 이빨. 지니게 하면 데미지를 줬을 때 풀죽게 하기도 한다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/razor-fang.png"
+    },
+    {
+      "id": "griseous_orb",
+      "slug": "griseous-orb",
+      "name": "백금옥",
+      "nameEn": "Griseous Orb",
+      "category": "species-specific",
+      "categoryKo": "종족특화",
+      "emoji": "🌟",
+      "desc": "기라티나에게 지니게 하면 드래곤과 고스트타입 기술의 위력이 올라가는 반짝반짝 빛나는 구슬.",
+      "sprite": "https://pkmnchamps.github.io/images/items/griseous-orb.png"
+    },
+    {
+      "id": "douse_drive",
+      "slug": "douse-drive",
+      "name": "아쿠아카세트",
+      "nameEn": "Douse Drive",
+      "category": "species-specific",
+      "categoryKo": "종족특화",
+      "emoji": "🌟",
+      "desc": "게노세크트에게 지니게 하면 테크노버스터라는 기술이 물타입으로 바뀌는 카세트.",
+      "sprite": "https://pkmnchamps.github.io/images/items/douse-drive.png"
+    },
+    {
+      "id": "shock_drive",
+      "slug": "shock-drive",
+      "name": "번개카세트",
+      "nameEn": "Shock Drive",
+      "category": "species-specific",
+      "categoryKo": "종족특화",
+      "emoji": "🌟",
+      "desc": "게노세크트에게 지니게 하면 테크노버스터라는 기술이 전기타입으로 바뀌는 카세트.",
+      "sprite": "https://pkmnchamps.github.io/images/items/shock-drive.png"
+    },
+    {
+      "id": "burn_drive",
+      "slug": "burn-drive",
+      "name": "블레이즈카세트",
+      "nameEn": "Burn Drive",
+      "category": "species-specific",
+      "categoryKo": "종족특화",
+      "emoji": "🌟",
+      "desc": "게노세크트에게 지니게 하면 테크노버스터라는 기술이 불꽃타입으로 바뀌는 카세트.",
+      "sprite": "https://pkmnchamps.github.io/images/items/burn-drive.png"
+    },
+    {
+      "id": "chill_drive",
+      "slug": "chill-drive",
+      "name": "프리즈카세트",
+      "nameEn": "Chill Drive",
+      "category": "species-specific",
+      "categoryKo": "종족특화",
+      "emoji": "🌟",
+      "desc": "게노세크트에게 지니게 하면 테크노버스터라는 기술이 얼음타입으로 바뀌는 카세트.",
+      "sprite": "https://pkmnchamps.github.io/images/items/chill-drive.png"
+    },
+    {
+      "id": "eviolite",
+      "slug": "eviolite",
+      "name": "진화의휘석",
+      "nameEn": "Eviolite",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "진화의 이상한 덩어리. 지니게 하면 진화 전 포켓몬의 방어와 특수방어가 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/eviolite.png"
+    },
+    {
+      "id": "float_stone",
+      "slug": "float-stone",
+      "name": "가벼운돌",
+      "nameEn": "Float Stone",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "매우 가벼운 돌. 지니게 하면 포켓몬의 체중이 가벼워진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/float-stone.png"
+    },
+    {
+      "id": "rocky_helmet",
+      "slug": "rocky-helmet",
+      "name": "울퉁불퉁멧",
+      "nameEn": "Rocky Helmet",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "포켓몬에게 지니게 하면 타격 기술을 당했을 때 상대에게도 데미지를 준다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/rocky-helmet.png"
+    },
+    {
+      "id": "air_balloon",
+      "slug": "air-balloon",
+      "name": "풍선",
+      "nameEn": "Air Balloon",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "포켓몬에게 지니게 하면 포켓몬이 허공에 뜬다. 공격을 받으면 터져버린다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/air-balloon.png"
+    },
+    {
+      "id": "red_card",
+      "slug": "red-card",
+      "name": "레드카드",
+      "nameEn": "Red Card",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "이상한 힘이 있는 카드. 지니게 하면 기술을 사용한 상대를 퇴장시킬 수 있다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/red-card.png"
+    },
+    {
+      "id": "ring_target",
+      "slug": "ring-target",
+      "name": "겨냥표적",
+      "nameEn": "Ring Target",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "포켓몬 타입의 상성 때문에 무효였던 기술이 맞게 되어 버린다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/ring-target.png"
+    },
+    {
+      "id": "binding_band",
+      "slug": "binding-band",
+      "name": "조임밴드",
+      "nameEn": "Binding Band",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "조이기 기술을 보조하는 밴드. 지니게 하면 조이기 기술의 위력이 강해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/binding-band.png"
+    },
+    {
+      "id": "absorb_bulb",
+      "slug": "absorb-bulb",
+      "name": "구근",
+      "nameEn": "Absorb Bulb",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "단 한 번 쓰면 없어지는 구근. 지니게 하고 물 기술을 받으면 특수공격이 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/absorb-bulb.png"
+    },
+    {
+      "id": "cell_battery",
+      "slug": "cell-battery",
+      "name": "충전지",
+      "nameEn": "Cell Battery",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "단 한 번 쓰면 없어지는 충전지. 지니게 하고 전기 기술을 받으면 공격이 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/cell-battery.png"
+    },
+    {
+      "id": "eject_button",
+      "slug": "eject-button",
+      "name": "탈출버튼",
+      "nameEn": "Eject Button",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "지니게 하고 기술을 받으면 배틀에서 탈출하여 지닌 포켓몬과 교체할 수 있다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/eject-button.png"
+    },
+    {
+      "id": "fire_gem",
+      "slug": "fire-gem",
+      "name": "불꽃주얼",
+      "nameEn": "Fire Gem",
+      "category": "jewels",
+      "categoryKo": "보석",
+      "emoji": "✨",
+      "desc": "불꽃타입의 주얼. 지니게 하면 한 번만 불꽃 기술의 위력이 강해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/fire-gem.png"
+    },
+    {
+      "id": "water_gem",
+      "slug": "water-gem",
+      "name": "물주얼",
+      "nameEn": "Water Gem",
+      "category": "jewels",
+      "categoryKo": "보석",
+      "emoji": "✨",
+      "desc": "물타입의 주얼. 지니게 하면 한 번만 물 기술의 위력이 강해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/water-gem.png"
+    },
+    {
+      "id": "electric_gem",
+      "slug": "electric-gem",
+      "name": "전기주얼",
+      "nameEn": "Electric Gem",
+      "category": "jewels",
+      "categoryKo": "보석",
+      "emoji": "✨",
+      "desc": "전기타입의 주얼. 지니게 하면 한 번만 전기 기술의 위력이 강해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/electric-gem.png"
+    },
+    {
+      "id": "grass_gem",
+      "slug": "grass-gem",
+      "name": "풀주얼",
+      "nameEn": "Grass Gem",
+      "category": "jewels",
+      "categoryKo": "보석",
+      "emoji": "✨",
+      "desc": "풀타입의 주얼. 지니게 하면 한 번만 풀 기술의 위력이 강해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/grass-gem.png"
+    },
+    {
+      "id": "ice_gem",
+      "slug": "ice-gem",
+      "name": "얼음주얼",
+      "nameEn": "Ice Gem",
+      "category": "jewels",
+      "categoryKo": "보석",
+      "emoji": "✨",
+      "desc": "얼음타입의 주얼. 지니게 하면 한 번만 얼음 기술의 위력이 강해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/ice-gem.png"
+    },
+    {
+      "id": "fighting_gem",
+      "slug": "fighting-gem",
+      "name": "격투주얼",
+      "nameEn": "Fighting Gem",
+      "category": "jewels",
+      "categoryKo": "보석",
+      "emoji": "✨",
+      "desc": "격투타입의 주얼. 지니게 하면 한 번만 격투 기술의 위력이 강해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/fighting-gem.png"
+    },
+    {
+      "id": "poison_gem",
+      "slug": "poison-gem",
+      "name": "독주얼",
+      "nameEn": "Poison Gem",
+      "category": "jewels",
+      "categoryKo": "보석",
+      "emoji": "✨",
+      "desc": "독타입의 주얼. 지니게 하면 한 번만 독 기술의 위력이 강해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/poison-gem.png"
+    },
+    {
+      "id": "ground_gem",
+      "slug": "ground-gem",
+      "name": "땅주얼",
+      "nameEn": "Ground Gem",
+      "category": "jewels",
+      "categoryKo": "보석",
+      "emoji": "✨",
+      "desc": "땅타입의 주얼. 지니게 하면 한 번만 땅 기술의 위력이 강해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/ground-gem.png"
+    },
+    {
+      "id": "flying_gem",
+      "slug": "flying-gem",
+      "name": "비행주얼",
+      "nameEn": "Flying Gem",
+      "category": "jewels",
+      "categoryKo": "보석",
+      "emoji": "✨",
+      "desc": "비행타입의 주얼. 지니게 하면 한 번만 비행 기술의 위력이 강해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/flying-gem.png"
+    },
+    {
+      "id": "psychic_gem",
+      "slug": "psychic-gem",
+      "name": "에스퍼주얼",
+      "nameEn": "Psychic Gem",
+      "category": "jewels",
+      "categoryKo": "보석",
+      "emoji": "✨",
+      "desc": "에스퍼타입의 주얼. 지니게 하면 한 번만 에스퍼 기술의 위력이 강해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/psychic-gem.png"
+    },
+    {
+      "id": "bug_gem",
+      "slug": "bug-gem",
+      "name": "벌레주얼",
+      "nameEn": "Bug Gem",
+      "category": "jewels",
+      "categoryKo": "보석",
+      "emoji": "✨",
+      "desc": "벌레타입의 주얼. 지니게 하면 한 번만 벌레 기술의 위력이 강해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/bug-gem.png"
+    },
+    {
+      "id": "rock_gem",
+      "slug": "rock-gem",
+      "name": "바위주얼",
+      "nameEn": "Rock Gem",
+      "category": "jewels",
+      "categoryKo": "보석",
+      "emoji": "✨",
+      "desc": "바위타입의 주얼. 지니게 하면 한 번만 바위 기술의 위력이 강해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/rock-gem.png"
+    },
+    {
+      "id": "ghost_gem",
+      "slug": "ghost-gem",
+      "name": "고스트주얼",
+      "nameEn": "Ghost Gem",
+      "category": "jewels",
+      "categoryKo": "보석",
+      "emoji": "✨",
+      "desc": "고스트타입의 주얼. 지니게 하면 한 번만 고스트 기술의 위력이 강해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/ghost-gem.png"
+    },
+    {
+      "id": "dark_gem",
+      "slug": "dark-gem",
+      "name": "악주얼",
+      "nameEn": "Dark Gem",
+      "category": "jewels",
+      "categoryKo": "보석",
+      "emoji": "✨",
+      "desc": "악타입의 주얼. 지니게 하면 한 번만 악 기술의 위력이 강해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/dark-gem.png"
+    },
+    {
+      "id": "steel_gem",
+      "slug": "steel-gem",
+      "name": "강철주얼",
+      "nameEn": "Steel Gem",
+      "category": "jewels",
+      "categoryKo": "보석",
+      "emoji": "✨",
+      "desc": "강철타입의 주얼. 지니게 하면 한 번만 강철 기술의 위력이 강해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/steel-gem.png"
+    },
+    {
+      "id": "pretty_wing",
+      "slug": "pretty-wing",
+      "name": "고운날개",
+      "nameEn": "Pretty Feather",
+      "category": "loot",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "아름답기만 할 뿐 아무 효과도 없는 지극히 평범한 날개.",
+      "sprite": "https://pkmnchamps.github.io/images/items/pretty-wing.png"
+    },
+    {
+      "id": "pass_orb",
+      "slug": "pass-orb",
+      "name": "딜구슬",
+      "nameEn": "Pass Orb",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "딜파워를 발생시킬 때 사용하는 하나지방의 파워가 담긴 이상한 구슬.",
+      "sprite": "https://pkmnchamps.github.io/images/items/pass-orb.png"
+    },
+    {
+      "id": "balm_mushroom",
+      "slug": "balm-mushroom",
+      "name": "향기버섯",
+      "nameEn": "Balm Mushroom",
+      "category": "loot",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "주변 일대에 좋은 향기가 퍼지는 희귀한 버섯. 상점에서 비싸게 팔린다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/balm-mushroom.png"
+    },
+    {
+      "id": "big_nugget",
+      "slug": "big-nugget",
+      "name": "큰금구슬",
+      "nameEn": "Big Nugget",
+      "category": "loot",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "금색으로 반짝반짝 빛나는 순금으로 만들어진 큰 구슬. 상점에서 비싸게 팔린다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/big-nugget.png"
+    },
+    {
+      "id": "comet_shard",
+      "slug": "comet-shard",
+      "name": "혜성조각",
+      "nameEn": "Comet Shard",
+      "category": "loot",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "혜성이 가까워졌을 때 지표면에 떨어진 조각. 상점에서 비싸게 팔린다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/comet-shard.png"
+    },
+    {
+      "id": "dragon_gem",
+      "slug": "dragon-gem",
+      "name": "드래곤주얼",
+      "nameEn": "Dragon Gem",
+      "category": "jewels",
+      "categoryKo": "보석",
+      "emoji": "✨",
+      "desc": "드래곤타입의 주얼. 지니게 하면 한 번만 드래곤 기술의 위력이 강해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/dragon-gem.png"
+    },
+    {
+      "id": "normal_gem",
+      "slug": "normal-gem",
+      "name": "노말주얼",
+      "nameEn": "Normal Gem",
+      "category": "jewels",
+      "categoryKo": "보석",
+      "emoji": "✨",
+      "desc": "노말타입의 주얼. 지니게 하면 한 번만 노말 기술의 위력이 강해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/normal-gem.png"
+    },
+    {
+      "id": "weakness_policy",
+      "slug": "weakness-policy",
+      "name": "약점보험",
+      "nameEn": "Weakness Policy",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "약점을 공격당했을 때 공격과 특수공격이 각각 크게 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/weakness-policy.png"
+    },
+    {
+      "id": "assault_vest",
+      "slug": "assault-vest",
+      "name": "돌격조끼",
+      "nameEn": "Assault Vest",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "공격적으로 변하는 조끼. 지니게 하면 특수방어가 올라가지만 변화 기술을 쓸 수 없게 된다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/assault-vest.png"
+    },
+    {
+      "id": "pixie_plate",
+      "slug": "pixie-plate",
+      "name": "정령플레이트",
+      "nameEn": "Pixie Plate",
+      "category": "plates",
+      "categoryKo": "플레이트",
+      "emoji": "🔮",
+      "desc": "페어리타입의 석판. 지니게 하면 페어리타입 기술의 위력이 강해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/pixie-plate.png"
+    },
+    {
+      "id": "luminous_moss",
+      "slug": "luminous-moss",
+      "name": "빛이끼",
+      "nameEn": "Luminous Moss",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "단 한 번 쓰면 없어지는 빛이끼. 지니게 하고 물 기술을 받으면 특수방어가 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/luminous-moss.png"
+    },
+    {
+      "id": "snowball",
+      "slug": "snowball",
+      "name": "눈덩이",
+      "nameEn": "Snowball",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "단 한 번 쓰면 없어지는 눈덩이. 지니게 하고 얼음 기술을 받으면 공격이 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/snowball.png"
+    },
+    {
+      "id": "safety_goggles",
+      "slug": "safety-goggles",
+      "name": "방진고글",
+      "nameEn": "Safety Goggles",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "날씨로 인한 데미지뿐만 아니라 가루를 내보내는 기술의 효과도 막을 수 있는 고글.",
+      "sprite": "https://pkmnchamps.github.io/images/items/safety-goggles.png"
+    },
+    {
+      "id": "gengarite",
+      "slug": "gengarite",
+      "name": "팬텀나이트",
+      "nameEn": "Gengarite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "팬텀에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/gengarite.png"
+    },
+    {
+      "id": "gardevoirite",
+      "slug": "gardevoirite",
+      "name": "가디안나이트",
+      "nameEn": "Gardevoirite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "가디안에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/gardevoirite.png"
+    },
+    {
+      "id": "ampharosite",
+      "slug": "ampharosite",
+      "name": "전룡나이트",
+      "nameEn": "Ampharosite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "전룡에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/ampharosite.png"
+    },
+    {
+      "id": "venusaurite",
+      "slug": "venusaurite",
+      "name": "이상해꽃나이트",
+      "nameEn": "Venusaurite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "이상해꽃에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/venusaurite.png"
+    },
+    {
+      "id": "charizardite_x",
+      "slug": "charizardite-x",
+      "name": "리자몽나이트X",
+      "nameEn": "Charizardite X",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "리자몽에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/charizardite-x.png"
+    },
+    {
+      "id": "blastoisinite",
+      "slug": "blastoisinite",
+      "name": "거북왕나이트",
+      "nameEn": "Blastoisinite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "거북왕에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/blastoisinite.png"
+    },
+    {
+      "id": "mewtwonite_x",
+      "slug": "mewtwonite-x",
+      "name": "뮤츠나이트X",
+      "nameEn": "Mewtwonite X",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "뮤츠에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/mewtwonite-x.png"
+    },
+    {
+      "id": "mewtwonite_y",
+      "slug": "mewtwonite-y",
+      "name": "뮤츠나이트Y",
+      "nameEn": "Mewtwonite Y",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "뮤츠에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/mewtwonite-y.png"
+    },
+    {
+      "id": "blazikenite",
+      "slug": "blazikenite",
+      "name": "번치코나이트",
+      "nameEn": "Blazikenite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "번치코에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/blazikenite.png"
+    },
+    {
+      "id": "medichamite",
+      "slug": "medichamite",
+      "name": "요가램나이트",
+      "nameEn": "Medichamite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "요가램에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/medichamite.png"
+    },
+    {
+      "id": "houndoominite",
+      "slug": "houndoominite",
+      "name": "헬가나이트",
+      "nameEn": "Houndoominite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "헬가에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/houndoominite.png"
+    },
+    {
+      "id": "aggronite",
+      "slug": "aggronite",
+      "name": "보스로라나이트",
+      "nameEn": "Aggronite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "보스로라에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/aggronite.png"
+    },
+    {
+      "id": "banettite",
+      "slug": "banettite",
+      "name": "다크펫나이트",
+      "nameEn": "Banettite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "다크펫에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/banettite.png"
+    },
+    {
+      "id": "tyranitarite",
+      "slug": "tyranitarite",
+      "name": "마기라스나이트",
+      "nameEn": "Tyranitarite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "마기라스에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/tyranitarite.png"
+    },
+    {
+      "id": "scizorite",
+      "slug": "scizorite",
+      "name": "핫삼나이트",
+      "nameEn": "Scizorite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "핫삼에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/scizorite.png"
+    },
+    {
+      "id": "pinsirite",
+      "slug": "pinsirite",
+      "name": "쁘사이저나이트",
+      "nameEn": "Pinsirite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "쁘사이저에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/pinsirite.png"
+    },
+    {
+      "id": "aerodactylite",
+      "slug": "aerodactylite",
+      "name": "프테라나이트",
+      "nameEn": "Aerodactylite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "프테라에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/aerodactylite.png"
+    },
+    {
+      "id": "lucarionite",
+      "slug": "lucarionite",
+      "name": "루카리오나이트",
+      "nameEn": "Lucarionite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "루카리오에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/lucarionite.png"
+    },
+    {
+      "id": "abomasite",
+      "slug": "abomasite",
+      "name": "눈설왕나이트",
+      "nameEn": "Abomasite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "눈설왕에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/abomasite.png"
+    },
+    {
+      "id": "kangaskhanite",
+      "slug": "kangaskhanite",
+      "name": "캥카나이트",
+      "nameEn": "Kangaskhanite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "캥카에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/kangaskhanite.png"
+    },
+    {
+      "id": "gyaradosite",
+      "slug": "gyaradosite",
+      "name": "갸라도스나이트",
+      "nameEn": "Gyaradosite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "갸라도스에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/gyaradosite.png"
+    },
+    {
+      "id": "absolite",
+      "slug": "absolite",
+      "name": "앱솔나이트",
+      "nameEn": "Absolite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "앱솔에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/absolite.png"
+    },
+    {
+      "id": "charizardite_y",
+      "slug": "charizardite-y",
+      "name": "리자몽나이트Y",
+      "nameEn": "Charizardite Y",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "리자몽에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/charizardite-y.png"
+    },
+    {
+      "id": "alakazite",
+      "slug": "alakazite",
+      "name": "후디나이트",
+      "nameEn": "Alakazite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "후딘에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/alakazite.png"
+    },
+    {
+      "id": "heracronite",
+      "slug": "heracronite",
+      "name": "헤라크로스나이트",
+      "nameEn": "Heracronite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "헤라크로스에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/heracronite.png"
+    },
+    {
+      "id": "mawilite",
+      "slug": "mawilite",
+      "name": "입치트나이트",
+      "nameEn": "Mawilite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "입치트에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/mawilite.png"
+    },
+    {
+      "id": "manectite",
+      "slug": "manectite",
+      "name": "썬더볼트나이트",
+      "nameEn": "Manectite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "썬더볼트에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/manectite.png"
+    },
+    {
+      "id": "garchompite",
+      "slug": "garchompite",
+      "name": "한카리아스나이트",
+      "nameEn": "Garchompite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "한카리아스에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/garchompite.png"
+    },
+    {
+      "id": "fairy_gem",
+      "slug": "fairy-gem",
+      "name": "페어리주얼",
+      "nameEn": "Fairy Gem",
+      "category": "jewels",
+      "categoryKo": "보석",
+      "emoji": "✨",
+      "desc": "페어리타입의 주얼. 지니게 하면 한 번만 페어리 기술의 위력이 강해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/fairy-gem.png"
+    },
+    {
+      "id": "latiasite",
+      "slug": "latiasite",
+      "name": "라티아스나이트",
+      "nameEn": "Latiasite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "라티아스에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/latiasite.png"
+    },
+    {
+      "id": "latiosite",
+      "slug": "latiosite",
+      "name": "라티오스나이트",
+      "nameEn": "Latiosite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "라티오스에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/latiosite.png"
+    },
+    {
+      "id": "swampertite",
+      "slug": "swampertite",
+      "name": "대짱이나이트",
+      "nameEn": "Swampertite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "대짱이에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/swampertite.png"
+    },
+    {
+      "id": "sceptilite",
+      "slug": "sceptilite",
+      "name": "나무킹나이트",
+      "nameEn": "Sceptilite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "나무킹에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/sceptilite.png"
+    },
+    {
+      "id": "sablenite",
+      "slug": "sablenite",
+      "name": "깜까미나이트",
+      "nameEn": "Sablenite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "깜까미에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/sablenite.png"
+    },
+    {
+      "id": "altarianite",
+      "slug": "altarianite",
+      "name": "파비코리나이트",
+      "nameEn": "Altarianite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "파비코리에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/altarianite.png"
+    },
+    {
+      "id": "galladite",
+      "slug": "galladite",
+      "name": "엘레이드나이트",
+      "nameEn": "Galladite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "엘레이드에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/galladite.png"
+    },
+    {
+      "id": "audinite",
+      "slug": "audinite",
+      "name": "다부니나이트",
+      "nameEn": "Audinite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "다부니에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/audinite.png"
+    },
+    {
+      "id": "metagrossite",
+      "slug": "metagrossite",
+      "name": "메타그로스나이트",
+      "nameEn": "Metagrossite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "메타그로스에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/metagrossite.png"
+    },
+    {
+      "id": "sharpedonite",
+      "slug": "sharpedonite",
+      "name": "샤크니아나이트",
+      "nameEn": "Sharpedonite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "샤크니아에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/sharpedonite.png"
+    },
+    {
+      "id": "slowbronite",
+      "slug": "slowbronite",
+      "name": "야도란나이트",
+      "nameEn": "Slowbronite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "야도란에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/slowbronite.png"
+    },
+    {
+      "id": "steelixite",
+      "slug": "steelixite",
+      "name": "강철톤나이트",
+      "nameEn": "Steelixite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "강철톤에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/steelixite.png"
+    },
+    {
+      "id": "pidgeotite",
+      "slug": "pidgeotite",
+      "name": "피죤투나이트",
+      "nameEn": "Pidgeotite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "피죤투에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/pidgeotite.png"
+    },
+    {
+      "id": "glalitite",
+      "slug": "glalitite",
+      "name": "얼음귀신나이트",
+      "nameEn": "Glalitite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "얼음귀신에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/glalitite.png"
+    },
+    {
+      "id": "diancite",
+      "slug": "diancite",
+      "name": "디안시나이트",
+      "nameEn": "Diancite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "디안시에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/diancite.png"
+    },
+    {
+      "id": "cameruptite",
+      "slug": "cameruptite",
+      "name": "폭타나이트",
+      "nameEn": "Cameruptite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "폭타에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/cameruptite.png"
+    },
+    {
+      "id": "lopunnite",
+      "slug": "lopunnite",
+      "name": "이어롭나이트",
+      "nameEn": "Lopunnite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "이어롭에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/lopunnite.png"
+    },
+    {
+      "id": "salamencite",
+      "slug": "salamencite",
+      "name": "보만다나이트",
+      "nameEn": "Salamencite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "보만다에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/salamencite.png"
+    },
+    {
+      "id": "beedrillite",
+      "slug": "beedrillite",
+      "name": "독침붕나이트",
+      "nameEn": "Beedrillite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "독침붕에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/beedrillite.png"
+    },
+    {
+      "id": "meganiumite",
+      "slug": "meganiumite",
+      "name": "메가니움나이트",
+      "nameEn": "Meganiumite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "메가니움에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/meganiumite.png"
+    },
+    {
+      "id": "feraligatrite",
+      "slug": "feraligatrite",
+      "name": "장크로다일나이트",
+      "nameEn": "Feraligatrite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "장크로다일에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/feraligatrite.png"
+    },
+    {
+      "id": "emboarite",
+      "slug": "emboarite",
+      "name": "염무왕나이트",
+      "nameEn": "Emboarite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "염무왕에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/emboarite.png"
+    },
+    {
+      "id": "raichunite_x",
+      "slug": "raichunite-x",
+      "name": "라이츄나이트X",
+      "nameEn": "Raichunite X",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "라이츄에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/raichunite-x.png"
+    },
+    {
+      "id": "raichunite_y",
+      "slug": "raichunite-y",
+      "name": "라이츄나이트Y",
+      "nameEn": "Raichunite Y",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "라이츄에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/raichunite-y.png"
+    },
+    {
+      "id": "clefablite",
+      "slug": "clefablite",
+      "name": "픽시나이트",
+      "nameEn": "Clefablite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "픽시에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/clefablite.png"
+    },
+    {
+      "id": "victreebelite",
+      "slug": "victreebelite",
+      "name": "우츠보트나이트",
+      "nameEn": "Victreebelite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "우츠보트에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/victreebelite.png"
+    },
+    {
+      "id": "starmienite",
+      "slug": "starmienite",
+      "name": "아쿠스타나이트",
+      "nameEn": "Starmienite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "아쿠스타에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/starmienite.png"
+    },
+    {
+      "id": "dragonitite",
+      "slug": "dragonitite",
+      "name": "망나뇽나이트",
+      "nameEn": "Dragonitite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "망나뇽에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/dragonitite.png"
+    },
+    {
+      "id": "skarmorite",
+      "slug": "skarmorite",
+      "name": "무장조나이트",
+      "nameEn": "Skarmorite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "무장조에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/skarmorite.png"
+    },
+    {
+      "id": "chimechonite",
+      "slug": "chimechonite",
+      "name": "치렁나이트",
+      "nameEn": "Chimechonite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "치렁에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/chimechonite.png"
+    },
+    {
+      "id": "rayquazite",
+      "slug": "rayquazite",
+      "name": "레쿠쟈나이트",
+      "nameEn": "Rayquazite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "레쿠쟈에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/rayquazite.png"
+    },
+    {
+      "id": "froslassite",
+      "slug": "froslassite",
+      "name": "눈여아나이트",
+      "nameEn": "Froslassite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "눈여아에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/froslassite.png"
+    },
+    {
+      "id": "excadrillite",
+      "slug": "excadrillite",
+      "name": "몰드류나이트",
+      "nameEn": "Excadrillite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "몰드류에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/excadrillite.png"
+    },
+    {
+      "id": "chandelurite",
+      "slug": "chandelurite",
+      "name": "샹델라나이트",
+      "nameEn": "Chandelurite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "샹델라에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/chandelurite.png"
+    },
+    {
+      "id": "golurkite",
+      "slug": "golurkite",
+      "name": "골루그나이트",
+      "nameEn": "Golurkite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "골루그에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/golurkite.png"
+    },
+    {
+      "id": "chesnaughtite",
+      "slug": "chesnaughtite",
+      "name": "브리가론나이트",
+      "nameEn": "Chesnaughtite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "브리가론에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/chesnaughtite.png"
+    },
+    {
+      "id": "delphoxite",
+      "slug": "delphoxite",
+      "name": "마폭시나이트",
+      "nameEn": "Delphoxite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "마폭시에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/delphoxite.png"
+    },
+    {
+      "id": "greninjite",
+      "slug": "greninjite",
+      "name": "개굴닌자나이트",
+      "nameEn": "Greninjite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "개굴닌자에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/greninjite.png"
+    },
+    {
+      "id": "floettite",
+      "slug": "floettite",
+      "name": "플라엣테나이트",
+      "nameEn": "Floettite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "플라엣테에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/floettite.png"
+    },
+    {
+      "id": "meowsticite",
+      "slug": "meowsticite",
+      "name": "냐오닉스나이트",
+      "nameEn": "Meowsticite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "냐오닉스에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/meowsticite.png"
+    },
+    {
+      "id": "hawluchite",
+      "slug": "hawluchite",
+      "name": "루차불나이트",
+      "nameEn": "Hawluchite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "루차불에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/hawluchite.png"
+    },
+    {
+      "id": "crabominite",
+      "slug": "crabominite",
+      "name": "모단단게나이트",
+      "nameEn": "Crabominite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "모단단게에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/crabominite.png"
+    },
+    {
+      "id": "drampite",
+      "slug": "drampite",
+      "name": "할비롱나이트",
+      "nameEn": "Drampite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "할비롱에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/drampite.png"
+    },
+    {
+      "id": "scovillainite",
+      "slug": "scovillainite",
+      "name": "스코빌런나이트",
+      "nameEn": "Scovillainite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "스코빌런에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/scovillainite.png"
+    },
+    {
+      "id": "glimmorite",
+      "slug": "glimmorite",
+      "name": "킬라플로르나이트",
+      "nameEn": "Glimmorite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "킬라플로르에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/glimmorite.png"
+    },
+    {
+      "id": "adrenaline_orb",
+      "slug": "adrenaline-orb",
+      "name": "주눅구슬",
+      "nameEn": "Adrenaline Orb",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "포켓몬에게 지니게 하면 위협을 받았을 때 스피드가 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/adrenaline-orb.png"
+    },
+    {
+      "id": "red_nectar",
+      "slug": "red-nectar",
+      "name": "다홍꿀",
+      "nameEn": "Red Nectar",
+      "category": "species-specific",
+      "categoryKo": "종족특화",
+      "emoji": "🌟",
+      "desc": "울라울라 화원에서 손에 넣은 꽃의 꿀. 특정 포켓몬의 모습을 바꾼다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/red-nectar.png"
+    },
+    {
+      "id": "yellow_nectar",
+      "slug": "yellow-nectar",
+      "name": "진노랑꿀",
+      "nameEn": "Yellow Nectar",
+      "category": "species-specific",
+      "categoryKo": "종족특화",
+      "emoji": "🌟",
+      "desc": "멜레멜레 화원에서 손에 넣은 꽃의 꿀. 특정 포켓몬의 모습을 바꾼다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/yellow-nectar.png"
+    },
+    {
+      "id": "pink_nectar",
+      "slug": "pink-nectar",
+      "name": "연분홍꿀",
+      "nameEn": "Pink Nectar",
+      "category": "species-specific",
+      "categoryKo": "종족특화",
+      "emoji": "🌟",
+      "desc": "로열 애버뉴 화단에서 손에 넣은 꽃의 꿀. 특정 포켓몬의 모습을 바꾼다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/pink-nectar.png"
+    },
+    {
+      "id": "purple_nectar",
+      "slug": "purple-nectar",
+      "name": "보라꿀",
+      "nameEn": "Purple Nectar",
+      "category": "species-specific",
+      "categoryKo": "종족특화",
+      "emoji": "🌟",
+      "desc": "포니 화원에서 손에 넣은 꽃의 꿀. 특정 포켓몬의 모습을 바꾼다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/purple-nectar.png"
+    },
+    {
+      "id": "terrain_extender",
+      "slug": "terrain-extender",
+      "name": "그라운드코트",
+      "nameEn": "Terrain Extender",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "지니게 한 포켓몬이 기술이나 특성으로 필드를 사용했을 때 여느 때보다 긴 시간 동안 지속된다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/terrain-extender.png"
+    },
+    {
+      "id": "protective_pads",
+      "slug": "protective-pads",
+      "name": "방호패드",
+      "nameEn": "Protective Pads",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "공격하는 상대와 접촉해서 받게 되는 효과를 받지 않게 한다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/protective-pads.png"
+    },
+    {
+      "id": "electric_seed",
+      "slug": "electric-seed",
+      "name": "일렉트릭시드",
+      "nameEn": "Electric Seed",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "포켓몬에게 지니게 하면 일렉트릭필드일 때 사용하여 방어가 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/electric-seed.png"
+    },
+    {
+      "id": "psychic_seed",
+      "slug": "psychic-seed",
+      "name": "사이코시드",
+      "nameEn": "Psychic Seed",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "포켓몬에게 지니게 하면 사이코필드일 때 사용하여 특수방어가 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/psychic-seed.png"
+    },
+    {
+      "id": "misty_seed",
+      "slug": "misty-seed",
+      "name": "미스트시드",
+      "nameEn": "Misty Seed",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "포켓몬에게 지니게 하면 미스트필드일 때 사용하여 특수방어가 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/misty-seed.png"
+    },
+    {
+      "id": "grassy_seed",
+      "slug": "grassy-seed",
+      "name": "그래스시드",
+      "nameEn": "Grassy Seed",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "포켓몬에게 지니게 하면 그래스필드일 때 사용하여 방어가 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/grassy-seed.png"
+    },
+    {
+      "id": "fighting_memory",
+      "slug": "fighting-memory",
+      "name": "파이팅메모리",
+      "nameEn": "Fighting Memory",
+      "category": "memories",
+      "categoryKo": "메모리",
+      "emoji": "💾",
+      "desc": "격투타입의 데이터가 들어 있는 메모리. 특정 포켓몬이 지니면 타입이 바뀐다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/fighting-memory.png"
+    },
+    {
+      "id": "flying_memory",
+      "slug": "flying-memory",
+      "name": "플라잉메모리",
+      "nameEn": "Flying Memory",
+      "category": "memories",
+      "categoryKo": "메모리",
+      "emoji": "💾",
+      "desc": "비행타입의 데이터가 들어 있는 메모리. 특정 포켓몬이 지니면 타입이 바뀐다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/flying-memory.png"
+    },
+    {
+      "id": "poison_memory",
+      "slug": "poison-memory",
+      "name": "포이즌메모리",
+      "nameEn": "Poison Memory",
+      "category": "memories",
+      "categoryKo": "메모리",
+      "emoji": "💾",
+      "desc": "독타입의 데이터가 들어 있는 메모리. 특정 포켓몬이 지니면 타입이 바뀐다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/poison-memory.png"
+    },
+    {
+      "id": "ground_memory",
+      "slug": "ground-memory",
+      "name": "그라운드메모리",
+      "nameEn": "Ground Memory",
+      "category": "memories",
+      "categoryKo": "메모리",
+      "emoji": "💾",
+      "desc": "땅타입의 데이터가 들어 있는 메모리. 특정 포켓몬이 지니면 타입이 바뀐다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/ground-memory.png"
+    },
+    {
+      "id": "rock_memory",
+      "slug": "rock-memory",
+      "name": "락메모리",
+      "nameEn": "Rock Memory",
+      "category": "memories",
+      "categoryKo": "메모리",
+      "emoji": "💾",
+      "desc": "바위타입의 데이터가 들어 있는 메모리. 특정 포켓몬이 지니면 타입이 바뀐다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/rock-memory.png"
+    },
+    {
+      "id": "bug_memory",
+      "slug": "bug-memory",
+      "name": "버그메모리",
+      "nameEn": "Bug Memory",
+      "category": "memories",
+      "categoryKo": "메모리",
+      "emoji": "💾",
+      "desc": "벌레타입의 데이터가 들어 있는 메모리. 특정 포켓몬이 지니면 타입이 바뀐다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/bug-memory.png"
+    },
+    {
+      "id": "ghost_memory",
+      "slug": "ghost-memory",
+      "name": "고스트메모리",
+      "nameEn": "Ghost Memory",
+      "category": "memories",
+      "categoryKo": "메모리",
+      "emoji": "💾",
+      "desc": "고스트타입의 데이터가 들어 있는 메모리. 특정 포켓몬이 지니면 타입이 바뀐다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/ghost-memory.png"
+    },
+    {
+      "id": "steel_memory",
+      "slug": "steel-memory",
+      "name": "스틸메모리",
+      "nameEn": "Steel Memory",
+      "category": "memories",
+      "categoryKo": "메모리",
+      "emoji": "💾",
+      "desc": "강철타입의 데이터가 들어 있는 메모리. 특정 포켓몬이 지니면 타입이 바뀐다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/steel-memory.png"
+    },
+    {
+      "id": "fire_memory",
+      "slug": "fire-memory",
+      "name": "파이어메모리",
+      "nameEn": "Fire Memory",
+      "category": "memories",
+      "categoryKo": "메모리",
+      "emoji": "💾",
+      "desc": "불꽃타입의 데이터가 들어 있는 메모리. 특정 포켓몬이 지니면 타입이 바뀐다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/fire-memory.png"
+    },
+    {
+      "id": "water_memory",
+      "slug": "water-memory",
+      "name": "워터메모리",
+      "nameEn": "Water Memory",
+      "category": "memories",
+      "categoryKo": "메모리",
+      "emoji": "💾",
+      "desc": "물타입의 데이터가 들어 있는 메모리. 특정 포켓몬이 지니면 타입이 바뀐다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/water-memory.png"
+    },
+    {
+      "id": "grass_memory",
+      "slug": "grass-memory",
+      "name": "그래스메모리",
+      "nameEn": "Grass Memory",
+      "category": "memories",
+      "categoryKo": "메모리",
+      "emoji": "💾",
+      "desc": "풀타입의 데이터가 들어 있는 메모리. 특정 포켓몬이 지니면 타입이 바뀐다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/grass-memory.png"
+    },
+    {
+      "id": "electric_memory",
+      "slug": "electric-memory",
+      "name": "일렉트릭메모리",
+      "nameEn": "Electric Memory",
+      "category": "memories",
+      "categoryKo": "메모리",
+      "emoji": "💾",
+      "desc": "전기타입의 데이터가 들어 있는 메모리. 특정 포켓몬이 지니면 타입이 바뀐다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/electric-memory.png"
+    },
+    {
+      "id": "psychic_memory",
+      "slug": "psychic-memory",
+      "name": "사이킥메모리",
+      "nameEn": "Psychic Memory",
+      "category": "memories",
+      "categoryKo": "메모리",
+      "emoji": "💾",
+      "desc": "에스퍼타입의 데이터가 들어 있는 메모리. 특정 포켓몬이 지니면 타입이 바뀐다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/psychic-memory.png"
+    },
+    {
+      "id": "ice_memory",
+      "slug": "ice-memory",
+      "name": "아이스메모리",
+      "nameEn": "Ice Memory",
+      "category": "memories",
+      "categoryKo": "메모리",
+      "emoji": "💾",
+      "desc": "얼음타입의 데이터가 들어 있는 메모리. 특정 포켓몬이 지니면 타입이 바뀐다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/ice-memory.png"
+    },
+    {
+      "id": "dragon_memory",
+      "slug": "dragon-memory",
+      "name": "드래곤메모리",
+      "nameEn": "Dragon Memory",
+      "category": "memories",
+      "categoryKo": "메모리",
+      "emoji": "💾",
+      "desc": "드래곤타입의 데이터가 들어 있는 메모리. 특정 포켓몬이 지니면 타입이 바뀐다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/dragon-memory.png"
+    },
+    {
+      "id": "dark_memory",
+      "slug": "dark-memory",
+      "name": "다크메모리",
+      "nameEn": "Dark Memory",
+      "category": "memories",
+      "categoryKo": "메모리",
+      "emoji": "💾",
+      "desc": "악타입의 데이터가 들어 있는 메모리. 특정 포켓몬이 지니면 타입이 바뀐다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/dark-memory.png"
+    },
+    {
+      "id": "fairy_memory",
+      "slug": "fairy-memory",
+      "name": "페어리메모리",
+      "nameEn": "Fairy Memory",
+      "category": "memories",
+      "categoryKo": "메모리",
+      "emoji": "💾",
+      "desc": "페어리타입의 데이터가 들어 있는 메모리. 특정 포켓몬이 지니면 타입이 바뀐다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/fairy-memory.png"
+    },
+    {
+      "id": "rusted_sword",
+      "slug": "rusted-sword",
+      "name": "녹슨검",
+      "nameEn": "Rusted Sword",
+      "category": "species-specific",
+      "categoryKo": "종족특화",
+      "emoji": "🌟",
+      "desc": "먼 옛날의 영웅이 재앙을 막는 데 사용했다고 전해지는 검이지만 지금은 녹이 슬고 닳아버렸다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/rusted-sword.png"
+    },
+    {
+      "id": "rusted_shield",
+      "slug": "rusted-shield",
+      "name": "녹슨방패",
+      "nameEn": "Rusted Shield",
+      "category": "species-specific",
+      "categoryKo": "종족특화",
+      "emoji": "🌟",
+      "desc": "먼 옛날의 영웅이 재앙을 막는 데 사용했다고 전해지는 방패지만 지금은 녹이 슬고 닳아버렸다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/rusted-shield.png"
+    },
+    {
+      "id": "throat_spray",
+      "slug": "throat-spray",
+      "name": "목스프레이",
+      "nameEn": "Throat Spray",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "소리 기술을 사용하면 특수공격이 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/throat-spray.png"
+    },
+    {
+      "id": "eject_pack",
+      "slug": "eject-pack",
+      "name": "탈출팩",
+      "nameEn": "Eject Pack",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "지니게 한 포켓몬의 능력이 떨어지면 지닌 포켓몬과 교체한다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/eject-pack.png"
+    },
+    {
+      "id": "heavy_duty_boots",
+      "slug": "heavy-duty-boots",
+      "name": "통굽부츠",
+      "nameEn": "Heavy-Duty Boots",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "발밑에 설치된 함정 등의 영향을 받지 않게 된다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/heavy-duty-boots.png"
+    },
+    {
+      "id": "blunder_policy",
+      "slug": "blunder-policy",
+      "name": "허탕보험",
+      "nameEn": "Blunder Policy",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "명중률에 의해 기술이 빗나갔을 때 스피드가 크게 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/blunder-policy.png"
+    },
+    {
+      "id": "room_service",
+      "slug": "room-service",
+      "name": "룸서비스",
+      "nameEn": "Room Service",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "포켓몬에게 지니게 하면 트릭룸일 때 사용하여 스피드가 떨어진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/room-service.png"
+    },
+    {
+      "id": "utility_umbrella",
+      "slug": "utility-umbrella",
+      "name": "만능우산",
+      "nameEn": "Utility Umbrella",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "지니게 한 포켓몬은 비와 햇살이 강할 때의 영향을 받지 않게 된다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/utility-umbrella.png"
+    },
+    {
+      "id": "max_mushrooms",
+      "slug": "max-mushrooms",
+      "name": "다이버섯",
+      "nameEn": "Max Mushrooms",
+      "category": "stat-boosts",
+      "categoryKo": "능력강화",
+      "emoji": "⚡",
+      "desc": "다이맥스의 모습을 바꿀 수 있는 힘을 가진 버섯. 배틀 중인 포켓몬의 모든 능력을 올린다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/max-mushrooms.png"
+    },
+    {
+      "id": "blank_plate",
+      "slug": "blank-plate",
+      "name": "Blank Plate",
+      "nameEn": "Blank Plate",
+      "category": "plates",
+      "categoryKo": "플레이트",
+      "emoji": "🔮",
+      "desc": "",
+      "sprite": "https://pkmnchamps.github.io/images/items/blank-plate.png"
+    },
+    {
+      "id": "legend_plate",
+      "slug": "legend-plate",
+      "name": "Legend Plate",
+      "nameEn": "Legend Plate",
+      "category": "plates",
+      "categoryKo": "플레이트",
+      "emoji": "🔮",
+      "desc": "",
+      "sprite": "https://pkmnchamps.github.io/images/items/legend-plate.png"
+    },
+    {
+      "id": "booster_energy",
+      "slug": "booster-energy",
+      "name": "부스트에너지",
+      "nameEn": "Booster Energy",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "지니게 하면 고대활성이나 쿼크차지를 날씨나 필드 없이 발동시킨다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/booster-energy.png"
+    },
+    {
+      "id": "ability_shield",
+      "slug": "ability-shield",
+      "name": "특성가드",
+      "nameEn": "Ability Shield",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "지니게 하면 상대에 의해 특성이 바뀌지 않는다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/ability-shield.png"
+    },
+    {
+      "id": "clear_amulet",
+      "slug": "clear-amulet",
+      "name": "클리어참",
+      "nameEn": "Clear Amulet",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "지니게 하면 상대의 효과로 능력이 떨어지지 않는다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/clear-amulet.png"
+    },
+    {
+      "id": "mirror_herb",
+      "slug": "mirror-herb",
+      "name": "미러허브",
+      "nameEn": "Mirror Herb",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "지니게 하면 상대의 능력 변화를 복사한다. 한 번 사용하면 없어진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/mirror-herb.png"
+    },
+    {
+      "id": "punching_glove",
+      "slug": "punching-glove",
+      "name": "펀치글러브",
+      "nameEn": "Punching Glove",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "지니게 하면 펀치 기술의 위력이 올라가고 접촉하지 않게 된다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/punching-glove.png"
+    },
+    {
+      "id": "covert_cloak",
+      "slug": "covert-cloak",
+      "name": "비밀망토",
+      "nameEn": "Covert Cloak",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "지니게 하면 기술의 추가 효과를 받지 않는다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/covert-cloak.png"
+    },
+    {
+      "id": "loaded_dice",
+      "slug": "loaded-dice",
+      "name": "구르는주사위",
+      "nameEn": "Loaded Dice",
+      "category": "held-items",
+      "categoryKo": "소지품",
+      "emoji": "🎒",
+      "desc": "지니게 하면 연속 기술이 더 많이 맞기 쉬워진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/loaded-dice.png"
+    },
+    {
+      "id": "fairy_feather",
+      "slug": "fairy-feather",
+      "name": "요정의깃털",
+      "nameEn": "Fairy Feather",
+      "category": "type-enhancement",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "요정의 깃털. 지니게 하면 페어리타입 기술의 위력이 올라간다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/fairy-feather.png"
+    },
+    {
+      "id": "wellspring_mask",
+      "slug": "wellspring-mask",
+      "name": "우물의가면",
+      "nameEn": "Wellspring Mask",
+      "category": "species-specific",
+      "categoryKo": "종족특화",
+      "emoji": "🌟",
+      "desc": "오거폰에게 지니게 하면 우물의가면을 쓴 모습으로 변한다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/wellspring-mask.png"
+    },
+    {
+      "id": "hearthflame_mask",
+      "slug": "hearthflame-mask",
+      "name": "화덕의가면",
+      "nameEn": "Hearthflame Mask",
+      "category": "species-specific",
+      "categoryKo": "종족특화",
+      "emoji": "🌟",
+      "desc": "오거폰에게 지니게 하면 화덕의가면을 쓴 모습으로 변한다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/hearthflame-mask.png"
+    },
+    {
+      "id": "cornerstone_mask",
+      "slug": "cornerstone-mask",
+      "name": "주춧돌의가면",
+      "nameEn": "Cornerstone Mask",
+      "category": "species-specific",
+      "categoryKo": "종족특화",
+      "emoji": "🌟",
+      "desc": "오거폰에게 지니게 하면 주춧돌의가면을 쓴 모습으로 변한다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/cornerstone-mask.png"
+    },
+    {
+      "id": "roseli_berry",
+      "slug": "roseli-berry",
+      "name": "로셀열매",
+      "nameEn": "Roseli Berry",
+      "category": "type-protection",
+      "categoryKo": "기타",
+      "emoji": "📦",
+      "desc": "포켓몬에게 지니게 하면 효과가 뛰어난 페어리 기술을 당했을 때 위력이 약해진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/roseli-berry.png"
+    },
+    {
+      "id": "vileplumite",
+      "slug": "vileplumite",
+      "name": "라플레시아나이트",
+      "nameEn": "Vileplumite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "라플레시아에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/vileplumite.png"
+    },
+    {
+      "id": "staraptorite",
+      "slug": "staraptorite",
+      "name": "찌르호크나이트",
+      "nameEn": "Staraptorite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "찌르호크에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/staraptorite.png"
+    },
+    {
+      "id": "musharnite",
+      "slug": "musharnite",
+      "name": "몽얌나나이트",
+      "nameEn": "Musharnite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "몽얌나에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/musharnite.png"
+    },
+    {
+      "id": "scolipedite",
+      "slug": "scolipedite",
+      "name": "펜드라나이트",
+      "nameEn": "Scolipedite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "펜드라에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/scolipedite.png"
+    },
+    {
+      "id": "scraftite",
+      "slug": "scraftite",
+      "name": "곤율거니나이트",
+      "nameEn": "Scraftite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "곤율거니에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/scraftite.png"
+    },
+    {
+      "id": "eelektrossite",
+      "slug": "eelektrossite",
+      "name": "저리더프나이트",
+      "nameEn": "Eelektrossite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "저리더프에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/eelektrossite.png"
+    },
+    {
+      "id": "pyroarite",
+      "slug": "pyroarite",
+      "name": "화염레오나이트",
+      "nameEn": "Pyroarite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "화염레오에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/pyroarite.png"
+    },
+    {
+      "id": "malamarite",
+      "slug": "malamarite",
+      "name": "칼라마네로나이트",
+      "nameEn": "Malamarite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "칼라마네로에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/malamarite.png"
+    },
+    {
+      "id": "barbaraclite",
+      "slug": "barbaraclite",
+      "name": "거북손데스나이트",
+      "nameEn": "Barbaraclite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "거북손데스에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/barbaraclite.png"
+    },
+    {
+      "id": "dragalgite",
+      "slug": "dragalgite",
+      "name": "드래캄나이트",
+      "nameEn": "Dragalgite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "드래캄에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/dragalgite.png"
+    },
+    {
+      "id": "grimmsnarlite",
+      "slug": "grimmsnarlite",
+      "name": "오롱털나이트",
+      "nameEn": "Grimmsnarlite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "오롱털에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/grimmsnarlite.png"
+    },
+    {
+      "id": "falinksite",
+      "slug": "falinksite",
+      "name": "대여르나이트",
+      "nameEn": "Falinksite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "대여르에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/falinksite.png"
+    },
+    {
+      "id": "houndstonite",
+      "slug": "houndstonite",
+      "name": "묘두기나이트",
+      "nameEn": "Houndstonite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "묘두기에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/houndstonite.png"
+    },
+    {
+      "id": "annihilapite",
+      "slug": "annihilapite",
+      "name": "저승갓숭나이트",
+      "nameEn": "Annihilapite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "저승갓숭에게 지니게 하면 배틀할 때 메가진화할 수 있는 신비한 메가스톤의 일종.",
+      "sprite": "https://pkmnchamps.github.io/images/items/annihilapite.png"
+    }
+  ],
+  "mega_evolutions": [
+    {
+      "basePokeId": 3,
+      "formSlug": "venusaur-mega",
+      "nameKo": "메가이상해꽃",
+      "nameJa": "メガフシギバナ",
+      "nameEn": "venusaur-mega",
+      "types": [
+        "풀",
+        "독"
+      ],
+      "stats": {
+        "hp": 80,
+        "atk": 100,
+        "def": 123,
+        "spa": 122,
+        "spd": 120,
+        "spe": 80
+      },
+      "realStats": {
+        "hp": 155,
+        "atk": 120,
+        "def": 143,
+        "spa": 142,
+        "spd": 140,
+        "spe": 100
+      },
+      "abilities": [
+        "thick-fat"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/venusaur-mega.png",
+      "backSprite": "/pokemon/mega_back_venusaur-mega.png",
+      "requiredStoneId": "venusaurite"
+    },
+    {
+      "basePokeId": 6,
+      "formSlug": "charizard-mega-x",
+      "nameKo": "메가리자몽X",
+      "nameJa": "メガリザードンＸ",
+      "nameEn": "charizard-mega-x",
+      "types": [
+        "불꽃",
+        "드래곤"
+      ],
+      "stats": {
+        "hp": 78,
+        "atk": 130,
+        "def": 111,
+        "spa": 130,
+        "spd": 85,
+        "spe": 100
+      },
+      "realStats": {
+        "hp": 153,
+        "atk": 150,
+        "def": 131,
+        "spa": 150,
+        "spd": 105,
+        "spe": 120
+      },
+      "abilities": [
+        "tough-claws"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/charizard-mega-x.png",
+      "backSprite": "/pokemon/mega_back_charizard-mega-x.png",
+      "requiredStoneId": "charizardite_x"
+    },
+    {
+      "basePokeId": 6,
+      "formSlug": "charizard-mega-y",
+      "nameKo": "메가리자몽Y",
+      "nameJa": "メガリザードンＹ",
+      "nameEn": "charizard-mega-y",
+      "types": [
+        "불꽃",
+        "비행"
+      ],
+      "stats": {
+        "hp": 78,
+        "atk": 104,
+        "def": 78,
+        "spa": 159,
+        "spd": 115,
+        "spe": 100
+      },
+      "realStats": {
+        "hp": 153,
+        "atk": 124,
+        "def": 98,
+        "spa": 179,
+        "spd": 135,
+        "spe": 120
+      },
+      "abilities": [
+        "drought"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/charizard-mega-y.png",
+      "backSprite": "/pokemon/mega_back_charizard-mega-y.png",
+      "requiredStoneId": "charizardite_y"
+    },
+    {
+      "basePokeId": 9,
+      "formSlug": "blastoise-mega",
+      "nameKo": "메가거북왕",
+      "nameJa": "メガカメックス",
+      "nameEn": "blastoise-mega",
+      "types": [
+        "물"
+      ],
+      "stats": {
+        "hp": 79,
+        "atk": 103,
+        "def": 120,
+        "spa": 135,
+        "spd": 115,
+        "spe": 78
+      },
+      "realStats": {
+        "hp": 154,
+        "atk": 123,
+        "def": 140,
+        "spa": 155,
+        "spd": 135,
+        "spe": 98
+      },
+      "abilities": [
+        "mega-launcher"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/blastoise-mega.png",
+      "backSprite": "/pokemon/mega_back_blastoise-mega.png",
+      "requiredStoneId": "blastoisinite"
+    },
+    {
+      "basePokeId": 15,
+      "formSlug": "beedrill-mega",
+      "nameKo": "메가독침붕",
+      "nameJa": "メガスピアー",
+      "nameEn": "beedrill-mega",
+      "types": [
+        "벌레",
+        "독"
+      ],
+      "stats": {
+        "hp": 65,
+        "atk": 150,
+        "def": 40,
+        "spa": 15,
+        "spd": 80,
+        "spe": 145
+      },
+      "realStats": {
+        "hp": 140,
+        "atk": 170,
+        "def": 60,
+        "spa": 35,
+        "spd": 100,
+        "spe": 165
+      },
+      "abilities": [
+        "adaptability"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/beedrill-mega.png",
+      "backSprite": "/pokemon/mega_back_beedrill-mega.png",
+      "requiredStoneId": "beedrillite"
+    },
+    {
+      "basePokeId": 18,
+      "formSlug": "pidgeot-mega",
+      "nameKo": "메가피죤투",
+      "nameJa": "メガピジョット",
+      "nameEn": "pidgeot-mega",
+      "types": [
+        "노말",
+        "비행"
+      ],
+      "stats": {
+        "hp": 83,
+        "atk": 80,
+        "def": 80,
+        "spa": 135,
+        "spd": 80,
+        "spe": 121
+      },
+      "realStats": {
+        "hp": 158,
+        "atk": 100,
+        "def": 100,
+        "spa": 155,
+        "spd": 100,
+        "spe": 141
+      },
+      "abilities": [
+        "no-guard"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/pidgeot-mega.png",
+      "backSprite": "/pokemon/mega_back_pidgeot-mega.png",
+      "requiredStoneId": "pidgeotite"
+    },
+    {
+      "basePokeId": 26,
+      "formSlug": "raichu-mega-x",
+      "nameKo": "메가라이츄X",
+      "nameJa": "ライチュウ",
+      "nameEn": "raichu-mega-x",
+      "types": [
+        "전기"
+      ],
+      "stats": {
+        "hp": 60,
+        "atk": 135,
+        "def": 95,
+        "spa": 90,
+        "spd": 95,
+        "spe": 110
+      },
+      "realStats": {
+        "hp": 135,
+        "atk": 155,
+        "def": 115,
+        "spa": 110,
+        "spd": 115,
+        "spe": 130
+      },
+      "abilities": [
+        "electric-surge"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/raichu-mega-x.png",
+      "backSprite": "pokemon/26_back.png",
+      "requiredStoneId": "raichunite_x"
+    },
+    {
+      "basePokeId": 26,
+      "formSlug": "raichu-mega-y",
+      "nameKo": "메가라이츄Y",
+      "nameJa": "ライチュウ",
+      "nameEn": "raichu-mega-y",
+      "types": [
+        "전기"
+      ],
+      "stats": {
+        "hp": 60,
+        "atk": 100,
+        "def": 55,
+        "spa": 160,
+        "spd": 80,
+        "spe": 130
+      },
+      "realStats": {
+        "hp": 135,
+        "atk": 120,
+        "def": 75,
+        "spa": 180,
+        "spd": 100,
+        "spe": 150
+      },
+      "abilities": [
+        "no-guard"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/raichu-mega-y.png",
+      "backSprite": "pokemon/26_back.png",
+      "requiredStoneId": "raichunite_y"
+    },
+    {
+      "basePokeId": 36,
+      "formSlug": "clefable-mega",
+      "nameKo": "메가픽시",
+      "nameJa": "ピクシー",
+      "nameEn": "clefable-mega",
+      "types": [
+        "페어리",
+        "비행"
+      ],
+      "stats": {
+        "hp": 95,
+        "atk": 80,
+        "def": 93,
+        "spa": 135,
+        "spd": 110,
+        "spe": 70
+      },
+      "realStats": {
+        "hp": 170,
+        "atk": 100,
+        "def": 113,
+        "spa": 155,
+        "spd": 130,
+        "spe": 90
+      },
+      "abilities": [
+        "magic-bounce"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/clefable-mega.png",
+      "backSprite": "/pokemon/mega_back_clefable-mega.png",
+      "requiredStoneId": "clefablite"
+    },
+    {
+      "basePokeId": 45,
+      "formSlug": "vileplume-mega",
+      "nameKo": "메가라플레시아",
+      "nameJa": "メガラフレシア",
+      "nameEn": "vileplume-mega",
+      "types": [
+        "풀",
+        "독"
+      ],
+      "stats": {
+        "hp": 75,
+        "atk": 80,
+        "def": 100,
+        "spa": 160,
+        "spd": 115,
+        "spe": 60
+      },
+      "realStats": {
+        "hp": 150,
+        "atk": 100,
+        "def": 120,
+        "spa": 180,
+        "spd": 135,
+        "spe": 80
+      },
+      "abilities": [
+        "effect-spore"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/vileplume-mega.png",
+      "backSprite": "/pokemon/45_back.png",
+      "requiredStoneId": "vileplumite"
+    },
+    {
+      "basePokeId": 65,
+      "formSlug": "alakazam-mega",
+      "nameKo": "메가후딘",
+      "nameJa": "メガフーディン",
+      "nameEn": "alakazam-mega",
+      "types": [
+        "에스퍼"
+      ],
+      "stats": {
+        "hp": 55,
+        "atk": 50,
+        "def": 65,
+        "spa": 175,
+        "spd": 105,
+        "spe": 150
+      },
+      "realStats": {
+        "hp": 130,
+        "atk": 70,
+        "def": 85,
+        "spa": 195,
+        "spd": 125,
+        "spe": 170
+      },
+      "abilities": [
+        "trace"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/alakazam-mega.png",
+      "backSprite": "/pokemon/mega_back_alakazam-mega.png",
+      "requiredStoneId": null
+    },
+    {
+      "basePokeId": 71,
+      "formSlug": "victreebel-mega",
+      "nameKo": "메가우츠보트",
+      "nameJa": "ウツボット",
+      "nameEn": "victreebel-mega",
+      "types": [
+        "풀",
+        "독"
+      ],
+      "stats": {
+        "hp": 80,
+        "atk": 125,
+        "def": 85,
+        "spa": 135,
+        "spd": 95,
+        "spe": 70
+      },
+      "realStats": {
+        "hp": 155,
+        "atk": 145,
+        "def": 105,
+        "spa": 155,
+        "spd": 115,
+        "spe": 90
+      },
+      "abilities": [
+        "liquid-ooze"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/victreebel-mega.png",
+      "backSprite": "/pokemon/mega_back_victreebel-mega.png",
+      "requiredStoneId": "victreebelite"
+    },
+    {
+      "basePokeId": 80,
+      "formSlug": "slowbro-mega",
+      "nameKo": "메가야도란",
+      "nameJa": "メガヤドラン",
+      "nameEn": "slowbro-mega",
+      "types": [
+        "물",
+        "에스퍼"
+      ],
+      "stats": {
+        "hp": 95,
+        "atk": 75,
+        "def": 180,
+        "spa": 130,
+        "spd": 80,
+        "spe": 30
+      },
+      "realStats": {
+        "hp": 170,
+        "atk": 95,
+        "def": 200,
+        "spa": 150,
+        "spd": 100,
+        "spe": 50
+      },
+      "abilities": [
+        "shell-armor"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/slowbro-mega.png",
+      "backSprite": "/pokemon/mega_back_slowbro-mega.png",
+      "requiredStoneId": "slowbronite"
+    },
+    {
+      "basePokeId": 94,
+      "formSlug": "gengar-mega",
+      "nameKo": "메가팬텀",
+      "nameJa": "メガゲンガー",
+      "nameEn": "gengar-mega",
+      "types": [
+        "고스트",
+        "독"
+      ],
+      "stats": {
+        "hp": 60,
+        "atk": 65,
+        "def": 80,
+        "spa": 170,
+        "spd": 95,
+        "spe": 130
+      },
+      "realStats": {
+        "hp": 135,
+        "atk": 85,
+        "def": 100,
+        "spa": 190,
+        "spd": 115,
+        "spe": 150
+      },
+      "abilities": [
+        "shadow-tag"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/gengar-mega.png",
+      "backSprite": "/pokemon/mega_back_gengar-mega.png",
+      "requiredStoneId": "gengarite"
+    },
+    {
+      "basePokeId": 115,
+      "formSlug": "kangaskhan-mega",
+      "nameKo": "메가캥카",
+      "nameJa": "メガガルーラ",
+      "nameEn": "kangaskhan-mega",
+      "types": [
+        "노말"
+      ],
+      "stats": {
+        "hp": 105,
+        "atk": 125,
+        "def": 100,
+        "spa": 60,
+        "spd": 100,
+        "spe": 100
+      },
+      "realStats": {
+        "hp": 180,
+        "atk": 145,
+        "def": 120,
+        "spa": 80,
+        "spd": 120,
+        "spe": 120
+      },
+      "abilities": [
+        "parental-bond"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/kangaskhan-mega.png",
+      "backSprite": "/pokemon/mega_back_kangaskhan-mega.png",
+      "requiredStoneId": "kangaskhanite"
+    },
+    {
+      "basePokeId": 121,
+      "formSlug": "starmie-mega",
+      "nameKo": "메가아쿠스타",
+      "nameJa": "スターミー",
+      "nameEn": "starmie-mega",
+      "types": [
+        "물",
+        "에스퍼"
+      ],
+      "stats": {
+        "hp": 60,
+        "atk": 100,
+        "def": 105,
+        "spa": 130,
+        "spd": 105,
+        "spe": 120
+      },
+      "realStats": {
+        "hp": 135,
+        "atk": 120,
+        "def": 125,
+        "spa": 150,
+        "spd": 125,
+        "spe": 140
+      },
+      "abilities": [
+        "huge-power"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/starmie-mega.png",
+      "backSprite": "/pokemon/mega_back_starmie-mega.png",
+      "requiredStoneId": "starmienite"
+    },
+    {
+      "basePokeId": 127,
+      "formSlug": "pinsir-mega",
+      "nameKo": "메가쁘사이저",
+      "nameJa": "メガカイロス",
+      "nameEn": "pinsir-mega",
+      "types": [
+        "벌레",
+        "비행"
+      ],
+      "stats": {
+        "hp": 65,
+        "atk": 155,
+        "def": 120,
+        "spa": 65,
+        "spd": 90,
+        "spe": 105
+      },
+      "realStats": {
+        "hp": 140,
+        "atk": 175,
+        "def": 140,
+        "spa": 85,
+        "spd": 110,
+        "spe": 125
+      },
+      "abilities": [
+        "aerilate"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/pinsir-mega.png",
+      "backSprite": "/pokemon/mega_back_pinsir-mega.png",
+      "requiredStoneId": "pinsirite"
+    },
+    {
+      "basePokeId": 130,
+      "formSlug": "gyarados-mega",
+      "nameKo": "메가갸라도스",
+      "nameJa": "メガギャラドス",
+      "nameEn": "gyarados-mega",
+      "types": [
+        "물",
+        "악"
+      ],
+      "stats": {
+        "hp": 95,
+        "atk": 155,
+        "def": 109,
+        "spa": 70,
+        "spd": 130,
+        "spe": 81
+      },
+      "realStats": {
+        "hp": 170,
+        "atk": 175,
+        "def": 129,
+        "spa": 90,
+        "spd": 150,
+        "spe": 101
+      },
+      "abilities": [
+        "mold-breaker"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/gyarados-mega.png",
+      "backSprite": "/pokemon/mega_back_gyarados-mega.png",
+      "requiredStoneId": "gyaradosite"
+    },
+    {
+      "basePokeId": 142,
+      "formSlug": "aerodactyl-mega",
+      "nameKo": "메가프테라",
+      "nameJa": "メガプテラ",
+      "nameEn": "aerodactyl-mega",
+      "types": [
+        "바위",
+        "비행"
+      ],
+      "stats": {
+        "hp": 80,
+        "atk": 135,
+        "def": 85,
+        "spa": 70,
+        "spd": 95,
+        "spe": 150
+      },
+      "realStats": {
+        "hp": 155,
+        "atk": 155,
+        "def": 105,
+        "spa": 90,
+        "spd": 115,
+        "spe": 170
+      },
+      "abilities": [
+        "tough-claws"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/aerodactyl-mega.png",
+      "backSprite": "/pokemon/mega_back_aerodactyl-mega.png",
+      "requiredStoneId": "aerodactylite"
+    },
+    {
+      "basePokeId": 149,
+      "formSlug": "dragonite-mega",
+      "nameKo": "메가망나뇽",
+      "nameJa": "カイリュー",
+      "nameEn": "dragonite-mega",
+      "types": [
+        "드래곤",
+        "비행"
+      ],
+      "stats": {
+        "hp": 91,
+        "atk": 124,
+        "def": 115,
+        "spa": 145,
+        "spd": 125,
+        "spe": 100
+      },
+      "realStats": {
+        "hp": 166,
+        "atk": 144,
+        "def": 135,
+        "spa": 165,
+        "spd": 145,
+        "spe": 120
+      },
+      "abilities": [
+        "multiscale"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/dragonite-mega.png",
+      "backSprite": "/pokemon/mega_back_dragonite-mega.png",
+      "requiredStoneId": "dragonitite"
+    },
+    {
+      "basePokeId": 150,
+      "formSlug": "mewtwo-mega-x",
+      "nameKo": "메가뮤츠X",
+      "nameJa": "メガミュウツーＸ",
+      "nameEn": "mewtwo-mega-x",
+      "types": [
+        "에스퍼",
+        "격투"
+      ],
+      "stats": {
+        "hp": 106,
+        "atk": 190,
+        "def": 100,
+        "spa": 154,
+        "spd": 100,
+        "spe": 130
+      },
+      "realStats": {
+        "hp": 181,
+        "atk": 210,
+        "def": 120,
+        "spa": 174,
+        "spd": 120,
+        "spe": 150
+      },
+      "abilities": [
+        "steadfast"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/mewtwo-mega-x.png",
+      "backSprite": "/pokemon/mega_back_mewtwo-mega-x.png",
+      "requiredStoneId": "mewtwonite_x"
+    },
+    {
+      "basePokeId": 150,
+      "formSlug": "mewtwo-mega-y",
+      "nameKo": "메가뮤츠Y",
+      "nameJa": "メガミュウツーＹ",
+      "nameEn": "mewtwo-mega-y",
+      "types": [
+        "에스퍼"
+      ],
+      "stats": {
+        "hp": 106,
+        "atk": 150,
+        "def": 70,
+        "spa": 194,
+        "spd": 120,
+        "spe": 140
+      },
+      "realStats": {
+        "hp": 181,
+        "atk": 170,
+        "def": 90,
+        "spa": 214,
+        "spd": 140,
+        "spe": 160
+      },
+      "abilities": [
+        "insomnia"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/mewtwo-mega-y.png",
+      "backSprite": "/pokemon/mega_back_mewtwo-mega-y.png",
+      "requiredStoneId": "mewtwonite_y"
+    },
+    {
+      "basePokeId": 154,
+      "formSlug": "meganium-mega",
+      "nameKo": "메가메가니움",
+      "nameJa": "メガニウム",
+      "nameEn": "meganium-mega",
+      "types": [
+        "풀",
+        "페어리"
+      ],
+      "stats": {
+        "hp": 80,
+        "atk": 92,
+        "def": 115,
+        "spa": 143,
+        "spd": 115,
+        "spe": 80
+      },
+      "realStats": {
+        "hp": 155,
+        "atk": 112,
+        "def": 135,
+        "spa": 163,
+        "spd": 135,
+        "spe": 100
+      },
+      "abilities": [
+        "mega-sol"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/meganium-mega.png",
+      "backSprite": "/pokemon/mega_back_meganium-mega.png",
+      "requiredStoneId": "meganiumite"
+    },
+    {
+      "basePokeId": 160,
+      "formSlug": "feraligatr-mega",
+      "nameKo": "메가장크로다일",
+      "nameJa": "オーダイル",
+      "nameEn": "feraligatr-mega",
+      "types": [
+        "물",
+        "드래곤"
+      ],
+      "stats": {
+        "hp": 85,
+        "atk": 160,
+        "def": 125,
+        "spa": 89,
+        "spd": 93,
+        "spe": 78
+      },
+      "realStats": {
+        "hp": 160,
+        "atk": 180,
+        "def": 145,
+        "spa": 109,
+        "spd": 113,
+        "spe": 98
+      },
+      "abilities": [
+        "dragonize"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/feraligatr-mega.png",
+      "backSprite": "/pokemon/mega_back_feraligatr-mega.png",
+      "requiredStoneId": "feraligatrite"
+    },
+    {
+      "basePokeId": 181,
+      "formSlug": "ampharos-mega",
+      "nameKo": "메가전룡",
+      "nameJa": "メガデンリュウ",
+      "nameEn": "ampharos-mega",
+      "types": [
+        "전기",
+        "드래곤"
+      ],
+      "stats": {
+        "hp": 90,
+        "atk": 95,
+        "def": 105,
+        "spa": 165,
+        "spd": 110,
+        "spe": 45
+      },
+      "realStats": {
+        "hp": 165,
+        "atk": 115,
+        "def": 125,
+        "spa": 185,
+        "spd": 130,
+        "spe": 65
+      },
+      "abilities": [
+        "mold-breaker"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/ampharos-mega.png",
+      "backSprite": "/pokemon/mega_back_ampharos-mega.png",
+      "requiredStoneId": "ampharosite"
+    },
+    {
+      "basePokeId": 208,
+      "formSlug": "steelix-mega",
+      "nameKo": "메가강철톤",
+      "nameJa": "メガハガネール",
+      "nameEn": "steelix-mega",
+      "types": [
+        "강철",
+        "땅"
+      ],
+      "stats": {
+        "hp": 75,
+        "atk": 125,
+        "def": 230,
+        "spa": 55,
+        "spd": 95,
+        "spe": 30
+      },
+      "realStats": {
+        "hp": 150,
+        "atk": 145,
+        "def": 250,
+        "spa": 75,
+        "spd": 115,
+        "spe": 50
+      },
+      "abilities": [
+        "sand-force"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/steelix-mega.png",
+      "backSprite": "/pokemon/mega_back_steelix-mega.png",
+      "requiredStoneId": "steelixite"
+    },
+    {
+      "basePokeId": 212,
+      "formSlug": "scizor-mega",
+      "nameKo": "메가핫삼",
+      "nameJa": "メガハッサム",
+      "nameEn": "scizor-mega",
+      "types": [
+        "벌레",
+        "강철"
+      ],
+      "stats": {
+        "hp": 70,
+        "atk": 150,
+        "def": 140,
+        "spa": 65,
+        "spd": 100,
+        "spe": 75
+      },
+      "realStats": {
+        "hp": 145,
+        "atk": 170,
+        "def": 160,
+        "spa": 85,
+        "spd": 120,
+        "spe": 95
+      },
+      "abilities": [
+        "technician"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/scizor-mega.png",
+      "backSprite": "/pokemon/mega_back_scizor-mega.png",
+      "requiredStoneId": "scizorite"
+    },
+    {
+      "basePokeId": 214,
+      "formSlug": "heracross-mega",
+      "nameKo": "메가헤라크로스",
+      "nameJa": "メガヘラクロス",
+      "nameEn": "heracross-mega",
+      "types": [
+        "벌레",
+        "격투"
+      ],
+      "stats": {
+        "hp": 80,
+        "atk": 185,
+        "def": 115,
+        "spa": 40,
+        "spd": 105,
+        "spe": 75
+      },
+      "realStats": {
+        "hp": 155,
+        "atk": 205,
+        "def": 135,
+        "spa": 60,
+        "spd": 125,
+        "spe": 95
+      },
+      "abilities": [
+        "skill-link"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/heracross-mega.png",
+      "backSprite": "/pokemon/mega_back_heracross-mega.png",
+      "requiredStoneId": "heracronite"
+    },
+    {
+      "basePokeId": 227,
+      "formSlug": "skarmory-mega",
+      "nameKo": "메가무장조",
+      "nameJa": "エアームド",
+      "nameEn": "skarmory-mega",
+      "types": [
+        "강철",
+        "비행"
+      ],
+      "stats": {
+        "hp": 65,
+        "atk": 140,
+        "def": 110,
+        "spa": 40,
+        "spd": 100,
+        "spe": 110
+      },
+      "realStats": {
+        "hp": 140,
+        "atk": 160,
+        "def": 130,
+        "spa": 60,
+        "spd": 120,
+        "spe": 130
+      },
+      "abilities": [
+        "stalwart"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/skarmory-mega.png",
+      "backSprite": "/pokemon/mega_back_skarmory-mega.png",
+      "requiredStoneId": "skarmorite"
+    },
+    {
+      "basePokeId": 229,
+      "formSlug": "houndoom-mega",
+      "nameKo": "메가헬가",
+      "nameJa": "メガヘルガー",
+      "nameEn": "houndoom-mega",
+      "types": [
+        "악",
+        "불꽃"
+      ],
+      "stats": {
+        "hp": 75,
+        "atk": 90,
+        "def": 90,
+        "spa": 140,
+        "spd": 90,
+        "spe": 115
+      },
+      "realStats": {
+        "hp": 150,
+        "atk": 110,
+        "def": 110,
+        "spa": 160,
+        "spd": 110,
+        "spe": 135
+      },
+      "abilities": [
+        "solar-power"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/houndoom-mega.png",
+      "backSprite": "/pokemon/mega_back_houndoom-mega.png",
+      "requiredStoneId": "houndoominite"
+    },
+    {
+      "basePokeId": 248,
+      "formSlug": "tyranitar-mega",
+      "nameKo": "메가마기라스",
+      "nameJa": "メガバンギラス",
+      "nameEn": "tyranitar-mega",
+      "types": [
+        "바위",
+        "악"
+      ],
+      "stats": {
+        "hp": 100,
+        "atk": 164,
+        "def": 150,
+        "spa": 95,
+        "spd": 120,
+        "spe": 71
+      },
+      "realStats": {
+        "hp": 175,
+        "atk": 184,
+        "def": 170,
+        "spa": 115,
+        "spd": 140,
+        "spe": 91
+      },
+      "abilities": [
+        "sand-stream"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/tyranitar-mega.png",
+      "backSprite": "/pokemon/mega_back_tyranitar-mega.png",
+      "requiredStoneId": "tyranitarite"
+    },
+    {
+      "basePokeId": 254,
+      "formSlug": "sceptile-mega",
+      "nameKo": "메가나무킹",
+      "nameJa": "メガジュカイン",
+      "nameEn": "sceptile-mega",
+      "types": [
+        "풀",
+        "드래곤"
+      ],
+      "stats": {
+        "hp": 70,
+        "atk": 110,
+        "def": 75,
+        "spa": 145,
+        "spd": 85,
+        "spe": 145
+      },
+      "realStats": {
+        "hp": 145,
+        "atk": 130,
+        "def": 95,
+        "spa": 165,
+        "spd": 105,
+        "spe": 165
+      },
+      "abilities": [
+        "lightning-rod"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/sceptile-mega.png",
+      "backSprite": "/pokemon/mega_back_sceptile-mega.png",
+      "requiredStoneId": "sceptilite"
+    },
+    {
+      "basePokeId": 257,
+      "formSlug": "blaziken-mega",
+      "nameKo": "메가번치코",
+      "nameJa": "メガバシャーモ",
+      "nameEn": "blaziken-mega",
+      "types": [
+        "불꽃",
+        "격투"
+      ],
+      "stats": {
+        "hp": 80,
+        "atk": 160,
+        "def": 80,
+        "spa": 130,
+        "spd": 80,
+        "spe": 100
+      },
+      "realStats": {
+        "hp": 155,
+        "atk": 180,
+        "def": 100,
+        "spa": 150,
+        "spd": 100,
+        "spe": 120
+      },
+      "abilities": [
+        "speed-boost"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/blaziken-mega.png",
+      "backSprite": "/pokemon/mega_back_blaziken-mega.png",
+      "requiredStoneId": "blazikenite"
+    },
+    {
+      "basePokeId": 260,
+      "formSlug": "swampert-mega",
+      "nameKo": "메가대짱이",
+      "nameJa": "メガラグラージ",
+      "nameEn": "swampert-mega",
+      "types": [
+        "물",
+        "땅"
+      ],
+      "stats": {
+        "hp": 100,
+        "atk": 150,
+        "def": 110,
+        "spa": 95,
+        "spd": 110,
+        "spe": 70
+      },
+      "realStats": {
+        "hp": 175,
+        "atk": 170,
+        "def": 130,
+        "spa": 115,
+        "spd": 130,
+        "spe": 90
+      },
+      "abilities": [
+        "swift-swim"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/swampert-mega.png",
+      "backSprite": "/pokemon/mega_back_swampert-mega.png",
+      "requiredStoneId": "swampertite"
+    },
+    {
+      "basePokeId": 282,
+      "formSlug": "gardevoir-mega",
+      "nameKo": "메가가디안",
+      "nameJa": "メガサーナイト",
+      "nameEn": "gardevoir-mega",
+      "types": [
+        "에스퍼",
+        "페어리"
+      ],
+      "stats": {
+        "hp": 68,
+        "atk": 85,
+        "def": 65,
+        "spa": 165,
+        "spd": 135,
+        "spe": 100
+      },
+      "realStats": {
+        "hp": 143,
+        "atk": 105,
+        "def": 85,
+        "spa": 185,
+        "spd": 155,
+        "spe": 120
+      },
+      "abilities": [
+        "pixilate"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/gardevoir-mega.png",
+      "backSprite": "/pokemon/mega_back_gardevoir-mega.png",
+      "requiredStoneId": "gardevoirite"
+    },
+    {
+      "basePokeId": 302,
+      "formSlug": "sableye-mega",
+      "nameKo": "메가깜까미",
+      "nameJa": "メガヤミラミ",
+      "nameEn": "sableye-mega",
+      "types": [
+        "악",
+        "고스트"
+      ],
+      "stats": {
+        "hp": 50,
+        "atk": 85,
+        "def": 125,
+        "spa": 85,
+        "spd": 115,
+        "spe": 20
+      },
+      "realStats": {
+        "hp": 125,
+        "atk": 105,
+        "def": 145,
+        "spa": 105,
+        "spd": 135,
+        "spe": 40
+      },
+      "abilities": [
+        "magic-bounce"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/sableye-mega.png",
+      "backSprite": "/pokemon/mega_back_sableye-mega.png",
+      "requiredStoneId": "sablenite"
+    },
+    {
+      "basePokeId": 303,
+      "formSlug": "mawile-mega",
+      "nameKo": "메가입치트",
+      "nameJa": "メガクチート",
+      "nameEn": "mawile-mega",
+      "types": [
+        "강철",
+        "페어리"
+      ],
+      "stats": {
+        "hp": 50,
+        "atk": 105,
+        "def": 125,
+        "spa": 55,
+        "spd": 95,
+        "spe": 50
+      },
+      "realStats": {
+        "hp": 125,
+        "atk": 125,
+        "def": 145,
+        "spa": 75,
+        "spd": 115,
+        "spe": 70
+      },
+      "abilities": [
+        "huge-power"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/mawile-mega.png",
+      "backSprite": "/pokemon/mega_back_mawile-mega.png",
+      "requiredStoneId": "mawilite"
+    },
+    {
+      "basePokeId": 306,
+      "formSlug": "aggron-mega",
+      "nameKo": "메가보스로라",
+      "nameJa": "メガボスゴドラ",
+      "nameEn": "aggron-mega",
+      "types": [
+        "강철"
+      ],
+      "stats": {
+        "hp": 70,
+        "atk": 140,
+        "def": 230,
+        "spa": 60,
+        "spd": 80,
+        "spe": 50
+      },
+      "realStats": {
+        "hp": 145,
+        "atk": 160,
+        "def": 250,
+        "spa": 80,
+        "spd": 100,
+        "spe": 70
+      },
+      "abilities": [
+        "filter"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/aggron-mega.png",
+      "backSprite": "/pokemon/mega_back_aggron-mega.png",
+      "requiredStoneId": "aggronite"
+    },
+    {
+      "basePokeId": 308,
+      "formSlug": "medicham-mega",
+      "nameKo": "메가요가램",
+      "nameJa": "メガチャーレム",
+      "nameEn": "medicham-mega",
+      "types": [
+        "격투",
+        "에스퍼"
+      ],
+      "stats": {
+        "hp": 60,
+        "atk": 100,
+        "def": 85,
+        "spa": 80,
+        "spd": 85,
+        "spe": 100
+      },
+      "realStats": {
+        "hp": 135,
+        "atk": 120,
+        "def": 105,
+        "spa": 100,
+        "spd": 105,
+        "spe": 120
+      },
+      "abilities": [
+        "pure-power"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/medicham-mega.png",
+      "backSprite": "/pokemon/mega_back_medicham-mega.png",
+      "requiredStoneId": "medichamite"
+    },
+    {
+      "basePokeId": 310,
+      "formSlug": "manectric-mega",
+      "nameKo": "메가썬더볼트",
+      "nameJa": "メガライボルト",
+      "nameEn": "manectric-mega",
+      "types": [
+        "전기"
+      ],
+      "stats": {
+        "hp": 70,
+        "atk": 75,
+        "def": 80,
+        "spa": 135,
+        "spd": 80,
+        "spe": 135
+      },
+      "realStats": {
+        "hp": 145,
+        "atk": 95,
+        "def": 100,
+        "spa": 155,
+        "spd": 100,
+        "spe": 155
+      },
+      "abilities": [
+        "intimidate"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/manectric-mega.png",
+      "backSprite": "/pokemon/mega_back_manectric-mega.png",
+      "requiredStoneId": "manectite"
+    },
+    {
+      "basePokeId": 319,
+      "formSlug": "sharpedo-mega",
+      "nameKo": "메가샤크니아",
+      "nameJa": "メガサメハダー",
+      "nameEn": "sharpedo-mega",
+      "types": [
+        "물",
+        "악"
+      ],
+      "stats": {
+        "hp": 70,
+        "atk": 140,
+        "def": 70,
+        "spa": 110,
+        "spd": 65,
+        "spe": 105
+      },
+      "realStats": {
+        "hp": 145,
+        "atk": 160,
+        "def": 90,
+        "spa": 130,
+        "spd": 85,
+        "spe": 125
+      },
+      "abilities": [
+        "strong-jaw"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/sharpedo-mega.png",
+      "backSprite": "/pokemon/mega_back_sharpedo-mega.png",
+      "requiredStoneId": "sharpedonite"
+    },
+    {
+      "basePokeId": 323,
+      "formSlug": "camerupt-mega",
+      "nameKo": "메가폭타",
+      "nameJa": "メガバクーダ",
+      "nameEn": "camerupt-mega",
+      "types": [
+        "불꽃",
+        "땅"
+      ],
+      "stats": {
+        "hp": 70,
+        "atk": 120,
+        "def": 100,
+        "spa": 145,
+        "spd": 105,
+        "spe": 20
+      },
+      "realStats": {
+        "hp": 145,
+        "atk": 140,
+        "def": 120,
+        "spa": 165,
+        "spd": 125,
+        "spe": 40
+      },
+      "abilities": [
+        "sheer-force"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/camerupt-mega.png",
+      "backSprite": "/pokemon/mega_back_camerupt-mega.png",
+      "requiredStoneId": "cameruptite"
+    },
+    {
+      "basePokeId": 334,
+      "formSlug": "altaria-mega",
+      "nameKo": "메가파비코리",
+      "nameJa": "メガチルタリス",
+      "nameEn": "altaria-mega",
+      "types": [
+        "드래곤",
+        "페어리"
+      ],
+      "stats": {
+        "hp": 75,
+        "atk": 110,
+        "def": 110,
+        "spa": 110,
+        "spd": 105,
+        "spe": 80
+      },
+      "realStats": {
+        "hp": 150,
+        "atk": 130,
+        "def": 130,
+        "spa": 130,
+        "spd": 125,
+        "spe": 100
+      },
+      "abilities": [
+        "pixilate"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/altaria-mega.png",
+      "backSprite": "/pokemon/mega_back_altaria-mega.png",
+      "requiredStoneId": "altarianite"
+    },
+    {
+      "basePokeId": 354,
+      "formSlug": "banette-mega",
+      "nameKo": "메가다크펫",
+      "nameJa": "メガジュペッタ",
+      "nameEn": "banette-mega",
+      "types": [
+        "고스트"
+      ],
+      "stats": {
+        "hp": 64,
+        "atk": 165,
+        "def": 75,
+        "spa": 93,
+        "spd": 83,
+        "spe": 75
+      },
+      "realStats": {
+        "hp": 139,
+        "atk": 185,
+        "def": 95,
+        "spa": 113,
+        "spd": 103,
+        "spe": 95
+      },
+      "abilities": [
+        "prankster"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/banette-mega.png",
+      "backSprite": "/pokemon/mega_back_banette-mega.png",
+      "requiredStoneId": "banettite"
+    },
+    {
+      "basePokeId": 358,
+      "formSlug": "chimecho-mega",
+      "nameKo": "메가치렁",
+      "nameJa": "チリーン",
+      "nameEn": "chimecho-mega",
+      "types": [
+        "에스퍼",
+        "강철"
+      ],
+      "stats": {
+        "hp": 75,
+        "atk": 50,
+        "def": 110,
+        "spa": 145,
+        "spd": 120,
+        "spe": 55
+      },
+      "realStats": {
+        "hp": 150,
+        "atk": 70,
+        "def": 130,
+        "spa": 165,
+        "spd": 140,
+        "spe": 75
+      },
+      "abilities": [
+        "levitate"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/chimecho-mega.png",
+      "backSprite": "/pokemon/mega_back_chimecho-mega.png",
+      "requiredStoneId": "chimechonite"
+    },
+    {
+      "basePokeId": 359,
+      "formSlug": "absol-mega",
+      "nameKo": "메가앱솔",
+      "nameJa": "メガアブソル",
+      "nameEn": "absol-mega",
+      "types": [
+        "악"
+      ],
+      "stats": {
+        "hp": 65,
+        "atk": 150,
+        "def": 60,
+        "spa": 115,
+        "spd": 60,
+        "spe": 115
+      },
+      "realStats": {
+        "hp": 140,
+        "atk": 170,
+        "def": 80,
+        "spa": 135,
+        "spd": 80,
+        "spe": 135
+      },
+      "abilities": [
+        "magic-bounce"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/absol-mega.png",
+      "backSprite": "/pokemon/mega_back_absol-mega.png",
+      "requiredStoneId": "absolite"
+    },
+    {
+      "basePokeId": 362,
+      "formSlug": "glalie-mega",
+      "nameKo": "메가얼음귀신",
+      "nameJa": "メガオニゴーリ",
+      "nameEn": "glalie-mega",
+      "types": [
+        "얼음"
+      ],
+      "stats": {
+        "hp": 80,
+        "atk": 120,
+        "def": 80,
+        "spa": 120,
+        "spd": 80,
+        "spe": 100
+      },
+      "realStats": {
+        "hp": 155,
+        "atk": 140,
+        "def": 100,
+        "spa": 140,
+        "spd": 100,
+        "spe": 120
+      },
+      "abilities": [
+        "refrigerate"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/glalie-mega.png",
+      "backSprite": "/pokemon/mega_back_glalie-mega.png",
+      "requiredStoneId": "glalitite"
+    },
+    {
+      "basePokeId": 373,
+      "formSlug": "salamence-mega",
+      "nameKo": "메가보만다",
+      "nameJa": "メガボーマンダ",
+      "nameEn": "salamence-mega",
+      "types": [
+        "드래곤",
+        "비행"
+      ],
+      "stats": {
+        "hp": 95,
+        "atk": 145,
+        "def": 130,
+        "spa": 120,
+        "spd": 90,
+        "spe": 120
+      },
+      "realStats": {
+        "hp": 170,
+        "atk": 165,
+        "def": 150,
+        "spa": 140,
+        "spd": 110,
+        "spe": 140
+      },
+      "abilities": [
+        "aerilate"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/salamence-mega.png",
+      "backSprite": "/pokemon/mega_back_salamence-mega.png",
+      "requiredStoneId": "salamencite"
+    },
+    {
+      "basePokeId": 376,
+      "formSlug": "metagross-mega",
+      "nameKo": "메가메타그로스",
+      "nameJa": "メガメタグロス",
+      "nameEn": "metagross-mega",
+      "types": [
+        "강철",
+        "에스퍼"
+      ],
+      "stats": {
+        "hp": 80,
+        "atk": 145,
+        "def": 150,
+        "spa": 105,
+        "spd": 110,
+        "spe": 110
+      },
+      "realStats": {
+        "hp": 155,
+        "atk": 165,
+        "def": 170,
+        "spa": 125,
+        "spd": 130,
+        "spe": 130
+      },
+      "abilities": [
+        "tough-claws"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/metagross-mega.png",
+      "backSprite": "/pokemon/mega_back_metagross-mega.png",
+      "requiredStoneId": "metagrossite"
+    },
+    {
+      "basePokeId": 380,
+      "formSlug": "latias-mega",
+      "nameKo": "메가라티아스",
+      "nameJa": "メガラティアス",
+      "nameEn": "latias-mega",
+      "types": [
+        "드래곤",
+        "에스퍼"
+      ],
+      "stats": {
+        "hp": 80,
+        "atk": 100,
+        "def": 120,
+        "spa": 140,
+        "spd": 150,
+        "spe": 110
+      },
+      "realStats": {
+        "hp": 155,
+        "atk": 120,
+        "def": 140,
+        "spa": 160,
+        "spd": 170,
+        "spe": 130
+      },
+      "abilities": [
+        "levitate"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/latias-mega.png",
+      "backSprite": "/pokemon/mega_back_latias-mega.png",
+      "requiredStoneId": "latiasite"
+    },
+    {
+      "basePokeId": 381,
+      "formSlug": "latios-mega",
+      "nameKo": "메가라티오스",
+      "nameJa": "メガラティオス",
+      "nameEn": "latios-mega",
+      "types": [
+        "드래곤",
+        "에스퍼"
+      ],
+      "stats": {
+        "hp": 80,
+        "atk": 130,
+        "def": 100,
+        "spa": 160,
+        "spd": 120,
+        "spe": 110
+      },
+      "realStats": {
+        "hp": 155,
+        "atk": 150,
+        "def": 120,
+        "spa": 180,
+        "spd": 140,
+        "spe": 130
+      },
+      "abilities": [
+        "levitate"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/latios-mega.png",
+      "backSprite": "/pokemon/mega_back_latios-mega.png",
+      "requiredStoneId": "latiosite"
+    },
+    {
+      "basePokeId": 384,
+      "formSlug": "rayquaza-mega",
+      "nameKo": "메가레쿠쟈",
+      "nameJa": "メガレックウザ",
+      "nameEn": "rayquaza-mega",
+      "types": [
+        "드래곤",
+        "비행"
+      ],
+      "stats": {
+        "hp": 105,
+        "atk": 180,
+        "def": 100,
+        "spa": 180,
+        "spd": 100,
+        "spe": 115
+      },
+      "realStats": {
+        "hp": 180,
+        "atk": 200,
+        "def": 120,
+        "spa": 200,
+        "spd": 120,
+        "spe": 135
+      },
+      "abilities": [
+        "delta-stream"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/rayquaza-mega.png",
+      "backSprite": "/pokemon/mega_back_rayquaza-mega.png",
+      "requiredStoneId": "rayquazite"
+    },
+    {
+      "basePokeId": 398,
+      "formSlug": "staraptor-mega",
+      "nameKo": "메가찌르호크",
+      "nameJa": "メガムクホーク",
+      "nameEn": "staraptor-mega",
+      "types": [
+        "격투",
+        "비행"
+      ],
+      "stats": {
+        "hp": 85,
+        "atk": 140,
+        "def": 100,
+        "spa": 60,
+        "spd": 90,
+        "spe": 110
+      },
+      "realStats": {
+        "hp": 160,
+        "atk": 160,
+        "def": 120,
+        "spa": 80,
+        "spd": 110,
+        "spe": 130
+      },
+      "abilities": [
+        "contrary"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/staraptor-mega.png",
+      "backSprite": "/pokemon/398_back.png",
+      "requiredStoneId": "staraptorite"
+    },
+    {
+      "basePokeId": 428,
+      "formSlug": "lopunny-mega",
+      "nameKo": "메가이어롭",
+      "nameJa": "メガミミロップ",
+      "nameEn": "lopunny-mega",
+      "types": [
+        "노말",
+        "격투"
+      ],
+      "stats": {
+        "hp": 65,
+        "atk": 136,
+        "def": 94,
+        "spa": 54,
+        "spd": 96,
+        "spe": 135
+      },
+      "realStats": {
+        "hp": 140,
+        "atk": 156,
+        "def": 114,
+        "spa": 74,
+        "spd": 116,
+        "spe": 155
+      },
+      "abilities": [
+        "scrappy"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/lopunny-mega.png",
+      "backSprite": "/pokemon/mega_back_lopunny-mega.png",
+      "requiredStoneId": "lopunnite"
+    },
+    {
+      "basePokeId": 445,
+      "formSlug": "garchomp-mega",
+      "nameKo": "메가한카리아스",
+      "nameJa": "メガガブリアス",
+      "nameEn": "garchomp-mega",
+      "types": [
+        "드래곤",
+        "땅"
+      ],
+      "stats": {
+        "hp": 108,
+        "atk": 170,
+        "def": 115,
+        "spa": 120,
+        "spd": 95,
+        "spe": 92
+      },
+      "realStats": {
+        "hp": 183,
+        "atk": 190,
+        "def": 135,
+        "spa": 140,
+        "spd": 115,
+        "spe": 112
+      },
+      "abilities": [
+        "sand-force"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/garchomp-mega.png",
+      "backSprite": "/pokemon/mega_back_garchomp-mega.png",
+      "requiredStoneId": "garchompite"
+    },
+    {
+      "basePokeId": 448,
+      "formSlug": "lucario-mega",
+      "nameKo": "메가루카리오",
+      "nameJa": "メガルカリオ",
+      "nameEn": "lucario-mega",
+      "types": [
+        "격투",
+        "강철"
+      ],
+      "stats": {
+        "hp": 70,
+        "atk": 145,
+        "def": 88,
+        "spa": 140,
+        "spd": 70,
+        "spe": 112
+      },
+      "realStats": {
+        "hp": 145,
+        "atk": 165,
+        "def": 108,
+        "spa": 160,
+        "spd": 90,
+        "spe": 132
+      },
+      "abilities": [
+        "adaptability"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/lucario-mega.png",
+      "backSprite": "/pokemon/mega_back_lucario-mega.png",
+      "requiredStoneId": "lucarionite"
+    },
+    {
+      "basePokeId": 460,
+      "formSlug": "abomasnow-mega",
+      "nameKo": "메가눈설왕",
+      "nameJa": "メガユキノオー",
+      "nameEn": "abomasnow-mega",
+      "types": [
+        "풀",
+        "얼음"
+      ],
+      "stats": {
+        "hp": 90,
+        "atk": 132,
+        "def": 105,
+        "spa": 132,
+        "spd": 105,
+        "spe": 30
+      },
+      "realStats": {
+        "hp": 165,
+        "atk": 152,
+        "def": 125,
+        "spa": 152,
+        "spd": 125,
+        "spe": 50
+      },
+      "abilities": [
+        "snow-warning"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/abomasnow-mega.png",
+      "backSprite": "/pokemon/mega_back_abomasnow-mega.png",
+      "requiredStoneId": "abomasite"
+    },
+    {
+      "basePokeId": 475,
+      "formSlug": "gallade-mega",
+      "nameKo": "메가엘레이드",
+      "nameJa": "メガエルレイド",
+      "nameEn": "gallade-mega",
+      "types": [
+        "에스퍼",
+        "격투"
+      ],
+      "stats": {
+        "hp": 68,
+        "atk": 165,
+        "def": 95,
+        "spa": 65,
+        "spd": 115,
+        "spe": 110
+      },
+      "realStats": {
+        "hp": 143,
+        "atk": 185,
+        "def": 115,
+        "spa": 85,
+        "spd": 135,
+        "spe": 130
+      },
+      "abilities": [
+        "inner-focus"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/gallade-mega.png",
+      "backSprite": "/pokemon/mega_back_gallade-mega.png",
+      "requiredStoneId": "galladite"
+    },
+    {
+      "basePokeId": 478,
+      "formSlug": "froslass-mega",
+      "nameKo": "메가눈여아",
+      "nameJa": "ユキメノコ",
+      "nameEn": "froslass-mega",
+      "types": [
+        "얼음",
+        "고스트"
+      ],
+      "stats": {
+        "hp": 70,
+        "atk": 80,
+        "def": 70,
+        "spa": 140,
+        "spd": 100,
+        "spe": 120
+      },
+      "realStats": {
+        "hp": 145,
+        "atk": 100,
+        "def": 90,
+        "spa": 160,
+        "spd": 120,
+        "spe": 140
+      },
+      "abilities": [
+        "snow-warning"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/froslass-mega.png",
+      "backSprite": "/pokemon/mega_back_froslass-mega.png",
+      "requiredStoneId": "froslassite"
+    },
+    {
+      "basePokeId": 500,
+      "formSlug": "emboar-mega",
+      "nameKo": "메가염무왕",
+      "nameJa": "エンブオー",
+      "nameEn": "emboar-mega",
+      "types": [
+        "불꽃",
+        "격투"
+      ],
+      "stats": {
+        "hp": 110,
+        "atk": 148,
+        "def": 75,
+        "spa": 110,
+        "spd": 110,
+        "spe": 75
+      },
+      "realStats": {
+        "hp": 185,
+        "atk": 168,
+        "def": 95,
+        "spa": 130,
+        "spd": 130,
+        "spe": 95
+      },
+      "abilities": [
+        "mold-breaker"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/emboar-mega.png",
+      "backSprite": "/pokemon/mega_back_emboar-mega.png",
+      "requiredStoneId": "emboarite"
+    },
+    {
+      "basePokeId": 518,
+      "formSlug": "musharna-mega",
+      "nameKo": "메가몽얌나",
+      "nameJa": "メガムシャーナ",
+      "nameEn": "musharna-mega",
+      "types": [
+        "에스퍼"
+      ],
+      "stats": {
+        "hp": 116,
+        "atk": 55,
+        "def": 105,
+        "spa": 157,
+        "spd": 115,
+        "spe": 39
+      },
+      "realStats": {
+        "hp": 191,
+        "atk": 75,
+        "def": 125,
+        "spa": 177,
+        "spd": 135,
+        "spe": 59
+      },
+      "abilities": [
+        "telepathy"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/musharna-mega.png",
+      "backSprite": "/pokemon/518_back.png",
+      "requiredStoneId": "musharnite"
+    },
+    {
+      "basePokeId": 530,
+      "formSlug": "excadrill-mega",
+      "nameKo": "메가몰드류",
+      "nameJa": "ドリュウズ",
+      "nameEn": "excadrill-mega",
+      "types": [
+        "땅",
+        "강철"
+      ],
+      "stats": {
+        "hp": 110,
+        "atk": 175,
+        "def": 80,
+        "spa": 50,
+        "spd": 85,
+        "spe": 108
+      },
+      "realStats": {
+        "hp": 185,
+        "atk": 195,
+        "def": 100,
+        "spa": 70,
+        "spd": 105,
+        "spe": 128
+      },
+      "abilities": [
+        "penetrating-drill"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/excadrill-mega.png",
+      "backSprite": "/pokemon/mega_back_excadrill-mega.png",
+      "requiredStoneId": "excadrillite"
+    },
+    {
+      "basePokeId": 531,
+      "formSlug": "audino-mega",
+      "nameKo": "메가다부니",
+      "nameJa": "メガタブンネ",
+      "nameEn": "audino-mega",
+      "types": [
+        "노말",
+        "페어리"
+      ],
+      "stats": {
+        "hp": 103,
+        "atk": 60,
+        "def": 126,
+        "spa": 80,
+        "spd": 126,
+        "spe": 50
+      },
+      "realStats": {
+        "hp": 178,
+        "atk": 80,
+        "def": 146,
+        "spa": 100,
+        "spd": 146,
+        "spe": 70
+      },
+      "abilities": [
+        "healer"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/audino-mega.png",
+      "backSprite": "/pokemon/mega_back_audino-mega.png",
+      "requiredStoneId": "audinite"
+    },
+    {
+      "basePokeId": 545,
+      "formSlug": "scolipede-mega",
+      "nameKo": "메가펜드라",
+      "nameJa": "メガペンドラー",
+      "nameEn": "scolipede-mega",
+      "types": [
+        "벌레",
+        "독"
+      ],
+      "stats": {
+        "hp": 60,
+        "atk": 140,
+        "def": 149,
+        "spa": 75,
+        "spd": 99,
+        "spe": 62
+      },
+      "realStats": {
+        "hp": 135,
+        "atk": 160,
+        "def": 169,
+        "spa": 95,
+        "spd": 119,
+        "spe": 82
+      },
+      "abilities": [
+        "shell-armor"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/scolipede-mega.png",
+      "backSprite": "/pokemon/545_back.png",
+      "requiredStoneId": "scolipedite"
+    },
+    {
+      "basePokeId": 560,
+      "formSlug": "scrafty-mega",
+      "nameKo": "메가곤율거니",
+      "nameJa": "メガズルズキン",
+      "nameEn": "scrafty-mega",
+      "types": [
+        "악",
+        "격투"
+      ],
+      "stats": {
+        "hp": 65,
+        "atk": 140,
+        "def": 135,
+        "spa": 45,
+        "spd": 135,
+        "spe": 68
+      },
+      "realStats": {
+        "hp": 140,
+        "atk": 160,
+        "def": 155,
+        "spa": 65,
+        "spd": 155,
+        "spe": 88
+      },
+      "abilities": [
+        "intimidate"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/scrafty-mega.png",
+      "backSprite": "/pokemon/560_back.png",
+      "requiredStoneId": "scraftite"
+    },
+    {
+      "basePokeId": 604,
+      "formSlug": "eelektross-mega",
+      "nameKo": "메가저리더프",
+      "nameJa": "メガシビルドン",
+      "nameEn": "eelektross-mega",
+      "types": [
+        "전기"
+      ],
+      "stats": {
+        "hp": 85,
+        "atk": 140,
+        "def": 80,
+        "spa": 150,
+        "spd": 90,
+        "spe": 70
+      },
+      "realStats": {
+        "hp": 160,
+        "atk": 160,
+        "def": 100,
+        "spa": 170,
+        "spd": 110,
+        "spe": 90
+      },
+      "abilities": [
+        "eelevate"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/eelektross-mega.png",
+      "backSprite": "/pokemon/604_back.png",
+      "requiredStoneId": "eelektrossite"
+    },
+    {
+      "basePokeId": 609,
+      "formSlug": "chandelure-mega",
+      "nameKo": "메가샹델라",
+      "nameJa": "シャンデラ",
+      "nameEn": "chandelure-mega",
+      "types": [
+        "고스트",
+        "불꽃"
+      ],
+      "stats": {
+        "hp": 60,
+        "atk": 75,
+        "def": 110,
+        "spa": 175,
+        "spd": 110,
+        "spe": 90
+      },
+      "realStats": {
+        "hp": 135,
+        "atk": 95,
+        "def": 130,
+        "spa": 195,
+        "spd": 130,
+        "spe": 110
+      },
+      "abilities": [
+        "infiltrator"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/chandelure-mega.png",
+      "backSprite": "/pokemon/mega_back_chandelure-mega.png",
+      "requiredStoneId": "chandelurite"
+    },
+    {
+      "basePokeId": 623,
+      "formSlug": "golurk-mega",
+      "nameKo": "메가골루그",
+      "nameJa": "ゴルーグ",
+      "nameEn": "golurk-mega",
+      "types": [
+        "땅",
+        "고스트"
+      ],
+      "stats": {
+        "hp": 89,
+        "atk": 159,
+        "def": 105,
+        "spa": 70,
+        "spd": 105,
+        "spe": 55
+      },
+      "realStats": {
+        "hp": 164,
+        "atk": 179,
+        "def": 125,
+        "spa": 90,
+        "spd": 125,
+        "spe": 75
+      },
+      "abilities": [
+        "unseen-fist"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/golurk-mega.png",
+      "backSprite": "/pokemon/mega_back_golurk-mega.png",
+      "requiredStoneId": "golurkite"
+    },
+    {
+      "basePokeId": 652,
+      "formSlug": "chesnaught-mega",
+      "nameKo": "메가브리가론",
+      "nameJa": "ブリガロン",
+      "nameEn": "chesnaught-mega",
+      "types": [
+        "풀",
+        "격투"
+      ],
+      "stats": {
+        "hp": 88,
+        "atk": 137,
+        "def": 152,
+        "spa": 74,
+        "spd": 105,
+        "spe": 74
+      },
+      "realStats": {
+        "hp": 163,
+        "atk": 157,
+        "def": 172,
+        "spa": 94,
+        "spd": 125,
+        "spe": 94
+      },
+      "abilities": [
+        "bulletproof"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/chesnaught-mega.png",
+      "backSprite": "/pokemon/mega_back_chesnaught-mega.png",
+      "requiredStoneId": "chesnaughtite"
+    },
+    {
+      "basePokeId": 655,
+      "formSlug": "delphox-mega",
+      "nameKo": "메가마폭시",
+      "nameJa": "マフォクシー",
+      "nameEn": "delphox-mega",
+      "types": [
+        "불꽃",
+        "에스퍼"
+      ],
+      "stats": {
+        "hp": 75,
+        "atk": 69,
+        "def": 72,
+        "spa": 159,
+        "spd": 125,
+        "spe": 134
+      },
+      "realStats": {
+        "hp": 150,
+        "atk": 89,
+        "def": 92,
+        "spa": 179,
+        "spd": 145,
+        "spe": 154
+      },
+      "abilities": [
+        "levitate"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/delphox-mega.png",
+      "backSprite": "/pokemon/mega_back_delphox-mega.png",
+      "requiredStoneId": "delphoxite"
+    },
+    {
+      "basePokeId": 658,
+      "formSlug": "greninja-mega",
+      "nameKo": "메가개굴닌자",
+      "nameJa": "ゲッコウガ",
+      "nameEn": "greninja-mega",
+      "types": [
+        "물",
+        "악"
+      ],
+      "stats": {
+        "hp": 72,
+        "atk": 125,
+        "def": 77,
+        "spa": 133,
+        "spd": 81,
+        "spe": 142
+      },
+      "realStats": {
+        "hp": 147,
+        "atk": 145,
+        "def": 97,
+        "spa": 153,
+        "spd": 101,
+        "spe": 162
+      },
+      "abilities": [
+        "protean"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/greninja-mega.png",
+      "backSprite": "/pokemon/mega_back_greninja-mega.png",
+      "requiredStoneId": "greninjite"
+    },
+    {
+      "basePokeId": 668,
+      "formSlug": "pyroar-mega",
+      "nameKo": "메가화염레오",
+      "nameJa": "メガカエンジシ",
+      "nameEn": "pyroar-mega",
+      "types": [
+        "불꽃",
+        "노말"
+      ],
+      "stats": {
+        "hp": 86,
+        "atk": 68,
+        "def": 72,
+        "spa": 159,
+        "spd": 86,
+        "spe": 136
+      },
+      "realStats": {
+        "hp": 161,
+        "atk": 88,
+        "def": 92,
+        "spa": 179,
+        "spd": 106,
+        "spe": 156
+      },
+      "abilities": [
+        "fire-mane"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/pyroar-mega.png",
+      "backSprite": "/pokemon/668_back.png",
+      "requiredStoneId": "pyroarite"
+    },
+    {
+      "basePokeId": 670,
+      "formSlug": "floette-eternal-mega",
+      "nameKo": "메가 플라엣테(영원의 꽃)",
+      "nameJa": "メガフラエッテ",
+      "nameEn": "floette-eternal-mega",
+      "types": [
+        "페어리"
+      ],
+      "stats": {
+        "hp": 74,
+        "atk": 85,
+        "def": 87,
+        "spa": 155,
+        "spd": 148,
+        "spe": 102
+      },
+      "realStats": {
+        "hp": 149,
+        "atk": 105,
+        "def": 107,
+        "spa": 175,
+        "spd": 168,
+        "spe": 122
+      },
+      "abilities": [
+        "fairy-aura"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/floette-eternal-mega.png",
+      "backSprite": "pokemon/670_back.png",
+      "requiredStoneId": null
+    },
+    {
+      "basePokeId": 678,
+      "formSlug": "meowstic-mega",
+      "nameKo": "메가냐오닉스",
+      "nameJa": "ニャオニクス",
+      "nameEn": "meowstic-mega",
+      "types": [
+        "에스퍼"
+      ],
+      "stats": {
+        "hp": 74,
+        "atk": 48,
+        "def": 76,
+        "spa": 143,
+        "spd": 101,
+        "spe": 124
+      },
+      "realStats": {
+        "hp": 149,
+        "atk": 68,
+        "def": 96,
+        "spa": 163,
+        "spd": 121,
+        "spe": 144
+      },
+      "abilities": [
+        "trace"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/meowstic-mega.png",
+      "backSprite": "pokemon/678_back.png",
+      "requiredStoneId": "meowsticite"
+    },
+    {
+      "basePokeId": 687,
+      "formSlug": "malamar-mega",
+      "nameKo": "메가칼라마네로",
+      "nameJa": "メガカラマネロ",
+      "nameEn": "malamar-mega",
+      "types": [
+        "악",
+        "에스퍼"
+      ],
+      "stats": {
+        "hp": 86,
+        "atk": 142,
+        "def": 103,
+        "spa": 68,
+        "spd": 85,
+        "spe": 98
+      },
+      "realStats": {
+        "hp": 161,
+        "atk": 162,
+        "def": 123,
+        "spa": 88,
+        "spd": 105,
+        "spe": 118
+      },
+      "abilities": [
+        "contrary"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/malamar-mega.png",
+      "backSprite": "/pokemon/687_back.png",
+      "requiredStoneId": "malamarite"
+    },
+    {
+      "basePokeId": 689,
+      "formSlug": "barbaracle-mega",
+      "nameKo": "메가거북손데스",
+      "nameJa": "メガガメノデス",
+      "nameEn": "barbaracle-mega",
+      "types": [
+        "바위",
+        "격투"
+      ],
+      "stats": {
+        "hp": 72,
+        "atk": 155,
+        "def": 140,
+        "spa": 54,
+        "spd": 101,
+        "spe": 78
+      },
+      "realStats": {
+        "hp": 147,
+        "atk": 175,
+        "def": 160,
+        "spa": 74,
+        "spd": 121,
+        "spe": 98
+      },
+      "abilities": [
+        "tough-claws"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/barbaracle-mega.png",
+      "backSprite": "/pokemon/689_back.png",
+      "requiredStoneId": "barbaraclite"
+    },
+    {
+      "basePokeId": 691,
+      "formSlug": "dragalge-mega",
+      "nameKo": "메가드래캄",
+      "nameJa": "メガドラミドロ",
+      "nameEn": "dragalge-mega",
+      "types": [
+        "독",
+        "드래곤"
+      ],
+      "stats": {
+        "hp": 65,
+        "atk": 75,
+        "def": 105,
+        "spa": 147,
+        "spd": 148,
+        "spe": 54
+      },
+      "realStats": {
+        "hp": 140,
+        "atk": 95,
+        "def": 125,
+        "spa": 167,
+        "spd": 168,
+        "spe": 74
+      },
+      "abilities": [
+        "regenerator"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/dragalge-mega.png",
+      "backSprite": "/pokemon/691_back.png",
+      "requiredStoneId": "dragalgite"
+    },
+    {
+      "basePokeId": 701,
+      "formSlug": "hawlucha-mega",
+      "nameKo": "메가루차불",
+      "nameJa": "ルチャブル",
+      "nameEn": "hawlucha-mega",
+      "types": [
+        "격투",
+        "비행"
+      ],
+      "stats": {
+        "hp": 78,
+        "atk": 137,
+        "def": 100,
+        "spa": 74,
+        "spd": 93,
+        "spe": 118
+      },
+      "realStats": {
+        "hp": 153,
+        "atk": 157,
+        "def": 120,
+        "spa": 94,
+        "spd": 113,
+        "spe": 138
+      },
+      "abilities": [
+        "no-guard"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/hawlucha-mega.png",
+      "backSprite": "/pokemon/mega_back_hawlucha-mega.png",
+      "requiredStoneId": "hawluchite"
+    },
+    {
+      "basePokeId": 719,
+      "formSlug": "diancie-mega",
+      "nameKo": "메가디안시",
+      "nameJa": "メガディアンシー",
+      "nameEn": "diancie-mega",
+      "types": [
+        "바위",
+        "페어리"
+      ],
+      "stats": {
+        "hp": 50,
+        "atk": 160,
+        "def": 110,
+        "spa": 160,
+        "spd": 110,
+        "spe": 110
+      },
+      "realStats": {
+        "hp": 125,
+        "atk": 180,
+        "def": 130,
+        "spa": 180,
+        "spd": 130,
+        "spe": 130
+      },
+      "abilities": [
+        "magic-bounce"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/diancie-mega.png",
+      "backSprite": "/pokemon/mega_back_diancie-mega.png",
+      "requiredStoneId": "diancite"
+    },
+    {
+      "basePokeId": 740,
+      "formSlug": "crabominable-mega",
+      "nameKo": "메가모단단게",
+      "nameJa": "ケケンカニ",
+      "nameEn": "crabominable-mega",
+      "types": [
+        "격투",
+        "얼음"
+      ],
+      "stats": {
+        "hp": 97,
+        "atk": 157,
+        "def": 122,
+        "spa": 62,
+        "spd": 107,
+        "spe": 33
+      },
+      "realStats": {
+        "hp": 172,
+        "atk": 177,
+        "def": 142,
+        "spa": 82,
+        "spd": 127,
+        "spe": 53
+      },
+      "abilities": [
+        "iron-fist"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/crabominable-mega.png",
+      "backSprite": "/pokemon/mega_back_crabominable-mega.png",
+      "requiredStoneId": "crabominite"
+    },
+    {
+      "basePokeId": 780,
+      "formSlug": "drampa-mega",
+      "nameKo": "메가할비롱",
+      "nameJa": "ジジーロン",
+      "nameEn": "drampa-mega",
+      "types": [
+        "노말",
+        "드래곤"
+      ],
+      "stats": {
+        "hp": 78,
+        "atk": 85,
+        "def": 110,
+        "spa": 160,
+        "spd": 116,
+        "spe": 36
+      },
+      "realStats": {
+        "hp": 153,
+        "atk": 105,
+        "def": 130,
+        "spa": 180,
+        "spd": 136,
+        "spe": 56
+      },
+      "abilities": [
+        "berserk"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/drampa-mega.png",
+      "backSprite": "/pokemon/mega_back_drampa-mega.png",
+      "requiredStoneId": "drampite"
+    },
+    {
+      "basePokeId": 861,
+      "formSlug": "grimmsnarl-mega",
+      "nameKo": "메가오롱털",
+      "nameJa": "メガオーロンゲ",
+      "nameEn": "grimmsnarl-mega",
+      "types": [
+        "악",
+        "페어리"
+      ],
+      "stats": {
+        "hp": 95,
+        "atk": 170,
+        "def": 80,
+        "spa": 95,
+        "spd": 100,
+        "spe": 70
+      },
+      "realStats": {
+        "hp": 170,
+        "atk": 190,
+        "def": 100,
+        "spa": 115,
+        "spd": 120,
+        "spe": 90
+      },
+      "abilities": [
+        "prankster"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/grimmsnarl-mega.png",
+      "backSprite": "/pokemon/861_back.png",
+      "requiredStoneId": "grimmsnarlite"
+    },
+    {
+      "basePokeId": 870,
+      "formSlug": "falinks-mega",
+      "nameKo": "메가대여르",
+      "nameJa": "メガタイレーツ",
+      "nameEn": "falinks-mega",
+      "types": [
+        "격투"
+      ],
+      "stats": {
+        "hp": 65,
+        "atk": 150,
+        "def": 120,
+        "spa": 70,
+        "spd": 70,
+        "spe": 95
+      },
+      "realStats": {
+        "hp": 140,
+        "atk": 170,
+        "def": 140,
+        "spa": 90,
+        "spd": 90,
+        "spe": 115
+      },
+      "abilities": [
+        "defiant"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/falinks-mega.png",
+      "backSprite": "/pokemon/870_back.png",
+      "requiredStoneId": "falinksite"
+    },
+    {
+      "basePokeId": 952,
+      "formSlug": "scovillain-mega",
+      "nameKo": "메가스코빌런",
+      "nameJa": "スコヴィラン",
+      "nameEn": "scovillain-mega",
+      "types": [
+        "풀",
+        "불꽃"
+      ],
+      "stats": {
+        "hp": 65,
+        "atk": 138,
+        "def": 85,
+        "spa": 138,
+        "spd": 85,
+        "spe": 75
+      },
+      "realStats": {
+        "hp": 140,
+        "atk": 158,
+        "def": 105,
+        "spa": 158,
+        "spd": 105,
+        "spe": 95
+      },
+      "abilities": [
+        "spicy-spray"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/scovillain-mega.png",
+      "backSprite": "/pokemon/mega_back_scovillain-mega.png",
+      "requiredStoneId": "scovillainite"
+    },
+    {
+      "basePokeId": 970,
+      "formSlug": "glimmora-mega",
+      "nameKo": "메가킬라플로르",
+      "nameJa": "キラフロル",
+      "nameEn": "glimmora-mega",
+      "types": [
+        "바위",
+        "독"
+      ],
+      "stats": {
+        "hp": 83,
+        "atk": 90,
+        "def": 105,
+        "spa": 150,
+        "spd": 96,
+        "spe": 101
+      },
+      "realStats": {
+        "hp": 158,
+        "atk": 110,
+        "def": 125,
+        "spa": 170,
+        "spd": 116,
+        "spe": 121
+      },
+      "abilities": [
+        "adaptability"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/glimmora-mega.png",
+      "backSprite": "/pokemon/mega_back_glimmora-mega.png",
+      "requiredStoneId": "glimmorite"
+    },
+    {
+      "basePokeId": 972,
+      "formSlug": "houndstone-mega",
+      "nameKo": "메가묘두기",
+      "nameJa": "メガハカドッグ",
+      "nameEn": "houndstone-mega",
+      "types": [
+        "고스트"
+      ],
+      "stats": {
+        "hp": 72,
+        "atk": 146,
+        "def": 110,
+        "spa": 50,
+        "spd": 112,
+        "spe": 98
+      },
+      "realStats": {
+        "hp": 147,
+        "atk": 166,
+        "def": 130,
+        "spa": 70,
+        "spd": 132,
+        "spe": 118
+      },
+      "abilities": [
+        "fluffy"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/houndstone-mega.png",
+      "backSprite": "/pokemon/972_back.png",
+      "requiredStoneId": "houndstonite"
+    },
+    {
+      "basePokeId": 979,
+      "formSlug": "annihilape-mega",
+      "nameKo": "메가저승갓숭",
+      "nameJa": "メガコノヨザル",
+      "nameEn": "annihilape-mega",
+      "types": [
+        "격투",
+        "고스트"
+      ],
+      "stats": {
+        "hp": 110,
+        "atk": 165,
+        "def": 90,
+        "spa": 50,
+        "spd": 100,
+        "spe": 120
+      },
+      "realStats": {
+        "hp": 185,
+        "atk": 185,
+        "def": 110,
+        "spa": 70,
+        "spd": 120,
+        "spe": 140
+      },
+      "abilities": [
+        "defiant"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/annihilape-mega.png",
+      "backSprite": "/pokemon/979_back.png",
+      "requiredStoneId": "annihilapite"
+    }
+  ]
 }

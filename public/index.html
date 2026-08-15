@@ -782,6 +782,115 @@
       transform: translateX(0);
     }
 
+    /* Slide-out Left Settings Drawer */
+    .drawer-panel-left {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 530px;
+      max-width: 95vw;
+      height: 100vh;
+      background: #0d131f;
+      border-right: 1px solid var(--border-color);
+      box-shadow: 10px 0 35px rgba(0, 0, 0, 0.75);
+      z-index: 1060;
+      transform: translateX(-100%);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .drawer-panel-left.active {
+      transform: translateX(0);
+    }
+
+    .btn-settings-toggle {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 12px;
+      background: rgba(30, 41, 59, 0.8);
+      border: 1.5px solid var(--border-color);
+      border-radius: 10px;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+      margin-left: 10px;
+    }
+
+    .btn-settings-toggle:hover {
+      background: #1e293b;
+      border-color: rgba(0, 255, 163, 0.5);
+      color: var(--chzzk-green);
+      box-shadow: 0 0 14px rgba(0, 255, 163, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .btn-settings-toggle.active {
+      background: rgba(0, 255, 163, 0.15);
+      border-color: var(--chzzk-green);
+      color: var(--chzzk-green);
+      box-shadow: 0 0 16px rgba(0, 255, 163, 0.25);
+    }
+
+    .settings-badge {
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 6px;
+      background: rgba(0, 255, 163, 0.15);
+      color: var(--chzzk-green);
+      border: 1px solid rgba(0, 255, 163, 0.3);
+      max-width: 140px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Clean Tab Summary Bar */
+    .view-summary-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 10px 16px;
+      margin-bottom: 18px;
+      backdrop-filter: blur(8px);
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .view-summary-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .view-summary-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .view-summary-tag {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--chzzk-green);
+      background: rgba(0, 255, 163, 0.1);
+      padding: 3px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(0, 255, 163, 0.25);
+    }
+
     .drawer-header {
       padding: 18px 20px;
       border-bottom: 1px solid var(--border-color);
@@ -1963,6 +2072,75 @@
       color: #fff;
       box-shadow: 0 2px 10px rgba(0, 255, 163, 0.2);
     }
+
+    /* Mega Evolution Button & Effects */
+    .poke-mega-btn {
+      width: 100%;
+      padding: 9px 14px;
+      background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(168, 85, 247, 0.2), rgba(0, 255, 163, 0.15));
+      border: 1.5px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+    .poke-mega-btn:hover {
+      border-color: #00ffa3;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 15px rgba(0, 255, 163, 0.35);
+    }
+    .poke-mega-btn.active {
+      background: linear-gradient(135deg, rgba(236, 72, 153, 0.45), rgba(168, 85, 247, 0.5), rgba(0, 255, 163, 0.45));
+      border: 2px solid #00ffa3;
+      box-shadow: 0 0 22px rgba(0, 255, 163, 0.6), inset 0 0 12px rgba(255, 255, 255, 0.3);
+      animation: megaPulse 1.5s infinite;
+    }
+    @keyframes megaPulse {
+      0%, 100% { box-shadow: 0 0 15px rgba(0, 255, 163, 0.4); }
+      50% { box-shadow: 0 0 25px rgba(236, 72, 153, 0.7), 0 0 12px rgba(0, 255, 163, 0.9); }
+    }
+    .mega-pill-badge {
+      font-size: 10px;
+      font-weight: 900;
+      padding: 2px 8px;
+      border-radius: 12px;
+      letter-spacing: 0.5px;
+      transition: all 0.2s;
+    }
+    .mega-pill-badge.off {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-sub);
+    }
+    .mega-pill-badge.on {
+      background: #00ffa3;
+      color: #080c10;
+      box-shadow: 0 0 10px rgba(0, 255, 163, 0.9);
+    }
+    .mega-tag-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      background: linear-gradient(135deg, #ec4899, #a855f7);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 900;
+      padding: 1px 6px;
+      border-radius: 6px;
+      box-shadow: 0 0 8px rgba(236, 72, 153, 0.5);
+    }
+    .mega-flash {
+      animation: megaFlashAnim 0.8s ease-out;
+    }
+    @keyframes megaFlashAnim {
+      0% { filter: brightness(1); }
+      25% { filter: brightness(2.5) saturate(2); }
+      50% { filter: brightness(1.8) drop-shadow(0 0 25px #00ffa3); }
+      100% { filter: brightness(1); }
+    }
   </style>
 </head>
 <body>
@@ -1977,6 +2155,11 @@
       <div class="logo-group">
         <div class="logo-badge">CHZZK</div>
         <h1>치지직 대규모 추첨 & 룰렛 & 배틀</h1>
+        <button type="button" id="openSettingsDrawerBtn" class="btn-settings-toggle" onclick="openSettingsDrawer()" title="상세 설정 서랍 열기">
+          <span>⚙️</span>
+          <span id="settingsBtnLabel">추첨 설정</span>
+          <span id="settingsActiveSummaryBadge" class="settings-badge">전체 참여자</span>
+        </button>
       </div>
 
       <!-- Center Mode Nav Tabs -->
@@ -2027,171 +2210,16 @@
 
     <!-- 🎟️ MAIN TAB 1: 시청자 대규모 추첨기 (Raffle View) -->
     <div id="raffleView">
-      <!-- Smart Filter Chips & Accordion Panels -->
-      <div class="filter-chips-bar">
-        <span style="font-size: 13px; font-weight: 700; color: var(--text-sub); display: flex; align-items: center; gap: 4px;">
-          🎯 추첨 대상:
-        </span>
-        <button type="button" class="filter-chip-btn active" id="chipAllToggle" onclick="setFilterMode('all')">
-          <span class="chip-indicator"></span>
-          <span>👥 전체 참여자</span>
+      <!-- Clean Tab Summary Bar -->
+      <div class="view-summary-bar">
+        <div class="view-summary-left">
+          <span class="view-summary-title">🎯 현재 추첨 대상:</span>
+          <span id="raffleActiveFilterSummary" class="view-summary-tag">👥 전체 참여자</span>
+          <span id="raffleExcludeSummaryBadge" class="badge-tag" style="background: rgba(255,255,255,0.08); color: var(--text-sub);">중복 제외 ON</span>
+        </div>
+        <button type="button" class="btn-chip btn-chip-secondary" onclick="openSettingsDrawer('raffle')" style="font-size: 12px; padding: 6px 12px; font-weight: 700;">
+          <span>⚙️ 추첨 대상 & 제외 설정</span>
         </button>
-        <button type="button" class="filter-chip-btn" id="chipKeywordToggle" onclick="toggleFilter('keyword')">
-          <span class="chip-indicator"></span>
-          <span>💬 참여 키워드 필터</span>
-          <span id="keywordChipBadge" class="chip-badge" style="display: none;"></span>
-        </button>
-        <button type="button" class="filter-chip-btn" id="chipDonorToggle" onclick="toggleFilter('donor')">
-          <span class="chip-indicator"></span>
-          <span>🧀 치즈 후원자 필터</span>
-        </button>
-        <button type="button" class="filter-chip-btn" id="chipSubToggle" onclick="toggleFilter('sub')">
-          <span class="chip-indicator"></span>
-          <span>⭐ 구독자 필터</span>
-        </button>
-        
-        <div style="margin-left: auto; display: flex; gap: 8px;">
-          <button type="button" class="filter-chip-btn" id="chipExcludeToggle" onclick="toggleExcludePanel()">
-            <span>🚫 중복 방지 & 제외 관리</span>
-            <span id="excludeBadge" class="chip-badge">기본 중복제외 ON</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Detail Panel 0: Participation Keyword Filter -->
-      <div id="keywordFilterPanel" class="filter-accordion-panel" style="display: none;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <span style="font-size: 13px; font-weight: 800; color: var(--chzzk-green);">💬 특정 참여 키워드 조건 설정</span>
-            <span style="font-size: 11px; color: var(--text-sub);">(지정한 키워드를 채팅에 입력한 시청자만 추첨)</span>
-          </div>
-          <button type="button" class="btn-chip btn-chip-secondary" onclick="toggleFilter('keyword')">✕ 필터 끄기</button>
-        </div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
-          <div>
-            <label>참여 키워드 입력 (예: !추첨, !참여, 1번)</label>
-            <input type="text" id="keywordInput" placeholder="예: !추첨, !참여" style="margin-bottom: 8px;">
-            <div class="radio-group">
-              <label class="radio-label">
-                <input type="radio" name="keywordMatchMode" value="exact" checked> 완전 일치 (예: "!추첨" 단독 채팅)
-              </label>
-              <label class="radio-label">
-                <input type="radio" name="keywordMatchMode" value="partial"> 부분 일치 (예: "!추첨합니다" 포함 채팅)
-              </label>
-            </div>
-          </div>
-          <div style="font-size: 11px; color: var(--text-sub); display: flex; flex-direction: column; justify-content: center; line-height: 1.5; background: rgba(0,255,163,0.04); padding: 12px; border-radius: 8px; border: 1px solid rgba(0,255,163,0.1);">
-            <div>💡 <b>회차별 키워드 즉시 변경 가능</b></div>
-            <div style="margin-top: 4px;">방송 연결을 끊지 않고도 1회차 `!치킨`, 2회차 `!피자` 등 키워드를 변경하면 실시간 응모자 수가 즉시 다시 계산됩니다.</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Detail Panel 1: Cheese Donator Filter -->
-      <div id="donorFilterPanel" class="filter-accordion-panel" style="display: none;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <span style="font-size: 13px; font-weight: 800; color: var(--chzzk-green);">🧀 치즈 후원자 전용 추첨 세부 조건</span>
-            <span style="font-size: 11px; color: var(--text-sub);">(후원 뱃지를 보유한 시청자만 추첨)</span>
-          </div>
-          <button type="button" class="btn-chip btn-chip-secondary" onclick="toggleFilter('donor')">✕ 필터 끄기</button>
-        </div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
-          <div>
-            <label>최소 후원 등급 기준</label>
-            <select id="donorLevelSelect">
-              <option value="1">일반 후원자 이상 (치즈 후원 배지/팬 배지)</option>
-              <option value="2">🔥 10만 치즈 이상 후원자 (LV2+)</option>
-              <option value="3">🔥 100만 치즈 이상 후원자 (LV3+)</option>
-              <option value="4">💖 1,000만 치즈 이상 후원자 (LV4+)</option>
-              <option value="5">✨ 1억 치즈 이상 후원자 (LV5+)</option>
-            </select>
-          </div>
-          <div style="font-size: 11px; color: var(--text-sub); display: flex; align-items: center; line-height: 1.5; background: rgba(0,255,163,0.04); padding: 10px; border-radius: 8px; border: 1px solid rgba(0,255,163,0.1);">
-            💡 치지직 채팅 프로필의 활동 배지 및 치즈 등급을 실시간 감지하여 고액 후원자를 정밀하게 필터링합니다.
-          </div>
-        </div>
-      </div>
-
-      <!-- Detail Panel 2: Subscriber Filter -->
-      <div id="subFilterPanel" class="filter-accordion-panel" style="display: none;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <span style="font-size: 13px; font-weight: 800; color: var(--chzzk-green);">⭐ 구독자 전용 추첨 세부 조건</span>
-            <span style="font-size: 11px; color: var(--text-sub);">(현재 채널 구독자만 추첨)</span>
-          </div>
-          <button type="button" class="btn-chip btn-chip-secondary" onclick="toggleFilter('sub')">✕ 필터 끄기</button>
-        </div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
-          <div>
-            <label>최소 연속 구독 개월 수</label>
-            <input type="number" id="minSubMonths" min="0" placeholder="0 = 전체 구독자 (1개월 이상)" value="0">
-          </div>
-          <div>
-            <label>최소 구독 티어</label>
-            <select id="subTierSelect">
-              <option value="0">전체 티어 (1티어 및 2티어)</option>
-              <option value="1">1티어 이상</option>
-              <option value="2">2티어 전용</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <!-- Detail Panel 3: Exclude Settings -->
-      <div id="excludeFilterPanel" class="filter-accordion-panel" style="display: none;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-          <div>
-            <span style="font-weight: 800; color: #fff; font-size: 14px;">🚫 중복 당첨 방지 및 제외 관리</span>
-            <span style="font-size: 11px; color: var(--text-sub); margin-left: 8px;">(이전 당첨자, 블랙리스트 파일, 특정 닉네임을 추첨 대상에서 100% 제외)</span>
-          </div>
-          <button type="button" class="btn-chip btn-chip-secondary" onclick="toggleExcludePanel()">✕ 닫기</button>
-        </div>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
-          <!-- 1. Auto Exclude Previous -->
-          <div style="background: #121826; padding: 14px; border-radius: 10px; border: 1px solid var(--border-color);">
-            <div class="toggle-row">
-              <span class="toggle-label" style="font-size: 13px;">🔄 이전 회차 당첨자 중복 제외</span>
-              <input type="checkbox" id="autoExcludePreviousToggle" checked style="width: 18px; height: 18px; cursor: pointer;">
-            </div>
-            <div style="font-size: 11px; color: var(--text-sub); margin-top: 6px; line-height: 1.4;">
-              1회차에 뽑힌 당첨자가 2회차/3회차에 다시 뽑히지 않도록 고유 ID(UID)로 자동 차단합니다.
-            </div>
-          </div>
-
-          <!-- 2. Excel Exclude -->
-          <div style="background: #121826; padding: 14px; border-radius: 10px; border: 1px solid var(--border-color);">
-            <div class="toggle-row">
-              <span class="toggle-label" style="font-size: 13px;">📂 과거 당첨자/블랙리스트 파일 업로드</span>
-              <input type="checkbox" id="fileExcludeToggle" style="width: 18px; height: 18px; cursor: pointer;">
-            </div>
-            <div id="fileExcludeBox" style="display: none; margin-top: 8px;">
-              <div class="file-drop-zone" onclick="document.getElementById('excludeFileInput').click()">
-                <span id="fileDropText" style="font-size: 11px; color: var(--text-sub);">
-                  📁 엑셀/CSV/TXT 파일 클릭 또는 드래그 업로드
-                </span>
-                <input type="file" id="excludeFileInput" accept=".csv, .txt" style="display: none;">
-              </div>
-              <div id="fileExcludeStatus" style="font-size: 11px; color: var(--chzzk-green); margin-top: 4px;"></div>
-            </div>
-          </div>
-
-          <!-- 3. Manual Exclude -->
-          <div style="background: #121826; padding: 14px; border-radius: 10px; border: 1px solid var(--border-color);">
-            <div class="toggle-row">
-              <span class="toggle-label" style="font-size: 13px;">✍️ 특정 닉네임/UID 직접 입력 제외</span>
-              <input type="checkbox" id="manualExcludeToggle" style="width: 18px; height: 18px; cursor: pointer;">
-            </div>
-            <div id="manualExcludeBox" style="display: none; margin-top: 8px;">
-              <input type="text" id="tablePasteInput" placeholder="제외할 닉네임 또는 엑셀 복사열 붙여넣기 (Ctrl+V)" style="font-size: 11px; padding: 6px 10px; margin-bottom: 6px;">
-              <div style="max-height: 80px; overflow-y: auto;">
-                <table style="font-size: 11px;">
-                  <tbody id="excludeRulesBody"></tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
 
       <!-- Raffle Hero Rolling Stage & Counters -->
@@ -2317,182 +2345,16 @@
 
     <!-- 🎰 MAIN TAB 2: 비주얼 룰렛 시스템 (Roulette View) -->
     <div id="rouletteView" class="roulette-grid" style="display: none;">
-      <!-- TOP PANEL: Roulette Settings & Management (상부 설정 및 관리) -->
-      <div class="panel">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
-          <!-- Sub Tabs: Manual vs Cheese Donation -->
-          <div class="sub-tabs" style="margin-bottom: 0;">
-            <button type="button" id="rouletteManualTabBtn" class="sub-tab-btn active">✍️ 수동 항목 입력</button>
-            <button type="button" id="rouletteDonationTabBtn" class="sub-tab-btn">🧀 치즈 도네이션 연동</button>
-          </div>
-
-          <!-- Quick Actions & Duration in Header -->
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <span style="font-size: 12px; color: var(--text-sub); font-weight: 700;">⏱️ 회전 시간</span>
-            <select id="spinDurationSelect" style="padding: 6px 12px; font-size: 12px; background: #080c14; border: 1px solid var(--border-color); color: #fff; border-radius: 6px;">
-              <option value="3">⚡ 빠르게 (3초)</option>
-              <option value="5" selected>🎯 표준 (5초)</option>
-              <option value="8">🔥 극적인 긴장감 (8초)</option>
-            </select>
-          </div>
+      <!-- Clean Tab Summary Bar -->
+      <div class="view-summary-bar">
+        <div class="view-summary-left">
+          <span class="view-summary-title">🎰 룰렛 설정 상태:</span>
+          <span id="rouletteSummaryTag" class="view-summary-tag">수동 항목 (0개)</span>
+          <span id="rouletteDurationSummaryTag" class="badge-tag" style="background: rgba(255,255,255,0.08); color: var(--text-sub);">회전: 5초</span>
         </div>
-
-        <!-- 2-Column Config Layout: Left = Items Management, Right = Mode Settings & History -->
-        <div class="roulette-config-columns">
-          <!-- Left Column: Item Management & Excel Actions -->
-          <div>
-            <!-- Manual Mode Items Box -->
-            <div id="rouletteManualBox">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                <label style="margin-bottom: 0; font-size: 13px; font-weight: 700;">룰렛 항목 목록 (칸별 직접 관리)</label>
-                <span id="manualItemCount" style="color: var(--chzzk-green); font-size: 11px; font-weight: 700;">총 0개 항목</span>
-              </div>
-
-              <!-- Excel/CSV Import & Export Action Bar -->
-              <div style="display: flex; gap: 6px; margin-bottom: 8px;">
-                <input type="file" id="rouletteImportFileInput" accept=".csv, .xlsx, .xls, .txt, .tsv" style="display: none;">
-                <button type="button" id="importRouletteFileBtn" class="btn-chip" style="flex: 1.2; padding: 6px 10px; font-size: 11px; background: rgba(0, 255, 163, 0.12); color: var(--chzzk-green); border-color: rgba(0, 255, 163, 0.35); font-weight: 700;">
-                  📂 엑셀/CSV 불러오기
-                </button>
-                <button type="button" id="exportRouletteItemsBtn" class="btn-chip btn-chip-secondary" style="flex: 1; padding: 6px 10px; font-size: 11px; font-weight: 700;">
-                  💾 엑셀 저장
-                </button>
-                <button type="button" id="downloadRouletteTemplateBtn" class="btn-chip btn-chip-secondary" style="padding: 6px 8px; font-size: 11px;" title="룰렛 항목 엑셀 샘플 양식 다운로드">
-                  📄 양식
-                </button>
-              </div>
-
-              <!-- Dynamic Interactive Item Rows Container -->
-              <div id="rouletteItemsContainer" class="roulette-items-list" style="max-height: 140px;">
-                <!-- Dynamically populated rows -->
-              </div>
-
-              <div style="display: flex; gap: 8px; margin-top: 8px;">
-                <button type="button" id="addRouletteRowBtn" class="btn btn-secondary" style="flex: 1; padding: 6px 10px; font-size: 12px;">
-                  ➕ 새 항목 칸 추가 (Enter)
-                </button>
-                <button type="button" id="clearAllRouletteRowsBtn" class="btn-chip btn-chip-danger" style="padding: 6px 10px; font-size: 12px;">
-                  🗑️ 전체 삭제
-                </button>
-              </div>
-            </div>
-
-            <!-- Cheese Donation Mode Items Box -->
-            <div id="rouletteDonationBox" style="display: none;">
-              <!-- Header info & Status & Timer -->
-              <div style="background: rgba(0, 255, 163, 0.06); border: 1px solid rgba(0, 255, 163, 0.2); border-radius: 8px; padding: 8px 10px; margin-bottom: 8px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px;">
-                  <div style="font-size: 11px; color: var(--chzzk-green); font-weight: 700;">
-                    📡 치즈 후원 메시지 실시간 룰렛 연동
-                  </div>
-                  <span id="rouletteDonationStatusBadge" class="live-badge-pill offline" style="font-size: 10px; padding: 2px 6px;">대기 중</span>
-                </div>
-                <div style="font-size: 10px; color: var(--text-sub); line-height: 1.3;">
-                  <b>수집 시작</b> 버튼을 누른 동안 후원된 치즈 메시지만 룰렛 원판에 실시간 등록됩니다.
-                </div>
-              </div>
-
-              <!-- Options Grid: Min Cheese + Weight Toggle + Duration Select -->
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
-                <div class="form-group" style="margin-bottom: 0;">
-                  <label>최소 후원 치즈 기준</label>
-                  <select id="minDonationCheeseSelect">
-                    <option value="1">전체 후원 (1치즈+)</option>
-                    <option value="1000" selected>1,000 치즈 이상</option>
-                    <option value="5000">5,000 치즈 이상</option>
-                    <option value="10000">10,000 치즈 이상</option>
-                    <option value="50000">50,000 치즈 이상</option>
-                    <option value="100000">100,000 치즈 이상</option>
-                  </select>
-                </div>
-
-                <div class="form-group" style="margin-bottom: 0;">
-                  <label>수집 제한 시간 (타이머)</label>
-                  <select id="rouletteDonationDurationSelect">
-                    <option value="0" selected>⏳ 무제한 (수동 마감)</option>
-                    <option value="30">⚡ 30초</option>
-                    <option value="60">⏱️ 1분</option>
-                    <option value="120">⏱️ 2분</option>
-                    <option value="180">⏱️ 3분</option>
-                    <option value="300">⏱️ 5분</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="toggle-row" style="margin-bottom: 8px;">
-                <span class="toggle-label" style="font-size: 11px;">💰 후원 금액 비례 칸 크기 확장 (가중치 연동)</span>
-                <input type="checkbox" id="donationWeightToggle" checked style="width: 16px; height: 16px; cursor: pointer;">
-              </div>
-
-              <!-- Collection Control Action Buttons -->
-              <div style="display: flex; gap: 6px; margin-bottom: 8px;">
-                <button type="button" id="startRouletteDonationBtn" class="btn btn-primary" style="flex: 1; padding: 7px 12px; font-size: 12px; font-weight: 800;">
-                  ▶️ 도네 수집 시작
-                </button>
-                <button type="button" id="pauseRouletteDonationBtn" class="btn btn-secondary" style="display: none; padding: 7px 10px; font-size: 11px;">
-                  ⏸️ 일시 정지
-                </button>
-                <button type="button" id="stopRouletteDonationBtn" class="btn btn-danger" style="display: none; padding: 7px 10px; font-size: 11px; font-weight: 800;">
-                  ⏹️ 수집 마감
-                </button>
-                <button type="button" id="clearDonationsBtn" class="btn-chip btn-chip-danger" style="padding: 7px 10px; font-size: 11px;">
-                  🔄 초기화
-                </button>
-              </div>
-
-              <!-- Feed Header with Count & Timer -->
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px; margin-bottom: 4px;">
-                <span style="font-size: 11px; font-weight: 700; color: var(--text-sub);">수집된 후원 메시지 (<span id="donationItemCount" style="color: var(--chzzk-green);">0</span>건)</span>
-                <span id="rouletteDonationTimerDisplay" style="font-family: 'Outfit'; font-weight: 700; color: #ffd700; font-size: 11px; display: none;">남은 시간: 00:00</span>
-              </div>
-              <div id="donationFeedList" style="max-height: 80px; overflow-y: auto; background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; padding: 6px; font-size: 11px;">
-                <div style="text-align: center; color: var(--text-sub); padding: 12px 0;">도네 수집 시작 버튼을 누르면 실시간 후원이 수집됩니다.</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Right Column: Roulette Detailed Toggles & History Table -->
-          <div>
-            <div class="panel-title" style="font-size: 13px; margin-bottom: 6px;">⚙️ 룰렛 옵션 및 히스토리</div>
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
-              <div class="toggle-row" style="margin-bottom: 0;">
-                <span class="toggle-label" style="font-size: 11px;">🗑️ 당첨 항목 자동 제거</span>
-                <input type="checkbox" id="autoRemoveWonItemToggle" style="width: 16px; height: 16px; cursor: pointer;">
-              </div>
-
-              <div class="toggle-row" style="margin-bottom: 0;">
-                <span class="toggle-label" style="font-size: 11px;">🔊 회전 틱 사운드</span>
-                <input type="checkbox" id="rouletteSoundToggle" checked style="width: 16px; height: 16px; cursor: pointer;">
-              </div>
-            </div>
-
-            <!-- Roulette History Table -->
-            <div style="margin-top: 6px;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                <span style="font-size: 11px; font-weight: 700; color: var(--text-sub);">📜 룰렛 당첨 히스토리</span>
-                <div style="display: flex; gap: 4px;">
-                  <button type="button" id="exportRouletteHistoryBtn" class="btn-chip btn-chip-primary" style="padding: 2px 6px; font-size: 10px; background: #107c41; color: #fff;">📊 엑셀 저장</button>
-                  <button type="button" id="clearRouletteHistoryBtn" class="btn-chip btn-chip-secondary" style="padding: 2px 6px; font-size: 10px;">초기화</button>
-                </div>
-              </div>
-              <div class="table-container" style="max-height: 120px;">
-                <table>
-                  <thead>
-                    <tr>
-                      <th style="width: 45px;">회차</th>
-                      <th>당첨 항목</th>
-                      <th style="width: 75px;">시간</th>
-                    </tr>
-                  </thead>
-                  <tbody id="rouletteHistoryBody">
-                    <tr><td colspan="3" style="text-align:center; color: var(--text-sub); font-size: 11px; padding: 14px 0;">아직 룰렛 결과가 없습니다.</td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
+        <button type="button" class="btn-chip btn-chip-secondary" onclick="openSettingsDrawer('roulette')" style="font-size: 12px; padding: 6px 12px; font-weight: 700;">
+          <span>⚙️ 룰렛 항목 & 옵션 편집</span>
+        </button>
       </div>
 
       <!-- BOTTOM PANEL: Big Canvas Roulette Stage & Spin Controls (하부 룰렛 원판 및 돌리기 스테이지) -->
@@ -2537,165 +2399,17 @@
 
     <!-- 📊 MAIN TAB 3: 실시간 투표 시스템 (Poll View) -->
     <div id="pollView" class="poll-grid" style="display: none;">
-      <!-- TOP PANEL: Poll Configuration & Controls (상부 설정 및 제어) -->
-      <div class="panel">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
-          <!-- Sub Tabs: General Chat vs Cheese Donation -->
-          <div class="sub-tabs" style="margin-bottom: 0;">
-            <button type="button" id="pollModeChatTabBtn" class="sub-tab-btn active">✍️ 일반 채팅 투표</button>
-            <button type="button" id="pollModeCheeseTabBtn" class="sub-tab-btn">🧀 치즈 도네이션 투표</button>
-          </div>
-
-          <!-- Common Timer Option -->
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <span style="font-size: 12px; color: var(--text-sub); font-weight: 700;">⏱️ 타이머</span>
-            <select id="pollDurationSelect" style="padding: 6px 12px; font-size: 12px; background: #080c14; border: 1px solid var(--border-color); color: #fff; border-radius: 6px;">
-              <option value="0" selected>⏳ 무제한 (수동 마감)</option>
-              <option value="30">⚡ 30초</option>
-              <option value="60">⏱️ 1분</option>
-              <option value="120">⏱️ 2분</option>
-              <option value="180">⏱️ 3분</option>
-              <option value="300">⏱️ 5분</option>
-            </select>
-          </div>
+      <!-- Clean Tab Summary Bar -->
+      <div class="view-summary-bar">
+        <div class="view-summary-left">
+          <span class="view-summary-title">📊 투표 설정:</span>
+          <span id="pollActiveQuestionSummary" class="view-summary-tag" style="max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">질문: 오늘 2부 콘텐츠 무엇을 할까요?</span>
+          <span id="pollOptionsCountSummary" class="badge-tag" style="background: rgba(255,255,255,0.08); color: var(--text-sub);">선택지 2개</span>
         </div>
-
-        <!-- Question & Presets Row -->
-        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 10px; padding: 12px 14px; margin-bottom: 14px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 8px;">
-            <label style="margin-bottom: 0; font-size: 13px; font-weight: 800; color: #fff;">투표 주제 (질문)</label>
-            <div style="display: flex; align-items: center; gap: 4px;">
-              <span style="font-size: 11px; color: var(--text-sub); margin-right: 4px;">추천 프리셋:</span>
-              <button type="button" class="btn-chip btn-chip-secondary" id="presetPollOxBtn" style="padding: 3px 8px; font-size: 11px;">⭕ O / ❌ X</button>
-              <button type="button" class="btn-chip btn-chip-secondary" id="presetPollYesNoBtn" style="padding: 3px 8px; font-size: 11px;">👍 찬성 / 👎 반대</button>
-              <button type="button" class="btn-chip btn-chip-secondary" id="presetPoll123Btn" style="padding: 3px 8px; font-size: 11px;">1번 / 2번 / 3번</button>
-            </div>
-          </div>
-          <input type="text" id="pollTitleInput" placeholder="예: 오늘 2부 게임 뭐할까요?, 찬반 투표 등" value="오늘 2부 콘텐츠 무엇을 할까요?" style="font-weight: 700; width: 100%;">
-        </div>
-
-        <!-- 2-Column Config Layout: Left = Options List, Right = Mode Settings -->
-        <div class="poll-config-columns">
-          <!-- Left: Options List -->
-          <div>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-              <label style="margin-bottom: 0; font-size: 13px; font-weight: 700;">선택지 목록 (2~10개)</label>
-              <span id="pollOptionCount" style="color: var(--chzzk-green); font-size: 11px; font-weight: 700;">총 2개 항목</span>
-            </div>
-
-            <div id="pollOptionsList" class="roulette-items-list" style="max-height: 140px;">
-              <!-- Dynamic option rows -->
-            </div>
-
-            <div style="display: flex; gap: 8px; margin-top: 8px;">
-              <button type="button" id="addPollOptionBtn" class="btn btn-secondary" style="flex: 1; padding: 6px 10px; font-size: 12px;">
-                ➕ 선택지 추가 (Enter)
-              </button>
-              <button type="button" id="clearAllPollOptionsBtn" class="btn-chip btn-chip-danger" style="padding: 6px 10px; font-size: 12px;">
-                🗑️ 전체 삭제
-              </button>
-            </div>
-          </div>
-
-          <!-- Right: Mode Detailed Settings -->
-          <div>
-            <!-- 1. General Chat Poll Settings -->
-            <div id="pollChatConfigBox">
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                <div class="form-group" style="margin-bottom: 6px;">
-                  <label>투표 참여 방식</label>
-                  <select id="pollVoteTypeSelect">
-                    <option value="both" selected>🔢 번호 + 키워드 둘 다</option>
-                    <option value="numberOnly">🔢 번호만 인정 (!1, 1, 2...)</option>
-                    <option value="keywordOnly">🔤 선택지 키워드만</option>
-                  </select>
-                </div>
-
-                <div class="form-group" style="margin-bottom: 6px;">
-                  <label>중복 투표 규정</label>
-                  <select id="pollDuplicateModeSelect">
-                    <option value="single" selected>🔒 1인 1표 고정</option>
-                    <option value="allowRevote">🔄 재투표 허용 (변경)</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="form-group" style="margin-top: 6px; margin-bottom: 0;">
-                <label>참여 자격 필터</label>
-                <select id="pollAudienceFilterSelect">
-                  <option value="all" selected>👥 전체 시청자 누구나 참여</option>
-                  <option value="subscriber">⭐ 구독자만 참여 가능</option>
-                  <option value="donator">🧀 치즈 후원자만 참여 가능</option>
-                </select>
-              </div>
-            </div>
-
-            <!-- 2. Cheese Donation Poll Settings -->
-            <div id="pollCheeseConfigBox" style="display: none;">
-              <div style="background: rgba(0, 255, 163, 0.06); border: 1px solid rgba(0, 255, 163, 0.2); border-radius: 8px; padding: 8px 10px; margin-bottom: 8px;">
-                <div style="font-size: 11px; color: var(--chzzk-green); font-weight: 700; margin-bottom: 2px;">
-                  🧀 치즈 도네이션 배틀 투표
-                </div>
-                <div style="font-size: 10px; color: var(--text-sub); line-height: 1.3;">
-                  시청자가 치즈 후원 시 메시지에 선택지 번호/키워드를 넣으면 해당 항목에 실시간 누적됩니다.
-                </div>
-              </div>
-
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                <div class="form-group" style="margin-bottom: 0;">
-                  <label>최소 후원 치즈</label>
-                  <select id="pollMinCheeseSelect">
-                    <option value="1">전체 (1치즈+)</option>
-                    <option value="1000" selected>1,000 치즈 이상</option>
-                    <option value="5000">5,000 치즈 이상</option>
-                    <option value="10000">10,000 치즈 이상</option>
-                  </select>
-                </div>
-
-                <div class="form-group" style="margin-bottom: 0;">
-                  <label>치즈 집계 방식</label>
-                  <select id="pollCheeseWeightSelect">
-                    <option value="amount" selected>💰 금액 비례 (1치즈=1표)</option>
-                    <option value="count">🎟️ 건수 기준 (1도네=1표)</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <hr style="border-color: var(--border-color); margin: 14px 0;">
-
-        <!-- Action Control Buttons Bar -->
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-          <div style="display: flex; gap: 8px; flex: 1; max-width: 480px;">
-            <button type="button" id="startPollBtn" class="btn btn-primary" style="flex: 1; padding: 10px 16px; font-size: 13px; font-weight: 800;">
-              ▶️ 투표 시작
-            </button>
-            <button type="button" id="pausePollBtn" class="btn btn-secondary" style="display: none; padding: 10px 14px; font-size: 12px;">
-              ⏸️ 일시 정지
-            </button>
-            <button type="button" id="stopPollBtn" class="btn btn-danger" style="display: none; padding: 10px 14px; font-size: 12px; font-weight: 800;">
-              ⏹️ 투표 마감
-            </button>
-            <button type="button" id="resetPollBtn" class="btn-chip btn-chip-secondary" style="padding: 10px 14px; font-size: 12px;">
-              🔄 초기화
-            </button>
-          </div>
-
-          <!-- Special Actions & Export -->
-          <div style="display: flex; gap: 6px; align-items: center;">
-            <button type="button" id="convertPollToRouletteBtn" class="btn-chip" style="padding: 9px 14px; font-size: 12px; font-weight: 800; background: linear-gradient(135deg, #7928ca, #ff0080); color: #fff; border: none; box-shadow: 0 4px 12px rgba(121, 40, 202, 0.4);" title="현재 투표(치즈) 항목과 가중치를 룰렛으로 즉시 전환합니다">
-              <span>🎰</span>
-              <span>룰렛으로 전환</span>
-            </button>
-            <button type="button" id="exportPollSummaryBtn" class="btn-chip btn-chip-secondary" style="padding: 9px 12px; font-size: 11px;">
-              📊 결과 엑셀 저장
-            </button>
-            <button type="button" id="exportPollVotersBtn" class="btn-chip btn-chip-secondary" style="padding: 9px 12px; font-size: 11px;">
-              👥 투표자 명단
-            </button>
-          </div>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <button type="button" class="btn-chip btn-chip-secondary" onclick="openSettingsDrawer('poll')" style="font-size: 12px; padding: 6px 12px; font-weight: 700;">
+            <span>⚙️ 투표 주제 & 선택지 설정</span>
+          </button>
         </div>
       </div>
 
@@ -2742,13 +2456,15 @@
     <!-- 🎮 MAIN TAB 4: 미니게임 허브 (Game View) -->
     <div id="gameView" class="game-grid" style="display: none; flex-direction: column; width: 100%;">
       
-      <!-- Top Sub-Navigation Minigame Selector Bar -->
-      <div style="display: flex; gap: 10px; margin-bottom: 16px; background: rgba(15, 23, 42, 0.7); padding: 8px; border-radius: 12px; border: 1px solid var(--border-color); width: 100%;">
-        <button type="button" id="subTabVoltorbBtn" class="filter-chip-btn active" style="flex: 1; padding: 12px 18px; font-size: 14px; font-weight: 800; justify-content: center;" onclick="switchMinigame('voltorb')">
-          <span>⚡ 찌리리공 뒤집기 (Voltorb Flip)</span>
-        </button>
-        <button type="button" id="subTabPokeBattleBtn" class="filter-chip-btn" style="flex: 1; padding: 12px 18px; font-size: 14px; font-weight: 800; justify-content: center;" onclick="switchMinigame('pokebattle')">
-          <span>⚔️ 포켓몬 1v1 배틀 (Pokemon Battle)</span>
+      <!-- Clean Tab Summary Bar -->
+      <div class="view-summary-bar">
+        <div class="view-summary-left">
+          <span class="view-summary-title">🎮 현재 미니게임:</span>
+          <span id="gameActiveSummaryTag" class="view-summary-tag">⚡ 찌리리공 뒤집기</span>
+          <span id="gameModeSummaryBadge" class="badge-tag" style="background: rgba(255,255,255,0.08); color: var(--text-sub);">단판 승부</span>
+        </div>
+        <button type="button" class="btn-chip btn-chip-secondary" onclick="openSettingsDrawer('game')" style="font-size: 12px; padding: 6px 12px; font-weight: 700;">
+          <span>⚙️ 미니게임 선택 & 옵션 설정</span>
         </button>
       </div>
 
@@ -2957,7 +2673,8 @@
 
               <div style="display: flex; align-items: center; gap: 6px;">
                 <span style="font-size: 12px; color: var(--text-sub); font-weight: 700;" id="pokeStreamerDurationLabel">⏱️ 스트리머 턴</span>
-                <select id="pokeStreamerDurationSelect" style="padding: 6px 10px; font-size: 12px; background: #080c14; border: 1px solid var(--border-color); color: #fff; border-radius: 6px; font-weight: 700;">
+                <select id="pokeStreamerDurationSelect" style="padding: 6px 10px; font-size: 12px; background: #080c14; border: 1px solid var(--border-color); color: #fff; border-radius: 6px; font-weight: 700;" onchange="syncPokeStreamerDuration(this.value)">
+                  <option value="10">⚡ 10초 (초고속)</option>
                   <option value="15">⚡ 15초</option>
                   <option value="20">⏱️ 20초</option>
                   <option value="30" selected>⏱️ 30초</option>
@@ -2968,7 +2685,8 @@
 
               <div style="display: flex; align-items: center; gap: 6px;">
                 <span style="font-size: 12px; color: var(--text-sub); font-weight: 700;">⏱️ 시청자 턴</span>
-                <select id="pokeVoteDurationSelect" style="padding: 6px 10px; font-size: 12px; background: #080c14; border: 1px solid var(--border-color); color: #fff; border-radius: 6px; font-weight: 700;">
+                <select id="pokeVoteDurationSelect" style="padding: 6px 10px; font-size: 12px; background: #080c14; border: 1px solid var(--border-color); color: #fff; border-radius: 6px; font-weight: 700;" onchange="syncPokeVoteDuration(this.value)">
+                  <option value="10">⚡ 10초 (초고속)</option>
                   <option value="15">⚡ 15초</option>
                   <option value="20">⏱️ 20초</option>
                   <option value="30" selected>⏱️ 30초</option>
@@ -3005,8 +2723,8 @@
                 </div>
               </div>
 
-              <img id="streamerPokeSprite" src="pokemon/6.png" alt="리자몽" class="poke-sprite-large">
-              <div id="streamerPokeName" style="font-size: 18px; font-weight: 900; color: #fff; margin-top: 4px;">리자몽</div>
+              <img id="streamerPokeSprite" src="pokemon/6.png" alt="리자몽" class="poke-sprite-large" style="cursor: pointer;" onclick="openPokemonPicker('streamer')" title="클릭하여 포켓몬 교체">
+              <div id="streamerPokeName" style="font-size: 18px; font-weight: 900; color: #fff; margin-top: 4px; cursor: pointer;" onclick="openPokemonPicker('streamer')">리자몽</div>
               <div id="streamerPokeTypes" style="display: flex; gap: 4px; margin: 4px 0 8px;"></div>
               
               <!-- Held Item Select Dropdown -->
@@ -3076,8 +2794,8 @@
                 </div>
               </div>
 
-              <img id="viewersPokeSprite" src="pokemon/25.png" alt="피카츄" class="poke-sprite-large">
-              <div id="viewersPokeName" style="font-size: 18px; font-weight: 900; color: #fff; margin-top: 4px;">피카츄</div>
+              <img id="viewersPokeSprite" src="pokemon/25.png" alt="피카츄" class="poke-sprite-large" style="cursor: pointer;" onclick="openPokemonPicker('viewers')" title="클릭하여 포켓몬 교체">
+              <div id="viewersPokeName" style="font-size: 18px; font-weight: 900; color: #fff; margin-top: 4px; cursor: pointer;" onclick="openPokemonPicker('viewers')">피카츄</div>
               <div id="viewersPokeTypes" style="display: flex; gap: 4px; margin: 4px 0 8px;"></div>
               
               <!-- Held Item Select Dropdown -->
@@ -3277,6 +2995,17 @@
                 </button>
               </div>
 
+              <!-- Streamer Mega Evolution Toggle (Shown only if holding mega stone & not yet mega evolved) -->
+              <div id="streamerMegaToggleContainer" style="display: none; margin-bottom: 2px;">
+                <button type="button" id="streamerMegaToggleBtn" class="poke-mega-btn" onclick="toggleStreamerMega()">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 16px;">🧬</span>
+                    <span id="streamerMegaBtnTitle" style="font-weight: 800; font-size: 12px; color: #fff;">메가진화 (MEGA EVOLUTION)</span>
+                  </div>
+                  <span id="streamerMegaPill" class="mega-pill-badge off">OFF</span>
+                </button>
+              </div>
+
               <!-- Streamer 4 Move Buttons Deck -->
               <div id="arenaMoveButtonsDeck" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
                 <!-- 4 Move Buttons dynamically populated -->
@@ -3419,6 +3148,591 @@
           <span>치지직 방송 연결하기</span>
         </button>
       </div>
+    </div>
+  </div>
+
+  <!-- ⚙️ Slide-out Left Settings Drawer (좌측 서랍형 상세 설정) -->
+  <div id="settingsDrawerBackdrop" class="drawer-backdrop" onclick="closeSettingsDrawer()"></div>
+  <div id="settingsDrawer" class="drawer-panel-left">
+    <div class="drawer-header">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 20px;">⚙️</span>
+        <div>
+          <div style="font-weight: 800; font-size: 15px; color: #fff;">상세 설정 & 옵션</div>
+          <div id="settingsDrawerSubTitle" style="font-size: 11px; color: var(--text-sub);">추첨, 룰렛, 투표의 세부 옵션을 설정하세요</div>
+        </div>
+      </div>
+      <button type="button" class="modal-close-btn" onclick="closeSettingsDrawer()">✕</button>
+    </div>
+
+    <!-- Inner Tab Buttons (추첨 / 룰렛 / 투표 / 미니게임) -->
+    <div style="display: flex; background: #141b2b; border-bottom: 1px solid var(--border-color); padding: 8px 16px; gap: 8px; flex-wrap: wrap;">
+      <button type="button" id="drawerTabRaffleBtn" class="sub-tab-btn active" onclick="switchSettingsDrawerTab('raffle')">
+        🎟️ 추첨 설정
+      </button>
+      <button type="button" id="drawerTabRouletteBtn" class="sub-tab-btn" onclick="switchSettingsDrawerTab('roulette')">
+        🎰 룰렛 설정
+      </button>
+      <button type="button" id="drawerTabPollBtn" class="sub-tab-btn" onclick="switchSettingsDrawerTab('poll')">
+        📊 투표 설정
+      </button>
+      <button type="button" id="drawerTabGameBtn" class="sub-tab-btn" onclick="switchSettingsDrawerTab('game')">
+        🎮 미니게임 설정
+      </button>
+    </div>
+
+    <!-- Scrollable Drawer Content -->
+    <div style="flex: 1; overflow-y: auto; padding: 18px 20px; display: flex; flex-direction: column; gap: 16px;">
+      <!-- Section 1: Raffle Settings Content -->
+      <div id="drawerRaffleContent">
+        <div class="panel-title" style="font-size: 13px; margin-bottom: 12px;">🎯 추첨 대상 및 조건 필터</div>
+        
+        <!-- Filter Chips -->
+        <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px;">
+          <button type="button" class="filter-chip-btn active" id="chipAllToggle" onclick="setFilterMode('all')" style="width: 100%;">
+            <span class="chip-indicator"></span>
+            <span>👥 전체 참여자</span>
+          </button>
+          <button type="button" class="filter-chip-btn" id="chipKeywordToggle" onclick="toggleFilter('keyword')" style="width: 100%;">
+            <span class="chip-indicator"></span>
+            <span>💬 참여 키워드 필터</span>
+            <span id="keywordChipBadge" class="chip-badge" style="display: none;"></span>
+          </button>
+          <button type="button" class="filter-chip-btn" id="chipDonorToggle" onclick="toggleFilter('donor')" style="width: 100%;">
+            <span class="chip-indicator"></span>
+            <span>🧀 치즈 후원자 필터</span>
+          </button>
+          <button type="button" class="filter-chip-btn" id="chipSubToggle" onclick="toggleFilter('sub')" style="width: 100%;">
+            <span class="chip-indicator"></span>
+            <span>⭐ 구독자 필터</span>
+          </button>
+          <button type="button" class="filter-chip-btn" id="chipExcludeToggle" onclick="toggleExcludePanel()" style="width: 100%;">
+            <span>🚫 중복 방지 & 제외 관리</span>
+            <span id="excludeBadge" class="chip-badge">기본 중복제외 ON</span>
+          </button>
+        </div>
+
+        <!-- Detail Panel 0: Participation Keyword Filter -->
+        <div id="keywordFilterPanel" class="filter-accordion-panel" style="display: none;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <span style="font-size: 12px; font-weight: 800; color: var(--chzzk-green);">💬 특정 참여 키워드 조건 설정</span>
+            <button type="button" class="btn-chip btn-chip-secondary" onclick="toggleFilter('keyword')">✕ 끄기</button>
+          </div>
+          <div class="form-group">
+            <label>참여 키워드 입력 (예: !추첨, !참여, 1번)</label>
+            <input type="text" id="keywordInput" placeholder="예: !추첨, !참여" style="margin-bottom: 8px;">
+            <div class="radio-group">
+              <label class="radio-label">
+                <input type="radio" name="keywordMatchMode" value="exact" checked> 완전 일치 ("!추첨" 단독)
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="keywordMatchMode" value="partial"> 부분 일치 ("!추첨합니다" 포함)
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detail Panel 1: Cheese Donator Filter -->
+        <div id="donorFilterPanel" class="filter-accordion-panel" style="display: none;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <span style="font-size: 12px; font-weight: 800; color: var(--chzzk-green);">🧀 치즈 후원자 전용 추첨 세부 조건</span>
+            <button type="button" class="btn-chip btn-chip-secondary" onclick="toggleFilter('donor')">✕ 끄기</button>
+          </div>
+          <div class="form-group">
+            <label>최소 후원 등급 기준</label>
+            <select id="donorLevelSelect">
+              <option value="1">일반 후원자 이상 (치즈 후원 배지/팬 배지)</option>
+              <option value="2">🔥 10만 치즈 이상 후원자 (LV2+)</option>
+              <option value="3">🔥 100만 치즈 이상 후원자 (LV3+)</option>
+              <option value="4">💖 1,000만 치즈 이상 후원자 (LV4+)</option>
+              <option value="5">✨ 1억 치즈 이상 후원자 (LV5+)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Detail Panel 2: Subscriber Filter -->
+        <div id="subFilterPanel" class="filter-accordion-panel" style="display: none;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <span style="font-size: 12px; font-weight: 800; color: var(--chzzk-green);">⭐ 구독자 전용 추첨 세부 조건</span>
+            <button type="button" class="btn-chip btn-chip-secondary" onclick="toggleFilter('sub')">✕ 끄기</button>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div class="form-group">
+              <label>최소 연속 구독 개월 수</label>
+              <input type="number" id="minSubMonths" min="0" placeholder="0 = 전체" value="0">
+            </div>
+            <div class="form-group">
+              <label>최소 구독 티어</label>
+              <select id="subTierSelect">
+                <option value="0">전체 티어</option>
+                <option value="1">1티어 이상</option>
+                <option value="2">2티어 전용</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detail Panel 3: Exclude Settings -->
+        <div id="excludeFilterPanel" class="filter-accordion-panel" style="display: none;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <span style="font-weight: 800; color: #fff; font-size: 13px;">🚫 중복 당첨 방지 및 제외 관리</span>
+            <button type="button" class="btn-chip btn-chip-secondary" onclick="toggleExcludePanel()">✕ 닫기</button>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <!-- 1. Auto Exclude Previous -->
+            <div style="background: #121826; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color);">
+              <div class="toggle-row">
+                <span class="toggle-label" style="font-size: 12px;">🔄 이전 회차 당첨자 중복 제외</span>
+                <input type="checkbox" id="autoExcludePreviousToggle" checked style="width: 16px; height: 16px; cursor: pointer;">
+              </div>
+            </div>
+
+            <!-- 2. Excel Exclude -->
+            <div style="background: #121826; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color);">
+              <div class="toggle-row">
+                <span class="toggle-label" style="font-size: 12px;">📂 블랙리스트/제외 파일 업로드</span>
+                <input type="checkbox" id="fileExcludeToggle" style="width: 16px; height: 16px; cursor: pointer;">
+              </div>
+              <div id="fileExcludeBox" style="display: none; margin-top: 8px;">
+                <div class="file-drop-zone" onclick="document.getElementById('excludeFileInput').click()">
+                  <span id="fileDropText" style="font-size: 11px; color: var(--text-sub);">
+                    📁 엑셀/CSV/TXT 파일 클릭 업로드
+                  </span>
+                  <input type="file" id="excludeFileInput" accept=".csv, .txt" style="display: none;">
+                </div>
+                <div id="fileExcludeStatus" style="font-size: 11px; color: var(--chzzk-green); margin-top: 4px;"></div>
+              </div>
+            </div>
+
+            <!-- 3. Manual Exclude -->
+            <div style="background: #121826; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color);">
+              <div class="toggle-row">
+                <span class="toggle-label" style="font-size: 12px;">✍️ 특정 닉네임/UID 직접 입력 제외</span>
+                <input type="checkbox" id="manualExcludeToggle" style="width: 16px; height: 16px; cursor: pointer;">
+              </div>
+              <div id="manualExcludeBox" style="display: none; margin-top: 8px;">
+                <input type="text" id="tablePasteInput" placeholder="제외할 닉네임 또는 엑셀 복사열 붙여넣기 (Ctrl+V)" style="font-size: 11px; padding: 6px 10px; margin-bottom: 6px;">
+                <div style="max-height: 80px; overflow-y: auto;">
+                  <table style="font-size: 11px;">
+                    <tbody id="excludeRulesBody"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Roulette Settings Content -->
+      <div id="drawerRouletteContent" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <!-- Sub Tabs: Manual vs Cheese Donation -->
+          <div class="sub-tabs" style="margin-bottom: 0; flex: 1;">
+            <button type="button" id="rouletteManualTabBtn" class="sub-tab-btn active">✍️ 수동 항목 입력</button>
+            <button type="button" id="rouletteDonationTabBtn" class="sub-tab-btn">🧀 치즈 도네이션 연동</button>
+          </div>
+        </div>
+
+        <!-- Quick Actions & Duration in Drawer -->
+        <div style="display: flex; align-items: center; justify-content: space-between; background: #121826; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 12px;">
+          <span style="font-size: 12px; color: var(--text-sub); font-weight: 700;">⏱️ 회전 시간</span>
+          <select id="spinDurationSelect" style="width: auto; padding: 4px 10px; font-size: 12px; background: #080c14; border: 1px solid var(--border-color); color: #fff; border-radius: 6px;">
+            <option value="3">⚡ 빠르게 (3초)</option>
+            <option value="5" selected>🎯 표준 (5초)</option>
+            <option value="8">🔥 극적인 긴장감 (8초)</option>
+          </select>
+        </div>
+
+        <!-- Manual Mode Items Box -->
+        <div id="rouletteManualBox">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label style="margin-bottom: 0; font-size: 13px; font-weight: 700;">룰렛 항목 목록 (칸별 직접 관리)</label>
+            <span id="manualItemCount" style="color: var(--chzzk-green); font-size: 11px; font-weight: 700;">총 0개 항목</span>
+          </div>
+
+          <!-- Excel/CSV Import & Export Action Bar -->
+          <div style="display: flex; gap: 6px; margin-bottom: 8px;">
+            <input type="file" id="rouletteImportFileInput" accept=".csv, .xlsx, .xls, .txt, .tsv" style="display: none;">
+            <button type="button" id="importRouletteFileBtn" class="btn-chip" style="flex: 1.2; padding: 6px 10px; font-size: 11px; background: rgba(0, 255, 163, 0.12); color: var(--chzzk-green); border-color: rgba(0, 255, 163, 0.35); font-weight: 700;">
+              📂 엑셀/CSV 불러오기
+            </button>
+            <button type="button" id="exportRouletteItemsBtn" class="btn-chip btn-chip-secondary" style="flex: 1; padding: 6px 10px; font-size: 11px; font-weight: 700;">
+              💾 엑셀 저장
+            </button>
+            <button type="button" id="downloadRouletteTemplateBtn" class="btn-chip btn-chip-secondary" style="padding: 6px 8px; font-size: 11px;" title="룰렛 항목 엑셀 샘플 양식 다운로드">
+              📄 양식
+            </button>
+          </div>
+
+          <!-- Dynamic Interactive Item Rows Container -->
+          <div id="rouletteItemsContainer" class="roulette-items-list" style="max-height: 200px;">
+            <!-- Dynamically populated rows -->
+          </div>
+
+          <div style="display: flex; gap: 8px; margin-top: 8px; margin-bottom: 16px;">
+            <button type="button" id="addRouletteRowBtn" class="btn btn-secondary" style="flex: 1; padding: 6px 10px; font-size: 12px;">
+              ➕ 새 항목 칸 추가 (Enter)
+            </button>
+            <button type="button" id="clearAllRouletteRowsBtn" class="btn-chip btn-chip-danger" style="padding: 6px 10px; font-size: 12px;">
+              🗑️ 전체 삭제
+            </button>
+          </div>
+        </div>
+
+        <!-- Cheese Donation Mode Items Box -->
+        <div id="rouletteDonationBox" style="display: none;">
+          <div style="background: rgba(0, 255, 163, 0.06); border: 1px solid rgba(0, 255, 163, 0.2); border-radius: 8px; padding: 8px 10px; margin-bottom: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px;">
+              <div style="font-size: 11px; color: var(--chzzk-green); font-weight: 700;">
+                📡 치즈 후원 메시지 실시간 룰렛 연동
+              </div>
+              <span id="rouletteDonationStatusBadge" class="live-badge-pill offline" style="font-size: 10px; padding: 2px 6px;">대기 중</span>
+            </div>
+            <div style="font-size: 10px; color: var(--text-sub); line-height: 1.3;">
+              <b>수집 시작</b> 버튼을 누른 동안 후원된 치즈 메시지만 룰렛 원판에 실시간 등록됩니다.
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label>최소 후원 치즈 기준</label>
+              <select id="minDonationCheeseSelect">
+                <option value="1">전체 후원 (1치즈+)</option>
+                <option value="1000" selected>1,000 치즈 이상</option>
+                <option value="5000">5,000 치즈 이상</option>
+                <option value="10000">10,000 치즈 이상</option>
+                <option value="50000">50,000 치즈 이상</option>
+                <option value="100000">100,000 치즈 이상</option>
+              </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+              <label>수집 제한 시간</label>
+              <select id="rouletteDonationDurationSelect">
+                <option value="0" selected>⏳ 무제한</option>
+                <option value="30">⚡ 30초</option>
+                <option value="60">⏱️ 1분</option>
+                <option value="120">⏱️ 2분</option>
+                <option value="180">⏱️ 3분</option>
+                <option value="300">⏱️ 5분</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="toggle-row" style="margin-bottom: 8px;">
+            <span class="toggle-label" style="font-size: 11px;">💰 후원 금액 비례 칸 크기 확장</span>
+            <input type="checkbox" id="donationWeightToggle" checked style="width: 16px; height: 16px; cursor: pointer;">
+          </div>
+
+          <div style="display: flex; gap: 6px; margin-bottom: 8px;">
+            <button type="button" id="startRouletteDonationBtn" class="btn btn-primary" style="flex: 1; padding: 7px 12px; font-size: 12px; font-weight: 800;">
+              ▶️ 수집 시작
+            </button>
+            <button type="button" id="pauseRouletteDonationBtn" class="btn btn-secondary" style="display: none; padding: 7px 10px; font-size: 11px;">
+              ⏸️ 일시 정지
+            </button>
+            <button type="button" id="stopRouletteDonationBtn" class="btn btn-danger" style="display: none; padding: 7px 10px; font-size: 11px; font-weight: 800;">
+              ⏹️ 수집 마감
+            </button>
+            <button type="button" id="clearDonationsBtn" class="btn-chip btn-chip-danger" style="padding: 7px 10px; font-size: 11px;">
+              🔄 초기화
+            </button>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px; margin-bottom: 4px;">
+            <span style="font-size: 11px; font-weight: 700; color: var(--text-sub);">수집된 후원 (<span id="donationItemCount" style="color: var(--chzzk-green);">0</span>건)</span>
+            <span id="rouletteDonationTimerDisplay" style="font-family: 'Outfit'; font-weight: 700; color: #ffd700; font-size: 11px; display: none;">남은 시간: 00:00</span>
+          </div>
+          <div id="donationFeedList" style="max-height: 80px; overflow-y: auto; background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; padding: 6px; font-size: 11px; margin-bottom: 14px;">
+            <div style="text-align: center; color: var(--text-sub); padding: 12px 0;">도네 수집 시작 버튼을 누르면 실시간 후원이 수집됩니다.</div>
+          </div>
+        </div>
+
+        <!-- Roulette Toggles & History Table -->
+        <div style="border-top: 1px solid var(--border-color); padding-top: 12px;">
+          <div class="panel-title" style="font-size: 13px; margin-bottom: 8px;">⚙️ 룰렛 세부 옵션 및 히스토리</div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;">
+            <div class="toggle-row" style="margin-bottom: 0;">
+              <span class="toggle-label" style="font-size: 11px;">🗑️ 당첨 항목 자동 제거</span>
+              <input type="checkbox" id="autoRemoveWonItemToggle" style="width: 16px; height: 16px; cursor: pointer;">
+            </div>
+
+            <div class="toggle-row" style="margin-bottom: 0;">
+              <span class="toggle-label" style="font-size: 11px;">🔊 회전 틱 사운드</span>
+              <input type="checkbox" id="rouletteSoundToggle" checked style="width: 16px; height: 16px; cursor: pointer;">
+            </div>
+          </div>
+
+          <div style="margin-top: 6px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+              <span style="font-size: 11px; font-weight: 700; color: var(--text-sub);">📜 룰렛 당첨 히스토리</span>
+              <div style="display: flex; gap: 4px;">
+                <button type="button" id="exportRouletteHistoryBtn" class="btn-chip btn-chip-primary" style="padding: 2px 6px; font-size: 10px; background: #107c41; color: #fff;">📊 엑셀 저장</button>
+                <button type="button" id="clearRouletteHistoryBtn" class="btn-chip btn-chip-secondary" style="padding: 2px 6px; font-size: 10px;">초기화</button>
+              </div>
+            </div>
+            <div class="table-container" style="max-height: 120px;">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width: 45px;">회차</th>
+                    <th>당첨 항목</th>
+                    <th style="width: 75px;">시간</th>
+                  </tr>
+                </thead>
+                <tbody id="rouletteHistoryBody">
+                  <tr><td colspan="3" style="text-align:center; color: var(--text-sub); font-size: 11px; padding: 14px 0;">아직 룰렛 결과가 없습니다.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Poll Settings Content -->
+      <div id="drawerPollContent" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <!-- Sub Tabs: General Chat vs Cheese Donation -->
+          <div class="sub-tabs" style="margin-bottom: 0; flex: 1;">
+            <button type="button" id="pollModeChatTabBtn" class="sub-tab-btn active">✍️ 일반 채팅 투표</button>
+            <button type="button" id="pollModeCheeseTabBtn" class="sub-tab-btn">🧀 치즈 도네이션 투표</button>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; justify-content: space-between; background: #121826; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 12px;">
+          <span style="font-size: 12px; color: var(--text-sub); font-weight: 700;">⏱️ 타이머</span>
+          <select id="pollDurationSelect" style="width: auto; padding: 4px 10px; font-size: 12px; background: #080c14; border: 1px solid var(--border-color); color: #fff; border-radius: 6px;">
+            <option value="0" selected>⏳ 무제한 (수동 마감)</option>
+            <option value="30">⚡ 30초</option>
+            <option value="60">⏱️ 1분</option>
+            <option value="120">⏱️ 2분</option>
+            <option value="180">⏱️ 3분</option>
+            <option value="300">⏱️ 5분</option>
+          </select>
+        </div>
+
+        <!-- Question & Presets Row -->
+        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 10px; padding: 12px; margin-bottom: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+            <label style="margin-bottom: 0; font-size: 13px; font-weight: 800; color: #fff;">투표 주제 (질문)</label>
+            <div style="display: flex; align-items: center; gap: 4px;">
+              <button type="button" class="btn-chip btn-chip-secondary" id="presetPollOxBtn" style="padding: 2px 6px; font-size: 10px;">⭕ O / ❌ X</button>
+              <button type="button" class="btn-chip btn-chip-secondary" id="presetPollYesNoBtn" style="padding: 2px 6px; font-size: 10px;">👍 찬성 / 👎 반대</button>
+              <button type="button" class="btn-chip btn-chip-secondary" id="presetPoll123Btn" style="padding: 2px 6px; font-size: 10px;">1 / 2 / 3번</button>
+            </div>
+          </div>
+          <input type="text" id="pollTitleInput" placeholder="예: 오늘 2부 게임 뭐할까요?" value="오늘 2부 콘텐츠 무엇을 할까요?" style="font-weight: 700; width: 100%;">
+        </div>
+
+        <!-- Options List -->
+        <div style="margin-bottom: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <label style="margin-bottom: 0; font-size: 13px; font-weight: 700;">선택지 목록 (2~10개)</label>
+            <span id="pollOptionCount" style="color: var(--chzzk-green); font-size: 11px; font-weight: 700;">총 2개 항목</span>
+          </div>
+
+          <div id="pollOptionsList" class="roulette-items-list" style="max-height: 140px;">
+            <!-- Dynamic option rows -->
+          </div>
+
+          <div style="display: flex; gap: 8px; margin-top: 8px;">
+            <button type="button" id="addPollOptionBtn" class="btn btn-secondary" style="flex: 1; padding: 6px 10px; font-size: 12px;">
+              ➕ 선택지 추가 (Enter)
+            </button>
+            <button type="button" id="clearAllPollOptionsBtn" class="btn-chip btn-chip-danger" style="padding: 6px 10px; font-size: 12px;">
+              🗑️ 전체 삭제
+            </button>
+          </div>
+        </div>
+
+        <!-- Mode Detailed Settings -->
+        <div id="pollChatConfigBox" style="margin-bottom: 14px;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+            <div class="form-group" style="margin-bottom: 6px;">
+              <label>투표 참여 방식</label>
+              <select id="pollVoteTypeSelect">
+                <option value="both" selected>🔢 번호 + 키워드 둘 다</option>
+                <option value="numberOnly">🔢 번호만 인정 (!1, 1, 2...)</option>
+                <option value="keywordOnly">🔤 선택지 키워드만</option>
+              </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 6px;">
+              <label>중복 투표 규정</label>
+              <select id="pollDuplicateModeSelect">
+                <option value="single" selected>🔒 1인 1표 고정</option>
+                <option value="allowRevote">🔄 재투표 허용 (변경)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top: 6px; margin-bottom: 0;">
+            <label>참여 자격 필터</label>
+            <select id="pollAudienceFilterSelect">
+              <option value="all" selected>👥 전체 시청자 누구나 참여</option>
+              <option value="subscriber">⭐ 구독자만 참여 가능</option>
+              <option value="donator">🧀 치즈 후원자만 참여 가능</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Cheese Config Box -->
+        <div id="pollCheeseConfigBox" style="display: none; margin-bottom: 14px;">
+          <div style="background: rgba(0, 255, 163, 0.06); border: 1px solid rgba(0, 255, 163, 0.2); border-radius: 8px; padding: 8px 10px; margin-bottom: 8px;">
+            <div style="font-size: 11px; color: var(--chzzk-green); font-weight: 700; margin-bottom: 2px;">
+              🧀 치즈 도네이션 배틀 투표
+            </div>
+            <div style="font-size: 10px; color: var(--text-sub); line-height: 1.3;">
+              시청자가 치즈 후원 시 메시지에 선택지 번호/키워드를 넣으면 해당 항목에 실시간 누적됩니다.
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label>최소 후원 치즈</label>
+              <select id="pollMinCheeseSelect">
+                <option value="1">전체 (1치즈+)</option>
+                <option value="1000" selected>1,000 치즈 이상</option>
+                <option value="5000">5,000 치즈 이상</option>
+                <option value="10000">10,000 치즈 이상</option>
+              </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+              <label>치즈 집계 방식</label>
+              <select id="pollCheeseWeightSelect">
+                <option value="amount" selected>💰 금액 비례 (1치즈=1표)</option>
+                <option value="count">🎟️ 건수 기준 (1도네=1표)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Control Buttons Bar -->
+        <div style="border-top: 1px solid var(--border-color); padding-top: 12px; display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; gap: 8px;">
+            <button type="button" id="startPollBtn" class="btn btn-primary" style="flex: 1; padding: 10px 16px; font-size: 13px; font-weight: 800;">
+              ▶️ 투표 시작
+            </button>
+            <button type="button" id="pausePollBtn" class="btn btn-secondary" style="display: none; padding: 10px 14px; font-size: 12px;">
+              ⏸️ 일시 정지
+            </button>
+            <button type="button" id="stopPollBtn" class="btn btn-danger" style="display: none; padding: 10px 14px; font-size: 12px; font-weight: 800;">
+              ⏹️ 투표 마감
+            </button>
+            <button type="button" id="resetPollBtn" class="btn-chip btn-chip-secondary" style="padding: 10px 14px; font-size: 12px;">
+              🔄 초기화
+            </button>
+          </div>
+
+          <div style="display: flex; gap: 6px; align-items: center; justify-content: space-between;">
+            <button type="button" id="convertPollToRouletteBtn" class="btn-chip" style="padding: 8px 12px; font-size: 11px; font-weight: 800; background: linear-gradient(135deg, #7928ca, #ff0080); color: #fff; border: none;" title="현재 투표 항목을 룰렛으로 전환">
+              <span>🎰 룰렛으로 전환</span>
+            </button>
+            <button type="button" id="exportPollSummaryBtn" class="btn-chip btn-chip-secondary" style="padding: 8px 10px; font-size: 11px;">
+              📊 결과 엑셀
+            </button>
+            <button type="button" id="exportPollVotersBtn" class="btn-chip btn-chip-secondary" style="padding: 8px 10px; font-size: 11px;">
+              👥 투표자 명단
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 4: Minigame Settings Content -->
+      <div id="drawerGameContent" style="display: none;">
+        <div class="panel-title" style="font-size: 13px; margin-bottom: 12px;">🎮 플레이할 미니게임 선택</div>
+
+        <!-- 2 Game Selector Toggle Cards -->
+        <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
+          <button type="button" id="drawerVoltorbSelectBtn" class="filter-chip-btn active" style="width: 100%; padding: 12px 16px; font-size: 13px; font-weight: 800; justify-content: flex-start;" onclick="switchMinigame('voltorb'); updateSettingsSummaryBadges();">
+            <span class="chip-indicator"></span>
+            <span>⚡ 찌리리공 뒤집기 (Voltorb Flip)</span>
+          </button>
+          <button type="button" id="drawerPokeBattleSelectBtn" class="filter-chip-btn" style="width: 100%; padding: 12px 16px; font-size: 13px; font-weight: 800; justify-content: flex-start;" onclick="switchMinigame('pokebattle'); updateSettingsSummaryBadges();">
+            <span class="chip-indicator"></span>
+            <span>⚔️ 포켓몬 배틀 (Pokemon Battle)</span>
+          </button>
+        </div>
+
+        <!-- Game 1: Voltorb Flip Quick Options -->
+        <div id="drawerVoltorbOptionsBox" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 10px; padding: 14px; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+            <span style="font-size: 12px; font-weight: 800; color: #ffd700;">⚡ 찌리리공 뒤집기 규칙 설정</span>
+            <span class="badge-tag" style="background: rgba(255, 215, 0, 0.15); color: #ffd700;">스트리머 vs 시청자</span>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label>🏆 매치 방식</label>
+              <select id="drawerGameMatchFormatSelect" onchange="syncVoltorbMatchFormat(this.value)">
+                <option value="single" selected>단판 승부 (1세트 결착)</option>
+                <option value="bo3">3판 2선승제 (BO3)</option>
+                <option value="bo5">5판 3선승제 (BO5)</option>
+                <option value="bo7">7판 4선승제 (BO7)</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label>⏱️ 턴 제한 시간</label>
+              <select id="drawerGameTurnDurationSelect" onchange="syncVoltorbTurnDuration(this.value)">
+                <option value="0">⏳ 무제한</option>
+                <option value="15">⚡ 15초</option>
+                <option value="20" selected>⏱️ 20초 (기본)</option>
+                <option value="30">⏱️ 30초</option>
+                <option value="45">⏱️ 45초</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Game 2: Pokemon Battle Quick Options -->
+        <div id="drawerPokeBattleOptionsBox" style="display: none; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 10px; padding: 14px; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+            <span style="font-size: 12px; font-weight: 800; color: #a855f7;">⚔️ 포켓몬 배틀 모드 & 규칙</span>
+            <span class="badge-tag" style="background: rgba(168, 85, 247, 0.15); color: #c084fc;">턴제 배틀</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label>⚔️ 배틀 모드</label>
+              <select id="drawerPokeBattleModeSelect" onchange="syncPokeBattleMode(this.value)">
+                <option value="3v3" selected>🔥 3v3 팀 엔트리 교체 배틀</option>
+                <option value="1v1">👑 1v1 단판 에이스 배틀</option>
+              </select>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label>⏱️ 시청자 턴 투표 시간</label>
+                <select id="drawerPokeVoteDurationSelect" onchange="syncPokeVoteDuration(this.value)">
+                  <option value="10">⚡ 10초 (초고속)</option>
+                  <option value="15">⚡ 15초</option>
+                  <option value="20">⏱️ 20초 (여유)</option>
+                  <option value="30" selected>⏱️ 30초 (기본)</option>
+                  <option value="45">⏱️ 45초</option>
+                  <option value="60">⏱️ 60초</option>
+                </select>
+              </div>
+              <div class="form-group" style="margin-bottom: 0;">
+                <label>⏱️ 스트리머 턴 시간</label>
+                <select id="drawerPokeStreamerDurationSelect" onchange="syncPokeStreamerDuration(this.value)">
+                  <option value="10">⚡ 10초 (초고속)</option>
+                  <option value="15">⚡ 15초</option>
+                  <option value="20">⏱️ 20초 (여유)</option>
+                  <option value="30" selected>⏱️ 30초 (기본)</option>
+                  <option value="45">⏱️ 45초</option>
+                  <option value="60">⏱️ 60초</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Drawer Footer -->
+    <div style="padding: 12px 20px; border-top: 1px solid var(--border-color); background: #141b2b; display: flex; justify-content: flex-end;">
+      <button type="button" class="btn btn-primary" style="padding: 8px 20px; font-size: 13px; font-weight: 800;" onclick="closeSettingsDrawer()">
+        ✓ 설정 완료 및 닫기
+      </button>
     </div>
   </div>
 
@@ -3961,6 +4275,7 @@
       chipAll.classList.toggle('active', isAll);
 
       updateFilteredStats();
+      if (typeof updateSettingsSummaryBadges === 'function') updateSettingsSummaryBadges();
     }
 
     function updateExcludeBadge() {
@@ -3982,6 +4297,7 @@
         excludeBadge.style.background = 'rgba(0, 255, 163, 0.2)';
         excludeBadge.style.color = 'var(--chzzk-green)';
       }
+      if (typeof updateSettingsSummaryBadges === 'function') updateSettingsSummaryBadges();
     }
 
     keywordInput.addEventListener('input', () => {
@@ -5278,11 +5594,362 @@
           }
         }
       }
+      updateSettingsSummaryBadges();
     }
     tabRaffleBtn.addEventListener('click', () => switchMainTab('raffle'));
     tabRouletteBtn.addEventListener('click', () => switchMainTab('roulette'));
     tabPollBtn.addEventListener('click', () => switchMainTab('poll'));
     if (tabGameBtn) tabGameBtn.addEventListener('click', () => switchMainTab('game'));
+
+    // ==========================================
+    // ⚙️ SLIDE-OUT LEFT SETTINGS DRAWER SYSTEM
+    // ==========================================
+    let currentDrawerTab = 'raffle';
+
+    function openSettingsDrawer(tab) {
+      const backdrop = document.getElementById('settingsDrawerBackdrop');
+      const drawer = document.getElementById('settingsDrawer');
+      if (!drawer || !backdrop) return;
+
+      let targetTab = tab;
+      if (!targetTab) {
+        if (tabRouletteBtn && tabRouletteBtn.classList.contains('active')) targetTab = 'roulette';
+        else if (tabPollBtn && tabPollBtn.classList.contains('active')) targetTab = 'poll';
+        else if (tabGameBtn && tabGameBtn.classList.contains('active')) targetTab = 'game';
+        else targetTab = 'raffle';
+      }
+
+      switchSettingsDrawerTab(targetTab);
+      backdrop.classList.add('active');
+      drawer.classList.add('active');
+    }
+
+    function closeSettingsDrawer() {
+      const backdrop = document.getElementById('settingsDrawerBackdrop');
+      const drawer = document.getElementById('settingsDrawer');
+      if (backdrop) backdrop.classList.remove('active');
+      if (drawer) drawer.classList.remove('active');
+      updateSettingsSummaryBadges();
+    }
+
+    function switchSettingsDrawerTab(tab) {
+      currentDrawerTab = tab;
+      const tabRaffle = document.getElementById('drawerTabRaffleBtn');
+      const tabRoulette = document.getElementById('drawerTabRouletteBtn');
+      const tabPoll = document.getElementById('drawerTabPollBtn');
+      const tabGame = document.getElementById('drawerTabGameBtn');
+
+      const contentRaffle = document.getElementById('drawerRaffleContent');
+      const contentRoulette = document.getElementById('drawerRouletteContent');
+      const contentPoll = document.getElementById('drawerPollContent');
+      const contentGame = document.getElementById('drawerGameContent');
+      const subTitle = document.getElementById('settingsDrawerSubTitle');
+
+      if (tabRaffle) tabRaffle.classList.toggle('active', tab === 'raffle');
+      if (tabRoulette) tabRoulette.classList.toggle('active', tab === 'roulette');
+      if (tabPoll) tabPoll.classList.toggle('active', tab === 'poll');
+      if (tabGame) tabGame.classList.toggle('active', tab === 'game');
+
+      if (contentRaffle) contentRaffle.style.display = tab === 'raffle' ? 'block' : 'none';
+      if (contentRoulette) contentRoulette.style.display = tab === 'roulette' ? 'block' : 'none';
+      if (contentPoll) contentPoll.style.display = tab === 'poll' ? 'block' : 'none';
+      if (contentGame) contentGame.style.display = tab === 'game' ? 'block' : 'none';
+
+      if (subTitle) {
+        if (tab === 'raffle') subTitle.innerText = '추첨 대상 필터, 키워드, 구독/후원 조건 및 중복 제외 설정';
+        else if (tab === 'roulette') subTitle.innerText = '룰렛 항목 목록 편집, 엑셀 불러오기, 치즈 연동 및 회전 옵션';
+        else if (tab === 'poll') subTitle.innerText = '실시간 투표 주제(질문), 선택지 목록, 참여 규칙 및 치즈 도네 투표';
+        else if (tab === 'game') subTitle.innerText = '미니게임 종목 선택 (찌리리공 뒤집기 / 포켓몬 배틀) 및 대결 옵션';
+      }
+
+      if (tab === 'roulette') {
+        if (typeof renderManualRouletteRows === 'function') renderManualRouletteRows();
+      } else if (tab === 'poll') {
+        if (typeof renderPollOptionsList === 'function') renderPollOptionsList();
+      }
+      updateSettingsSummaryBadges();
+    }
+
+    function updateSettingsSummaryBadges() {
+      // 1. Header Setting Button Text & Badge
+      const headerBtnLabel = document.getElementById('settingsBtnLabel');
+      const headerSummaryBadge = document.getElementById('settingsActiveSummaryBadge');
+
+      const isRaffle = tabRaffleBtn && tabRaffleBtn.classList.contains('active');
+      const isRoulette = tabRouletteBtn && tabRouletteBtn.classList.contains('active');
+      const isPoll = tabPollBtn && tabPollBtn.classList.contains('active');
+      const isGame = tabGameBtn && tabGameBtn.classList.contains('active');
+
+      if (headerBtnLabel) {
+        if (isRaffle) headerBtnLabel.innerText = '추첨 설정';
+        else if (isRoulette) headerBtnLabel.innerText = '룰렛 설정';
+        else if (isPoll) headerBtnLabel.innerText = '투표 설정';
+        else if (isGame) headerBtnLabel.innerText = '게임 설정';
+        else headerBtnLabel.innerText = '상세 설정';
+      }
+
+      if (headerSummaryBadge) {
+        if (isRaffle) {
+          if (isKeywordFilterActive && keywordInput && keywordInput.value.trim()) {
+            headerSummaryBadge.innerText = `"${keywordInput.value.trim()}"`;
+          } else if (isDonorFilterActive) {
+            headerSummaryBadge.innerText = '후원자';
+          } else if (isSubFilterActive) {
+            headerSummaryBadge.innerText = '구독자';
+          } else {
+            headerSummaryBadge.innerText = '전체 참여자';
+          }
+        } else if (isRoulette) {
+          if (currentRouletteMode === 'manual') {
+            const count = manualRouletteRows ? manualRouletteRows.length : 0;
+            headerSummaryBadge.innerText = `항목 ${count}개`;
+          } else {
+            headerSummaryBadge.innerText = `도네 연동 (${donationRouletteList ? donationRouletteList.length : 0}건)`;
+          }
+        } else if (isPoll) {
+          const count = (typeof pollOptions !== 'undefined' && pollOptions) ? pollOptions.length : 0;
+          headerSummaryBadge.innerText = `선택지 ${count}개`;
+        } else if (isGame) {
+          if (typeof currentMinigame !== 'undefined' && currentMinigame === 'pokebattle') {
+            headerSummaryBadge.innerText = (typeof pokeBattleMode !== 'undefined' && pokeBattleMode === '3v3') ? '포켓몬 3v3' : '포켓몬 1v1';
+          } else {
+            headerSummaryBadge.innerText = '찌리리공';
+          }
+        } else {
+          headerSummaryBadge.innerText = '설정';
+        }
+      }
+
+      // 2. Raffle View Summary Bar
+      const raffleSummary = document.getElementById('raffleActiveFilterSummary');
+      const raffleExclude = document.getElementById('raffleExcludeSummaryBadge');
+      if (raffleSummary) {
+        let filters = [];
+        if (isKeywordFilterActive && keywordInput && keywordInput.value.trim()) {
+          filters.push(`💬 키워드: "${keywordInput.value.trim()}"`);
+        }
+        if (isDonorFilterActive) {
+          const lvl = donorLevelSelect ? donorLevelSelect.value : '1';
+          filters.push(`🧀 후원자 LV${lvl}+`);
+        }
+        if (isSubFilterActive) {
+          const months = minSubMonths ? (parseInt(minSubMonths.value, 10) || 0) : 0;
+          const tier = subTierSelect ? subTierSelect.value : '0';
+          filters.push(`⭐ 구독자 (${months > 0 ? months + '개월+' : '전체'}${tier !== '0' ? ', ' + tier + '티어+' : ''})`);
+        }
+        if (filters.length === 0) {
+          raffleSummary.innerText = '👥 전체 참여자';
+        } else {
+          raffleSummary.innerText = filters.join(' + ');
+        }
+      }
+      if (raffleExclude) {
+        const count = (autoExcludePreviousToggle && autoExcludePreviousToggle.checked ? 1 : 0) +
+                      (fileExcludeToggle && fileExcludeToggle.checked ? 1 : 0) +
+                      (manualExcludeToggle && manualExcludeToggle.checked ? 1 : 0);
+        if (count === 0) {
+          raffleExclude.innerText = '제외 없음';
+          raffleExclude.style.background = 'rgba(255, 255, 255, 0.08)';
+          raffleExclude.style.color = 'var(--text-sub)';
+        } else if (autoExcludePreviousToggle && autoExcludePreviousToggle.checked && count === 1) {
+          raffleExclude.innerText = '기본 중복제외 ON';
+          raffleExclude.style.background = 'rgba(0, 255, 163, 0.15)';
+          raffleExclude.style.color = 'var(--chzzk-green)';
+        } else {
+          raffleExclude.innerText = `${count}개 제외 규칙 적용 중`;
+          raffleExclude.style.background = 'rgba(0, 255, 163, 0.2)';
+          raffleExclude.style.color = 'var(--chzzk-green)';
+        }
+      }
+
+      // 3. Roulette View Summary Bar
+      const rouletteSummary = document.getElementById('rouletteSummaryTag');
+      const rouletteDuration = document.getElementById('rouletteDurationSummaryTag');
+      if (rouletteSummary) {
+        if (currentRouletteMode === 'manual') {
+          const count = manualRouletteRows ? manualRouletteRows.length : 0;
+          rouletteSummary.innerText = `✍️ 수동 항목 (${count}개 칸)`;
+        } else {
+          const count = donationRouletteList ? donationRouletteList.length : 0;
+          rouletteSummary.innerText = `🧀 치즈 도네이션 연동 (${count}건)`;
+        }
+      }
+      if (rouletteDuration && spinDurationSelect) {
+        rouletteDuration.innerText = `회전: ${spinDurationSelect.value}초`;
+      }
+
+      // 4. Poll View Summary Bar
+      const pollSummary = document.getElementById('pollActiveQuestionSummary');
+      const pollOptionsCountSummary = document.getElementById('pollOptionsCountSummary');
+      if (pollSummary && typeof pollTitleInput !== 'undefined' && pollTitleInput) {
+        const q = pollTitleInput.value.trim() || '투표 질문 미입력';
+        pollSummary.innerText = `질문: ${q}`;
+      }
+      if (pollOptionsCountSummary && typeof pollOptions !== 'undefined' && pollOptions) {
+        const modeText = (pollModeChatTabBtn && pollModeChatTabBtn.classList.contains('active')) ? '일반 채팅' : '치즈 도네';
+        pollOptionsCountSummary.innerText = `선택지 ${pollOptions.length}개 (${modeText})`;
+      }
+
+      // 5. Game View Summary Bar
+      const gameActiveSummary = document.getElementById('gameActiveSummaryTag');
+      const gameModeSummary = document.getElementById('gameModeSummaryBadge');
+      if (gameActiveSummary) {
+        if (typeof currentMinigame !== 'undefined' && currentMinigame === 'pokebattle') {
+          gameActiveSummary.innerText = '⚔️ 포켓몬 배틀';
+        } else {
+          gameActiveSummary.innerText = '⚡ 찌리리공 뒤집기';
+        }
+      }
+      if (gameModeSummary) {
+        if (typeof currentMinigame !== 'undefined' && currentMinigame === 'pokebattle') {
+          gameModeSummary.innerText = (typeof pokeBattleMode !== 'undefined' && pokeBattleMode === '3v3') ? '3v3 팀 엔트리 배틀' : '1v1 에이스 배틀';
+        } else {
+          const formatSelect = document.getElementById('gameMatchFormatSelect');
+          gameModeSummary.innerText = formatSelect ? formatSelect.options[formatSelect.selectedIndex]?.text.split('(')[0].trim() : '단판 승부';
+        }
+      }
+
+      // Drawer Minigame Toggle & Option box states
+      const drawerVoltorbBtn = document.getElementById('drawerVoltorbSelectBtn');
+      const drawerPokeBtn = document.getElementById('drawerPokeBattleSelectBtn');
+      const drawerVoltorbBox = document.getElementById('drawerVoltorbOptionsBox');
+      const drawerPokeBox = document.getElementById('drawerPokeBattleOptionsBox');
+      if (drawerVoltorbBtn && drawerPokeBtn) {
+        const isVoltorb = (typeof currentMinigame === 'undefined' || currentMinigame === 'voltorb');
+        drawerVoltorbBtn.classList.toggle('active', isVoltorb);
+        drawerPokeBtn.classList.toggle('active', !isVoltorb);
+        if (drawerVoltorbBox) drawerVoltorbBox.style.display = isVoltorb ? 'block' : 'none';
+        if (drawerPokeBox) drawerPokeBox.style.display = isVoltorb ? 'none' : 'block';
+      }
+
+      // Sync form values between Drawer and Main setup bar
+      const mainVoteDur = document.getElementById('pokeVoteDurationSelect');
+      const drawerVoteDur = document.getElementById('drawerPokeVoteDurationSelect');
+      if (mainVoteDur && drawerVoteDur && drawerVoteDur.value !== mainVoteDur.value) {
+        drawerVoteDur.value = mainVoteDur.value;
+      }
+      const mainStreamerDur = document.getElementById('pokeStreamerDurationSelect');
+      const drawerStreamerDur = document.getElementById('drawerPokeStreamerDurationSelect');
+      if (mainStreamerDur && drawerStreamerDur && drawerStreamerDur.value !== mainStreamerDur.value) {
+        drawerStreamerDur.value = mainStreamerDur.value;
+      }
+      const mainBattleMode = document.getElementById('pokeBattleModeSelect');
+      const drawerBattleMode = document.getElementById('drawerPokeBattleModeSelect');
+      if (mainBattleMode && drawerBattleMode && drawerBattleMode.value !== mainBattleMode.value) {
+        drawerBattleMode.value = pokeBattleMode || mainBattleMode.value;
+      }
+    }
+
+    // Synchronizers between Drawer and Main Game View
+    function syncVoltorbMatchFormat(val) {
+      const mainSelect = document.getElementById('gameMatchFormatSelect');
+      const drawerSelect = document.getElementById('drawerGameMatchFormatSelect');
+      if (mainSelect && mainSelect.value !== val) {
+        mainSelect.value = val;
+        mainSelect.dispatchEvent(new Event('change'));
+      }
+      if (drawerSelect && drawerSelect.value !== val) drawerSelect.value = val;
+      updateSettingsSummaryBadges();
+    }
+
+    function syncVoltorbTurnDuration(val) {
+      const mainSelect = document.getElementById('gameTurnDurationSelect');
+      const drawerSelect = document.getElementById('drawerGameTurnDurationSelect');
+      if (mainSelect && mainSelect.value !== val) {
+        mainSelect.value = val;
+        mainSelect.dispatchEvent(new Event('change'));
+      }
+      if (drawerSelect && drawerSelect.value !== val) drawerSelect.value = val;
+      updateSettingsSummaryBadges();
+    }
+
+    function syncPokeBattleMode(val) {
+      const mainSelect = document.getElementById('pokeBattleModeSelect');
+      const drawerSelect = document.getElementById('drawerPokeBattleModeSelect');
+      if (mainSelect && mainSelect.value !== val) {
+        mainSelect.value = val;
+        mainSelect.dispatchEvent(new Event('change'));
+      } else {
+        pokeBattleMode = val;
+        if (typeof renderPokeSetupPreview === 'function') renderPokeSetupPreview();
+      }
+      if (drawerSelect && drawerSelect.value !== val) drawerSelect.value = val;
+      updateSettingsSummaryBadges();
+    }
+
+    function syncPokeVoteDuration(val) {
+      const mainSelect = document.getElementById('pokeVoteDurationSelect');
+      const drawerSelect = document.getElementById('drawerPokeVoteDurationSelect');
+      if (mainSelect && mainSelect.value !== val) {
+        mainSelect.value = val;
+      }
+      if (drawerSelect && drawerSelect.value !== val) {
+        drawerSelect.value = val;
+      }
+      // If live battle in viewers_vote or faint_switch_viewers phase, dynamically adjust timer
+      if (typeof pokeBattleState !== 'undefined' && pokeBattleState) {
+        if (pokeBattleState.phase === 'viewers_vote') {
+          const newTotal = parseFloat(val) || 30.0;
+          const currentElapsed = pokeBattleState.viewersTimerTotal - pokeBattleState.viewersTimerRemaining;
+          pokeBattleState.viewersTimerTotal = newTotal;
+          pokeBattleState.viewersTimerRemaining = Math.max(0.5, newTotal - currentElapsed);
+          if (typeof renderViewersVotingTimer === 'function') renderViewersVotingTimer();
+        } else if (pokeBattleState.phase === 'faint_switch_viewers') {
+          const newTotal = parseFloat(val) || 30.0;
+          const currentElapsed = pokeBattleState.faintTimerTotal - pokeBattleState.faintTimerRemaining;
+          pokeBattleState.faintTimerTotal = newTotal;
+          pokeBattleState.faintTimerRemaining = Math.max(0.5, newTotal - currentElapsed);
+          if (typeof renderFaintTimerUI === 'function') renderFaintTimerUI();
+        }
+      }
+      showToast(`⏱️ 시청자 턴 투표 시간: ${val}초로 설정되었습니다.`, '⏱️');
+      updateSettingsSummaryBadges();
+    }
+
+    function syncPokeStreamerDuration(val) {
+      const mainSelect = document.getElementById('pokeStreamerDurationSelect');
+      const drawerSelect = document.getElementById('drawerPokeStreamerDurationSelect');
+      if (mainSelect && mainSelect.value !== val) {
+        mainSelect.value = val;
+      }
+      if (drawerSelect && drawerSelect.value !== val) {
+        drawerSelect.value = val;
+      }
+      // If live battle in streamer_turn or faint_switch_streamer phase, dynamically adjust timer
+      if (typeof pokeBattleState !== 'undefined' && pokeBattleState) {
+        if (pokeBattleState.phase === 'streamer_turn') {
+          const newTotal = parseFloat(val) || 30.0;
+          const currentElapsed = pokeBattleState.streamerTimerTotal - pokeBattleState.streamerTimerRemaining;
+          pokeBattleState.streamerTimerTotal = newTotal;
+          pokeBattleState.streamerTimerRemaining = Math.max(0.5, newTotal - currentElapsed);
+          if (typeof renderStreamerTimerUI === 'function') renderStreamerTimerUI();
+        } else if (pokeBattleState.phase === 'faint_switch_streamer') {
+          const newTotal = parseFloat(val) || 30.0;
+          const currentElapsed = pokeBattleState.faintTimerTotal - pokeBattleState.faintTimerRemaining;
+          pokeBattleState.faintTimerTotal = newTotal;
+          pokeBattleState.faintTimerRemaining = Math.max(0.5, newTotal - currentElapsed);
+          if (typeof renderFaintTimerUI === 'function') renderFaintTimerUI();
+        }
+      }
+      showToast(`⏱️ 스트리머 턴 제한 시간: ${val}초로 설정되었습니다.`, '⏱️');
+      updateSettingsSummaryBadges();
+    }
+
+    function syncPokeTurnDuration(val) {
+      syncPokeVoteDuration(val);
+    }
+
+    window.openSettingsDrawer = openSettingsDrawer;
+    window.closeSettingsDrawer = closeSettingsDrawer;
+    window.switchSettingsDrawerTab = switchSettingsDrawerTab;
+    window.updateSettingsSummaryBadges = updateSettingsSummaryBadges;
+    window.syncVoltorbMatchFormat = syncVoltorbMatchFormat;
+    window.syncVoltorbTurnDuration = syncVoltorbTurnDuration;
+    window.syncPokeBattleMode = syncPokeBattleMode;
+    window.syncPokeVoteDuration = syncPokeVoteDuration;
+    window.syncPokeStreamerDuration = syncPokeStreamerDuration;
+    window.syncPokeTurnDuration = syncPokeTurnDuration;
+
 
     function switchRouletteMode(mode) {
       currentRouletteMode = mode;
@@ -5590,6 +6257,7 @@
     function updateManualItemCount() {
       const items = getActiveRouletteItems();
       manualItemCountEl.innerText = `총 ${items.length}개 항목`;
+      if (typeof updateSettingsSummaryBadges === 'function') updateSettingsSummaryBadges();
     }
 
     function handleLiveDonation(nickname, msg, uid, amount, timeStr) {
@@ -6273,16 +6941,36 @@
         pollVoteUnitText.innerText = pollCheeseWeightSelect.value === 'amount' ? '치즈' : '표';
       }
       renderPollVisualBars();
+      if (typeof updateSettingsSummaryBadges === 'function') updateSettingsSummaryBadges();
     }
 
     pollModeChatTabBtn.addEventListener('click', () => switchPollMode('chat'));
     pollModeCheeseTabBtn.addEventListener('click', () => switchPollMode('cheese'));
+
+    if (pollTitleInput) {
+      pollTitleInput.addEventListener('input', () => {
+        if (typeof updateSettingsSummaryBadges === 'function') updateSettingsSummaryBadges();
+      });
+    }
+
+    if (spinDurationSelect) {
+      spinDurationSelect.addEventListener('change', () => {
+        if (typeof updateSettingsSummaryBadges === 'function') updateSettingsSummaryBadges();
+      });
+    }
+
+    if (pollVoteTypeSelect) {
+      pollVoteTypeSelect.addEventListener('change', () => {
+        if (typeof updateSettingsSummaryBadges === 'function') updateSettingsSummaryBadges();
+      });
+    }
 
     pollCheeseWeightSelect.addEventListener('change', () => {
       if (currentPollMode === 'cheese') {
         pollVoteUnitText.innerText = pollCheeseWeightSelect.value === 'amount' ? '치즈' : '표';
       }
       renderPollVisualBars();
+      if (typeof updateSettingsSummaryBadges === 'function') updateSettingsSummaryBadges();
     });
 
     function renderPollOptionsList() {
@@ -6325,6 +7013,7 @@
 
       pollOptionCount.innerText = `총 ${pollOptions.length}개 항목`;
       renderPollVisualBars();
+      if (typeof updateSettingsSummaryBadges === 'function') updateSettingsSummaryBadges();
     }
 
     function addPollOption(text = '', focus = false) {
@@ -7832,58 +8521,42 @@
     });
 
     // ==========================================
-    // ⚔️ POKEMON BATTLE ENGINE (3v3 TEAM & 1v1 ACE & 20 HELD ITEMS)
+    // ⚔️ POKEMON BATTLE ENGINE (3v3 TEAM & 348 ITEMS & 87 MEGA EVOLUTIONS)
     // ==========================================
-    const HELD_ITEMS = [
-      { id: 'none', name: '없음', emoji: '⚪', desc: '지닌 도구 없음' },
-      { id: 'life_orb', name: '생명의구슬', emoji: '🔴', desc: '기술 위력 1.3배, 공격 시 최대 HP 10% 반동 피해' },
-      { id: 'focus_sash', name: '기합의띠', emoji: '🥋', desc: 'HP 100%에서 일격사 방지 (HP 1로 1회 생존)' },
-      { id: 'leftovers', name: '먹어남은음식', emoji: '🍎', desc: '매 턴 종료 시 최대 HP의 1/16 자동 지속 회복' },
-      { id: 'choice_scarf', name: '구애스카프', emoji: '🧣', desc: '스피드 1.5배 상승, 첫 사용 기술로 고정' },
-      { id: 'choice_band', name: '구애머리띠', emoji: '🥊', desc: '물리 공격력 1.5배 상승, 첫 기술 고정' },
-      { id: 'choice_specs', name: '구애안경', emoji: '👓', desc: '특수 공격력 1.5배 상승, 첫 기술 고정' },
-      { id: 'assault_vest', name: '돌격조끼', emoji: '🦺', desc: '특수 방어력 1.5배 상승, 변화기 사용 불가' },
-      { id: 'sitrus_berry', name: '자뭉열매', emoji: '🍋', desc: 'HP 50% 이하 피격 시 최대 HP 25% 즉시 1회 회복' },
-      { id: 'lum_berry', name: '리샘열매', emoji: '🫐', desc: '화상/마비 등 상태이상 발생 시 즉시 1회 완치' },
-      { id: 'expert_belt', name: '달인의띠', emoji: '🥋', desc: '효과 굉장한 약점 기술 위력 1.2배 상승' },
-      { id: 'rocky_helmet', name: '울퉁불퉁멧', emoji: '🪖', desc: '직접 접촉 피격 시 상대에게 최대 HP 1/6 반사 피해' },
-      { id: 'eviolite', name: '진화의휘석', emoji: '🛡️', desc: '미진화 포켓몬 방어/특수방어 1.5배 상승' },
-      { id: 'scope_lens', name: '초점렌즈', emoji: '🎯', desc: '급소(크리티컬) 공격 확률 대폭 상승' },
-      { id: 'kings_rock', name: '왕의징표석', emoji: '👑', desc: '공격 명중 시 10% 확률로 상대 풀죽음 유발' },
-      { id: 'black_sludge', name: '검은진흙', emoji: '🧪', desc: '독 타입 매 턴 HP 1/16 회복 (타 타입 1/8 피해)' },
-      { id: 'big_root', name: '큰뿌리', emoji: '🌿', desc: '흡수 기술 HP 회복량 1.3배 상승' },
-      { id: 'white_herb', name: '하양허브', emoji: '🌱', desc: '능력치 랭크 다운 발생 시 1회 원상 복구' },
-      { id: 'weakness_policy', name: '약점보험', emoji: '💥', desc: '약점 피격 시 공격/특수공격 2랭크 상승' },
-      { id: 'focus_band', name: '기합의머리띠', emoji: '🎗️', desc: '기절 위기 시 10% 확률로 HP 1 생존' }
+    var allPokemonData = [];
+    var allPokemonItems = [];
+    var allMegaEvolutions = [];
+    var pokeTypeChart = {};
+
+    var currentMinigame = 'voltorb';
+    var pokeBattleMode = '3v3'; // '3v3' or '1v1'
+    var streamerSetupSlotIdx = 0;
+    var viewersSetupSlotIdx = 0;
+    var pokePickerTarget = 'streamer';
+    var pokePickerSlotIdx = 0;
+    var currentPokeTypeFilter = 'all';
+
+    var streamerTeamHasMegaEvolved = false;
+    var viewersTeamHasMegaEvolved = false;
+    var streamerMegaSelected = false;
+
+    var streamerTeam = [
+      { pokemon: null, item: 'charizardite_x', currentHP: 0, maxHP: 0, fainted: false, isMega: false, choiceMove: null, itemUsed: false, rankAtk: 0, rankSpA: 0 },
+      { pokemon: null, item: 'gengarite', currentHP: 0, maxHP: 0, fainted: false, isMega: false, choiceMove: null, itemUsed: false, rankAtk: 0, rankSpA: 0 },
+      { pokemon: null, item: 'focus_sash', currentHP: 0, maxHP: 0, fainted: false, isMega: false, choiceMove: null, itemUsed: false, rankAtk: 0, rankSpA: 0 }
     ];
 
-    let allPokemonData = [];
-    let pokeTypeChart = {};
-    let currentMinigame = 'voltorb';
-    let pokeBattleMode = '3v3'; // '3v3' or '1v1'
-    let streamerSetupSlotIdx = 0;
-    let viewersSetupSlotIdx = 0;
-    let pokePickerTarget = 'streamer';
-    let pokePickerSlotIdx = 0;
-    let currentPokeTypeFilter = 'all';
-
-    let streamerTeam = [
-      { pokemon: null, item: 'life_orb', currentHP: 0, maxHP: 0, fainted: false, choiceMove: null, itemUsed: false, rankAtk: 0, rankSpA: 0 },
-      { pokemon: null, item: 'choice_scarf', currentHP: 0, maxHP: 0, fainted: false, choiceMove: null, itemUsed: false, rankAtk: 0, rankSpA: 0 },
-      { pokemon: null, item: 'focus_sash', currentHP: 0, maxHP: 0, fainted: false, choiceMove: null, itemUsed: false, rankAtk: 0, rankSpA: 0 }
+    var viewersTeam = [
+      { pokemon: null, item: 'focus_sash', currentHP: 0, maxHP: 0, fainted: false, isMega: false, choiceMove: null, itemUsed: false, rankAtk: 0, rankSpA: 0 },
+      { pokemon: null, item: 'blastoisinite', currentHP: 0, maxHP: 0, fainted: false, isMega: false, choiceMove: null, itemUsed: false, rankAtk: 0, rankSpA: 0 },
+      { pokemon: null, item: 'choice_band', currentHP: 0, maxHP: 0, fainted: false, isMega: false, choiceMove: null, itemUsed: false, rankAtk: 0, rankSpA: 0 }
     ];
 
-    let viewersTeam = [
-      { pokemon: null, item: 'focus_sash', currentHP: 0, maxHP: 0, fainted: false, choiceMove: null, itemUsed: false, rankAtk: 0, rankSpA: 0 },
-      { pokemon: null, item: 'leftovers', currentHP: 0, maxHP: 0, fainted: false, choiceMove: null, itemUsed: false, rankAtk: 0, rankSpA: 0 },
-      { pokemon: null, item: 'choice_band', currentHP: 0, maxHP: 0, fainted: false, choiceMove: null, itemUsed: false, rankAtk: 0, rankSpA: 0 }
-    ];
+    var streamerActiveIdx = 0;
+    var viewersActiveIdx = 0;
+    var streamerActionTab = 'moves'; // 'moves' or 'switch'
 
-    let streamerActiveIdx = 0;
-    let viewersActiveIdx = 0;
-    let streamerActionTab = 'moves'; // 'moves' or 'switch'
-
-    let pokeBattleState = {
+    var pokeBattleState = {
       active: false,
       round: 1,
       phase: 'idle',
@@ -7919,17 +8592,19 @@
         if (subTabPokeBattleBtn) subTabPokeBattleBtn.classList.remove('active');
         if (voltorbSection) voltorbSection.style.display = 'flex';
         if (pokeBattleSection) pokeBattleSection.style.display = 'none';
-        if (bgCharGame) bgCharGame.style.backgroundImage = "url('voltorb-bg.png')";
       } else {
         if (subTabPokeBattleBtn) subTabPokeBattleBtn.classList.add('active');
         if (subTabVoltorbBtn) subTabVoltorbBtn.classList.remove('active');
         if (voltorbSection) voltorbSection.style.display = 'none';
         if (pokeBattleSection) pokeBattleSection.style.display = 'flex';
-        if (bgCharGame) bgCharGame.style.backgroundImage = "url('simisear-bg.png')";
         if (allPokemonData.length === 0) {
           loadPokemonDataset();
+        } else {
+          if (typeof renderPokeSetupPreview === 'function') renderPokeSetupPreview();
         }
       }
+      if (bgCharGame) bgCharGame.style.backgroundImage = "url('voltorb-bg.png')";
+      if (typeof updateSettingsSummaryBadges === 'function') updateSettingsSummaryBadges();
     }
 
     async function loadPokemonDataset() {
@@ -7937,16 +8612,18 @@
         const res = await fetch('/pokemon_data.json');
         const data = await res.json();
         allPokemonData = data.pokemons || [];
+        allPokemonItems = data.items || [];
+        allMegaEvolutions = data.mega_evolutions || [];
         pokeTypeChart = data.type_chart || {};
       } catch (e) {
         console.warn('Failed to load pokemon_data.json', e);
       }
 
       if (allPokemonData.length > 0) {
-        // Defaults
+        // Default team setups
         streamerTeam[0].pokemon = allPokemonData.find(p => p.id === 6) || allPokemonData[0];   // Charizard
         streamerTeam[1].pokemon = allPokemonData.find(p => p.id === 94) || allPokemonData[1];  // Gengar
-        streamerTeam[2].pokemon = allPokemonData.find(p => p.id === 445) || allPokemonData[2]; // Garchomp or fallback
+        streamerTeam[2].pokemon = allPokemonData.find(p => p.id === 445) || allPokemonData[2]; // Garchomp
 
         viewersTeam[0].pokemon = allPokemonData.find(p => p.id === 25) || allPokemonData[3];  // Pikachu
         viewersTeam[1].pokemon = allPokemonData.find(p => p.id === 9) || allPokemonData[4];   // Blastoise
@@ -7958,15 +8635,99 @@
       }
     }
 
+    function getItemObj(itemId) {
+      if (!itemId || itemId === 'none') {
+        return { id: 'none', slug: 'none', name: '없음', emoji: '⚪', desc: '지닌 도구 없음', sprite: '' };
+      }
+      const found = allPokemonItems.find(x => x.id === itemId || x.slug === itemId);
+      if (found) return found;
+      return { id: itemId, slug: itemId, name: itemId, emoji: '🎒', desc: '', sprite: '' };
+    }
+
+    function getAvailableMegaEvolution(poke, itemId) {
+      if (!poke || !allMegaEvolutions || allMegaEvolutions.length === 0) return null;
+      const itemObj = getItemObj(itemId);
+      const candidates = allMegaEvolutions.filter(m => m.basePokeId === poke.id);
+      if (candidates.length === 0) return null;
+
+      for (const c of candidates) {
+        if (c.requiredStoneId && (c.requiredStoneId === itemObj.id || c.requiredStoneId === itemObj.slug)) {
+          return c;
+        }
+        const stoneName = (itemObj.name || '').toLowerCase();
+        const stoneSlug = (itemObj.slug || '').toLowerCase();
+        if (itemObj.categoryKo === '메가돌' || stoneName.includes('나이트') || stoneName.includes('스톤') || stoneSlug.includes('ite')) {
+          if (c.nameKo.includes('X') && (stoneName.includes('x') || stoneSlug.includes('-x'))) return c;
+          if (c.nameKo.includes('Y') && (stoneName.includes('y') || stoneSlug.includes('-y'))) return c;
+          if (!c.nameKo.includes('X') && !c.nameKo.includes('Y') && !stoneName.includes('x') && !stoneName.includes('y')) {
+            const baseName = c.nameKo.replace('메가', '').replace(/[XY]/g, '');
+            if (stoneName.includes(baseName)) return c;
+          }
+        }
+      }
+
+      if (poke.id === 384 && (itemObj.id.includes('rayquaza') || itemObj.name.includes('레쿠쟈'))) {
+        return candidates[0];
+      }
+      return null;
+    }
+
     function populateItemDropdowns() {
       const sSel = document.getElementById('streamerItemSelect');
       const vSel = document.getElementById('viewersItemSelect');
-      const optionsHtml = HELD_ITEMS.map(it => `
-        <option value="${it.id}">${it.emoji} ${it.name} - ${it.desc}</option>
-      `).join('');
+      const items = allPokemonItems.length > 0 ? allPokemonItems : [];
 
-      if (sSel) sSel.innerHTML = optionsHtml;
-      if (vSel) vSel.innerHTML = optionsHtml;
+      if (items.length === 0) return;
+
+      const competitiveIds = [
+        'life_orb', 'focus_sash', 'leftovers', 'choice_scarf', 'choice_band', 'choice_specs',
+        'assault_vest', 'sitrus_berry', 'lum_berry', 'expert_belt', 'rocky_helmet', 'eviolite',
+        'scope_lens', 'kings_rock', 'black_sludge', 'big_root', 'white_herb', 'weakness_policy',
+        'focus_band', 'covert_cloak', 'punching_glove', 'clear_amulet', 'booster_energy', 'loaded_dice'
+      ];
+
+      const competitive = items.filter(it => competitiveIds.includes(it.id));
+      const megaStones = items.filter(it => it.categoryKo === '메가돌' || it.name.includes('나이트') || it.name.includes('스톤'));
+      const plates = items.filter(it => it.categoryKo === '플레이트' || it.categoryKo === '보석');
+      const berries = items.filter(it => it.categoryKo === '위기상황' || it.name.includes('열매'));
+      const others = items.filter(it => it.id !== 'none' && !competitive.includes(it) && !megaStones.includes(it) && !plates.includes(it) && !berries.includes(it));
+
+      let html = `<option value="none">⚪ 없음 - 지닌 도구 없음</option>`;
+
+      html += `<optgroup label="⭐ 추천 실전 배틀 도구">`;
+      competitive.forEach(it => {
+        html += `<option value="${it.id}">${it.emoji} ${it.name} - ${it.desc}</option>`;
+      });
+      html += `</optgroup>`;
+
+      html += `<optgroup label="💎 메가스톤 (Mega Stones - 전용 메가진화)">`;
+      megaStones.forEach(it => {
+        html += `<option value="${it.id}">${it.emoji} ${it.name} - ${it.desc}</option>`;
+      });
+      html += `</optgroup>`;
+
+      html += `<optgroup label="🔮 플레이트 & 주얼 (속성 강화)">`;
+      plates.forEach(it => {
+        html += `<option value="${it.id}">${it.emoji} ${it.name} - ${it.desc}</option>`;
+      });
+      html += `</optgroup>`;
+
+      html += `<optgroup label="🍒 나무열매 & 위기 회복">`;
+      berries.forEach(it => {
+        html += `<option value="${it.id}">${it.emoji} ${it.name} - ${it.desc}</option>`;
+      });
+      html += `</optgroup>`;
+
+      if (others.length > 0) {
+        html += `<optgroup label="🎒 기타 도구">`;
+        others.forEach(it => {
+          html += `<option value="${it.id}">${it.emoji} ${it.name} - ${it.desc}</option>`;
+        });
+        html += `</optgroup>`;
+      }
+
+      if (sSel) sSel.innerHTML = html;
+      if (vSel) vSel.innerHTML = html;
     }
 
     function handleBattleModeChange() {
@@ -7990,7 +8751,7 @@
       renderPokeSetupPreview();
     }
 
-    function switchSetupSlot(side, slotIdx) {
+    function switchPokeSetupSlot(side, slotIdx) {
       if (side === 'streamer') {
         streamerSetupSlotIdx = slotIdx;
         for (let i = 0; i < 3; i++) {
@@ -8006,15 +8767,19 @@
       }
       renderPokeSetupPreview();
     }
+    function switchSetupSlot(side, slotIdx) {
+      switchPokeSetupSlot(side, slotIdx);
+    }
+    window.switchSetupSlot = switchPokeSetupSlot;
+    window.switchPokeSetupSlot = switchPokeSetupSlot;
 
     function handleItemChange(side, itemId) {
+      const it = getItemObj(itemId);
       if (side === 'streamer') {
         streamerTeam[streamerSetupSlotIdx].item = itemId;
-        const it = HELD_ITEMS.find(x => x.id === itemId);
-        if (it) showToast(`👑 스트리머 ${streamerSetupSlotIdx+1}번 포켓몬 도구: [${it.emoji} ${it.name}]`, '🎒');
+        if (it) showToast(`👑 ${getStreamerName()} ${streamerSetupSlotIdx+1}번 포켓몬 도구: [${it.emoji} ${it.name}]`, '🎒');
       } else {
         viewersTeam[viewersSetupSlotIdx].item = itemId;
-        const it = HELD_ITEMS.find(x => x.id === itemId);
         if (it) showToast(`👥 시청자 ${viewersSetupSlotIdx+1}번 포켓몬 도구: [${it.emoji} ${it.name}]`, '🎒');
       }
     }
@@ -8095,10 +8860,6 @@
       return map[t] || "⚪";
     }
 
-    function getItemObj(itemId) {
-      return HELD_ITEMS.find(x => x.id === itemId) || HELD_ITEMS[0];
-    }
-
     // --- Pokemon Picker Modal (213 Pokemon Search & Filter) ---
     function openPokemonPicker(target) {
       pokePickerTarget = target;
@@ -8110,6 +8871,7 @@
           ? `👑 ${getStreamerName()} [${pokeBattleMode === '3v3' ? `${pokePickerSlotIdx+1}번 포켓몬` : '에이스'}]을 선택하세요`
           : `👥 시청자 연합 [${pokeBattleMode === '3v3' ? `${pokePickerSlotIdx+1}번 포켓몬` : '에이스'}]을 선택하세요`;
       }
+      renderPokemonPickerFilters();
       filterPokemonGrid();
       if (modal) modal.classList.add('active');
     }
@@ -8163,79 +8925,106 @@
         return;
       }
 
-      grid.innerHTML = filtered.map(p => `
-        <div class="poke-grid-item" onclick="selectPokemonFromPicker(${p.id})">
-          <img src="${p.sprite_front}" alt="${p.name}" style="width: 72px; height: 72px; object-fit: contain; image-rendering: pixelated;" onerror="this.src='pokemon/25.png'">
-          <div style="font-size: 10px; color: var(--text-sub); margin-top: 2px;">#${String(p.id).padStart(3, '0')}</div>
-          <div style="font-size: 13px; font-weight: 800; color: #fff; margin: 2px 0 4px;">${p.name}</div>
-          <div style="display: flex; gap: 3px; flex-wrap: wrap; justify-content: center;">
-            ${p.types.map(t => `<span class="type-badge type-${t}" style="font-size: 8px; padding: 1px 4px;">${t}</span>`).join('')}
+      grid.innerHTML = filtered.map(p => {
+        const hasMega = allMegaEvolutions.some(m => m.basePokeId === p.id);
+        return `
+          <div class="poke-grid-item" onclick="selectPokemonFromPicker(${p.id})">
+            <div style="position: relative; width: 72px; height: 72px; margin: 0 auto;">
+              <img src="${p.sprite_front}" alt="${p.name}" style="width: 72px; height: 72px; object-fit: contain; image-rendering: pixelated;" onerror="this.src='pokemon/25.png'">
+              ${hasMega ? '<span class="mega-tag-badge" style="position: absolute; bottom: 0; right: -4px; font-size: 9px;">🧬 MEGA</span>' : ''}
+            </div>
+            <div style="font-size: 10px; color: var(--text-sub); margin-top: 2px;">#${String(p.id).padStart(3, '0')}</div>
+            <div style="font-size: 13px; font-weight: 800; color: #fff; margin: 2px 0 4px;">${p.name}</div>
+            <div style="display: flex; gap: 3px; flex-wrap: wrap; justify-content: center;">
+              ${p.types.map(t => `<span class="type-badge type-${t}" style="font-size: 8px; padding: 1px 4px;">${t}</span>`).join('')}
+            </div>
           </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     function selectPokemonFromPicker(pokeId) {
       const found = allPokemonData.find(p => p.id === pokeId);
       if (!found) return;
 
+      const team = pokePickerTarget === 'streamer' ? streamerTeam : viewersTeam;
+      team[pokePickerSlotIdx].pokemon = found;
+
+      // Auto-suggest Mega Stone if available
+      const megaForm = allMegaEvolutions.find(m => m.basePokeId === found.id);
+      if (megaForm && megaForm.requiredStoneId) {
+        team[pokePickerSlotIdx].item = megaForm.requiredStoneId;
+      }
+
       if (pokePickerTarget === 'streamer') {
-        streamerTeam[pokePickerSlotIdx].pokemon = found;
-        showToast(`👑 스트리머 [${found.name}] 선택 완료!`, '🔥');
+        showToast(`👑 ${getStreamerName()} [${found.name}] 선택 완료! ${megaForm ? `(💎 ${getItemObj(team[pokePickerSlotIdx].item).name} 자동 장착)` : ''}`, '🔥');
       } else {
-        viewersTeam[pokePickerSlotIdx].pokemon = found;
-        showToast(`👥 시청자 [${found.name}] 선택 완료!`, '⚡');
+        showToast(`👥 시청자 [${found.name}] 선택 완료! ${megaForm ? `(💎 ${getItemObj(team[pokePickerSlotIdx].item).name} 자동 장착)` : ''}`, '⚡');
       }
       renderPokeSetupPreview();
       closePokemonPickerModal();
     }
 
     function randomizeSlotItem(side) {
-      const itemPool = HELD_ITEMS.filter(x => x.id !== 'none');
-      const randItem = itemPool[Math.floor(Math.random() * itemPool.length)];
-      if (side === 'streamer') {
-        streamerTeam[streamerSetupSlotIdx].item = randItem.id;
-        const sel = document.getElementById('streamerItemSelect');
-        if (sel) sel.value = randItem.id;
-        showToast(`👑 스트리머 ${streamerSetupSlotIdx+1}번 도구: [${randItem.emoji} ${randItem.name}] 랜덤 배정!`, '🎒');
+      const team = side === 'streamer' ? streamerTeam : viewersTeam;
+      const currentSlot = team[side === 'streamer' ? streamerSetupSlotIdx : viewersSetupSlotIdx];
+      const poke = currentSlot.pokemon;
+      const megaForm = poke ? allMegaEvolutions.find(m => m.basePokeId === poke.id) : null;
+
+      // 40% chance to equip matching Mega Stone if pokemon can mega evolve
+      if (megaForm && megaForm.requiredStoneId && Math.random() < 0.45) {
+        currentSlot.item = megaForm.requiredStoneId;
       } else {
-        viewersTeam[viewersSetupSlotIdx].item = randItem.id;
-        const sel = document.getElementById('viewersItemSelect');
-        if (sel) sel.value = randItem.id;
-        showToast(`👥 시청자 ${viewersSetupSlotIdx+1}번 도구: [${randItem.emoji} ${randItem.name}] 랜덤 배정!`, '🎒');
+        const itemPool = allPokemonItems.filter(x => x.id !== 'none');
+        const randItem = itemPool[Math.floor(Math.random() * itemPool.length)];
+        currentSlot.item = randItem.id;
       }
+
+      const itemObj = getItemObj(currentSlot.item);
+      const sel = document.getElementById(side === 'streamer' ? 'streamerItemSelect' : 'viewersItemSelect');
+      if (sel) sel.value = currentSlot.item;
+
+      showToast(`${side === 'streamer' ? `👑 ${getStreamerName()}` : '👥 시청자'} 도구: [${itemObj.emoji} ${itemObj.name}] 배정!`, '🎒');
     }
 
     function randomizeCurrentSlot(target) {
       if (allPokemonData.length === 0) return;
       const rand = allPokemonData[Math.floor(Math.random() * allPokemonData.length)];
-      const itemPool = HELD_ITEMS.filter(x => x.id !== 'none');
-      const randItem = itemPool[Math.floor(Math.random() * itemPool.length)];
-      if (target === 'streamer') {
-        streamerTeam[streamerSetupSlotIdx].pokemon = rand;
-        streamerTeam[streamerSetupSlotIdx].item = randItem.id;
-        showToast(`👑 스트리머 ${streamerSetupSlotIdx+1}번: [${rand.name}] & [${randItem.name}] 랜덤 배정!`, '🎲');
-      } else {
-        viewersTeam[viewersSetupSlotIdx].pokemon = rand;
-        viewersTeam[viewersSetupSlotIdx].item = randItem.id;
-        showToast(`👥 시청자 ${viewersSetupSlotIdx+1}번: [${rand.name}] & [${randItem.name}] 랜덤 배정!`, '🎲');
-      }
+      const team = target === 'streamer' ? streamerTeam : viewersTeam;
+      const slotIdx = target === 'streamer' ? streamerSetupSlotIdx : viewersSetupSlotIdx;
+
+      team[slotIdx].pokemon = rand;
+      randomizeSlotItem(target);
+
+      showToast(`${target === 'streamer' ? `👑 ${getStreamerName()}` : '👥 시청자'} ${slotIdx+1}번: [${rand.name}] 랜덤 배정!`, '🎲');
       renderPokeSetupPreview();
     }
 
     function randomizeAllTeams() {
       if (allPokemonData.length < 6) return;
       const shuffled = [...allPokemonData].sort(() => 0.5 - Math.random());
-      const itemPool = HELD_ITEMS.filter(x => x.id !== 'none').map(x => x.id);
 
       for (let i = 0; i < 3; i++) {
         streamerTeam[i].pokemon = shuffled[i];
-        streamerTeam[i].item = itemPool[Math.floor(Math.random() * itemPool.length)];
+        const sMega = allMegaEvolutions.find(m => m.basePokeId === shuffled[i].id);
+        if (sMega && sMega.requiredStoneId && Math.random() < 0.5) {
+          streamerTeam[i].item = sMega.requiredStoneId;
+        } else {
+          const randIt = allPokemonItems[Math.floor(Math.random() * allPokemonItems.length)];
+          streamerTeam[i].item = randIt.id;
+        }
+
         viewersTeam[i].pokemon = shuffled[i + 3];
-        viewersTeam[i].item = itemPool[Math.floor(Math.random() * itemPool.length)];
+        const vMega = allMegaEvolutions.find(m => m.basePokeId === shuffled[i + 3].id);
+        if (vMega && vMega.requiredStoneId && Math.random() < 0.5) {
+          viewersTeam[i].item = vMega.requiredStoneId;
+        } else {
+          const randIt = allPokemonItems[Math.floor(Math.random() * allPokemonItems.length)];
+          viewersTeam[i].item = randIt.id;
+        }
       }
 
-      showToast('🎲 양팀 6마리 포켓몬 및 실전 지닌 도구가 모두 무작위로 구성되었습니다!', '✨');
+      showToast('🎲 양팀 포켓몬 및 도구(메가스톤 포함)가 무작위로 구성되었습니다!', '✨');
       renderPokeSetupPreview();
     }
 
@@ -8248,11 +9037,11 @@
           showToast('포켓몬 엔트리가 완성되지 않았습니다.', '⚠️');
           return;
         }
-        // Initialize stats
         const sP = streamerTeam[i].pokemon;
         streamerTeam[i].maxHP = calculateLevel50HP(sP.stats.hp);
         streamerTeam[i].currentHP = streamerTeam[i].maxHP;
         streamerTeam[i].fainted = false;
+        streamerTeam[i].isMega = false;
         streamerTeam[i].choiceMove = null;
         streamerTeam[i].itemUsed = false;
         streamerTeam[i].rankAtk = 0;
@@ -8262,6 +9051,7 @@
         viewersTeam[i].maxHP = calculateLevel50HP(vP.stats.hp);
         viewersTeam[i].currentHP = viewersTeam[i].maxHP;
         viewersTeam[i].fainted = false;
+        viewersTeam[i].isMega = false;
         viewersTeam[i].choiceMove = null;
         viewersTeam[i].itemUsed = false;
         viewersTeam[i].rankAtk = 0;
@@ -8271,6 +9061,9 @@
       streamerActiveIdx = 0;
       viewersActiveIdx = 0;
       streamerActionTab = 'moves';
+      streamerTeamHasMegaEvolved = false;
+      viewersTeamHasMegaEvolved = false;
+      streamerMegaSelected = false;
 
       pokeBattleState.active = true;
       pokeBattleState.round = 1;
@@ -8279,7 +9072,6 @@
       pokeBattleState.viewersAction = null;
       pokeBattleState.stats = { totalRounds: 0, streamerDamage: 0, viewersDamage: 0, crits: 0, superEffective: 0 };
 
-      // Switch views
       document.getElementById('pokeBattleSetupStage').style.display = 'none';
       document.getElementById('pokeBattleArenaStage').style.display = 'flex';
 
@@ -8295,25 +9087,37 @@
       const sP = sSlot.pokemon;
       const vP = vSlot.pokemon;
 
-      document.getElementById('arenaStreamerName').innerText = sP.name;
-      document.getElementById('arenaStreamerSprite').src = sP.sprite_back || sP.sprite_front;
+      const sNameEl = document.getElementById('arenaStreamerName');
+      if (sNameEl) {
+        sNameEl.innerHTML = sSlot.isMega ? `<span class="mega-tag-badge">🧬 MEGA</span> ${sP.name}` : sP.name;
+      }
+      const sSpr = document.getElementById('arenaStreamerSprite');
+      if (sSpr) {
+        sSpr.src = sP.sprite_back || sP.sprite_front;
+      }
       document.getElementById('arenaStreamerTypes').innerHTML = sP.types.map(t => `<span class="type-badge type-${t}" style="font-size: 9px; padding: 1px 4px;">${t}</span>`).join('');
       
       const sItem = getItemObj(sSlot.item);
       const sItemBadge = document.getElementById('arenaStreamerItemBadge');
       if (sItemBadge) {
-        sItemBadge.innerText = `${sItem.emoji} ${sItem.name}`;
+        sItemBadge.innerHTML = sSlot.isMega ? `<span class="mega-tag-badge">🧬 MEGA</span> ${sItem.name}` : `${sItem.emoji} ${sItem.name}`;
         sItemBadge.style.display = sSlot.item === 'none' ? 'none' : 'inline-flex';
       }
 
-      document.getElementById('arenaViewersName').innerText = vP.name;
-      document.getElementById('arenaViewersSprite').src = vP.sprite_front;
+      const vNameEl = document.getElementById('arenaViewersName');
+      if (vNameEl) {
+        vNameEl.innerHTML = vSlot.isMega ? `<span class="mega-tag-badge">🧬 MEGA</span> ${vP.name}` : vP.name;
+      }
+      const vSpr = document.getElementById('arenaViewersSprite');
+      if (vSpr) {
+        vSpr.src = vP.sprite_front;
+      }
       document.getElementById('arenaViewersTypes').innerHTML = vP.types.map(t => `<span class="type-badge type-${t}" style="font-size: 9px; padding: 1px 4px;">${t}</span>`).join('');
 
       const vItem = getItemObj(vSlot.item);
       const vItemBadge = document.getElementById('arenaViewersItemBadge');
       if (vItemBadge) {
-        vItemBadge.innerText = `${vItem.emoji} ${vItem.name}`;
+        vItemBadge.innerHTML = vSlot.isMega ? `<span class="mega-tag-badge">🧬 MEGA</span> ${vItem.name}` : `${vItem.emoji} ${vItem.name}`;
         vItemBadge.style.display = vSlot.item === 'none' ? 'none' : 'inline-flex';
       }
     }
@@ -8367,33 +9171,38 @@
 
       if (sText) sText.innerText = `${Math.max(0, Math.round(sSlot.currentHP))} / ${sSlot.maxHP}`;
       if (vText) vText.innerText = `${Math.max(0, Math.round(vSlot.currentHP))} / ${vSlot.maxHP}`;
-
-      document.getElementById('pokeBattleRoundBadge').innerText = `⚔️ ROUND ${pokeBattleState.round}`;
     }
 
-    function setBattleDialogue(msg) {
-      const el = document.getElementById('arenaDialogueText');
-      if (el) el.innerHTML = msg;
+    function setBattleDialogue(html) {
+      const dlg = document.getElementById('arenaDialogueText');
+      if (dlg) dlg.innerHTML = html;
     }
 
-    // --- Action Tabs (Moves / Switch) ---
     function switchPokeActionTab(tab) {
       streamerActionTab = tab;
       const movesBtn = document.getElementById('pokeActionMovesTabBtn');
       const switchBtn = document.getElementById('pokeActionSwitchTabBtn');
       const movesDeck = document.getElementById('arenaMoveButtonsDeck');
       const switchDeck = document.getElementById('arenaSwitchButtonsDeck');
+      const megaContainer = document.getElementById('streamerMegaToggleContainer');
 
       if (tab === 'moves') {
         if (movesBtn) movesBtn.classList.add('active');
         if (switchBtn) switchBtn.classList.remove('active');
         if (movesDeck) movesDeck.style.display = 'grid';
         if (switchDeck) switchDeck.style.display = 'none';
+        
+        const sSlot = streamerTeam[streamerActiveIdx];
+        const megaForm = getAvailableMegaEvolution(sSlot.pokemon, sSlot.item);
+        if (megaContainer) {
+          megaContainer.style.display = (megaForm && !streamerTeamHasMegaEvolved && !sSlot.isMega) ? 'block' : 'none';
+        }
       } else {
         if (switchBtn) switchBtn.classList.add('active');
         if (movesBtn) movesBtn.classList.remove('active');
         if (movesDeck) movesDeck.style.display = 'none';
         if (switchDeck) switchDeck.style.display = 'flex';
+        if (megaContainer) megaContainer.style.display = 'none';
         renderStreamerSwitchDeck();
       }
     }
@@ -8441,6 +9250,31 @@
       }).join('');
     }
 
+    function toggleStreamerMega() {
+      if (pokeBattleState.phase !== 'streamer_turn') return;
+      const sSlot = streamerTeam[streamerActiveIdx];
+      const megaForm = getAvailableMegaEvolution(sSlot.pokemon, sSlot.item);
+      if (!megaForm || streamerTeamHasMegaEvolved || sSlot.isMega) {
+        showToast('현재 출전 포켓몬은 메가진화할 수 없거나 이미 이번 매치에서 메가진화를 사용했습니다.', '⚠️');
+        return;
+      }
+
+      streamerMegaSelected = !streamerMegaSelected;
+      const btn = document.getElementById('streamerMegaToggleBtn');
+      const pill = document.getElementById('streamerMegaPill');
+      if (btn) btn.classList.toggle('active', streamerMegaSelected);
+      if (pill) {
+        pill.className = `mega-pill-badge ${streamerMegaSelected ? 'on' : 'off'}`;
+        pill.innerText = streamerMegaSelected ? '🧬 MEGA ON' : 'OFF';
+      }
+
+      if (streamerMegaSelected) {
+        showToast(`🧬 [${megaForm.nameKo}] 메가진화 준비 완료! 기술을 선택하면 메가진화와 동시에 공격합니다.`, '✨');
+      } else {
+        showToast('메가진화가 취소되었습니다.', '⚪');
+      }
+    }
+
     // --- Streamer Turn Execution with Timer ---
     function startStreamerPokeTurn() {
       pokeBattleState.phase = 'streamer_turn';
@@ -8452,6 +9286,26 @@
       setBattleDialogue(`👑 <b>[${getStreamerName()}]</b>의 <b>${sSlot.pokemon.name}</b>은(는) 무엇을 할까? (기술 또는 교체 선택)`);
 
       switchPokeActionTab('moves');
+
+      // Check Mega Evolution availability
+      const megaForm = getAvailableMegaEvolution(sSlot.pokemon, sSlot.item);
+      const megaContainer = document.getElementById('streamerMegaToggleContainer');
+      const megaBtnTitle = document.getElementById('streamerMegaBtnTitle');
+      const megaBtn = document.getElementById('streamerMegaToggleBtn');
+      const megaPill = document.getElementById('streamerMegaPill');
+
+      if (megaForm && !streamerTeamHasMegaEvolved && !sSlot.isMega) {
+        if (megaContainer) megaContainer.style.display = 'block';
+        if (megaBtnTitle) megaBtnTitle.innerText = `🧬 ${megaForm.nameKo} 메가진화 (동시 발동)`;
+        if (megaBtn) megaBtn.classList.toggle('active', streamerMegaSelected);
+        if (megaPill) {
+          megaPill.className = `mega-pill-badge ${streamerMegaSelected ? 'on' : 'off'}`;
+          megaPill.innerText = streamerMegaSelected ? '🧬 MEGA ON' : 'OFF';
+        }
+      } else {
+        if (megaContainer) megaContainer.style.display = 'none';
+        streamerMegaSelected = false;
+      }
 
       const deck = document.getElementById('arenaMoveButtonsDeck');
       if (deck) {
@@ -8535,9 +9389,11 @@
 
       const sSlot = streamerTeam[streamerActiveIdx];
       const move = sSlot.pokemon.moves[moveIdx];
-      pokeBattleState.streamerAction = { type: 'move', moveIdx, move };
+      const willMega = streamerMegaSelected && !streamerTeamHasMegaEvolved && getAvailableMegaEvolution(sSlot.pokemon, sSlot.item);
+      
+      pokeBattleState.streamerAction = { type: 'move', moveIdx, move, isMega: !!willMega };
 
-      showToast(`${getStreamerName()} [${move.name}] 선택 완료! 시청자 투표가 시작됩니다.`, '🎯');
+      showToast(`${getStreamerName()} ${willMega ? '🧬 메가진화 + ' : ''}[${move.name}] 선택 완료! 시청자 투표가 시작됩니다.`, '🎯');
       startViewersPokeVote();
     }
 
@@ -8547,22 +9403,26 @@
       clearInterval(pokeBattleState.streamerTimerInterval);
       document.getElementById('arenaStreamerTimerHud').style.display = 'none';
 
-      pokeBattleState.streamerAction = { type: 'switch', targetIdx, targetPokemon: streamerTeam[targetIdx].pokemon };
+      pokeBattleState.streamerAction = { type: 'switch', targetIdx, targetPokemon: streamerTeam[targetIdx].pokemon, isMega: false };
       showToast(`${getStreamerName()} [${streamerTeam[targetIdx].pokemon.name}](으)로 교체 선택! 시청자 투표가 시작됩니다.`, '🔄');
       startViewersPokeVote();
     }
 
-    // --- Viewers Vote with Move & Switch Options ---
+    // --- Viewers Vote with Mega Evolution, Move & Switch Options ---
     function startViewersPokeVote() {
       pokeBattleState.phase = 'viewers_vote';
       document.getElementById('pokeBattlePhaseBadge').innerText = '👥 2단계: 시청자 행동 투표';
       document.getElementById('pokeBattlePhaseBadge').style.background = 'linear-gradient(135deg, #0284c7, #0369a1)';
 
       pokeVoteUsers.clear();
-      pokeVoteCounts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
+      pokeVoteCounts = {};
 
       const hud = document.getElementById('arenaViewersVoteHud');
       if (hud) hud.style.display = 'block';
+
+      const vSlot = viewersTeam[viewersActiveIdx];
+      const vMega = getAvailableMegaEvolution(vSlot.pokemon, vSlot.item);
+      const canMega = vMega && !viewersTeamHasMegaEvolved && !vSlot.isMega;
 
       // Build switch guide text
       const switchGuides = [];
@@ -8578,13 +9438,14 @@
 
       const instr = document.getElementById('arenaVoteInstructionText');
       if (instr) {
-        instr.innerHTML = pokeBattleMode === '3v3' && switchGuides.length > 0
-          ? `(채팅에 <b>1</b>~<b>4</b> 기술 / <b>5</b>, <b>6</b> 교체)`
-          : `(채팅에 <b>1</b>~<b>4</b> 기술 번호 입력)`;
+        instr.innerHTML = canMega
+          ? `(채팅: <b>1</b>~<b>4</b> / <b>메가1</b>~<b>메가4</b> / <b>5</b>, <b>6</b> 교체)`
+          : (pokeBattleMode === '3v3' && switchGuides.length > 0 ? `(채팅에 <b>1</b>~<b>4</b> 기술 / <b>5</b>, <b>6</b> 교체)` : `(채팅에 <b>1</b>~<b>4</b> 기술 입력)`);
       }
 
+      const megaNotice = canMega ? ` (🧬 <b>메가1~4</b> 입력 시 메가진화+공격)` : '';
       const switchPrompt = switchGuides.length > 0 ? ` 또는 교체 ${switchGuides.join(' / ')}` : '';
-      setBattleDialogue(`👥 <b>시청자 턴</b>: 채팅창에 기술 [<b>1~4</b>]${switchPrompt} (또는 이름)을 입력하세요!`);
+      setBattleDialogue(`👥 <b>시청자 턴</b>: 채팅창에 기술 [<b>1~4</b>]${megaNotice}${switchPrompt}을 입력하세요!`);
 
       pokeBattleState.viewersTimerTotal = parseFloat(document.getElementById('pokeVoteDurationSelect').value) || 30.0;
       pokeBattleState.viewersTimerRemaining = pokeBattleState.viewersTimerTotal;
@@ -8620,19 +9481,31 @@
       // Case A: Normal Turn Viewers Vote
       if (pokeBattleState.phase === 'viewers_vote') {
         const clean = msg.trim().toUpperCase().replace(/\s+/g, '');
-        let choice = null;
+        const vSlot = viewersTeam[viewersActiveIdx];
+        const vMega = getAvailableMegaEvolution(vSlot.pokemon, vSlot.item);
+        const canMega = vMega && !viewersTeamHasMegaEvolved && !vSlot.isMega;
 
-        // Exact numbers 1~4
-        if (/^[1-4]$/.test(clean)) {
-          choice = parseInt(clean, 10);
+        let choiceKey = null;
+
+        // Mega Move Detection: "MEGA 1", "메가1", "M1", "진화1", "1MEGA", "1메가"
+        const megaMatch = clean.match(/^(?:MEGA|메가|진화|M)([1-4])$/) || clean.match(/^([1-4])(?:MEGA|메가|진화|M)$/);
+        if (megaMatch && canMega) {
+          const moveNum = parseInt(megaMatch[1], 10);
+          choiceKey = `mega_${moveNum}`;
         }
-        // Exact numbers 5~6
+        // Exact numbers 1~4
+        else if (/^[1-4]$/.test(clean) || /^[1-4]번$/.test(clean)) {
+          const num = parseInt(clean.replace('번', ''), 10);
+          choiceKey = `move_${num}`;
+        }
+        // Exact numbers 5~6 (switch)
         else if (/^[5-6]$/.test(clean)) {
-          choice = parseInt(clean, 10);
+          const num = parseInt(clean, 10);
+          choiceKey = `switch_${num}`;
         }
 
         // Check for 3v3 switch keywords: "교체1", "1번교체", "1번", "교체2", "2번", "교체3", "3번", or Pokemon names
-        if (pokeBattleMode === '3v3') {
+        if (!choiceKey && pokeBattleMode === '3v3') {
           let switchCounter = 5;
           for (let i = 0; i < 3; i++) {
             if (i !== viewersActiveIdx && !viewersTeam[i].fainted) {
@@ -8647,7 +9520,7 @@
                 clean === `교체${pName}` ||
                 clean === pName
               ) {
-                choice = switchCounter;
+                choiceKey = `switch_${switchCounter}`;
                 break;
               }
               switchCounter++;
@@ -8656,17 +9529,19 @@
         }
 
         // Match move names
-        if (!choice) {
-          const vSlot = viewersTeam[viewersActiveIdx];
+        if (!choiceKey) {
           vSlot.pokemon.moves.forEach((m, idx) => {
-            if (m.name.toUpperCase().replace(/\s+/g, '') === clean) {
-              choice = idx + 1;
+            const mName = m.name.toUpperCase().replace(/\s+/g, '');
+            if (clean === mName) {
+              choiceKey = `move_${idx + 1}`;
+            } else if (clean === `메가${mName}` && canMega) {
+              choiceKey = `mega_${idx + 1}`;
             }
           });
         }
 
-        if (choice && choice >= 1 && choice <= 6) {
-          pokeVoteUsers.set(uid, choice);
+        if (choiceKey) {
+          pokeVoteUsers.set(uid, choiceKey);
           recomputePokeVotes();
           renderPokeVotingBarsUI();
         }
@@ -8706,7 +9581,7 @@
     }
 
     function recomputePokeVotes() {
-      pokeVoteCounts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
+      pokeVoteCounts = {};
       for (const [uid, choice] of pokeVoteUsers.entries()) {
         pokeVoteCounts[choice] = (pokeVoteCounts[choice] || 0) + 1;
       }
@@ -8719,13 +9594,17 @@
 
       const total = pokeVoteUsers.size;
       const candidates = [];
+      const vMega = getAvailableMegaEvolution(vSlot.pokemon, vSlot.item);
+      const canMega = vMega && !viewersTeamHasMegaEvolved && !vSlot.isMega;
 
-      // 4 Moves
+      // 4 Moves (and Mega Moves if available)
       vSlot.pokemon.moves.forEach((m, i) => {
         const isLocked = vSlot.choiceMove && vSlot.choiceMove.name !== m.name;
         const isAV = vSlot.item === 'assault_vest' && m.category === '변화';
+        
+        // Standard move option
         candidates.push({
-          num: i + 1,
+          key: `move_${i + 1}`,
           label: `${i + 1}. ${m.name}`,
           subtext: `채팅: ${i + 1} / ${m.name}`,
           tag: m.type,
@@ -8733,6 +9612,20 @@
           disabled: isLocked || isAV,
           note: isLocked ? '고정됨' : (isAV ? '돌격조끼' : '')
         });
+
+        // Mega move option (if available or has votes)
+        if (canMega || pokeVoteCounts[`mega_${i + 1}`]) {
+          candidates.push({
+            key: `mega_${i + 1}`,
+            label: `🧬 [MEGA] ${m.name}`,
+            subtext: `채팅: 메가${i + 1} / MEGA ${i + 1}`,
+            tag: '메가진화',
+            tagClass: 'badge-tag',
+            disabled: isLocked || isAV,
+            note: isLocked ? '고정됨' : (isAV ? '돌격조끼' : ''),
+            isMega: true
+          });
+        }
       });
 
       // Switch Candidates (if 3v3 mode)
@@ -8743,7 +9636,7 @@
             const slot = viewersTeam[i];
             const slotNum = i + 1;
             candidates.push({
-              num: switchCounter,
+              key: `switch_${switchCounter}`,
               label: `${switchCounter}. [🔄 ${slotNum}번 교체] ${slot.pokemon.name}`,
               subtext: `채팅: ${switchCounter} / ${slotNum}번 / ${slot.pokemon.name}`,
               tag: slot.fainted ? '기절' : `HP ${Math.round((slot.currentHP/slot.maxHP)*100)}%`,
@@ -8757,16 +9650,16 @@
       }
 
       container.innerHTML = candidates.map(c => {
-        const count = pokeVoteCounts[c.num] || 0;
+        const count = pokeVoteCounts[c.key] || 0;
         const pct = total > 0 ? Math.round((count / total) * 100) : 0;
         return `
           <div style="display: flex; align-items: center; gap: 8px; opacity: ${c.disabled ? '0.4' : '1'};">
-            <div style="width: 155px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-              <span style="font-weight: 800; color: #fff; font-size: 11px;">${c.label}</span>
+            <div style="width: 165px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+              <span style="font-weight: 800; color: ${c.isMega ? '#00ffa3' : '#fff'}; font-size: 11px;">${c.label}</span>
               ${c.subtext ? `<div style="font-size: 9px; color: var(--text-sub);">${c.subtext}</div>` : ''}
             </div>
             <div style="flex: 1; height: 10px; background: rgba(255,255,255,0.08); border-radius: 5px; overflow: hidden;">
-              <div style="height: 100%; width: ${pct}%; background: linear-gradient(90deg, #38bdf8, #00ffa3); transition: width 0.15s;"></div>
+              <div style="height: 100%; width: ${pct}%; background: ${c.isMega ? 'linear-gradient(90deg, #ec4899, #00ffa3)' : 'linear-gradient(90deg, #38bdf8, #00ffa3)'}; transition: width 0.15s;"></div>
             </div>
             <span style="font-size: 10px; color: var(--text-sub); width: 55px; text-align: right;">${count}표 (${pct}%)</span>
           </div>
@@ -8778,13 +9671,18 @@
       clearInterval(pokeBattleState.viewersTimerInterval);
       
       const vSlot = viewersTeam[viewersActiveIdx];
-      const validCandidateNums = [];
+      const validCandidateKeys = [];
+      const vMega = getAvailableMegaEvolution(vSlot.pokemon, vSlot.item);
+      const canMega = vMega && !viewersTeamHasMegaEvolved && !vSlot.isMega;
 
       // Valid moves
       vSlot.pokemon.moves.forEach((m, i) => {
         const isLocked = vSlot.choiceMove && vSlot.choiceMove.name !== m.name;
         const isAV = vSlot.item === 'assault_vest' && m.category === '변화';
-        if (!isLocked && !isAV) validCandidateNums.push(i + 1);
+        if (!isLocked && !isAV) {
+          validCandidateKeys.push(`move_${i + 1}`);
+          if (canMega) validCandidateKeys.push(`mega_${i + 1}`);
+        }
       });
 
       // Valid switches
@@ -8794,8 +9692,8 @@
         for (let i = 0; i < 3; i++) {
           if (i !== viewersActiveIdx) {
             if (!viewersTeam[i].fainted) {
-              validCandidateNums.push(switchCounter);
-              switchIndexMap[switchCounter] = i;
+              validCandidateKeys.push(`switch_${switchCounter}`);
+              switchIndexMap[`switch_${switchCounter}`] = i;
             }
             switchCounter++;
           }
@@ -8804,31 +9702,36 @@
 
       let maxVotes = 0;
       let topChoices = [];
-      for (const num of validCandidateNums) {
-        const v = pokeVoteCounts[num] || 0;
+      for (const key of validCandidateKeys) {
+        const v = pokeVoteCounts[key] || 0;
         if (v > maxVotes) {
           maxVotes = v;
-          topChoices = [num];
+          topChoices = [key];
         } else if (v === maxVotes && maxVotes > 0) {
-          topChoices.push(num);
+          topChoices.push(key);
         }
       }
 
-      let pickedNum = 1;
+      let pickedKey = 'move_1';
       if (maxVotes > 0 && topChoices.length > 0) {
-        pickedNum = topChoices[Math.floor(Math.random() * topChoices.length)];
+        pickedKey = topChoices[Math.floor(Math.random() * topChoices.length)];
       } else {
-        pickedNum = validCandidateNums[Math.floor(Math.random() * validCandidateNums.length)] || 1;
+        pickedKey = validCandidateKeys[Math.floor(Math.random() * validCandidateKeys.length)] || 'move_1';
       }
 
-      if (pickedNum <= 4) {
-        const moveIdx = pickedNum - 1;
+      if (pickedKey.startsWith('move_')) {
+        const moveIdx = parseInt(pickedKey.replace('move_', ''), 10) - 1;
         const move = vSlot.pokemon.moves[moveIdx];
-        pokeBattleState.viewersAction = { type: 'move', moveIdx, move };
+        pokeBattleState.viewersAction = { type: 'move', moveIdx, move, isMega: false };
         showToast(`시청자 행동: [${move.name}] 발동!`, '👥');
-      } else {
-        const targetIdx = switchIndexMap[pickedNum];
-        pokeBattleState.viewersAction = { type: 'switch', targetIdx, targetPokemon: viewersTeam[targetIdx].pokemon };
+      } else if (pickedKey.startsWith('mega_')) {
+        const moveIdx = parseInt(pickedKey.replace('mega_', ''), 10) - 1;
+        const move = vSlot.pokemon.moves[moveIdx];
+        pokeBattleState.viewersAction = { type: 'move', moveIdx, move, isMega: true };
+        showToast(`시청자 행동: 🧬 [메가진화 + ${move.name}] 발동!`, '✨');
+      } else if (pickedKey.startsWith('switch_')) {
+        const targetIdx = switchIndexMap[pickedKey];
+        pokeBattleState.viewersAction = { type: 'switch', targetIdx, targetPokemon: viewersTeam[targetIdx].pokemon, isMega: false };
         showToast(`시청자 행동: [${viewersTeam[targetIdx].pokemon.name}](으)로 교체!`, '🔄');
       }
 
@@ -8880,9 +9783,11 @@
 
         const firstActor = streamerFirst ? 'streamer' : 'viewers';
         const secondActor = streamerFirst ? 'viewers' : 'streamer';
+        const firstAct = streamerFirst ? sAct : vAct;
+        const secondAct = streamerFirst ? vAct : sAct;
 
         // Attack 1
-        const firstFainted = await executeSingleAttack(firstActor, streamerFirst ? sMove : vMove);
+        const firstFainted = await executeSingleAttack(firstActor, firstAct.move, firstAct.isMega);
         if (firstFainted) {
           await handleFaintPhase(firstActor === 'streamer' ? 'viewers' : 'streamer');
           return;
@@ -8891,21 +9796,19 @@
         await new Promise(r => setTimeout(r, 1000));
 
         // Attack 2 (if defender didn't faint)
-        const secondFainted = await executeSingleAttack(secondActor, streamerFirst ? vMove : sMove);
+        const secondFainted = await executeSingleAttack(secondActor, secondAct.move, secondAct.isMega);
         if (secondFainted) {
           await handleFaintPhase(secondActor === 'streamer' ? 'viewers' : 'streamer');
           return;
         }
       } else if (sAct.type === 'move' && vAct.type === 'switch') {
-        // Streamer attacks incoming switched-in Pokemon
-        const fainted = await executeSingleAttack('streamer', sAct.move);
+        const fainted = await executeSingleAttack('streamer', sAct.move, sAct.isMega);
         if (fainted) {
           await handleFaintPhase('viewers');
           return;
         }
       } else if (sAct.type === 'switch' && vAct.type === 'move') {
-        // Viewers attack incoming switched-in Pokemon
-        const fainted = await executeSingleAttack('viewers', vAct.move);
+        const fainted = await executeSingleAttack('viewers', vAct.move, vAct.isMega);
         if (fainted) {
           await handleFaintPhase('streamer');
           return;
@@ -8915,9 +9818,70 @@
       await handleRoundEndEffects();
     }
 
+    async function executeMegaEvolution(actor) {
+      const isStreamer = actor === 'streamer';
+      const team = isStreamer ? streamerTeam : viewersTeam;
+      const activeIdx = isStreamer ? streamerActiveIdx : viewersActiveIdx;
+      const slot = team[activeIdx];
+      const poke = slot.pokemon;
+      const megaForm = getAvailableMegaEvolution(poke, slot.item);
+      if (!megaForm) return;
+
+      const teamName = isStreamer ? getStreamerName() : '시청자 연합';
+      const stoneObj = getItemObj(slot.item);
+
+      if (isStreamer) streamerTeamHasMegaEvolved = true;
+      else viewersTeamHasMegaEvolved = true;
+      slot.isMega = true;
+
+      // Arena Flash & Aura
+      const stage = document.getElementById('pokeBattleArenaStage');
+      if (stage) {
+        stage.classList.add('mega-flash');
+        setTimeout(() => stage.classList.remove('mega-flash'), 900);
+      }
+
+      setBattleDialogue(`🧬 <b>[${teamName}]</b>의 <b>${poke.name}</b>의 <b>[${stoneObj.name}]</b>이(가) 트레이너의 마음에 반응했다!<br>✨ <b>${megaForm.nameKo}</b>(으)로 <b>메가진화(MEGA EVOLUTION)</b>!`);
+
+      // Animate sprite
+      const spr = isStreamer ? document.getElementById('arenaStreamerSprite') : document.getElementById('arenaViewersSprite');
+      if (spr) {
+        spr.style.filter = 'brightness(3) drop-shadow(0 0 25px #00ffa3)';
+        spr.style.transform = 'scale(1.25)';
+        setTimeout(() => {
+          spr.src = isStreamer ? (megaForm.backSprite || megaForm.frontSprite) : megaForm.frontSprite;
+          spr.style.filter = 'none';
+          spr.style.transform = 'scale(1)';
+        }, 450);
+      }
+
+      // Update Poke stats and types
+      const oldMaxHP = slot.maxHP;
+      poke.name = megaForm.nameKo;
+      poke.types = megaForm.types;
+      poke.stats = megaForm.stats;
+      poke.sprite_front = megaForm.frontSprite;
+      poke.sprite_back = megaForm.backSprite;
+
+      const newMaxHP = calculateLevel50HP(megaForm.stats.hp || 80);
+      const hpDiff = newMaxHP - oldMaxHP;
+      slot.maxHP = newMaxHP;
+      slot.currentHP = Math.min(slot.maxHP, slot.currentHP + Math.max(0, hpDiff));
+
+      updateArenaActivePokemonUI();
+      updateArenaHPBars();
+
+      const itemBadge = document.getElementById(isStreamer ? 'arenaStreamerItemBadge' : 'arenaViewersItemBadge');
+      if (itemBadge) {
+        itemBadge.innerHTML = `<span class="mega-tag-badge">🧬 MEGA</span> ${stoneObj.name}`;
+      }
+
+      await new Promise(r => setTimeout(r, 1300));
+    }
+
     async function executeSwitchAnimation(side, targetIdx) {
       if (side === 'streamer') {
-        streamerTeam[streamerActiveIdx].choiceMove = null; // Reset choice lock on switch
+        streamerTeam[streamerActiveIdx].choiceMove = null;
         streamerActiveIdx = targetIdx;
         const sP = streamerTeam[targetIdx].pokemon;
         setBattleDialogue(`👑 <b>[${getStreamerName()}]</b>은(는) <b>[${sP.name}]</b>(으)로 교체했다!`);
@@ -8927,10 +9891,10 @@
         const spr = document.getElementById('arenaStreamerSprite');
         if (spr) {
           spr.style.transform = 'scale(0.5)';
-          setTimeout(() => spr.style.transform = 'scale(1)', 300);
+          setTimeout(() => { spr.style.transform = 'scale(1)'; }, 300);
         }
       } else {
-        viewersTeam[viewersActiveIdx].choiceMove = null; // Reset choice lock on switch
+        viewersTeam[viewersActiveIdx].choiceMove = null;
         viewersActiveIdx = targetIdx;
         const vP = viewersTeam[targetIdx].pokemon;
         setBattleDialogue(`👥 <b>시청자 연합</b>은 <b>[${vP.name}]</b>(으)로 교체했다!`);
@@ -8946,10 +9910,16 @@
       await new Promise(r => setTimeout(r, 900));
     }
 
-    async function executeSingleAttack(actor, move) {
+    async function executeSingleAttack(actor, move, isMega = false) {
       const isStreamer = actor === 'streamer';
       const attackerSlot = isStreamer ? streamerTeam[streamerActiveIdx] : viewersTeam[viewersActiveIdx];
       const defenderSlot = isStreamer ? viewersTeam[viewersActiveIdx] : streamerTeam[streamerActiveIdx];
+
+      // Handle Mega Evolution first in the exact same turn!
+      if (isMega && !attackerSlot.isMega) {
+        await executeMegaEvolution(actor);
+      }
+
       const attacker = attackerSlot.pokemon;
       const defender = defenderSlot.pokemon;
       const attackerSpr = isStreamer ? document.getElementById('arenaStreamerSprite') : document.getElementById('arenaViewersSprite');
@@ -9000,7 +9970,7 @@
         defStat = Math.floor(defStat * 1.5);
       }
 
-      // STAB
+      // STAB (자속 보정)
       const stab = attacker.types.includes(move.type) ? 1.5 : 1.0;
 
       // Type Effectiveness
@@ -9023,62 +9993,79 @@
       if (isCrit) pokeBattleState.stats.crits++;
       if (typeMult >= 2.0) pokeBattleState.stats.superEffective++;
 
-      // Base formula
-      let baseDmg = ((2 * 50 / 5 + 2) * move.power * (atkStat / Math.max(1, defStat)) / 50 + 2);
-      if (attackerSlot.item === 'life_orb') baseDmg *= 1.3;
+      // Life Orb bonus
+      const itemDmgMult = attackerSlot.item === 'life_orb' ? 1.3 : 1.0;
 
-      const variance = (Math.random() * (1.0 - 0.85)) + 0.85;
-      let totalDmg = Math.max(1, Math.round(baseDmg * stab * typeMult * critMult * variance));
+      const randomFactor = (Math.floor(Math.random() * 16) + 85) / 100;
+      let baseDmg = Math.floor((((2 * 50 / 5 + 2) * move.power * (atkStat / Math.max(1, defStat))) / 50) + 2);
+      let finalDamage = Math.max(1, Math.floor(baseDmg * stab * typeMult * critMult * itemDmgMult * randomFactor));
 
-      // Focus Sash & Focus Band Check
-      let sashTriggered = false;
-      if (defenderSlot.item === 'focus_sash' && !defenderSlot.itemUsed && defenderSlot.currentHP === defenderSlot.maxHP && totalDmg >= defenderSlot.currentHP) {
-        totalDmg = defenderSlot.currentHP - 1;
+      // Apply damage
+      const prevHP = defenderSlot.currentHP;
+      let remainingHP = Math.max(0, prevHP - finalDamage);
+
+      // Item: Focus Sash (기합의띠)
+      if (prevHP === defenderSlot.maxHP && remainingHP === 0 && defenderSlot.item === 'focus_sash' && !defenderSlot.itemUsed) {
+        remainingHP = 1;
         defenderSlot.itemUsed = true;
-        sashTriggered = true;
-      } else if (defenderSlot.item === 'focus_band' && totalDmg >= defenderSlot.currentHP && Math.random() < 0.1) {
-        totalDmg = defenderSlot.currentHP - 1;
-        sashTriggered = true;
+        setBattleDialogue(`🥋 <b>[${defender.name}]</b>은(는) <b>기합의띠</b>로 버텼다! (HP 1 남음)`);
       }
 
-      // Apply Damage
-      defenderSlot.currentHP = Math.max(0, defenderSlot.currentHP - totalDmg);
+      // Item: Focus Band (기합의머리띠 10%)
+      if (remainingHP === 0 && defenderSlot.item === 'focus_band' && Math.random() < 0.1) {
+        remainingHP = 1;
+        setBattleDialogue(`🎗️ <b>[${defender.name}]</b>은(는) <b>기합의머리띠</b>로 버텼다! (HP 1 남음)`);
+      }
+
+      defenderSlot.currentHP = remainingHP;
       if (isStreamer) {
-        pokeBattleState.stats.streamerDamage += totalDmg;
+        pokeBattleState.stats.streamerDamage += (prevHP - remainingHP);
       } else {
-        pokeBattleState.stats.viewersDamage += totalDmg;
+        pokeBattleState.stats.viewersDamage += (prevHP - remainingHP);
       }
 
-      // Defender hit animation
+      // Defender hit visual animation
       if (defenderSpr) {
-        defenderSpr.classList.add('poke-sprite-damaged');
-        setTimeout(() => defenderSpr.classList.remove('poke-sprite-damaged'), 600);
+        defenderSpr.classList.add('poke-sprite-defender');
+        setTimeout(() => defenderSpr.classList.remove('poke-sprite-defender'), 500);
       }
 
       updateArenaHPBars();
 
-      let effText = '';
-      if (typeMult >= 2.0) effText = '<span style="color: #ffd700; font-weight: 800;">💥 효과가 굉장했다!</span> ';
-      else if (typeMult <= 0.5 && typeMult > 0) effText = '<span style="color: #94a3b8;">🛡️ 효과가 별로인 듯하다...</span> ';
-      else if (typeMult === 0) effText = '<span style="color: #ef4444;">🚫 효과가 없는 것 같다...</span> ';
+      // Dialogue feedback
+      let feedback = `💥 <b>${finalDamage}</b>의 데미지를 입혔다!`;
+      if (isCrit) feedback += ` <b style="color: #f59e0b;">(급소에 맞았다!)</b>`;
+      if (typeMult >= 2.0) feedback += ` <b style="color: #ef4444;">(효과가 굉장했다!)</b>`;
+      else if (typeMult > 0 && typeMult < 1.0) feedback += ` <b style="color: #64748b;">(효과가 별로인 듯하다...)</b>`;
+      else if (typeMult === 0) feedback += ` <b style="color: #64748b;">(효과가 전혀 없다...)</b>`;
 
-      const critText = isCrit ? '<b style="color: #f43f5e;">⚡ 급소에 맞았다!</b> ' : '';
-      const sashText = sashTriggered ? '<b style="color: #38bdf8;">🥋 기합의띠로 버텼다!</b> ' : '';
+      setBattleDialogue(feedback);
+      await new Promise(r => setTimeout(r, 800));
 
-      setBattleDialogue(`💥 ${defender.name}에게 <b>${totalDmg}</b>의 데미지! ${critText}${effText}${sashText}`);
-      await new Promise(r => setTimeout(r, 900));
+      // Post-hit Item Effects
+      // 1. Life Orb recoil (HP 10%)
+      if (attackerSlot.item === 'life_orb' && attackerSlot.currentHP > 0) {
+        const recoil = Math.max(1, Math.floor(attackerSlot.maxHP * 0.1));
+        attackerSlot.currentHP = Math.max(0, attackerSlot.currentHP - recoil);
+        updateArenaHPBars();
+        setBattleDialogue(`🔴 <b>${attacker.name}</b>은(는) 생명의구슬 반동으로 HP가 깎였다! (-${recoil})`);
+        await new Promise(r => setTimeout(r, 600));
+      }
 
-      // Weakness Policy trigger
+      // 2. Rocky Helmet (울퉁불퉁멧 1/6 recoil on physical)
+      if (!isSpecial && defenderSlot.item === 'rocky_helmet' && attackerSlot.currentHP > 0) {
+        const recoil = Math.max(1, Math.floor(attackerSlot.maxHP / 6));
+        attackerSlot.currentHP = Math.max(0, attackerSlot.currentHP - recoil);
+        updateArenaHPBars();
+        setBattleDialogue(`🪖 <b>${attacker.name}</b>은(는) 상대의 울퉁불퉁멧에 상처를 입었다! (-${recoil})`);
+        await new Promise(r => setTimeout(r, 600));
+      }
+
+      // 3. Weakness Policy (약점보험 +2 Atk/+2 SpA on super-effective)
       if (typeMult >= 2.0 && defenderSlot.item === 'weakness_policy' && !defenderSlot.itemUsed && defenderSlot.currentHP > 0) {
         defenderSlot.itemUsed = true;
         defenderSlot.rankAtk += 2;
         defenderSlot.rankSpA += 2;
-        setBattleDialogue(`💥 <b>${defender.name}</b>의 약점보험이 발동하여 공격/특공이 대폭 상승했다!`);
-        await new Promise(r => setTimeout(r, 800));
-      }
-
-      // Rocky Helmet counter damage
-      if (defenderSlot.item === 'rocky_helmet' && move.category === '물리' && attackerSlot.currentHP > 0) {
         const recoil = Math.max(1, Math.round(attackerSlot.maxHP / 6));
         attackerSlot.currentHP = Math.max(0, attackerSlot.currentHP - recoil);
         updateArenaHPBars();
@@ -9212,9 +10199,10 @@
 
       if (modal) modal.classList.add('active');
 
-      // 15s Timer for Streamer
-      pokeBattleState.faintTimerTotal = 15.0;
-      pokeBattleState.faintTimerRemaining = 15.0;
+      // Timer for Streamer (synced with pokeStreamerDurationSelect)
+      const sTimer = parseFloat(document.getElementById('pokeStreamerDurationSelect')?.value || document.getElementById('drawerPokeStreamerDurationSelect')?.value || 30.0) || 30.0;
+      pokeBattleState.faintTimerTotal = sTimer;
+      pokeBattleState.faintTimerRemaining = sTimer;
       renderFaintTimerUI();
 
       clearInterval(pokeBattleState.faintTimerInterval);
@@ -9277,8 +10265,10 @@
       renderFaintVoteCandidatesUI(aliveSlots);
       if (modal) modal.classList.add('active');
 
-      pokeBattleState.faintTimerTotal = 20.0;
-      pokeBattleState.faintTimerRemaining = 20.0;
+      // Timer for Viewers (synced with pokeVoteDurationSelect)
+      const vTimer = parseFloat(document.getElementById('pokeVoteDurationSelect')?.value || document.getElementById('drawerPokeVoteDurationSelect')?.value || 30.0) || 30.0;
+      pokeBattleState.faintTimerTotal = vTimer;
+      pokeBattleState.faintTimerRemaining = vTimer;
       renderFaintTimerUI();
 
       clearInterval(pokeBattleState.faintTimerInterval);
@@ -9455,6 +10445,7 @@
     renderPollOptionsList();
     initNewMatch(true);
     loadPokemonDataset();
+    updateSettingsSummaryBadges();
   </script>
 </body>
 </html>

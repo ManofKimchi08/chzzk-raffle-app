@@ -1,139 +1,95 @@
-# 🎮 치지직 대규모 시청자 추첨 & 비주얼 룰렛 시스템 (Chzzk Mega Raffle & Roulette) v2.1.0
+# 🎮 치지직 대규모 시청자 추첨 & 룰렛 & 실시간 투표 & 포켓몬 배틀 플랫폼 (Chzzk Interactive Hub) v4.4.0
 
-![Chzzk Mega Raffle](https://img.shields.io/badge/Chzzk-WebSocket%20Live-00ffa3?style=for-the-badge&logo=naver)
-![Version](https://img.shields.io/badge/Release-v2.1.0-purple?style=for-the-badge)
+![Chzzk WebSocket Live](https://img.shields.io/badge/Chzzk-WebSocket%20Live-00ffa3?style=for-the-badge&logo=naver)
+![Version](https://img.shields.io/badge/Release-v4.4.0-purple?style=for-the-badge)
 ![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![HTML5](https://img.shields.io/badge/HTML5-SinglePage-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![HTML5 Canvas](https://img.shields.io/badge/HTML5-Canvas%20%26%20Audio-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
 
-네이버 **치지직(Chzzk)** 라이브 방송 채팅창과 웹소켓(WebSocket)으로 직접 연결하여 **치즈 후원자(10만~1억 치즈 등급), 구독자(개월 수/티어)** 등 다양한 조건으로 시청자를 실시간 분류하고 **수백~수천 명 이상을 중복 없이 공정하게 일괄 추첨**하며, **수동 입력 및 실시간 치즈 도네이션 연동 비주얼 룰렛(Roulette Wheel)**까지 완벽 지원하는 올인원 방송 보조 도구입니다.
+네이버 **치지직(CHZZK)** 라이브 방송 채팅창과 웹소켓(WebSocket)으로 직접 연결하여, **수천 명 단위의 시청자 대상별 공정 추첨**, **비주얼 룰렛**, **실시간 채팅/치즈 투표**, 그리고 시청자들과 실시간 채팅으로 대결하는 **포켓몬 3v3/1v1 턴제 배틀 & 메가진화** 및 **찌리리공 뒤집기**까지 완벽 지원하는 올인원 방송 인터랙션 플랫폼입니다.
 
 ---
 
-## 🌟 핵심 기능 (Key Features)
+## 🌟 v4.4.0 주요 신규 및 개선 사항 (What's New in v4.4.0)
 
-### 🎨 1. 와이드 & 모던 UI/UX 리디자인 (`NEW in v2.1.0`)
-- **📡 방송 연결 설정창 모달 분리**: 좌측을 차지하던 주소/키워드 입력 폼을 깔끔한 모달 팝업으로 분리하고 상단 헤더에 슬림한 스마트 연결 상태 칩(`[ 🟢 방송명 연결됨 (수집 N개) ⚙️ 변경 ]`) 배치
-- **💬 우측 슬라이드 채팅 서랍(Drawer)**: 메인 화면을 가리던 채팅창을 우측에서 부드럽게 열리고 닫히는 서랍 형태로 전환하여 추첨 스테이지와 룰렛 원판을 100% 풀 와이드로 활용
-- **🎯 원터치 토글 필터**: `[ 👥 전체 참여자 ]`, `[ 🧀 치즈 후원자 필터 ]`, `[ ⭐ 구독자 필터 ]` 버튼을 누르면 즉시 초록 불이 켜지며 세부 설정이 펼쳐지는 직관적인 인터랙션
-- **🚫 독립된 중복 방지 & 제외 관리**: 이전 회차 당첨자 자동 제외, 엑셀/CSV 파일 제외, 수동 닉네임 제외를 명확히 분리 관리
+### 1. ⚙️ 좌측 서랍형 상세 설정 패널 (Settings Drawer) & 극대화된 클린 UI
+- **탁 트인 방송용 와이드 화면**: 추첨, 룰렛, 투표, 미니게임 화면 상단의 거대한 설정 박스들을 깔끔한 요약 바(`.view-summary-bar`)로 정리하고, 상단 좌측 `[⚙️ 설정]` 버튼을 누르면 좌측에서 부드럽게 튀어나오는 슬라이드아웃 서랍 패널(`[🎟️ 추첨]`, `[🎰 룰렛]`, `[📊 투표]`, `[🎮 미니게임]`)로 통합했습니다.
+- **실시간 양방향 뱃지 동기화**: 서랍에서 키워드, 후원 조건, 룰렛 항목, 투표 주제, 게임 모드를 변경하면 메인 화면의 요약 뱃지에 즉시 실시간 반영됩니다.
 
----
+### 2. 🧬 46종 메가진화(Mega Evolution) 시스템 & 전용 뒷모습(Back-Sprite) 그래픽
+- **메가진화 메카닉**: 배틀 중 메가스톤을 지닌 포켓몬은 기술 선택과 동시에 메가진화(`🧬 MEGA ON` / 시청자 채팅: `메가1`~`메가4`)하여 종족값 대폭 상승, 타입/특성 변경 및 강력한 전용 메가 그래픽으로 각성합니다 (팀당 1회 한정).
+- **스트리머 진영 전용 뒷모습 그래픽**: 스트리머 진영의 메가진화 폼 46종 전체(메가리자몽X/Y, 메가뮤츠X/Y, 메가팬텀, 메가루카리오, 메가번치코 등)에 대해 완벽한 후방 뒷모습 스프라이트를 지원하여 애니메이션 배틀 몰입감을 극대화했습니다.
 
-### 🎟️ 2. 시청자 대규모 추첨기 (Mega Raffle)
-- **⚡ 실시간 웹소켓(WebSocket) 채팅 수집**: 방송 URL 또는 채널 ID만 입력하면 실시간 채팅 메시지를 초고속 수집합니다.
-- **🧀 치즈 후원자 전용 추첨 (Cheese Donator Filter)**:
-  - 팬 배지 및 일반 치즈 후원자 전체 대상 추첨
-  - 치즈 누적 후원 등급별 정밀 필터링:
-    - **일반 후원자 이상 (LV1+)**
-    - **🔥 10만 치즈 이상 (LV2+)**
-    - **🔥 100만 치즈 이상 (LV3+)**
-    - **💖 1,000만 치즈 이상 (LV4+)**
-    - **✨ 1억 치즈 이상 (LV5+)**
-- **⭐ 구독자 전용 추첨 (Subscription Filter)**:
-  - **최소 구독 개월 수 지정** (예: 3개월 이상 연속 구독자)
-  - **구독 티어 지정** (1티어 이상 또는 2티어 전용)
-- **🔄 다회차 중복 당첨 방지 & 강력한 제외 설정**:
-  - **이전 회차 당첨자 자동 제외**: 1회차, 2회차 등 다회차 추첨 시 이전 회차 당첨자는 고유 ID 기반으로 100% 자동 차단
-  - **과거 당첨자 엑셀/CSV 파일 제외**: 엑셀/CSV 파일 드래그 앤 드롭으로 이전 당첨자 일괄 제외
-  - **수동 직접 제외**: 닉네임 및 고유 ID 표 대조로 특정 사용자 개별 제외
-- **🏆 회차별 당첨자 구획 배너 & 배지 표기**:
-  - 추첨회차마다 `🏆 제 N 회차 당첨자` 네온 구분 배너 자동 표시
-  - 당첨자 항목마다 `🎉 N회차` 태그 배지 시각적 표시
-- **📊 엑셀 커스텀 내보내기 (`⚙️ 항목 선택` 기능)**:
-  - `순위`, `추첨회차`, `닉네임`, `구독여부`, `구독개월`, `구독티어`, `후원여부`, `후원등급`, `채팅내용`, `참여시간`, `고유식별자(UID)` 등 11개 항목 중 원하는 항목만 선택하여 한글 깨짐 없이 UTF-8 BOM CSV 추출
+### 3. ⏱️ 턴 제한시간 & 기절 교체 투표 타이머 완전 연동
+- **10초(초고속)부터 60초까지 정밀 제어**: 시청자 턴 투표 시간 및 스트리머 턴 시간을 10초, 15초, 20초, 30초, 45초, 60초로 자유롭게 선택 가능합니다.
+- **기절 교체 모달 실시간 동기화**: 포켓몬이 쓰러졌을 때 열리는 `시청자 연합: 다음 출전 포켓몬 투표` 및 스트리머 출전 선택 모달의 카운트다운 타이머 역시 설정된 시간과 100% 실시간 연동됩니다.
+
+### 4. 👑 스트리머 채널 닉네임 & 프로필 사진 실시간 연동
+- 방송 연결 시 스트리머의 실제 채널 닉네임(예: 침착맨)과 프로필 썸네일 이미지를 추출하여 상단 헤더, 배틀 아레나, 상태창, 결과 팝업 전체에 실시간 동적 표시합니다.
 
 ---
 
-### 🎰 3. 비주얼 룰렛 시스템 (Visual Roulette Engine)
-- **✍️ 칸(Row) 단위 인터랙티브 룰렛 관리**:
-  - 줄바꿈 텍스트 상자 대신 **개별 칸별 항목 이름, 비율(가중치), 개별 삭제(`✕`) 버튼** 지원
-  - **`➕ 새 항목 칸 추가` 버튼 및 `Enter` 키**로 빠르고 간편하게 칸 생성
-  - 원클릭 빠른 프리셋 제공 (`🎁 경품 세트`, `🔥 벌칙 세트`, `🍱 메뉴 선택`)
-  - **👥 추첨 참여자 불러오기**: 현재 수집된 유효 응모자 명단을 버튼 하나로 룰렛 개별 칸에 즉시 생성
-- **🧀 치지직 치즈 도네이션 실시간 연동 룰렛 (Donation Mode)**:
-  - 방송 중 시청자가 치즈를 후원하는 순간 룰렛 원판에 실시간 자동 등록
-  - **후원자 닉네임 모드** (후원자 대상 추첨) & **후원 메시지 모드** (시청자 추천 벌칙/미션 모음)
-  - 최소 후원 치즈 금액 컷 설정 (예: `1,000 치즈 이상`)
-  - 후원 금액 비례 가중치 옵션 (치즈 후원 금액에 따라 룰렛 칸 넓이 자동 확장)
-- **🎨 HTML5 캔버스 고해상도 원판 & 물리 감속 회전**:
-  - 고대비 네온/파스텔 그라데이션 컬러 및 자동 폰트 크기 조절
-  - 부드러운 감속 곡선(`Ease-Out Quartic`)을 적용한 쫄깃한 회전 연출 (3초 / 5초 / 8초 시간 조절)
-- **🔊 Web Audio API 무설치 사운드 신디사이저**:
-  - 외부 음원 파일 없이 브라우저에서 직접 합성하는 리얼한 틱틱 회전음 & 당첨 축하 팡파레
-- **🎉 당첨 축하 폭죽(Confetti) & 모달**:
-  - 당첨 순간 화면 전체에 터지는 140여 개의 화려한 파티클 폭죽 가루
-  - `🗑️ 당첨된 항목 룰렛에서 자동 제거` 옵션으로 중복 당첨 완벽 방지
-  - 룰렛 당첨 히스토리 기록 관리
+## 🎮 주요 모드별 기능 안내
+
+### 🎟️ 1. 시청자 대규모 추첨기 (Mega Raffle)
+- **실시간 웹소켓 채팅 수집**: URL 또는 채널 ID 입력으로 실시간 채팅 초고속 수집
+- **정밀 조건별 필터링**:
+  - `👥 전체 참여자` / `💬 참여 키워드` (단독/부분 일치)
+  - `🧀 치즈 후원자 필터` (LV1+ ~ LV5+ 1억 치즈 등급)
+  - `⭐ 구독자 필터` (최소 구독 개월 수 / 1티어, 2티어 지정)
+  - `🚫 중복 방지 및 제외 관리` (다회차 이전 당첨자 자동 차단, 엑셀/CSV 파일 제외, 수동 닉네임/UID 제외)
+- **엑셀(CSV) 커스텀 추출**: 원하는 컬럼(순위, 회차, 닉네임, 구독/후원 상태, 채팅 내용, UID 등)만 골라 UTF-8 BOM CSV 내보내기
+
+### 🎰 2. 비주얼 룰렛 (Visual Roulette Engine)
+- **인터랙티브 항목 관리**: 칸(Row)별 항목명, 가중치, 확률 실시간 계산, 엑셀/CSV 불러오기/저장, 빠른 프리셋 제공
+- **치즈 도네이션 실시간 연동**: 후원 발생 시 룰렛에 자동 등록 (후원자 닉네임 모드 / 후원 메시지 미션 모드, 최소 치즈 금액 컷, 금액 비례 가중치)
+- **물리 감속 회전 & 무설치 Web Audio 사운드**: 리얼한 틱틱 회전 효과음, 당첨 팡파레, 화려한 Confetti 폭죽 파티클 연출
+
+### 📊 3. 실시간 투표 (Real-time Live Poll)
+- **실시간 게이지 차트 & 투표자 피드**: 시청자들의 실시간 참여율 및 득표수 애니메이션
+- **투표 방식**: 일반 채팅 번호/키워드 투표, 치즈 후원 비례 투표, 1인 1표 고정 / 중복 투표 허용
+- **원클릭 룰렛 변환 & 명단 엑셀 추출**: 투표 결과를 즉시 룰렛 항목으로 전환하거나 참여자 명단 다운로드
+
+### ⚔️ 4. 포켓몬 배틀 (Pokemon Battle Hub)
+- **213마리 챔피언스 풀 & 14종 지닌 도구**: 구애시리즈, 기합의띠, 돌격조끼, 생명의구슬, 자뭉열매, 먹밥, 메가스톤 등 완벽 구현
+- **🔥 3v3 팀 엔트리 교체 배틀 & 👑 1v1 단판 에이스 배틀**:
+  - 엔트리 구성, 선발/후발 교체, 포켓몬/지닌도구 양팀 전체 랜덤
+- **시청자 실시간 집단지성 투표**:
+  - 채팅창에 `1`~`4` (기술), `메가1`~`메가4` (메가진화+공격), `5`, `6` (포켓몬 교체) 입력 시 최다 득표 행동 자동 발동
+  - 18개 상성 타입 차트, 자속 보정(STAB 1.5배), 급소, 명중률, 랭크업/다운 및 상태이상 완벽 반영
+
+### ⚡ 5. 찌리리공 뒤집기 (Voltorb Flip)
+- **5×5 지뢰찾기 + 스도쿠 두뇌 배틀**: 스트리머 vs 시청자 턴제 대결
+- **대결 옵션**: 단판 승부, 3판 2선승제(BO3), 5판 3선승제(BO5), 7판 4선승제(BO7)
+- **메모 모드 & 실시간 투표**: 타일별 코인/폭탄 메모, 시청자 실시간 좌표(`A1`~`E5`) 투표 집계
 
 ---
 
-## 🏗️ 시스템 아키텍처 (Architecture)
+## 🚀 빠른 시작 (Quick Start)
 
-```mermaid
-sequenceDiagram
-    autonumber
-    actor Streamer as 스트리머/운영자
-    participant WebApp as Web Client (index.html)
-    participant Server as Python Proxy Server (server.py)
-    participant ChzzkAPI as Naver Chzzk API
-    participant ChzzkWS as Chzzk WebSocket Server
+### 1. 무설치 실행 파일로 바로 실행 (Windows)
+1. **[Releases](https://github.com/dlwjdxor/chzzk-raffle-app/releases)**에서 최신 `치지직추첨기.exe` 파일을 다운로드합니다.
+2. 다운로드한 `.exe` 파일을 더블 클릭하여 실행하면 브라우저 대시보드가 자동으로 열립니다.
 
-    Streamer->>WebApp: 방송 URL & 모드 선택 (추첨기 or 룰렛)
-    WebApp->>Server: /api/chzzk/?channelId={ID}
-    Server->>ChzzkAPI: GET /service/v2/channels/{ID}/live-detail
-    ChzzkAPI-->>Server: chatChannelId 반환
-    Server->>ChzzkAPI: GET /chats/access-token?channelId={chatCid}
-    ChzzkAPI-->>Server: accessToken 반환
-    Server-->>WebApp: chatChannelId & accessToken 전달
-    WebApp->>ChzzkWS: wss://kr-ss1.chat.naver.com/chat 접속
-    WebApp->>ChzzkWS: Handshake 패킷 송신 (cmd: 100)
-    ChzzkWS-->>WebApp: Connect Response (cmd: 10100)
-    loop 실시간 채팅 및 치즈 도네이션 수집
-        ChzzkWS-->>WebApp: Chat / Donation Packet (msgTypeCode: 1, 10, extras)
-        WebApp->>WebApp: 치즈 등급, 구독 정보 파싱 & 룰렛 도네이션 자동 등록
-    end
-    alt 시청자 대규모 추첨 모드
-        Streamer->>WebApp: [조건에 맞는 시청자 추첨하기] 클릭
-        WebApp->>WebApp: Fisher-Yates 셔플 기반 N명 추첨 (다회차 자동 제외 적용)
-        WebApp->>Streamer: 회차별 구획 배너 당첨자 출력 & 선택 항목 엑셀 CSV 다운로드
-    else 비주얼 룰렛 모드
-        Streamer->>WebApp: [룰렛 돌리기 (SPIN)] 클릭
-        WebApp->>WebApp: 물리 감속 회전 + Web Audio 틱틱 사운드 + Confetti 폭죽
-        WebApp->>Streamer: 당첨 팝업 모달 & 룰렛 히스토리 기록
-    end
+### 2. Python 소스 코드로 실행 (Windows / macOS / Linux)
+Python 3.9 이상이 설치되어 있다면 별도의 외장 패키지 설치 없이 바로 구동됩니다:
+```bash
+git clone https://github.com/dlwjdxor/chzzk-raffle-app.git
+cd chzzk-raffle-app
+python server.py
 ```
+브라우저에서 `http://localhost:8000`에 접속합니다.
 
 ---
 
-## 🚀 실행 방법 (Execution Guide)
-
-### 1. `.exe` 실행 파일로 바로 실행하기 (Windows 추천)
-- `dist/치지직추첨기.exe` (또는 Releases에서 다운로드한 `치지직추첨기.exe`) 파일을 **더블 클릭**만 하시면 됩니다.
-- 파이썬이나 기타 부가 프로그램 설치가 전혀 필요 없는 독립형 무설치 실행 파일입니다.
-
----
-
-### 2. 파이썬 소스 코드로 실행하기 (Mac / Linux / Windows 공통)
-파이썬 표준 라이브러리만 사용하므로 별도의 `pip install` 없이 바로 실행 가능합니다.
-
-- **필수 조건**: Python 3.9 이상
-- **실행 명령어**:
-  ```bash
-  # 저장소 클론 후 이동
-  git clone https://github.com/dlwjdxor/chzzk-raffle-app.git
-  cd chzzk-raffle-app
-
-  # 서버 실행 (Windows: python server.py / Mac & Linux: python3 server.py)
-  python server.py
-  ```
-- 서버가 실행되면 웹 브라우저에서 **`http://localhost:8000`** 페이지가 자동으로 열립니다.
-
----
-
-## 💻 실행 파일(.exe) 다시 빌드하기
+## 💻 실행 파일(.exe) 로컬 빌드
 
 ```bash
 pip install pyinstaller
-python -m PyInstaller --noconfirm --onefile --name "치지직추첨기" --add-data "public;public" server.py
+pyinstaller --noconfirm --clean --onefile --windowed --name "치지직추첨기" --add-data "public;public" server.py
 ```
+
+---
+
+## 📜 라이선스 (License)
+MIT License. 자유롭게 수정 및 배포하실 수 있습니다.
