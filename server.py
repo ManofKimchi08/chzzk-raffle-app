@@ -15,7 +15,7 @@ if sys.stdout is None:
 if sys.stderr is None:
     sys.stderr = open(os.devnull, 'w')
 
-DEFAULT_PORT = 8000
+DEFAULT_PORT = int(os.environ.get('PORT', 8000))
 
 # Base directory for static files (supports PyInstaller onefile bundle)
 if getattr(sys, 'frozen', False):
@@ -171,16 +171,18 @@ class ReusableThreadingServer(http.server.ThreadingHTTPServer):
     daemon_threads = True
 
 if __name__ == '__main__':
-    port = find_available_port(DEFAULT_PORT)
+    is_cloud = bool(os.environ.get('PORT'))
+    port = DEFAULT_PORT if is_cloud else find_available_port(DEFAULT_PORT)
     server_address = ('', port)
     
     print(f"==================================================")
-    print(f" 🚀 치지직 대규모 시청자 추첨 & 룰렛 앱이 실행되었습니다!")
-    print(f" 👉 브라우저 주소: http://localhost:{port}")
+    print(f" 🚀 치지직 대규모 시청자 추첨 & 룰렛 & 배틀 플랫폼이 시작되었습니다!")
+    print(f" 👉 포트(Port): {port}")
     print(f"==================================================")
     
-    # Automatically open browser window
-    threading.Timer(0.8, lambda: webbrowser.open(f'http://localhost:{port}')).start()
+    # Automatically open browser window in local environment
+    if not is_cloud:
+        threading.Timer(0.8, lambda: webbrowser.open(f'http://localhost:{port}')).start()
 
     with ReusableThreadingServer(server_address, ChzzkProxyHandler) as httpd:
         try:
