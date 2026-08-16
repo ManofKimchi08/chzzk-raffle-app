@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>치지직 대규모 시청자 추첨 & 룰렛 & 포켓몬 배틀 v4.6.0 | Chzzk Mega Raffle & Pokemon Battle</title>
+  <title>치지직 대규모 시청자 추첨 & 룰렛 & 포켓몬 배틀 v4.6.1 | Chzzk Mega Raffle & Pokemon Battle</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
@@ -3174,6 +3174,45 @@
           <div id="modalLiveTitle" style="font-size: 11px; color: var(--text-sub); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></div>
         </div>
 
+        <!-- 🔞 19세(연령 제한) 방송 네이버 쿠키 인증 세팅 -->
+        <div id="adultCookieContainer" style="margin-bottom: 12px; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 10px; background: rgba(239, 68, 68, 0.05); overflow: hidden; transition: all 0.2s ease;">
+          <div id="adultCookieHeader" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; cursor: pointer; user-select: none;" onclick="toggleAdultCookieSettings()">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 14px;">🔞</span>
+              <span style="font-size: 12px; font-weight: 700; color: #fff;">19세 연령제한 방송 연결 설정</span>
+              <span id="adultCookieStatusBadge" style="font-size: 10px; padding: 2px 6px; border-radius: 4px; background: rgba(255,255,255,0.1); color: var(--text-sub);">선택사항</span>
+            </div>
+            <span id="adultCookieToggleIcon" style="font-size: 11px; color: var(--text-sub); font-weight: 700;">▼ 열기</span>
+          </div>
+
+          <div id="adultCookieFields" style="display: none; padding: 0 14px 14px 14px; border-top: 1px solid rgba(239, 68, 68, 0.15);">
+            <div style="margin-top: 10px; padding: 8px 10px; background: rgba(0, 0, 0, 0.3); border-radius: 6px; font-size: 11px; color: var(--text-sub); line-height: 1.45;">
+              <strong style="color: #f87171;">💡 19세 방송 연결 안내:</strong> 네이버 정책상 연령제한 방송은 성인 인증된 네이버 계정의 세션 쿠키가 필요합니다.
+              <div style="margin-top: 4px; color: #38bdf8;">
+                치지직 로그인 후 <b>F12(개발자도구) > Application(애플리케이션) > Cookies > https://chzzk.naver.com</b> 에서 복사하여 붙여넣으세요.
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 10px; margin-bottom: 8px;">
+              <label style="font-size: 11px; font-weight: 700; color: #cbd5e1;">NID_AUT</label>
+              <input type="password" id="nidAuthInput" placeholder="NID_AUT 값 붙여넣기" style="font-size: 12px; padding: 8px 10px; background: rgba(15, 23, 42, 0.9); border: 1px solid var(--border-color); border-radius: 6px; color: #fff; width: 100%;">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 10px;">
+              <label style="font-size: 11px; font-weight: 700; color: #cbd5e1;">NID_SES</label>
+              <input type="password" id="nidSesInput" placeholder="NID_SES 값 붙여넣기" style="font-size: 12px; padding: 8px 10px; background: rgba(15, 23, 42, 0.9); border: 1px solid var(--border-color); border-radius: 6px; color: #fff; width: 100%;">
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <label style="display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-sub); cursor: pointer;">
+                <input type="checkbox" id="saveCookieCheck" checked style="accent-color: var(--chzzk-green);">
+                <span>이 브라우저에 쿠키 안전하게 저장</span>
+              </label>
+              <button type="button" class="btn-chip btn-chip-secondary" style="font-size: 10px; padding: 3px 8px;" onclick="clearSavedCookies()">쿠키 비우기</button>
+            </div>
+          </div>
+        </div>
+
         <div style="font-size: 11px; color: var(--text-sub); line-height: 1.5; background: rgba(0, 255, 163, 0.05); padding: 12px; border-radius: 8px; border: 1px solid rgba(0, 255, 163, 0.15);">
           💡 방송 주소(URL) 또는 채널 ID를 입력하여 실시간 채팅 및 도네이션 서버에 연결합니다. 연결 후 참여 키워드나 후원/구독자 필터는 메인 화면에서 자유롭게 설정하실 수 있습니다.
         </div>
@@ -4573,6 +4612,63 @@
       }
     }
 
+    // ==========================================
+    // 🔞 19세(연령 제한) 방송 네이버 쿠키 관리
+    // ==========================================
+    function toggleAdultCookieSettings(forceOpen = null) {
+      const fields = document.getElementById('adultCookieFields');
+      const icon = document.getElementById('adultCookieToggleIcon');
+      if (!fields || !icon) return;
+      const isOpen = forceOpen !== null ? forceOpen : (fields.style.display !== 'none');
+      if (isOpen) {
+        fields.style.display = 'none';
+        icon.innerText = '▼ 열기';
+      } else {
+        fields.style.display = 'block';
+        icon.innerText = '▲ 닫기';
+      }
+    }
+
+    function updateAdultCookieBadge() {
+      const badge = document.getElementById('adultCookieStatusBadge');
+      const nidAuth = (document.getElementById('nidAuthInput')?.value || '').trim();
+      const nidSes = (document.getElementById('nidSesInput')?.value || '').trim();
+      if (!badge) return;
+      if (nidAuth && nidSes) {
+        badge.style.background = 'rgba(0, 255, 163, 0.2)';
+        badge.style.color = 'var(--chzzk-green)';
+        badge.innerText = '✓ 쿠키 설정됨';
+      } else {
+        badge.style.background = 'rgba(255,255,255,0.1)';
+        badge.style.color = 'var(--text-sub)';
+        badge.innerText = '선택사항';
+      }
+    }
+
+    function loadSavedCookies() {
+      const savedAuth = localStorage.getItem('chzzk_nid_aut') || '';
+      const savedSes = localStorage.getItem('chzzk_nid_ses') || '';
+      const authInput = document.getElementById('nidAuthInput');
+      const sesInput = document.getElementById('nidSesInput');
+      if (authInput && savedAuth) authInput.value = savedAuth;
+      if (sesInput && savedSes) sesInput.value = savedSes;
+      updateAdultCookieBadge();
+    }
+
+    function clearSavedCookies() {
+      localStorage.removeItem('chzzk_nid_aut');
+      localStorage.removeItem('chzzk_nid_ses');
+      const authInput = document.getElementById('nidAuthInput');
+      const sesInput = document.getElementById('nidSesInput');
+      if (authInput) authInput.value = '';
+      if (sesInput) sesInput.value = '';
+      updateAdultCookieBadge();
+      alert('저장된 19세 인증 쿠키가 삭제되었습니다.');
+    }
+
+    document.getElementById('nidAuthInput')?.addEventListener('input', updateAdultCookieBadge);
+    document.getElementById('nidSesInput')?.addEventListener('input', updateAdultCookieBadge);
+
     // Connect Entry
     connectBtn.addEventListener('click', async () => {
       currentChannelId = extractChannelId(channelInput.value);
@@ -4592,13 +4688,32 @@
     async function startConnectionFlow() {
       setStatus('connecting', '치지직 방송 접근 토큰 요청 중...');
 
+      const nidAuth = (document.getElementById('nidAuthInput')?.value || localStorage.getItem('chzzk_nid_aut') || '').trim();
+      const nidSes = (document.getElementById('nidSesInput')?.value || localStorage.getItem('chzzk_nid_ses') || '').trim();
+
+      if (document.getElementById('saveCookieCheck')?.checked) {
+        if (nidAuth) localStorage.setItem('chzzk_nid_aut', nidAuth);
+        if (nidSes) localStorage.setItem('chzzk_nid_ses', nidSes);
+      }
+
+      let apiUrl = `/api/chzzk/?channelId=${encodeURIComponent(currentChannelId)}`;
+      if (nidAuth) apiUrl += `&nidAuth=${encodeURIComponent(nidAuth)}`;
+      if (nidSes) apiUrl += `&nidSes=${encodeURIComponent(nidSes)}`;
+
       try {
-        const res = await fetch(`/api/chzzk/?channelId=${encodeURIComponent(currentChannelId)}`);
+        const res = await fetch(apiUrl);
         const data = await res.json();
 
         if (!res.ok || data.error) {
-          alert('오류: ' + (data.error || '방송 정보를 불러올 수 없습니다.'));
           setStatus('disconnected', '연결 실패');
+          if (data.isAdult) {
+            openConnectModal();
+            toggleAdultCookieSettings(false); // force open
+            setTimeout(() => document.getElementById('nidAuthInput')?.focus(), 200);
+            alert(data.error || '🔞 19세(연령 제한) 방송입니다. [19세 방송 연결 설정]에 NID_AUT와 NID_SES 쿠키를 입력해주세요.');
+          } else {
+            alert('오류: ' + (data.error || '방송 정보를 불러올 수 없습니다.'));
+          }
           return;
         }
 
@@ -4724,7 +4839,12 @@
       liveStatusPollingInterval = setInterval(async () => {
         if (!isConnected || isManualDisconnect) return;
         try {
-          const res = await fetch(`/api/chzzk/?channelId=${encodeURIComponent(currentChannelId)}`);
+          const nidAuth = (document.getElementById('nidAuthInput')?.value || localStorage.getItem('chzzk_nid_aut') || '').trim();
+          const nidSes = (document.getElementById('nidSesInput')?.value || localStorage.getItem('chzzk_nid_ses') || '').trim();
+          let apiUrl = `/api/chzzk/?channelId=${encodeURIComponent(currentChannelId)}`;
+          if (nidAuth) apiUrl += `&nidAuth=${encodeURIComponent(nidAuth)}`;
+          if (nidSes) apiUrl += `&nidSes=${encodeURIComponent(nidSes)}`;
+          const res = await fetch(apiUrl);
           const data = await res.json();
           if (data) {
             updateLiveStatusUI(data.isLive, data.channelName, data.liveTitle, data.concurrentUserCount, data.channelImageUrl);
@@ -10782,6 +10902,7 @@
     }
 
     // Initialize
+    loadSavedCookies();
     renderManualRouletteRows();
     renderPollOptionsList();
     initNewMatch(true);

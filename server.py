@@ -75,20 +75,49 @@ class ChzzkProxyHandler(http.server.SimpleHTTPRequestHandler):
         if parsed.path.startswith('/api/chzzk/'):
             qs = parse_qs(parsed.query)
             raw_channel_id = qs.get('channelId', [''])[0]
+            nid_auth = qs.get('nidAuth', [''])[0].strip()
+            nid_ses = qs.get('nidSes', [''])[0].strip()
             channel_id = extract_channel_id(raw_channel_id)
             
             if not channel_id:
                 self.send_json({'error': '유효한 채널 ID 또는 방송 URL을 입력해주세요.'}, status=400)
                 return
 
+            api_headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
+            }
+            if nid_auth and nid_ses:
+                api_headers['Cookie'] = f"NID_AUT={nid_auth}; NID_SES={nid_ses}"
+
             try:
                 # 1. Fetch live detail
                 detail_url = f"https://api.chzzk.naver.com/service/v2/channels/{channel_id}/live-detail"
-                req = urllib.request.Request(detail_url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'})
-                with urllib.request.urlopen(req, timeout=10) as resp:
-                    detail_data = json.loads(resp.read().decode('utf-8'))
+                req = urllib.request.Request(detail_url, headers=api_headers)
+                try:
+                    with urllib.request.urlopen(req, timeout=10) as resp:
+                        detail_data = json.loads(resp.read().decode('utf-8'))
+                except urllib.error.HTTPError as he:
+                    if he.code == 4001 or he.code == 403 or he.code == 400:
+                        self.send_json({
+                            'error': '🔞 19세(연령 제한) 방송입니다. 방송 연결 창 하단의 [19세 방송 설정]에 NID_AUT와 NID_SES 쿠키를 입력해주세요.',
+                            'isAdult': True
+                        }, status=403)
+                        return
+                    raise he
 
-                content_obj = detail_data.get('content', {})
+                res_code = detail_data.get('code')
+                res_msg = detail_data.get('message', '')
+                content_obj = detail_data.get('content') or {}
+
+                # Detect 19+ restrictions from response payload
+                if res_code == 4001 or '연령' in str(res_msg) or '성인' in str(res_msg) or (not content_obj and not nid_auth):
+                    if not content_obj:
+                        self.send_json({
+                            'error': '🔞 19세(연령 제한) 방송입니다. 방송 연결 창 하단의 [19세 방송 설정]에 NID_AUT와 NID_SES 쿠키를 입력해주세요.',
+                            'isAdult': True
+                        }, status=403)
+                        return
+
                 chat_cid = content_obj.get('chatChannelId')
                 status = content_obj.get('status', 'CLOSE')
                 is_live = (status == 'OPEN')
@@ -103,7 +132,7 @@ class ChzzkProxyHandler(http.server.SimpleHTTPRequestHandler):
                 if not chat_cid:
                     try:
                         chan_url = f"https://api.chzzk.naver.com/service/v1/channels/{channel_id}"
-                        c_req = urllib.request.Request(chan_url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'})
+                        c_req = urllib.request.Request(chan_url, headers=api_headers)
                         with urllib.request.urlopen(c_req, timeout=10) as c_resp:
                             chan_data = json.loads(c_resp.read().decode('utf-8'))
                             channel_name = chan_data.get('content', {}).get('channelName', channel_name)
@@ -117,7 +146,7 @@ class ChzzkProxyHandler(http.server.SimpleHTTPRequestHandler):
 
                 # 2. Fetch chat access token
                 token_url = f"https://comm-api.game.naver.com/nng_main/v1/chats/access-token?channelId={chat_cid}&chatType=STREAMING"
-                t_req = urllib.request.Request(token_url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'})
+                t_req = urllib.request.Request(token_url, headers=api_headers)
                 with urllib.request.urlopen(t_req, timeout=10) as t_resp:
                     token_data = json.loads(t_resp.read().decode('utf-8'))
 
@@ -136,7 +165,8 @@ class ChzzkProxyHandler(http.server.SimpleHTTPRequestHandler):
                     'openDate': open_date,
                     'channelImageUrl': channel_image,
                     'accessToken': access_token,
-                    'extraToken': extra_token
+                    'extraToken': extra_token,
+                    'isAdult': content_obj.get('adult', False)
                 }
                 self.send_json(res_payload)
             except urllib.error.HTTPError as he:
