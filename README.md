@@ -1,7 +1,7 @@
-# 🎮 치지직 대규모 시청자 추첨 & 룰렛 & 실시간 투표 & 포켓몬 배틀 플랫폼 (Chzzk Interactive Hub) v4.6.2
+# 🎮 치지직 대규모 시청자 추첨 & 룰렛 & 실시간 투표 & 포켓몬 배틀 플랫폼 (Chzzk Interactive Hub) v4.6.3
 
 ![Chzzk WebSocket Live](https://img.shields.io/badge/Chzzk-WebSocket%20Live-00ffa3?style=for-the-badge&logo=naver)
-![Version](https://img.shields.io/badge/Release-v4.6.2-purple?style=for-the-badge)
+![Version](https://img.shields.io/badge/Release-v4.6.3-purple?style=for-the-badge)
 ![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![HTML5 Canvas](https://img.shields.io/badge/HTML5-Canvas%20%26%20Audio-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
@@ -10,16 +10,16 @@
 
 ---
 
-## 🌟 v4.6.2 주요 신규 및 개선 사항 (What's New in v4.6.2)
+## 🌟 v4.6.3 주요 신규 및 개선 사항 (What's New in v4.6.3)
 
-### 1. 🧬 포켓몬 매치 종료 후 메가진화 기본 폼 복원 & 스프라이트 잔상/투명화 버그 완벽 수정
-- **메가진화 상태 초기화 (Clean Base Form Reversion)**: 이전 경기에서 메가진화를 진행한 뒤 매치를 종료하거나 다시 시작(`다시 하기`)할 때, 포켓몬이 메가진화 상태로 고정되던 문제를 수정하여 매치 시작 및 엔트리 화면에서 항상 정상적인 **기본 폼(Base Form)**으로 복원되도록 개선했습니다.
-- **포켓몬 스프라이트 투명화(기절 애니메이션 잔상) 제거**: 이전 경기에서 기절했던 포켓몬의 기절 애니메이션 클래스(`poke-sprite-fainted`)가 다음 경기 시작 시 남아있어 스프라이트가 투명해지던 현상을 완벽하게 초기화하여 모든 포켓몬 그래픽이 항상 100% 정상 출력되도록 수정했습니다.
-- **포켓몬 데이터 딥클론(Deep Clone) 격리**: 메가진화 시 원본 데이터셋이 변조되지 않도록 독립 슬롯 인스턴스로 격리했습니다.
+### 1. ⚔️ 포켓몬 1v1 에이스 배틀 모드 엔트리 & 교체 UI 완벽 정상화
+- **1v1 모드 단일 포켓몬 엔트리 동기화**: 1v1 모드 선택 시 배틀 아레나 상단 볼 카운트 HUD가 정확히 1개(`⚔️`)만 표시되도록 수정하고, 3v3용 후속 포켓몬 슬롯이 배틀 화면에 유령 후보(NaN%, Infinity%)로 나타나던 현상을 완벽 차단했습니다.
+- **1v1 교체 탭 자동 비활성화 & 전용 투표 가이드**: 1v1 배틀 중에는 스트리머 교체 탭(`🔄 포켓몬 교체`) 버튼이 자동으로 숨겨지며, 시청자 실시간 투표 HUD에서도 교체 명령어(`5, 6번`) 없이 오직 4개 기술(1~4 / 메가1~4)만 직관적으로 안내되도록 최적화했습니다.
+- **메인/드로어 설정 완벽 양방향 동기화**: 상단 설정 서랍과 메인 배틀 설정 창 사이의 1v1 / 3v3 모드 변경 이벤트가 실시간으로 양방향 동기화되도록 수정했습니다.
 
-### 2. 🔞 치지직 19세(연령 제한) 방송 네이버 쿠키 인증 지원
-- **19세 방송 실시간 연결 지원**: 네이버 정책상 비로그인 조회가 차단되는 연령제한 방송에 대해, 성인 인증된 네이버 세션 쿠키(`NID_AUT`, `NID_SES`)를 입력하여 즉시 연결할 수 있는 **전용 19세 방송 연결 설정 UI**를 탑재했습니다.
-- **브라우저 안전 저장 & 로그 제로 마스킹**: 브라우저 로컬 저장소에 안전하게 보관되며, 서버 로그에 쿠키가 절대 남지 않도록 완벽 마스킹 처리됩니다.
+### 2. 🧬 포켓몬 매치 종료 후 메가진화 기본 폼 복원 & 스프라이트 투명화 수정
+- **기본 폼 자동 복원**: 매치 종료 또는 재시작 시 메가진화 상태가 항상 기본 폼(Base Form)으로 자동 복원.
+- **스프라이트 가시성 리셋**: 기절 애니메이션 클래스 잔상을 제거하여 모든 포켓몬 그래픽이 항상 100% 정상 출력.
 
 ### 3. 🎮 포켓몬 배틀 기술별 PP (Power Points) 및 발버둥 (Struggle) 시스템
 - **전 기술 공식 최대 PP 규격 탑재**: 235마리 포켓몬의 72개 고유 기술에 대해 공식 PP 규격 (`5 PP`, `10 PP`, `15 PP`, `20 PP`, `30 PP`)을 전면 구축했습니다.
