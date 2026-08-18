@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>치지직 대규모 시청자 추첨 & 룰렛 & 포켓몬 배틀 v4.6.1 | Chzzk Mega Raffle & Pokemon Battle</title>
+  <title>치지직 대규모 시청자 추첨 & 룰렛 & 포켓몬 배틀 v4.6.2 | Chzzk Mega Raffle & Pokemon Battle</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
@@ -8791,19 +8791,42 @@
       }
 
       if (allPokemonData.length > 0) {
-        // Default team setups
-        streamerTeam[0].pokemon = allPokemonData.find(p => p.id === 6) || allPokemonData[0];   // Charizard
-        streamerTeam[1].pokemon = allPokemonData.find(p => p.id === 94) || allPokemonData[1];  // Gengar
-        streamerTeam[2].pokemon = allPokemonData.find(p => p.id === 445) || allPokemonData[2]; // Garchomp
+        // Default team setups (Clean deep clones)
+        const s0 = allPokemonData.find(p => p.id === 6) || allPokemonData[0];   // Charizard
+        const s1 = allPokemonData.find(p => p.id === 94) || allPokemonData[1];  // Gengar
+        const s2 = allPokemonData.find(p => p.id === 445) || allPokemonData[2]; // Garchomp
+        streamerTeam[0].basePokeCode = s0.code || String(s0.id);
+        streamerTeam[0].pokemon = JSON.parse(JSON.stringify(s0));
+        streamerTeam[1].basePokeCode = s1.code || String(s1.id);
+        streamerTeam[1].pokemon = JSON.parse(JSON.stringify(s1));
+        streamerTeam[2].basePokeCode = s2.code || String(s2.id);
+        streamerTeam[2].pokemon = JSON.parse(JSON.stringify(s2));
 
-        viewersTeam[0].pokemon = allPokemonData.find(p => p.id === 25) || allPokemonData[3];  // Pikachu
-        viewersTeam[1].pokemon = allPokemonData.find(p => p.id === 9) || allPokemonData[4];   // Blastoise
-        viewersTeam[2].pokemon = allPokemonData.find(p => p.id === 68) || allPokemonData[5];  // Machamp
+        const v0 = allPokemonData.find(p => p.id === 25) || allPokemonData[3];  // Pikachu
+        const v1 = allPokemonData.find(p => p.id === 9) || allPokemonData[4];   // Blastoise
+        const v2 = allPokemonData.find(p => p.id === 68) || allPokemonData[5];  // Machamp
+        viewersTeam[0].basePokeCode = v0.code || String(v0.id);
+        viewersTeam[0].pokemon = JSON.parse(JSON.stringify(v0));
+        viewersTeam[1].basePokeCode = v1.code || String(v1.id);
+        viewersTeam[1].pokemon = JSON.parse(JSON.stringify(v1));
+        viewersTeam[2].basePokeCode = v2.code || String(v2.id);
+        viewersTeam[2].pokemon = JSON.parse(JSON.stringify(v2));
 
         populateItemDropdowns();
         renderPokeSetupPreview();
         renderPokemonPickerFilters();
       }
+    }
+
+    function revertPokemonToBaseForm(slot) {
+      if (!slot || !slot.pokemon) return;
+      const targetCodeOrId = slot.basePokeCode || slot.pokemon.code || String(slot.pokemon.id);
+      const base = allPokemonData.find(p => (p.code && p.code === targetCodeOrId) || String(p.id) === String(targetCodeOrId));
+      if (base) {
+        slot.pokemon = JSON.parse(JSON.stringify(base));
+        slot.basePokeCode = base.code || String(base.id);
+      }
+      slot.isMega = false;
     }
 
     function getItemObj(itemId) {
@@ -9122,7 +9145,9 @@
       if (!found) return;
 
       const team = pokePickerTarget === 'streamer' ? streamerTeam : viewersTeam;
-      team[pokePickerSlotIdx].pokemon = found;
+      team[pokePickerSlotIdx].basePokeCode = found.code || String(found.id);
+      team[pokePickerSlotIdx].pokemon = JSON.parse(JSON.stringify(found));
+      team[pokePickerSlotIdx].isMega = false;
 
       // Auto-suggest Mega Stone if available
       const megaForm = allMegaEvolutions.find(m => m.basePokeId === found.id);
@@ -9167,7 +9192,9 @@
       const team = target === 'streamer' ? streamerTeam : viewersTeam;
       const slotIdx = target === 'streamer' ? streamerSetupSlotIdx : viewersSetupSlotIdx;
 
-      team[slotIdx].pokemon = rand;
+      team[slotIdx].basePokeCode = rand.code || String(rand.id);
+      team[slotIdx].pokemon = JSON.parse(JSON.stringify(rand));
+      team[slotIdx].isMega = false;
       randomizeSlotItem(target);
 
       showToast(`${target === 'streamer' ? `👑 ${getStreamerName()}` : '👥 시청자'} ${slotIdx+1}번: [${rand.name}] 랜덤 배정!`, '🎲');
@@ -9179,7 +9206,9 @@
       const shuffled = [...allPokemonData].sort(() => 0.5 - Math.random());
 
       for (let i = 0; i < 3; i++) {
-        streamerTeam[i].pokemon = shuffled[i];
+        streamerTeam[i].basePokeCode = shuffled[i].code || String(shuffled[i].id);
+        streamerTeam[i].pokemon = JSON.parse(JSON.stringify(shuffled[i]));
+        streamerTeam[i].isMega = false;
         const sMega = allMegaEvolutions.find(m => m.basePokeId === shuffled[i].id);
         if (sMega && sMega.requiredStoneId && Math.random() < 0.5) {
           streamerTeam[i].item = sMega.requiredStoneId;
@@ -9188,7 +9217,9 @@
           streamerTeam[i].item = randIt.id;
         }
 
-        viewersTeam[i].pokemon = shuffled[i + 3];
+        viewersTeam[i].basePokeCode = shuffled[i + 3].code || String(shuffled[i + 3].id);
+        viewersTeam[i].pokemon = JSON.parse(JSON.stringify(shuffled[i + 3]));
+        viewersTeam[i].isMega = false;
         const vMega = allMegaEvolutions.find(m => m.basePokeId === shuffled[i + 3].id);
         if (vMega && vMega.requiredStoneId && Math.random() < 0.5) {
           viewersTeam[i].item = vMega.requiredStoneId;
@@ -9211,6 +9242,11 @@
           showToast('포켓몬 엔트리가 완성되지 않았습니다.', '⚠️');
           return;
         }
+
+        // Always revert to clean base form before battle starts
+        revertPokemonToBaseForm(streamerTeam[i]);
+        revertPokemonToBaseForm(viewersTeam[i]);
+
         const sP = streamerTeam[i].pokemon;
         streamerTeam[i].maxHP = calculateLevel50HP(sP.stats.hp);
         streamerTeam[i].currentHP = streamerTeam[i].maxHP;
@@ -9241,6 +9277,22 @@
           currentPP: (m.pp !== undefined ? m.pp : (m.max_pp || 15)),
           maxPP: (m.pp !== undefined ? m.pp : (m.max_pp || 15))
         }));
+      }
+
+      // Reset arena sprites & animations
+      const sSpr = document.getElementById('arenaStreamerSprite');
+      if (sSpr) {
+        sSpr.classList.remove('poke-sprite-fainted', 'poke-sprite-attacker', 'poke-sprite-damaged');
+        sSpr.style.opacity = '1';
+        sSpr.style.transform = 'none';
+        sSpr.style.filter = 'none';
+      }
+      const vSpr = document.getElementById('arenaViewersSprite');
+      if (vSpr) {
+        vSpr.classList.remove('poke-sprite-fainted', 'poke-sprite-attacker', 'poke-sprite-damaged');
+        vSpr.style.opacity = '1';
+        vSpr.style.transform = 'none';
+        vSpr.style.filter = 'none';
       }
 
       streamerActiveIdx = 0;
@@ -9279,6 +9331,9 @@
       const sSpr = document.getElementById('arenaStreamerSprite');
       if (sSpr) {
         sSpr.src = sP.sprite_back || sP.sprite_front;
+        sSpr.classList.remove('poke-sprite-fainted', 'poke-sprite-attacker', 'poke-sprite-damaged');
+        sSpr.style.opacity = '1';
+        sSpr.style.transform = 'none';
       }
       document.getElementById('arenaStreamerTypes').innerHTML = sP.types.map(t => `<span class="type-badge type-${t}" style="font-size: 9px; padding: 1px 4px;">${t}</span>`).join('');
       
@@ -9296,6 +9351,9 @@
       const vSpr = document.getElementById('arenaViewersSprite');
       if (vSpr) {
         vSpr.src = vP.sprite_front;
+        vSpr.classList.remove('poke-sprite-fainted', 'poke-sprite-attacker', 'poke-sprite-damaged');
+        vSpr.style.opacity = '1';
+        vSpr.style.transform = 'none';
       }
       document.getElementById('arenaViewersTypes').innerHTML = vP.types.map(t => `<span class="type-badge type-${t}" style="font-size: 9px; padding: 1px 4px;">${t}</span>`).join('');
 
@@ -10266,6 +10324,7 @@
       const team = isStreamer ? streamerTeam : viewersTeam;
       const activeIdx = isStreamer ? streamerActiveIdx : viewersActiveIdx;
       const slot = team[activeIdx];
+      slot.pokemon = JSON.parse(JSON.stringify(slot.pokemon));
       const poke = slot.pokemon;
       const megaForm = getAvailableMegaEvolution(poke, slot.item);
       if (!megaForm) return;
@@ -10891,8 +10950,32 @@
       clearInterval(pokeBattleState.faintTimerInterval);
       const faintModal = document.getElementById('pokeFaintSwitchModal');
       if (faintModal) faintModal.classList.remove('active');
+
+      // Revert all team slots to clean base form
+      for (let i = 0; i < 3; i++) {
+        if (streamerTeam[i]) revertPokemonToBaseForm(streamerTeam[i]);
+        if (viewersTeam[i]) revertPokemonToBaseForm(viewersTeam[i]);
+      }
+
+      // Reset arena sprites & animations
+      const sSpr = document.getElementById('arenaStreamerSprite');
+      if (sSpr) {
+        sSpr.classList.remove('poke-sprite-fainted', 'poke-sprite-attacker', 'poke-sprite-damaged');
+        sSpr.style.opacity = '1';
+        sSpr.style.transform = 'none';
+        sSpr.style.filter = 'none';
+      }
+      const vSpr = document.getElementById('arenaViewersSprite');
+      if (vSpr) {
+        vSpr.classList.remove('poke-sprite-fainted', 'poke-sprite-attacker', 'poke-sprite-damaged');
+        vSpr.style.opacity = '1';
+        vSpr.style.transform = 'none';
+        vSpr.style.filter = 'none';
+      }
+
       document.getElementById('pokeBattleArenaStage').style.display = 'none';
       document.getElementById('pokeBattleSetupStage').style.display = 'block';
+      renderPokeSetupPreview();
     }
 
     function closePokeResultModal() {

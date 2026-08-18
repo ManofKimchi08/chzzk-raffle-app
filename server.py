@@ -48,13 +48,16 @@ class ChzzkProxyHandler(http.server.SimpleHTTPRequestHandler):
         super().__init__(*args, directory=WEB_DIR, **kwargs)
 
     def log_message(self, format, *args):
-        # Safe logging that never throws if stderr is redirected/closed
+        # Safe logging that never throws and masks sensitive cookie credentials
         try:
+            msg = format % args
+            msg = re.sub(r'nidAuth=[^&\s]+', 'nidAuth=***', msg)
+            msg = re.sub(r'nidSes=[^&\s]+', 'nidSes=***', msg)
             if sys.stderr:
                 sys.stderr.write("%s - - [%s] %s\n" %
                                  (self.address_string(),
                                   self.log_date_time_string(),
-                                  format % args))
+                                  msg))
         except Exception:
             pass
 
