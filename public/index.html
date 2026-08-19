@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>치지직 대규모 시청자 추첨 & 룰렛 & 포켓몬 배틀 v4.6.3 | Chzzk Mega Raffle & Pokemon Battle</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="shortcut icon" href="favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
@@ -2192,6 +2196,11 @@
       50% { filter: brightness(1.8) drop-shadow(0 0 25px #00ffa3); }
       100% { filter: brightness(1); }
     }
+    @keyframes votePulse {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
   </style>
 </head>
 <body>
@@ -2522,9 +2531,9 @@
       <!-- GAME 1: 찌리리공 뒤집기 (Voltorb Flip Game Section) -->
       <!-- ============================================== -->
       <div id="voltorbGameSection" style="display: flex; flex-direction: column; gap: 16px; width: 100%;">
-        <!-- TOP PANEL: Battle Status & Controls (상부 설정 및 제어) -->
-        <div class="panel">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+        <!-- TOP PANEL: Battle Status & Scoreboard (상부 스코어보드) -->
+        <div class="panel" style="margin-bottom: 0;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
             <div style="display: flex; align-items: center; gap: 10px;">
               <div class="panel-title" style="margin-bottom: 0;">
                 <span>⚡ 찌리리공 뒤집기 (스트리머 vs 시청자 배틀)</span>
@@ -2532,56 +2541,42 @@
               <span id="gamePhaseBadge" class="live-badge-pill offline" style="font-size: 11px;">대기 중</span>
             </div>
 
-            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-              <div style="display: flex; align-items: center; gap: 6px;">
-                <span style="font-size: 12px; color: var(--text-sub); font-weight: 700;">🏆 매치 방식</span>
-                <select id="gameMatchFormatSelect" style="padding: 6px 12px; font-size: 12px; background: #080c14; border: 1px solid var(--border-color); color: #fff; border-radius: 6px; font-weight: 700;">
-                  <option value="single" selected>단판 승부 (1세트 결착)</option>
-                  <option value="bo3">3판 2선승제 (BO3 - 2승 시 우승)</option>
-                  <option value="bo5">5판 3선승제 (BO5 - 3승 시 우승)</option>
-                  <option value="bo7">7판 4선승제 (BO7 - 4승 시 우승)</option>
-                </select>
-              </div>
-
-              <div style="display: flex; align-items: center; gap: 6px;">
-                <span style="font-size: 12px; color: var(--text-sub); font-weight: 700;">🎯 난이도 레벨</span>
-                <select id="gameLevelSelect" style="padding: 6px 12px; font-size: 12px; background: #080c14; border: 1px solid var(--border-color); color: #fff; border-radius: 6px; font-weight: 700;">
-                  <option value="1" selected>Lv.1 (초급 - 코인 24~48 / 폭탄 6개)</option>
-                  <option value="2">Lv.2 (중급 - 코인 54~108 / 폭탄 7개)</option>
-                  <option value="3">Lv.3 (고급 - 코인 108~216 / 폭탄 8개)</option>
-                  <option value="4">Lv.4 (달인 - 코인 216~432 / 폭탄 8~10개)</option>
-                  <option value="5">Lv.5 (초고수 - 코인 432~864 / 폭탄 10개)</option>
-                  <option value="6">Lv.6 (마스터 - 코인 864~1728 / 폭탄 10개)</option>
-                  <option value="7">Lv.7 (챔피언 - 코인 1728~3456 / 폭탄 10~11개)</option>
-                  <option value="8">Lv.8 (전설 - 코인 3456~6912 / 폭탄 10~12개)</option>
-                </select>
-              </div>
-
-              <div style="display: flex; align-items: center; gap: 6px;">
-                <span style="font-size: 12px; color: var(--text-sub); font-weight: 700;">🎯 턴 제한 모드</span>
-                <select id="gameTurnLimitSelect" style="padding: 6px 12px; font-size: 12px; background: #080c14; border: 1px solid var(--border-color); color: #fff; border-radius: 6px; font-weight: 700;">
-                  <option value="0" selected>♾️ 무제한 데스매치 (폭발/클리어까지)</option>
-                  <option value="3">⚡ 스피드전 (각 3턴 / 총 6턴)</option>
-                  <option value="5">⚔️ 표준전 (각 5턴 / 총 10턴)</option>
-                  <option value="7">🧠 심층전 (각 7턴 / 총 14턴)</option>
-                </select>
-              </div>
-
-              <div style="display: flex; align-items: center; gap: 6px;">
-                <span style="font-size: 12px; color: var(--text-sub); font-weight: 700;">⏱️ 턴 제한 시간</span>
-                <select id="gameVoteDurationSelect" style="padding: 6px 12px; font-size: 12px; background: #080c14; border: 1px solid var(--border-color); color: #fff; border-radius: 6px; font-weight: 700;">
-                  <option value="15">⚡ 15초 (빠른 턴)</option>
-                  <option value="20">⏱️ 20초</option>
-                  <option value="30" selected>⏱️ 30초 (표준 추천)</option>
-                  <option value="45">⏱️ 45초</option>
-                  <option value="60">⏱️ 60초 (1분 / 여유)</option>
-                </select>
-              </div>
+            <!-- Hidden Sync Elements (Settings are managed exclusively in left settings drawer) -->
+            <div style="display: none;">
+              <select id="gameMatchFormatSelect">
+                <option value="single" selected>단판 승부 (1세트 결착)</option>
+                <option value="bo3">3판 2선승제 (BO3 - 2승 시 우승)</option>
+                <option value="bo5">5판 3선승제 (BO5 - 3승 시 우승)</option>
+                <option value="bo7">7판 4선승제 (BO7 - 4승 시 우승)</option>
+              </select>
+              <select id="gameLevelSelect">
+                <option value="1" selected>Lv.1</option>
+                <option value="2">Lv.2</option>
+                <option value="3">Lv.3</option>
+                <option value="4">Lv.4</option>
+                <option value="5">Lv.5</option>
+                <option value="6">Lv.6</option>
+                <option value="7">Lv.7</option>
+                <option value="8">Lv.8</option>
+              </select>
+              <select id="gameTurnLimitSelect">
+                <option value="0" selected>0</option>
+                <option value="3">3</option>
+                <option value="5">5</option>
+                <option value="7">7</option>
+              </select>
+              <select id="gameVoteDurationSelect">
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="30" selected>30</option>
+                <option value="45">45</option>
+                <option value="60">60</option>
+              </select>
             </div>
           </div>
 
           <!-- Scoreboard Row (Streamer vs Viewers) -->
-          <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; align-items: center; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px 20px; margin-bottom: 14px;">
+          <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; align-items: center; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px 20px;">
             <!-- Left: Streamer Score Card -->
             <div style="display: flex; align-items: center; gap: 12px;">
               <div style="position: relative; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
@@ -2631,69 +2626,78 @@
               <div style="font-size: 32px;">👥</div>
             </div>
           </div>
-
-          <!-- Action Control Buttons Bar -->
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-              <button type="button" id="startGameStreamerBtn" class="btn btn-primary" style="padding: 10px 16px; font-size: 13px; font-weight: 800;">
-                ⚔️ 배틀 시작 (스트리머 선공)
-              </button>
-              <button type="button" id="startGameViewersBtn" class="btn btn-secondary" style="padding: 10px 16px; font-size: 13px; font-weight: 800; background: linear-gradient(135deg, #0284c7, #0369a1); border-color: #38bdf8; color: #fff;">
-                👥 시청자 선공으로 시작
-              </button>
-              <button type="button" id="gameCashOutBtn" class="btn btn-secondary" style="padding: 10px 14px; font-size: 12px; font-weight: 700;" title="현재 획득한 코인을 안전하게 확보하고 턴을 종료합니다">
-                🛑 그만둔다 (코인 확보)
-              </button>
-              <button type="button" id="resetGameBtn" class="btn-chip btn-chip-secondary" style="padding: 10px 14px; font-size: 12px;">
-                🔄 새 게임 생성
-              </button>
-            </div>
-
-            <!-- Memo Mode Toggle & Tools -->
-            <div style="display: flex; align-items: center; gap: 8px;">
-              <button type="button" id="toggleMemoModeBtn" class="btn-chip btn-chip-secondary" style="padding: 9px 14px; font-size: 12px; font-weight: 700;">
-                <span>📝 메모 모드: </span><b id="memoModeStateText" style="color: var(--text-sub); margin-left: 4px;">OFF</b>
-              </button>
-              <button type="button" id="showShowdownResultBtn" class="btn-chip" style="padding: 9px 14px; font-size: 12px; font-weight: 800; background: linear-gradient(135deg, #ffd700, #ff8800); color: #1a1000; border: none; display: none;">
-                🏆 최종 결과 발표
-              </button>
-            </div>
-          </div>
         </div>
 
-        <!-- BOTTOM PANEL: Authentic Voltorb Flip Interactive Board Stage -->
+        <!-- BOTTOM PANEL: Authentic Voltorb Flip Interactive Board Stage & Side Controls -->
         <div class="panel" style="display: flex; flex-direction: column; align-items: center;">
           <div class="panel-title" style="align-self: flex-start; margin-bottom: 14px; display: flex; justify-content: space-between; width: 100%; align-items: center; flex-wrap: wrap; gap: 10px;">
             <div style="display: flex; align-items: center; gap: 8px;">
               <span>🎯 5×5 찌리리공 뒤집기 보드</span>
               <span id="gameBoardRoundLevelBadge" class="badge-tag" style="background: rgba(0, 255, 163, 0.15); color: var(--chzzk-green); font-size: 12px; font-weight: 800;">Lv.1</span>
             </div>
-            <div id="gameInstructionText" style="font-size: 15px; color: #fff; font-weight: 800; background: rgba(0, 0, 0, 0.45); padding: 8px 18px; border-radius: 8px; border: 1px solid rgba(0, 255, 163, 0.3); box-shadow: 0 2px 10px rgba(0,0,0,0.3); letter-spacing: 0.3px;">
+            <div id="gameInstructionText" style="font-size: 14px; color: #fff; font-weight: 800; background: rgba(0, 0, 0, 0.45); padding: 8px 18px; border-radius: 8px; border: 1px solid rgba(0, 255, 163, 0.3); box-shadow: 0 2px 10px rgba(0,0,0,0.3); letter-spacing: 0.3px;">
               [배틀 시작] 버튼을 눌러 게임을 시작하세요. (1턴씩 번갈아 카드를 오픈합니다)
             </div>
           </div>
 
-          <div class="voltorb-stage-wrapper">
-            <div id="voltorbBoardContainer" class="voltorb-board-container">
-              <!-- Dynamically populated 25 tiles + 5 row hints + 5 col hints + 1 corner control -->
+          <!-- Main Board Stage: Board on Left + Action Control Deck on Right -->
+          <div style="display: flex; gap: 20px; align-items: flex-start; justify-content: center; width: 100%; flex-wrap: wrap;">
+            <!-- Left: 5x5 Board & Live Voting HUD -->
+            <div style="display: flex; flex-direction: column; align-items: center; max-width: 520px; width: 100%;">
+              <div id="voltorbBoardContainer" class="voltorb-board-container">
+                <!-- Dynamically populated 25 tiles + 5 row hints + 5 col hints + 1 corner control -->
+              </div>
+
+              <div id="gameViewersVotingHud" style="width: 100%; margin-top: 14px; background: rgba(8, 12, 20, 0.92); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 12px; padding: 12px 16px; display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <div style="display: flex; align-items: center; gap: 6px;">
+                    <span id="gameHudLiveDot" class="live-dot" style="background: #38bdf8;"></span>
+                    <span id="gameHudTitle" style="font-size: 12px; font-weight: 800; color: #38bdf8;">시청자 실시간 좌표 투표 중</span>
+                    <span id="gameHudSubTitle" style="font-size: 11px; color: var(--text-sub);">(채팅: <b>A1~E5</b> 또는 <b>stop</b>)</span>
+                  </div>
+                  <span id="gameVotingTimerText" style="font-family: 'Outfit'; font-weight: 800; color: #ffd700; font-size: 14px;">30.0s</span>
+                </div>
+
+                <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; margin-bottom: 10px;">
+                  <div id="gameVotingTimerFill" style="height: 100%; width: 100%; background: linear-gradient(90deg, #38bdf8, #ffd700); transition: width 0.1s linear;"></div>
+                </div>
+
+                <div id="gameTopVotedCandidatesList" style="display: flex; flex-direction: column; gap: 4px; font-size: 11px;">
+                  <div style="color: var(--text-sub); text-align: center; padding: 4px 0;">시청자들이 채팅창에 열고 싶은 좌표를 입력하면 실시간 집계됩니다.</div>
+                </div>
+              </div>
             </div>
 
-            <div id="gameViewersVotingHud" style="width: 100%; max-width: 520px; margin-top: 16px; background: rgba(8, 12, 20, 0.92); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 12px; padding: 12px 16px; display: none;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                <div style="display: flex; align-items: center; gap: 6px;">
-                  <span id="gameHudLiveDot" class="live-dot" style="background: #38bdf8;"></span>
-                  <span id="gameHudTitle" style="font-size: 12px; font-weight: 800; color: #38bdf8;">시청자 실시간 좌표 투표 중</span>
-                  <span id="gameHudSubTitle" style="font-size: 11px; color: var(--text-sub);">(채팅 입력: 좌표 <b>A1~E5</b> 또는 홀드 <b>stop</b>)</span>
-                </div>
-                <span id="gameVotingTimerText" style="font-family: 'Outfit'; font-weight: 800; color: #ffd700; font-size: 14px;">30.0s</span>
+            <!-- Right: Action Control Deck (게임판 옆 옵션/컨트롤 패널) -->
+            <div id="voltorbSideControlDeck" style="flex: 0 0 230px; width: 230px; display: flex; flex-direction: column; gap: 12px; background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.4);">
+              <div style="font-size: 12px; font-weight: 800; color: #ffd700; display: flex; align-items: center; gap: 6px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.08);">
+                <span>🎮 게임 컨트롤</span>
               </div>
 
-              <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; margin-bottom: 10px;">
-                <div id="gameVotingTimerFill" style="height: 100%; width: 100%; background: linear-gradient(90deg, #38bdf8, #ffd700); transition: width 0.1s linear;"></div>
+              <!-- Starter Buttons (게임 시작 전 선공 선택 -> 게임 시작 시 자동 숨김) -->
+              <div id="voltorbStarterBtnsGroup" style="display: flex; flex-direction: column; gap: 8px;">
+                <button type="button" id="startGameStreamerBtn" class="btn btn-primary" style="width: 100%; padding: 12px 14px; font-size: 13px; font-weight: 800; justify-content: center;">
+                  ⚔️ 배틀 시작 (스트리머 선공)
+                </button>
+                <button type="button" id="startGameViewersBtn" class="btn btn-secondary" style="width: 100%; padding: 12px 14px; font-size: 13px; font-weight: 800; background: linear-gradient(135deg, #0284c7, #0369a1); border-color: #38bdf8; color: #fff; justify-content: center;">
+                  👥 시청자 선공으로 시작
+                </button>
               </div>
 
-              <div id="gameTopVotedCandidatesList" style="display: flex; flex-direction: column; gap: 4px; font-size: 11px;">
-                <div style="color: var(--text-sub); text-align: center; padding: 4px 0;">시청자들이 채팅창에 열고 싶은 좌표를 입력하면 실시간 집계됩니다.</div>
+              <!-- Active Actions & Tools -->
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <button type="button" id="gameCashOutBtn" class="btn btn-secondary" style="width: 100%; padding: 11px 14px; font-size: 12px; font-weight: 700; justify-content: center;" title="현재 획득한 코인을 안전하게 확보하고 턴을 종료합니다">
+                  🛑 그만둔다 (코인 확보)
+                </button>
+                <button type="button" id="resetGameBtn" class="btn-chip btn-chip-secondary" style="width: 100%; padding: 10px 14px; font-size: 12px; justify-content: center;">
+                  🔄 새 게임 생성
+                </button>
+                <button type="button" id="toggleMemoModeBtn" class="btn-chip btn-chip-secondary" style="width: 100%; padding: 10px 14px; font-size: 12px; font-weight: 700; justify-content: center;">
+                  <span>📝 메모 모드: </span><b id="memoModeStateText" style="color: var(--text-sub); margin-left: 4px;">OFF</b>
+                </button>
+                <button type="button" id="showShowdownResultBtn" class="btn-chip" style="width: 100%; padding: 10px 14px; font-size: 12px; font-weight: 800; background: linear-gradient(135deg, #ffd700, #ff8800); color: #1a1000; border: none; justify-content: center; display: none;">
+                  🏆 최종 결과 발표
+                </button>
               </div>
             </div>
           </div>
@@ -2999,18 +3003,19 @@
               
               <!-- Real-time Viewers Voting & Turn Timer HUD -->
               <div id="arenaViewersVoteHud" style="background: rgba(8, 12, 20, 0.95); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 10px; padding: 10px 14px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                  <div style="display: flex; align-items: center; gap: 6px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+                  <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                     <span class="live-dot" style="background: #38bdf8;"></span>
-                    <span style="font-size: 12px; font-weight: 800; color: #38bdf8;">시청자 행동 실시간 채팅 투표 중</span>
-                    <span id="arenaVoteInstructionText" style="font-size: 10px; color: var(--text-sub);">(채팅에 <b>1</b>~<b>4</b> 기술 / <b>5</b>, <b>6</b> 교체 입력)</span>
+                    <span style="font-size: 13px; font-weight: 800; color: #38bdf8;">시청자 행동 실시간 채팅 투표</span>
+                    <span id="arenaVoteParticipantsBadge" style="font-size: 11px; font-weight: 800; color: #38bdf8; background: rgba(56, 189, 248, 0.18); padding: 2px 8px; border-radius: 10px;">👥 투표 참여: <b>0</b>명</span>
+                    <span id="arenaVoteInstructionText" style="font-size: 11px; color: var(--text-sub);">(채팅에 <b>1</b>~<b>4</b> 기술 / <b>5</b>, <b>6</b> 교체 입력)</span>
                   </div>
-                  <span id="arenaVotingTimerText" style="font-family: 'Outfit'; font-weight: 800; color: #ffd700; font-size: 13px;">30.0s</span>
+                  <span id="arenaVotingTimerText" style="font-family: 'Outfit'; font-weight: 800; color: #ffd700; font-size: 14px;">30.0s</span>
                 </div>
-                <div style="width: 100%; height: 5px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; margin-bottom: 8px;">
+                <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; margin-bottom: 8px;">
                   <div id="arenaVotingTimerFill" style="height: 100%; width: 100%; background: linear-gradient(90deg, #38bdf8, #00ffa3); transition: width 0.1s linear;"></div>
                 </div>
-                <div id="arenaVoteCandidateBars" style="display: flex; flex-direction: column; gap: 4px; font-size: 11px;">
+                <div id="arenaVoteCandidateBars" style="display: flex; flex-direction: column; gap: 5px; font-size: 11px;">
                   <!-- Live Bars for Moves 1~4 & Switch 5, 6 -->
                 </div>
               </div>
@@ -3058,6 +3063,42 @@
         </div>
       </div>
     </div>
+
+    <!-- 📄 Footer & Legal Disclaimers (저작권 및 면책 조항) -->
+    <footer style="margin-top: 40px; padding: 22px 20px; border-top: 1px solid rgba(255, 255, 255, 0.08); background: rgba(8, 12, 20, 0.65); border-radius: 12px; font-size: 11.5px; color: var(--text-sub); line-height: 1.6;">
+      <div style="display: flex; flex-direction: column; gap: 10px; max-width: 1000px; margin: 0 auto;">
+        
+        <!-- Chzzk / Naver Disclaimer -->
+        <div style="display: flex; gap: 10px; align-items: flex-start;">
+          <span class="badge-tag" style="background: rgba(0, 255, 163, 0.15); color: var(--chzzk-green); font-size: 10px; font-weight: 800; white-space: nowrap; margin-top: 2px;">치지직 · 네이버</span>
+          <div>
+            본 프로그램은 네이버 치지직(CHZZK)의 비공식 서드파티 방송 보조 도구이며, NAVER Corp.에서 직접 운영하거나 보증하는 서비스가 아닙니다. <b>"CHZZK"</b> 및 <b>"치지직"</b>은 NAVER Corp.의 등록 상표입니다.
+          </div>
+        </div>
+
+        <!-- Pokemon Disclaimer -->
+        <div style="display: flex; gap: 10px; align-items: flex-start;">
+          <span class="badge-tag" style="background: rgba(236, 72, 153, 0.15); color: #f472b6; font-size: 10px; font-weight: 800; white-space: nowrap; margin-top: 2px;">포켓몬스터</span>
+          <div>
+            Pokémon 및 포켓몬 캐릭터·도구·기술 명칭은 Nintendo의 등록 상표입니다. (© 1995–2026 Nintendo / Creatures Inc. / GAME FREAK inc. / © The Pokémon Company)<br>
+            본 사이트는 비영리 팬 제작물(Fan Project)로 Nintendo · Creatures · GAME FREAK · The Pokémon Company의 공식 후원이나 제휴를 받지 않았습니다.
+          </div>
+        </div>
+
+        <!-- Asset & Data Sources -->
+        <div style="display: flex; gap: 10px; align-items: flex-start;">
+          <span class="badge-tag" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; font-size: 10px; font-weight: 800; white-space: nowrap; margin-top: 2px;">자산 출처</span>
+          <div>
+            포켓몬 종족값·타입·기술 데이터는 PokéAPI 기반이며, 배틀 도트 스프라이트는 Pokémon Showdown & Smogon 커뮤니티 스프라이트를 비영리 식별 목적으로 활용하였습니다.
+          </div>
+        </div>
+
+        <!-- Copyright Bottom Note -->
+        <div style="margin-top: 4px; padding-top: 10px; border-top: 1px dashed rgba(255, 255, 255, 0.06); text-align: center; color: rgba(255, 255, 255, 0.35); font-size: 10.5px;">
+          CHZZK Interactive Hub · Non-commercial Open Source Broadcast Platform
+        </div>
+      </div>
+    </footer>
   </div>
 
   <!-- 🔄 Pokemon Faint Switch Modal (기절 시 출전 포켓몬 선택 모달) -->
@@ -3743,28 +3784,50 @@
 
         <!-- Game 1: Voltorb Flip Quick Options -->
         <div id="drawerVoltorbOptionsBox" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 10px; padding: 14px; margin-bottom: 14px;">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
             <span style="font-size: 12px; font-weight: 800; color: #ffd700;">⚡ 찌리리공 뒤집기 규칙 설정</span>
             <span class="badge-tag" style="background: rgba(255, 215, 0, 0.15); color: #ffd700;">스트리머 vs 시청자</span>
           </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div style="display: flex; flex-direction: column; gap: 10px;">
             <div class="form-group" style="margin-bottom: 0;">
               <label>🏆 매치 방식</label>
               <select id="drawerGameMatchFormatSelect" onchange="syncVoltorbMatchFormat(this.value)">
                 <option value="single" selected>단판 승부 (1세트 결착)</option>
-                <option value="bo3">3판 2선승제 (BO3)</option>
-                <option value="bo5">5판 3선승제 (BO5)</option>
-                <option value="bo7">7판 4선승제 (BO7)</option>
+                <option value="bo3">3판 2선승제 (BO3 - 2승 시 우승)</option>
+                <option value="bo5">5판 3선승제 (BO5 - 3승 시 우승)</option>
+                <option value="bo7">7판 4선승제 (BO7 - 4승 시 우승)</option>
               </select>
             </div>
             <div class="form-group" style="margin-bottom: 0;">
-              <label>⏱️ 턴 제한 시간</label>
-              <select id="drawerGameTurnDurationSelect" onchange="syncVoltorbTurnDuration(this.value)">
-                <option value="0">⏳ 무제한</option>
-                <option value="15">⚡ 15초</option>
-                <option value="20" selected>⏱️ 20초 (기본)</option>
-                <option value="30">⏱️ 30초</option>
+              <label>🎯 난이도 레벨</label>
+              <select id="drawerGameLevelSelect" onchange="syncVoltorbLevel(this.value)">
+                <option value="1" selected>Lv.1 (초급 - 코인 24~48 / 폭탄 6개)</option>
+                <option value="2">Lv.2 (중급 - 코인 54~108 / 폭탄 7개)</option>
+                <option value="3">Lv.3 (고급 - 코인 108~216 / 폭탄 8개)</option>
+                <option value="4">Lv.4 (달인 - 코인 216~432 / 폭탄 8~10개)</option>
+                <option value="5">Lv.5 (초고수 - 코인 432~864 / 폭탄 10개)</option>
+                <option value="6">Lv.6 (마스터 - 코인 864~1728 / 폭탄 10개)</option>
+                <option value="7">Lv.7 (챔피언 - 코인 1728~3456 / 폭탄 10~11개)</option>
+                <option value="8">Lv.8 (전설 - 코인 3456~6912 / 폭탄 10~12개)</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label>🎯 턴 제한 모드</label>
+              <select id="drawerGameTurnLimitSelect" onchange="syncVoltorbTurnLimit(this.value)">
+                <option value="0" selected>♾️ 무제한 데스매치 (폭발/클리어까지)</option>
+                <option value="3">⚡ 스피드전 (각 3턴 / 총 6턴)</option>
+                <option value="5">⚔️ 표준전 (각 5턴 / 총 10턴)</option>
+                <option value="7">🧠 심층전 (각 7턴 / 총 14턴)</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label>⏱️ 턴 제한 시간 (시청자 턴)</label>
+              <select id="drawerGameVoteDurationSelect" onchange="syncVoltorbVoteDuration(this.value)">
+                <option value="15">⚡ 15초 (빠른 턴)</option>
+                <option value="20">⏱️ 20초</option>
+                <option value="30" selected>⏱️ 30초 (표준 추천)</option>
                 <option value="45">⏱️ 45초</option>
+                <option value="60">⏱️ 60초 (1분 / 여유)</option>
               </select>
             </div>
           </div>
@@ -5989,6 +6052,27 @@
       }
 
       // Sync form values between Drawer and Main setup bar
+      const mainMatchFmt = document.getElementById('gameMatchFormatSelect');
+      const drawerMatchFmt = document.getElementById('drawerGameMatchFormatSelect');
+      if (mainMatchFmt && drawerMatchFmt && drawerMatchFmt.value !== mainMatchFmt.value) {
+        drawerMatchFmt.value = mainMatchFmt.value;
+      }
+      const mainLvl = document.getElementById('gameLevelSelect');
+      const drawerLvl = document.getElementById('drawerGameLevelSelect');
+      if (mainLvl && drawerLvl && drawerLvl.value !== mainLvl.value) {
+        drawerLvl.value = mainLvl.value;
+      }
+      const mainTurnLim = document.getElementById('gameTurnLimitSelect');
+      const drawerTurnLim = document.getElementById('drawerGameTurnLimitSelect');
+      if (mainTurnLim && drawerTurnLim && drawerTurnLim.value !== mainTurnLim.value) {
+        drawerTurnLim.value = mainTurnLim.value;
+      }
+      const mainVoteDurVolt = document.getElementById('gameVoteDurationSelect');
+      const drawerVoteDurVolt = document.getElementById('drawerGameVoteDurationSelect');
+      if (mainVoteDurVolt && drawerVoteDurVolt && drawerVoteDurVolt.value !== mainVoteDurVolt.value) {
+        drawerVoteDurVolt.value = mainVoteDurVolt.value;
+      }
+
       const mainVoteDur = document.getElementById('pokeVoteDurationSelect');
       const drawerVoteDur = document.getElementById('drawerPokeVoteDurationSelect');
       if (mainVoteDur && drawerVoteDur && drawerVoteDur.value !== mainVoteDur.value) {
@@ -6018,15 +6102,41 @@
       updateSettingsSummaryBadges();
     }
 
-    function syncVoltorbTurnDuration(val) {
-      const mainSelect = document.getElementById('gameTurnDurationSelect');
-      const drawerSelect = document.getElementById('drawerGameTurnDurationSelect');
+    function syncVoltorbLevel(val) {
+      const mainSelect = document.getElementById('gameLevelSelect');
+      const drawerSelect = document.getElementById('drawerGameLevelSelect');
       if (mainSelect && mainSelect.value !== val) {
         mainSelect.value = val;
         mainSelect.dispatchEvent(new Event('change'));
       }
       if (drawerSelect && drawerSelect.value !== val) drawerSelect.value = val;
       updateSettingsSummaryBadges();
+    }
+
+    function syncVoltorbTurnLimit(val) {
+      const mainSelect = document.getElementById('gameTurnLimitSelect');
+      const drawerSelect = document.getElementById('drawerGameTurnLimitSelect');
+      if (mainSelect && mainSelect.value !== val) {
+        mainSelect.value = val;
+        mainSelect.dispatchEvent(new Event('change'));
+      }
+      if (drawerSelect && drawerSelect.value !== val) drawerSelect.value = val;
+      updateSettingsSummaryBadges();
+    }
+
+    function syncVoltorbVoteDuration(val) {
+      const mainSelect = document.getElementById('gameVoteDurationSelect');
+      const drawerSelect = document.getElementById('drawerGameVoteDurationSelect');
+      if (mainSelect && mainSelect.value !== val) {
+        mainSelect.value = val;
+        mainSelect.dispatchEvent(new Event('change'));
+      }
+      if (drawerSelect && drawerSelect.value !== val) drawerSelect.value = val;
+      updateSettingsSummaryBadges();
+    }
+
+    function syncVoltorbTurnDuration(val) {
+      syncVoltorbVoteDuration(val);
     }
 
     function syncPokeBattleMode(val) {
@@ -7953,6 +8063,9 @@
         : `[배틀 시작] 버튼을 눌러 ${matchCurrentRound}세트를 시작하세요! (목표: ${matchTargetWins}승)`;
       gameViewersVotingHud.style.display = 'none';
 
+      const starterGroup = document.getElementById('voltorbStarterBtnsGroup');
+      if (starterGroup) starterGroup.style.display = 'flex';
+
       generateVoltorbBoard(gameLevel);
       updateBoardStatsUI();
       renderBoardUI();
@@ -8271,6 +8384,10 @@
       if (gamePhase === 'ended') return;
       clearInterval(currentTurnTimerInterval);
 
+      // Hide starter buttons when game starts
+      const starterGroup = document.getElementById('voltorbStarterBtnsGroup');
+      if (starterGroup) starterGroup.style.display = 'none';
+
       gamePhase = 'streamer';
       gamePhaseBadge.className = 'live-badge-pill live';
       gamePhaseBadge.style.background = 'linear-gradient(135deg, #eab308, #ca8a04)';
@@ -8301,7 +8418,7 @@
 
       currentTurnTotalDuration = parseFloat(gameVoteDurationSelect.value) || 30.0;
       currentTurnRemainingSeconds = currentTurnTotalDuration;
-      renderTurnTimerUI('streamer');
+      renderVoltorbTurnTimerUI('streamer');
 
       const stepMs = 100;
       currentTurnTimerInterval = setInterval(() => {
@@ -8317,7 +8434,7 @@
             flipTile(randomTile, 'streamer');
           }
         }
-        renderTurnTimerUI('streamer');
+        renderVoltorbTurnTimerUI('streamer');
       }, stepMs);
     }
 
@@ -8328,6 +8445,10 @@
         showToast('시청자 투표 턴을 진행하려면 방송에 먼저 연결해 주세요.', '⚠️');
       }
       clearInterval(currentTurnTimerInterval);
+
+      // Hide starter buttons when game starts
+      const starterGroup = document.getElementById('voltorbStarterBtnsGroup');
+      if (starterGroup) starterGroup.style.display = 'none';
 
       gamePhase = 'viewers';
       gamePhaseBadge.className = 'live-badge-pill live';
@@ -8360,7 +8481,7 @@
 
       currentTurnTotalDuration = parseFloat(gameVoteDurationSelect.value) || 30.0;
       currentTurnRemainingSeconds = currentTurnTotalDuration;
-      renderTurnTimerUI('viewers');
+      renderVoltorbTurnTimerUI('viewers');
       renderVotingBarsUI();
 
       const stepMs = 100;
@@ -8371,11 +8492,11 @@
           clearInterval(currentTurnTimerInterval);
           executeViewersVotedTile();
         }
-        renderTurnTimerUI('viewers');
+        renderVoltorbTurnTimerUI('viewers');
       }, stepMs);
     }
 
-    function renderTurnTimerUI(turn) {
+    function renderVoltorbTurnTimerUI(turn) {
       if (!gameVotingTimerText || !gameVotingTimerFill) return;
       gameVotingTimerText.innerText = `${Math.max(0, currentTurnRemainingSeconds).toFixed(1)}s`;
       const fillPct = (Math.max(0, currentTurnRemainingSeconds) / currentTurnTotalDuration) * 100;
@@ -8574,6 +8695,9 @@
         : `${matchCurrentRound}세트가 종료되었습니다. 다음 라운드를 진행하세요.`;
       showShowdownResultBtn.style.display = 'inline-flex';
 
+      const starterGroup = document.getElementById('voltorbStarterBtnsGroup');
+      if (starterGroup) starterGroup.style.display = 'flex';
+
       showShowdownResult();
     }
 
@@ -8677,9 +8801,29 @@
       renderBoardUI();
     });
 
-    gameMatchFormatSelect.addEventListener('change', () => initNewMatch(true));
-    gameLevelSelect.addEventListener('change', () => initNewGameRound(false));
-    gameTurnLimitSelect.addEventListener('change', () => initNewGameRound(false));
+    gameMatchFormatSelect.addEventListener('change', () => {
+      const drawerSelect = document.getElementById('drawerGameMatchFormatSelect');
+      if (drawerSelect && drawerSelect.value !== gameMatchFormatSelect.value) drawerSelect.value = gameMatchFormatSelect.value;
+      updateSettingsSummaryBadges();
+      initNewMatch(true);
+    });
+    gameLevelSelect.addEventListener('change', () => {
+      const drawerSelect = document.getElementById('drawerGameLevelSelect');
+      if (drawerSelect && drawerSelect.value !== gameLevelSelect.value) drawerSelect.value = gameLevelSelect.value;
+      updateSettingsSummaryBadges();
+      initNewGameRound(false);
+    });
+    gameTurnLimitSelect.addEventListener('change', () => {
+      const drawerSelect = document.getElementById('drawerGameTurnLimitSelect');
+      if (drawerSelect && drawerSelect.value !== gameTurnLimitSelect.value) drawerSelect.value = gameTurnLimitSelect.value;
+      updateSettingsSummaryBadges();
+      initNewGameRound(false);
+    });
+    gameVoteDurationSelect.addEventListener('change', () => {
+      const drawerSelect = document.getElementById('drawerGameVoteDurationSelect');
+      if (drawerSelect && drawerSelect.value !== gameVoteDurationSelect.value) drawerSelect.value = gameVoteDurationSelect.value;
+      updateSettingsSummaryBadges();
+    });
     closeGameResultModalBtn.addEventListener('click', () => {
       gameResultModal.classList.remove('active');
     });
@@ -9540,19 +9684,19 @@
 
       if (pokeBattleState.streamerAction && pokeBattleState.streamerAction.type === 'move') {
         pokeBattleState.streamerAction.isMega = streamerMegaSelected;
-        updateStreamerActionStatusUI();
+        updateStreamerActionStatusUI(false);
       }
 
       renderStreamerMovesDeck();
 
       if (streamerMegaSelected) {
-        showToast(`🧬 [${megaForm.nameKo}] 메가진화 활성화! 기술 선택 시 메가진화와 동시에 공격합니다.`, '✨');
+        showToast(`🧬 [메가진화] 장전 완료! 기술 선택 시 메가진화와 동시에 공격합니다.`, '✨');
       } else {
         showToast('메가진화가 취소되었습니다.', '⚪');
       }
     }
 
-    function updateStreamerActionStatusUI() {
+    function updateStreamerActionStatusUI(isReveal = false) {
       const badge = document.getElementById('streamerActionStatusBadge');
       if (!badge) return;
 
@@ -9561,19 +9705,29 @@
         badge.style.color = '#ffd700';
         badge.style.background = 'rgba(255, 215, 0, 0.1)';
         badge.style.borderColor = 'rgba(255, 215, 0, 0.4)';
-      } else if (pokeBattleState.streamerAction.type === 'move') {
-        const m = pokeBattleState.streamerAction.move;
-        const isMega = pokeBattleState.streamerAction.isMega;
-        badge.innerHTML = `👑 <b>${getStreamerName()} 선택</b>: [${isMega ? '🧬 MEGA ' : ''}${m.name}] 완료! <span style="font-size: 10px; color: #4ade80;">(종료 시 실행)</span>`;
-        badge.style.color = '#00ffa3';
-        badge.style.background = 'rgba(0, 255, 163, 0.15)';
-        badge.style.borderColor = '#00ffa3';
-      } else if (pokeBattleState.streamerAction.type === 'switch') {
-        const tp = pokeBattleState.streamerAction.targetPokemon;
-        badge.innerHTML = `👑 <b>${getStreamerName()} 교체</b>: [${tp.name}] 완료! <span style="font-size: 10px; color: #38bdf8;">(종료 시 실행)</span>`;
-        badge.style.color = '#38bdf8';
-        badge.style.background = 'rgba(56, 189, 248, 0.15)';
-        badge.style.borderColor = '#38bdf8';
+      } else {
+        if (isReveal) {
+          if (pokeBattleState.streamerAction.type === 'move') {
+            const m = pokeBattleState.streamerAction.move;
+            const isMega = pokeBattleState.streamerAction.isMega;
+            badge.innerHTML = `👑 <b>${getStreamerName()} 최종 선택</b>: [${isMega ? '🧬 MEGA ' : ''}${m.name}]! <span style="font-size: 10px; color: #4ade80;">(발동)</span>`;
+            badge.style.color = '#00ffa3';
+            badge.style.background = 'rgba(0, 255, 163, 0.2)';
+            badge.style.borderColor = '#00ffa3';
+          } else if (pokeBattleState.streamerAction.type === 'switch') {
+            const tp = pokeBattleState.streamerAction.targetPokemon;
+            badge.innerHTML = `👑 <b>${getStreamerName()} 최종 교체</b>: [${tp.name}]! <span style="font-size: 10px; color: #38bdf8;">(발동)</span>`;
+            badge.style.color = '#38bdf8';
+            badge.style.background = 'rgba(56, 189, 248, 0.2)';
+            badge.style.borderColor = '#38bdf8';
+          }
+        } else {
+          // Option B: Information Blind mode during selection
+          badge.innerHTML = `👑 <b>${getStreamerName()}</b>: 행동 결정 완료! 🔒 <span style="font-size: 10px; color: #4ade80;">(종료 시 동시 공개)</span>`;
+          badge.style.color = '#00ffa3';
+          badge.style.background = 'rgba(0, 255, 163, 0.12)';
+          badge.style.borderColor = 'rgba(0, 255, 163, 0.5)';
+        }
       }
     }
 
@@ -9644,7 +9798,7 @@
       pokeBattleState.turnTimerRemaining = pokeBattleState.turnTimerTotal;
       pokeBattleState.viewersTimerTotal = pokeBattleState.turnTimerTotal;
       pokeBattleState.viewersTimerRemaining = pokeBattleState.turnTimerTotal;
-      renderTurnTimerUI();
+      renderPokeTurnTimerUI();
 
       clearInterval(pokeBattleState.turnTimerInterval);
       clearInterval(pokeBattleState.viewersTimerInterval);
@@ -9660,7 +9814,7 @@
           clearInterval(pokeBattleState.turnTimerInterval);
           finishSimultaneousPokeTurn();
         }
-        renderTurnTimerUI();
+        renderPokeTurnTimerUI();
       }, stepMs);
     }
 
@@ -9762,7 +9916,7 @@
       showToast(`👑 ${getStreamerName()} [발버둥] 선택 완료!`, '💥');
     }
 
-    function renderTurnTimerUI() {
+    function renderPokeTurnTimerUI() {
       const tText = document.getElementById('arenaVotingTimerText');
       const tFill = document.getElementById('arenaVotingTimerFill');
       if (tText) tText.innerText = `${Math.max(0, pokeBattleState.turnTimerRemaining).toFixed(1)}s`;
@@ -9773,10 +9927,10 @@
     }
 
     function renderViewersVotingTimer() {
-      renderTurnTimerUI();
+      renderPokeTurnTimerUI();
     }
     function renderStreamerTimerUI() {
-      renderTurnTimerUI();
+      renderPokeTurnTimerUI();
     }
 
     function handleStreamerMoveSelect(moveIdx) {
@@ -9794,9 +9948,9 @@
 
       renderStreamerMovesDeck();
       renderStreamerSwitchDeck();
-      updateStreamerActionStatusUI();
+      updateStreamerActionStatusUI(false);
 
-      showToast(`👑 ${getStreamerName()} ${willMega ? '🧬 메가진화 + ' : ''}[${move.name}] 선택 완료!`, '🎯');
+      showToast(`👑 ${getStreamerName()} 행동 선택 완료! 🔒 (타이머 종료 시 공개)`, '🎯');
     }
 
     function handleStreamerSwitchSelect(targetIdx) {
@@ -9807,14 +9961,25 @@
 
       renderStreamerMovesDeck();
       renderStreamerSwitchDeck();
-      updateStreamerActionStatusUI();
+      updateStreamerActionStatusUI(false);
 
-      showToast(`👑 ${getStreamerName()} [${streamerTeam[targetIdx].pokemon.name}](으)로 교체 선택 완료!`, '🔄');
+      showToast(`👑 ${getStreamerName()} 교체 결정 완료! 🔒 (타이머 종료 시 공개)`, '🔄');
+    }
+
+    function handleStreamerStruggleSelect() {
+      if (pokeBattleState.phase !== 'simultaneous_turn' && pokeBattleState.phase !== 'streamer_turn') return;
+      const struggleMove = { name: '발버둥', type: '노말', category: '물리', power: 50, acc: 100, isStruggle: true };
+      pokeBattleState.streamerAction = { type: 'move', moveIdx: -1, move: struggleMove, isMega: false };
+      renderStreamerMovesDeck();
+      renderStreamerSwitchDeck();
+      updateStreamerActionStatusUI(false);
+      showToast(`👑 ${getStreamerName()} 발버둥 선택 완료! 🔒`, '💥');
     }
 
     function finishSimultaneousPokeTurn() {
       if (pokeBattleState.phase !== 'simultaneous_turn' && pokeBattleState.phase !== 'viewers_vote') return;
       clearInterval(pokeBattleState.turnTimerInterval);
+      pokeBattleState.phase = 'turn_revealing';
 
       // 1. Resolve Streamer Action
       const sSlot = streamerTeam[streamerActiveIdx];
@@ -9874,7 +10039,7 @@
       if (pokeBattleMode === '3v3') {
         for (let i = 0; i < 3; i++) {
           if (i !== viewersActiveIdx) {
-            if (!viewersTeam[i].fainted) {
+            if (!viewersTeam[i].fainted && viewersTeam[i].currentHP > 0) {
               validCandidateKeys.push(`switch_${switchCounter}`);
               switchIndexMap[`switch_${switchCounter}`] = i;
             }
@@ -9902,23 +10067,40 @@
         pickedKey = validCandidateKeys[Math.floor(Math.random() * validCandidateKeys.length)] || validCandidateKeys[0] || 'struggle';
       }
 
+      let viewersChoiceName = '';
       if (pickedKey === 'struggle') {
         const struggleMove = { name: '발버둥', type: '노말', category: '물리', power: 50, acc: 100, isStruggle: true };
         pokeBattleState.viewersAction = { type: 'move', moveIdx: -1, move: struggleMove, isMega: false };
+        viewersChoiceName = '발버둥';
       } else if (pickedKey.startsWith('move_')) {
         const moveIdx = parseInt(pickedKey.replace('move_', ''), 10) - 1;
         const move = vSlot.pokemon.moves[moveIdx];
         pokeBattleState.viewersAction = { type: 'move', moveIdx, move, isMega: false };
+        viewersChoiceName = move.name;
       } else if (pickedKey.startsWith('mega_')) {
         const moveIdx = parseInt(pickedKey.replace('mega_', ''), 10) - 1;
         const move = vSlot.pokemon.moves[moveIdx];
         pokeBattleState.viewersAction = { type: 'move', moveIdx, move, isMega: true };
+        viewersChoiceName = `🧬 MEGA ${move.name}`;
       } else if (pickedKey.startsWith('switch_')) {
         const targetIdx = switchIndexMap[pickedKey];
         pokeBattleState.viewersAction = { type: 'switch', targetIdx, targetPokemon: viewersTeam[targetIdx].pokemon, isMega: false };
+        viewersChoiceName = `${viewersTeam[targetIdx].pokemon.name} 교체`;
       }
 
-      executeBattleTurnSequence();
+      // 3. Reveal phase: Reveal both streamer's choice and viewers' vote counts
+      renderPokeVotingBarsUI(true, pickedKey);
+      updateStreamerActionStatusUI(true);
+
+      const sAct = pokeBattleState.streamerAction;
+      const sName = sAct.type === 'switch' ? `${sAct.targetPokemon.name} 교체` : `${sAct.isMega ? '🧬 MEGA ' : ''}${sAct.move.name}`;
+
+      setBattleDialogue(`📊 <b>투표 종료 & 공개!</b> 시청자: <b>[${viewersChoiceName}]</b> (👑 당선) vs 스트리머: <b>[${sName}]</b>`);
+
+      // 4. Delay 2.0s so everyone sees the revealed votes before attacking
+      setTimeout(() => {
+        executeBattleTurnSequence();
+      }, 2000);
     }
 
     function finishViewersPokeVote() {
@@ -10057,7 +10239,7 @@
       }
     }
 
-    function renderPokeVotingBarsUI() {
+    function renderPokeVotingBarsUI(isReveal = false, winningKey = null) {
       const container = document.getElementById('arenaVoteCandidateBars');
       const vSlot = viewersTeam[viewersActiveIdx];
       if (!container || !vSlot) return;
@@ -10067,15 +10249,22 @@
       const vMega = getAvailableMegaEvolution(vSlot.pokemon, vSlot.item);
       const canMega = vMega && !viewersTeamHasMegaEvolved && !vSlot.isMega;
 
+      // Update HUD participant counter
+      const pBadge = document.getElementById('arenaVoteParticipantsBadge');
+      if (pBadge) {
+        pBadge.innerHTML = `👥 투표 참여: <b>${total}</b>명`;
+      }
+
       const allOutOfPP = vSlot.movesPP && vSlot.movesPP.length > 0 && vSlot.movesPP.every(x => x.currentPP <= 0);
 
       if (allOutOfPP) {
         candidates.push({
           key: 'struggle',
           label: '💥 [발버둥] Struggle',
-          subtext: '채팅: 1 또는 발버둥 (모든 기술 PP 소진)',
-          tag: '반동 25%',
-          tagClass: 'badge-tag',
+          ppText: '반동 25%',
+          subtext: '1 또는 발버둥 (모든 기술 PP 소진)',
+          tag: '노말',
+          tagClass: 'type-노말',
           disabled: false,
           isStruggle: true
         });
@@ -10093,31 +10282,35 @@
           
           let note = '';
           if (isOutOfPP) note = 'PP 0 소진';
-          else if (isLocked) note = '고정됨';
+          else if (isLocked) note = '구애 고정';
           else if (isAV) note = '돌격조끼';
 
           // Standard move option
           candidates.push({
             key: `move_${i + 1}`,
-            label: `${i + 1}. ${m.name} (PP ${currentPP}/${maxPP})`,
-            subtext: isOutOfPP ? 'PP 소진 (사용 불가)' : `채팅: ${i + 1} / ${m.name}`,
-            tag: isOutOfPP ? 'PP 소진' : m.type,
+            label: `${i + 1}. ${m.name}`,
+            ppText: `PP ${currentPP}/${maxPP}`,
+            subtext: isOutOfPP ? 'PP 소진 (사용 불가)' : `${i + 1} 또는 ${m.name}`,
+            tag: isOutOfPP ? '소진' : m.type,
             tagClass: isOutOfPP ? 'badge-tag' : `type-${m.type}`,
             disabled: disabled,
-            note: note
+            note: note,
+            powerAcc: m.category === '변화' ? '변화기' : `위력 ${m.power} / 명중 ${m.acc}%`
           });
 
           // Mega move option (if available or has votes)
           if (canMega || pokeVoteCounts[`mega_${i + 1}`]) {
             candidates.push({
               key: `mega_${i + 1}`,
-              label: `🧬 [MEGA] ${m.name} (PP ${currentPP}/${maxPP})`,
-              subtext: isOutOfPP ? 'PP 소진 (사용 불가)' : `채팅: 메가${i + 1} / MEGA ${i + 1}`,
-              tag: isOutOfPP ? 'PP 소진' : '메가진화',
+              label: `🧬 [MEGA] ${m.name}`,
+              ppText: `PP ${currentPP}/${maxPP}`,
+              subtext: isOutOfPP ? 'PP 소진 (사용 불가)' : `메가${i + 1} 또는 MEGA ${i + 1}`,
+              tag: isOutOfPP ? '소진' : '메가진화',
               tagClass: isOutOfPP ? 'badge-tag' : 'badge-tag',
               disabled: disabled,
               note: note,
-              isMega: true
+              isMega: true,
+              powerAcc: m.category === '변화' ? '변화기' : `위력 ${m.power} / 명중 ${m.acc}%`
             });
           }
         });
@@ -10130,14 +10323,17 @@
           if (i !== viewersActiveIdx) {
             const slot = viewersTeam[i];
             const slotNum = i + 1;
+            const isFainted = slot.fainted || slot.currentHP <= 0;
             candidates.push({
               key: `switch_${switchCounter}`,
               label: `${switchCounter}. [🔄 ${slotNum}번 교체] ${slot.pokemon.name}`,
-              subtext: `채팅: ${switchCounter} / ${slotNum}번 / ${slot.pokemon.name}`,
-              tag: slot.fainted ? '기절' : `HP ${Math.round((slot.currentHP/slot.maxHP)*100)}%`,
-              tagClass: slot.fainted ? 'badge-tag' : 'type-노말',
-              disabled: slot.fainted,
-              targetIdx: i
+              ppText: isFainted ? '💀 기절' : `HP ${slot.currentHP}/${slot.maxHP}`,
+              subtext: isFainted ? '기절하여 교체 불가' : `${switchCounter} 또는 ${slotNum}번 / ${slot.pokemon.name}`,
+              tag: isFainted ? '기절' : `HP ${Math.round((slot.currentHP/slot.maxHP)*100)}%`,
+              tagClass: isFainted ? 'badge-tag' : 'type-노말',
+              disabled: isFainted,
+              targetIdx: i,
+              isSwitch: true
             });
             switchCounter++;
           }
@@ -10147,91 +10343,45 @@
       container.innerHTML = candidates.map(c => {
         const count = pokeVoteCounts[c.key] || 0;
         const pct = total > 0 ? Math.round((count / total) * 100) : 0;
+        const isWinning = isReveal && winningKey === c.key && count > 0;
+        const cardBorder = isWinning ? '1.5px solid #00ffa3' : (c.disabled ? '1px solid rgba(255,255,255,0.04)' : '1px solid rgba(255,255,255,0.08)');
+        const cardBg = isWinning ? 'rgba(0, 255, 163, 0.18)' : (c.disabled ? 'rgba(15, 23, 42, 0.35)' : 'rgba(15, 23, 42, 0.7)');
+
         return `
-          <div style="display: flex; align-items: center; gap: 8px; opacity: ${c.disabled ? '0.4' : '1'};">
-            <div style="width: 175px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-              <span style="font-weight: 800; color: ${c.isMega ? '#00ffa3' : (c.disabled ? '#94a3b8' : '#fff')}; font-size: 11px;">${c.label}</span>
-              ${c.note ? `<span style="font-size: 9px; color: #f87171; margin-left: 4px; font-weight: 700;">[${c.note}]</span>` : ''}
-              ${c.subtext ? `<div style="font-size: 9px; color: var(--text-sub);">${c.subtext}</div>` : ''}
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 6px 10px; border-radius: 8px; border: ${cardBorder}; background: ${cardBg}; opacity: ${c.disabled ? '0.45' : '1'}; transition: all 0.2s;">
+            <!-- Left: Large Label & High-contrast Chat Guide -->
+            <div style="flex: 0 0 200px; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span style="font-weight: 900; color: ${c.isMega ? '#00ffa3' : (c.disabled ? '#94a3b8' : '#fff')}; font-size: 13.5px; letter-spacing: -0.2px;">${c.label}</span>
+                <span class="type-badge ${c.tagClass}" style="font-size: 9px; padding: 1px 5px; font-weight: 800;">${c.tag}</span>
+                ${c.ppText ? `<span style="font-size: 9px; color: #ffd700; font-weight: 800; background: rgba(0,0,0,0.4); padding: 1px 4px; border-radius: 4px;">${c.ppText}</span>` : ''}
+                ${c.note ? `<span style="font-size: 9px; color: #f87171; font-weight: 800;">[${c.note}]</span>` : ''}
+              </div>
+              <div style="font-size: 11.5px; color: ${c.disabled ? '#64748b' : '#38bdf8'}; font-weight: 700; margin-top: 2px;">
+                💬 채팅: <b>${c.subtext}</b>
+              </div>
             </div>
-            <div style="flex: 1; height: 10px; background: rgba(255,255,255,0.08); border-radius: 5px; overflow: hidden;">
-              <div style="height: 100%; width: ${pct}%; background: ${c.isMega ? 'linear-gradient(90deg, #ec4899, #00ffa3)' : (c.isStruggle ? '#ef4444' : 'linear-gradient(90deg, #38bdf8, #00ffa3)')}; transition: width 0.15s;"></div>
+
+            <!-- Middle: Progress Bar (Blind Mask vs Revealed) -->
+            <div style="flex: 1; height: 12px; background: rgba(0,0,0,0.5); border-radius: 6px; overflow: hidden; border: 1px solid rgba(255,255,255,0.06); position: relative;">
+              ${!isReveal ? `
+                <div style="height: 100%; width: 100%; background: linear-gradient(90deg, rgba(56, 189, 248, 0.08), rgba(0, 255, 163, 0.2), rgba(56, 189, 248, 0.08)); background-size: 200% 100%; animation: votePulse 2s infinite linear; border-radius: 5px;"></div>
+              ` : `
+                <div style="height: 100%; width: ${pct}%; background: ${isWinning ? 'linear-gradient(90deg, #ffd700, #00ffa3)' : (c.isMega ? 'linear-gradient(90deg, #ec4899, #00ffa3)' : 'linear-gradient(90deg, #38bdf8, #00ffa3)')}; border-radius: 5px; transition: width 0.4s ease-out;"></div>
+              `}
             </div>
-            <span style="font-size: 10px; color: var(--text-sub); width: 55px; text-align: right;">${count}표 (${pct}%)</span>
+
+            <!-- Right: Votes count (Blind vs Revealed) -->
+            <div style="flex: 0 0 95px; text-align: right; white-space: nowrap;">
+              ${!isReveal ? `
+                <span style="font-size: 11px; color: #94a3b8; font-weight: 700; background: rgba(255,255,255,0.05); padding: 2px 6px; border-radius: 4px;">🔒 집계 중...</span>
+              ` : `
+                <span style="font-size: 11.5px; color: ${isWinning ? '#ffd700' : '#cbd5e1'}; font-weight: 900;">${count}표 (${pct}%) ${isWinning ? '👑' : ''}</span>
+              `}
+            </div>
           </div>
         `;
       }).join('');
-    }
-
-    function finishViewersPokeVote() {
-      clearInterval(pokeBattleState.viewersTimerInterval);
-      
-      const vSlot = viewersTeam[viewersActiveIdx];
-      const validCandidateKeys = [];
-      const vMega = getAvailableMegaEvolution(vSlot.pokemon, vSlot.item);
-      const canMega = vMega && !viewersTeamHasMegaEvolved && !vSlot.isMega;
-
-      // Valid moves
-      vSlot.pokemon.moves.forEach((m, i) => {
-        const isLocked = vSlot.choiceMove && vSlot.choiceMove.name !== m.name;
-        const isAV = vSlot.item === 'assault_vest' && m.category === '변화';
-        if (!isLocked && !isAV) {
-          validCandidateKeys.push(`move_${i + 1}`);
-          if (canMega) validCandidateKeys.push(`mega_${i + 1}`);
-        }
-      });
-
-      // Valid switches
-      let switchCounter = 5;
-      const switchIndexMap = {};
-      if (pokeBattleMode === '3v3') {
-        for (let i = 0; i < 3; i++) {
-          if (i !== viewersActiveIdx) {
-            if (!viewersTeam[i].fainted) {
-              validCandidateKeys.push(`switch_${switchCounter}`);
-              switchIndexMap[`switch_${switchCounter}`] = i;
-            }
-            switchCounter++;
-          }
-        }
-      }
-
-      let maxVotes = 0;
-      let topChoices = [];
-      for (const key of validCandidateKeys) {
-        const v = pokeVoteCounts[key] || 0;
-        if (v > maxVotes) {
-          maxVotes = v;
-          topChoices = [key];
-        } else if (v === maxVotes && maxVotes > 0) {
-          topChoices.push(key);
-        }
-      }
-
-      let pickedKey = 'move_1';
-      if (maxVotes > 0 && topChoices.length > 0) {
-        pickedKey = topChoices[Math.floor(Math.random() * topChoices.length)];
-      } else {
-        pickedKey = validCandidateKeys[Math.floor(Math.random() * validCandidateKeys.length)] || 'move_1';
-      }
-
-      if (pickedKey.startsWith('move_')) {
-        const moveIdx = parseInt(pickedKey.replace('move_', ''), 10) - 1;
-        const move = vSlot.pokemon.moves[moveIdx];
-        pokeBattleState.viewersAction = { type: 'move', moveIdx, move, isMega: false };
-        showToast(`시청자 행동: [${move.name}] 발동!`, '👥');
-      } else if (pickedKey.startsWith('mega_')) {
-        const moveIdx = parseInt(pickedKey.replace('mega_', ''), 10) - 1;
-        const move = vSlot.pokemon.moves[moveIdx];
-        pokeBattleState.viewersAction = { type: 'move', moveIdx, move, isMega: true };
-        showToast(`시청자 행동: 🧬 [메가진화 + ${move.name}] 발동!`, '✨');
-      } else if (pickedKey.startsWith('switch_')) {
-        const targetIdx = switchIndexMap[pickedKey];
-        pokeBattleState.viewersAction = { type: 'switch', targetIdx, targetPokemon: viewersTeam[targetIdx].pokemon, isMega: false };
-        showToast(`시청자 행동: [${viewersTeam[targetIdx].pokemon.name}](으)로 교체!`, '🔄');
-      }
-
-      executeBattleTurnSequence();
     }
 
     // --- Turn Sequence Execution (Switching Priority +6 & Attack Ordering) ---
