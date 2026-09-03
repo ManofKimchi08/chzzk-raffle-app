@@ -2305,6 +2305,637 @@
       border-color: var(--chzzk-green);
       box-shadow: 0 0 10px rgba(0, 255, 163, 0.25);
     }
+
+    /* ========================================================= */
+    .adult-inputs-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .adult-input-group label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      color: #cbd5e1;
+      margin-bottom: 4px;
+    }
+    .adult-input-group input {
+      width: 100%;
+      padding: 8px 12px;
+      font-size: 12px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      color: #fff;
+    }
+
+    /* ========================================================= */
+    /* 💬 NEW: Docked Split Chat Sidebar (상시 분할 실시간 채팅창) */
+    /* ========================================================= */
+    .app-main-layout {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      width: 100%;
+      position: relative;
+    }
+    .app-main-content {
+      flex: 1;
+      min-width: 0;
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .docked-chat-sidebar {
+      width: 380px;
+      min-width: 380px;
+      max-width: 420px;
+      height: calc(100vh - 170px);
+      min-height: 680px;
+      position: sticky;
+      top: 15px;
+      background: rgba(14, 19, 29, 0.96);
+      border: 1.5px solid rgba(0, 255, 163, 0.25);
+      border-radius: 14px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 255, 163, 0.05);
+      backdrop-filter: blur(14px);
+      overflow: hidden;
+      transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 20;
+    }
+    .app-main-layout.sidebar-collapsed .docked-chat-sidebar {
+      width: 0 !important;
+      min-width: 0 !important;
+      max-width: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: none !important;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(40px);
+    }
+    .chat-sidebar-header {
+      padding: 12px 14px;
+      background: rgba(8, 12, 20, 0.85);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .chat-sidebar-title-group {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .chat-sidebar-title {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #fff;
+    }
+    .chat-sidebar-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .btn-sidebar-icon {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-sub);
+      border-radius: 6px;
+      width: 28px;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 12px;
+      transition: all 0.15s;
+    }
+    .btn-sidebar-icon:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      border-color: var(--chzzk-green);
+    }
+    .chat-sidebar-filter-bar {
+      padding: 8px 12px;
+      background: rgba(12, 16, 26, 0.6);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .chat-filter-chips {
+      display: flex;
+      gap: 6px;
+    }
+    .chat-filter-chip {
+      flex: 1;
+      padding: 5px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-sub);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s;
+    }
+    .chat-filter-chip:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
+    .chat-filter-chip.active {
+      background: rgba(0, 255, 163, 0.15);
+      border-color: var(--chzzk-green);
+      color: var(--chzzk-green);
+      font-weight: 800;
+    }
+    .chat-search-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .chat-search-wrap input {
+      width: 100%;
+      padding: 6px 26px 6px 10px;
+      font-size: 11.5px;
+      background: #080c14;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      color: #fff;
+    }
+    .chat-search-wrap input:focus {
+      border-color: var(--chzzk-green);
+      outline: none;
+    }
+    .chat-search-clear {
+      position: absolute;
+      right: 6px;
+      background: transparent;
+      border: none;
+      color: var(--text-sub);
+      font-size: 10px;
+      cursor: pointer;
+      padding: 2px 4px;
+    }
+    .docked-chat-feed {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      scroll-behavior: smooth;
+    }
+    .docked-chat-empty-guide {
+      margin: auto;
+      text-align: center;
+      padding: 24px;
+      color: var(--text-sub);
+    }
+    .docked-chat-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 12px;
+      animation: fadeIn 0.2s ease-out;
+      transition: background 0.15s;
+    }
+    .docked-chat-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .docked-chat-item.is-donation {
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.12), rgba(255, 136, 0, 0.08));
+      border: 1.5px solid rgba(255, 215, 0, 0.4);
+      box-shadow: 0 2px 8px rgba(255, 215, 0, 0.15);
+    }
+    .docked-chat-header-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .docked-chat-nick {
+      font-weight: 800;
+      color: #fff;
+      font-size: 12px;
+    }
+    .docked-chat-nick.sub {
+      color: #a855f7;
+    }
+    .docked-chat-nick.donor {
+      color: #ffd700;
+    }
+    .docked-chat-time {
+      font-size: 10px;
+      color: #64748b;
+      margin-left: auto;
+    }
+    .docked-chat-msg {
+      color: #e2e8f0;
+      line-height: 1.45;
+      word-break: break-all;
+      font-size: 12.5px;
+    }
+    .chat-sidebar-footer {
+      padding: 8px 12px;
+      background: rgba(8, 12, 20, 0.85);
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+    }
+    .chat-scroll-toggle-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--text-sub);
+      cursor: pointer;
+    }
+    .chat-scroll-toggle-label input {
+      accent-color: var(--chzzk-green);
+      cursor: pointer;
+    }
+    .chat-new-msg-btn {
+      position: absolute;
+      top: -36px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--chzzk-green);
+      color: #000;
+      font-weight: 800;
+      font-size: 11px;
+      padding: 5px 14px;
+      border-radius: 12px;
+      border: none;
+      box-shadow: 0 4px 12px rgba(0, 255, 163, 0.5);
+      cursor: pointer;
+      animation: bounceSmall 1s infinite alternate;
+    }
+    @keyframes bounceSmall {
+      from { transform: translateX(-50%) translateY(0); }
+      to { transform: translateX(-50%) translateY(-4px); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Floating Chat Toggle Tab */
+    .floating-chat-tab-btn {
+      position: fixed;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      background: linear-gradient(135deg, #121826, #080c14);
+      border: 1.5px solid var(--chzzk-green);
+      border-right: none;
+      border-radius: 12px 0 0 12px;
+      padding: 12px 8px;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      box-shadow: -4px 0 16px rgba(0, 255, 163, 0.25);
+      z-index: 99;
+      transition: all 0.2s ease;
+    }
+    .floating-chat-tab-btn:hover {
+      background: rgba(0, 255, 163, 0.15);
+      box-shadow: -6px 0 22px rgba(0, 255, 163, 0.4);
+      padding-left: 12px;
+    }
+
+    @media (max-width: 1180px) {
+      .docked-chat-sidebar {
+        width: 320px;
+        min-width: 320px;
+      }
+    }
+    @media (max-width: 980px) {
+      .app-main-layout {
+        flex-direction: column;
+      }
+      .docked-chat-sidebar {
+        width: 100%;
+        min-width: 100%;
+        position: static;
+        height: 500px;
+      }
+    }
+
+    /* ========================================================= */
+    /* 🚀 NEW: Welcome Landing Start Screen (독립 시작 화면)      */
+    /* ========================================================= */
+    .welcome-landing-screen {
+      min-height: calc(100vh - 80px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 16px;
+      position: relative;
+      z-index: 10;
+      animation: fadeIn 0.35s ease-out;
+    }
+    .welcome-card {
+      width: 100%;
+      max-width: 780px;
+      background: linear-gradient(145deg, rgba(16, 22, 36, 0.97), rgba(9, 13, 22, 0.98));
+      border: 1.5px solid rgba(0, 255, 163, 0.35);
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.75), 0 0 36px rgba(0, 255, 163, 0.1);
+      border-radius: 20px;
+      padding: 38px 36px;
+      backdrop-filter: blur(16px);
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      position: relative;
+    }
+    .welcome-header {
+      text-align: center;
+    }
+    .welcome-badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 255, 163, 0.12);
+      border: 1px solid rgba(0, 255, 163, 0.35);
+      color: var(--chzzk-green);
+      font-family: 'Outfit', sans-serif;
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--chzzk-green);
+      box-shadow: 0 0 8px var(--chzzk-green);
+      animation: pulse 1.5s infinite;
+    }
+    .welcome-title {
+      font-size: 28px;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+      background: linear-gradient(to right, #ffffff, #a5f3fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .welcome-subtitle {
+      font-size: 13.5px;
+      color: var(--text-sub);
+      line-height: 1.6;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .welcome-search-box {
+      display: flex;
+      position: relative;
+      align-items: center;
+      background: #060911;
+      border: 2px solid rgba(0, 255, 163, 0.35);
+      border-radius: 12px;
+      padding: 4px 6px 4px 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      transition: all 0.25s ease;
+    }
+    .welcome-search-box:focus-within {
+      border-color: var(--chzzk-green);
+      box-shadow: 0 0 20px rgba(0, 255, 163, 0.25);
+      background: #080d18;
+    }
+    .search-input-icon {
+      font-size: 18px;
+      margin-right: 8px;
+      pointer-events: none;
+    }
+    .welcome-search-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 600;
+      padding: 12px 10px;
+      outline: none;
+    }
+    .search-clear-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-sub);
+      cursor: pointer;
+      font-size: 14px;
+      padding: 6px;
+      margin-right: 6px;
+    }
+    .search-clear-btn:hover {
+      color: #fff;
+    }
+    .welcome-search-btn {
+      padding: 12px 24px;
+      font-size: 14px;
+      font-weight: 800;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .welcome-quick-chips {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .quick-chip-label {
+      font-size: 11.5px;
+      color: var(--text-sub);
+      font-weight: 700;
+    }
+    .quick-chip {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #e2e8f0;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 5px 11px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .quick-chip:hover {
+      background: rgba(0, 255, 163, 0.15);
+      border-color: var(--chzzk-green);
+      color: var(--chzzk-green);
+      transform: translateY(-1px);
+    }
+    .welcome-search-results {
+      margin-top: 14px;
+      background: #080c16;
+      border: 1.5px solid rgba(0, 255, 163, 0.25);
+      border-radius: 12px;
+      padding: 12px;
+      max-height: 380px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      animation: fadeIn 0.2s ease;
+    }
+    .search-results-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 8px 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+    .search-sort-badge {
+      color: var(--chzzk-green);
+      font-weight: 800;
+      font-size: 11px;
+    }
+    .search-results-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .streamer-search-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+    .streamer-search-card:hover {
+      background: rgba(0, 255, 163, 0.09);
+      border-color: var(--chzzk-green);
+      transform: translateY(-1.5px);
+      box-shadow: 0 4px 16px rgba(0, 255, 163, 0.15);
+    }
+    .streamer-card-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+      flex-shrink: 0;
+      background: #1e293b;
+    }
+    .streamer-card-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
+    }
+    .streamer-card-name-row {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .streamer-card-name {
+      font-size: 14.5px;
+      font-weight: 800;
+      color: #fff;
+    }
+    .streamer-card-meta {
+      font-size: 11.5px;
+      color: var(--text-sub);
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .streamer-card-connect-btn {
+      padding: 8px 16px;
+      font-size: 12px;
+      font-weight: 800;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+    .welcome-adult-toggle-wrap {
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+    }
+    .btn-text-link {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-text-link:hover {
+      color: #fff;
+    }
+    .welcome-adult-panel {
+      margin-top: 10px;
+      padding: 12px 14px;
+      background: rgba(239, 68, 68, 0.06);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      border-radius: 10px;
+    }
+    .welcome-footer-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-top: 6px;
+      padding-top: 14px;
+      border-top: 1px dashed rgba(255, 255, 255, 0.1);
+    }
+    .btn-skip-workspace {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #cbd5e1;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 9px 18px;
+      border-radius: 8px;
+      transition: all 0.15s;
+    }
+    .btn-skip-workspace:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+    .welcome-legal-sub {
+      color: rgba(255, 255, 255, 0.35);
+      font-size: 11px;
+    }
   </style>
 </head>
 <body>
@@ -2315,7 +2946,98 @@
   <div id="bgCharGame" class="bg-character bg-character-game"></div>
 
   <div class="container">
-    <header>
+    <!-- ========================================================= -->
+    <!-- 🚀 NEW: Welcome Landing Start Screen (독립 시작 화면)      -->
+    <!-- ========================================================= -->
+    <div id="welcomeLandingScreen" class="welcome-landing-screen">
+      <div class="welcome-card">
+        <!-- Brand Header -->
+        <div class="welcome-header">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div class="welcome-badge-pill">
+              <span class="pulse-dot"></span>
+              CHZZK INTERACTIVE STUDIO
+            </div>
+            <button type="button" id="welcomeBackToWorkspaceBtn" class="btn-chip btn-chip-secondary" onclick="returnToWorkspace()" style="display: none; padding: 6px 12px; font-size: 11.5px;">
+              <span>✕ 작업대로 복귀</span>
+            </button>
+          </div>
+          <h1 class="welcome-title">치지직 방송 인터랙티브 스튜디오</h1>
+          <p class="welcome-subtitle">
+            시청자 참여형 대규모 추첨, 룰렛, 실시간 투표, 포켓몬 퀴즈 & 1v1 배틀을 시작하세요.<br>
+            함께할 치지직 <b>스트리머 이름</b> 또는 <b>방송 링크</b>를 검색해주세요.
+          </p>
+        </div>
+
+        <!-- Main Search Form -->
+        <div class="welcome-search-section">
+          <div class="welcome-search-box">
+            <span class="search-input-icon">🔍</span>
+            <input type="text" id="welcomeSearchInput" class="welcome-search-input" 
+                   placeholder="스트리머 이름 또는 방송 링크 입력" 
+                   onkeydown="if(event.key==='Enter') executeWelcomeSearch()"
+                   oninput="handleWelcomeSearchInput(this.value)">
+            <button type="button" id="welcomeClearSearchBtn" class="search-clear-btn" onclick="clearWelcomeSearch()" style="display: none;">✕</button>
+            <button type="button" id="welcomeSearchBtn" class="btn btn-primary welcome-search-btn" onclick="executeWelcomeSearch()">
+              <span id="welcomeSearchBtnIcon">🔍</span>
+              <span id="welcomeSearchBtnText">검색</span>
+            </button>
+          </div>
+
+
+          <!-- Dynamic Search Results Box (Sorted by Followers) -->
+          <div id="welcomeSearchResultsBox" class="welcome-search-results" style="display: none;">
+            <div class="search-results-header">
+              <span id="searchResultCountText">검색 결과 0건</span>
+              <span class="search-sort-badge">👥 팔로워 많은 순 정렬</span>
+            </div>
+            <div id="welcomeSearchResultsList" class="search-results-grid">
+              <!-- Dynamic streamer cards -->
+            </div>
+          </div>
+
+          <!-- 19+ Adult Settings Accordion -->
+          <div class="welcome-adult-toggle-wrap">
+            <button type="button" class="btn-text-link" onclick="toggleWelcomeAdultSettings()">
+              <span>🔞 19세(연령 제한) 방송 쿠키 설정</span>
+              <span id="welcomeAdultToggleIcon">▼</span>
+            </button>
+          </div>
+
+          <div id="welcomeAdultFields" class="welcome-adult-panel" style="display: none;">
+            <div style="font-size: 11.5px; color: #cbd5e1; margin-bottom: 8px;">
+              <strong style="color: #f87171;">성인 인증 안내:</strong> 19세 이상 시청 가능 방송의 경우 성인 인증된 네이버 계정의 쿠키(NID_AUT, NID_SES)가 필요합니다.
+            </div>
+            <div class="adult-inputs-row">
+              <div class="adult-input-group">
+                <label>NID_AUT</label>
+                <input type="password" id="welcomeNidAuthInput" placeholder="NID_AUT 값 붙여넣기" oninput="syncAdultCookieInputs('welcome')">
+              </div>
+              <div class="adult-input-group">
+                <label>NID_SES</label>
+                <input type="password" id="welcomeNidSesInput" placeholder="NID_SES 값 붙여넣기" oninput="syncAdultCookieInputs('welcome')">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Divider & Offline Skip Action -->
+        <div class="welcome-footer-actions">
+          <button type="button" class="btn-skip-workspace" onclick="enterWorkspaceOffline()">
+            <span>방송 연결 없이 오프라인 둘러보기 (수동 모드) ➔</span>
+          </button>
+          <div class="welcome-legal-sub">
+            CHZZK Interactive Studio · 비공식 오픈소스 서드파티 도구
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- 🖥️ App Workspace Area (헤더, 방송바, 추첨/게임 작업대)    -->
+    <!-- ========================================================= -->
+    <div id="appWorkspaceArea" class="app-workspace-area" style="display: none;">
+      <header>
       <div class="logo-group">
         <div class="logo-badge">CHZZK</div>
         <h1>치지직 대규모 추첨 & 룰렛 & 배틀</h1>
@@ -2351,26 +3073,31 @@
           <span id="statusLiveBadge" class="live-badge-pill offline" style="display: none;">OFFLINE</span>
           <span id="statusText" style="font-weight: 700; color: #fff;">방송 미연결</span>
           <span id="statusViewerInfo" style="font-size: 11px; color: var(--text-sub); display: none;"></span>
-          <button type="button" id="openConnectModalBtn" class="btn-chip btn-chip-primary">
+          <button type="button" id="openConnectModalBtn" class="btn-chip btn-chip-primary" onclick="openChangeChannelScreen()" title="방송 연결 또는 스트리머 변경">
             <span>📡</span>
             <span id="connectBtnLabel">방송 연결</span>
           </button>
-          <button type="button" id="disconnectBtn" class="btn-chip btn-chip-danger" style="display: none;">
+          <button type="button" id="disconnectBtn" class="btn-chip btn-chip-danger" onclick="disconnectBroadcast()" style="display: none;" title="현재 방송 연결 종료">
             <span>🛑</span>
             <span>종료</span>
           </button>
         </div>
 
-        <button type="button" id="openChatDrawerBtn" class="btn-chat-toggle" title="실시간 채팅 피드 열기">
+        <button type="button" id="openChatDrawerBtn" class="btn-chat-toggle" onclick="toggleDockedChatSidebar()" title="실시간 채팅창 열기/접기">
           <span>💬</span>
-          <span>채팅 피드</span>
+          <span>실시간 채팅창</span>
           <span id="chatBadgeCount" class="chat-badge">0</span>
         </button>
       </div>
     </header>
 
-    <!-- 🎟️ MAIN TAB 1: 시청자 대규모 추첨기 (Raffle View) -->
-    <div id="raffleView">
+    <!-- ========================================================= -->
+    <!-- 📱 NEW: App Main Layout (Left: Content / Right: Docked Chat) -->
+    <!-- ========================================================= -->
+    <div class="app-main-layout" id="appMainLayout">
+      <div class="app-main-content">
+        <!-- 🎟️ MAIN TAB 1: 시청자 대규모 추첨기 (Raffle View) -->
+        <div id="raffleView">
       <!-- Clean Tab Summary Bar (Left: Big Settings Button / Right: Live Filters Summary) -->
       <div class="view-summary-bar">
         <button type="button" class="btn-summary-settings" onclick="openSettingsDrawer('raffle')" title="추첨 대상 및 제외 설정 열기">
@@ -3426,6 +4153,75 @@
         </div>
       </div>
     </div>
+  </div> <!-- .app-main-content -->
+
+  <!-- ========================================================= -->
+  <!-- 💬 NEW: Docked Real-time Chat Sidebar (상시 분할 실시간 채팅창) -->
+  <!-- ========================================================= -->
+  <aside id="dockedChatSidebar" class="docked-chat-sidebar">
+    <!-- Sidebar Header -->
+    <div class="chat-sidebar-header">
+      <div class="chat-sidebar-title-group">
+        <span style="font-size: 16px;">💬</span>
+        <span class="chat-sidebar-title">실시간 시청자 채팅</span>
+        <span id="dockedChatLivePill" class="live-badge-pill offline" style="font-size: 10px; padding: 2px 6px;">OFFLINE</span>
+        <span id="dockedChatCountBadge" class="badge-tag" style="background: rgba(0, 255, 163, 0.15); color: var(--chzzk-green); font-size: 10.5px; font-weight: 800;">0</span>
+      </div>
+      <div class="chat-sidebar-header-actions">
+        <button type="button" class="btn-sidebar-icon" onclick="popoutChatWindow()" title="새 창으로 채팅창 띄우기 (OBS/듀얼 모니터용 Popout)">↗️</button>
+        <button type="button" class="btn-sidebar-icon" onclick="clearDockedChatFeed()" title="채팅창 비우기">🧹</button>
+        <button type="button" class="btn-sidebar-icon" onclick="toggleDockedChatSidebar()" title="채팅창 접기">✕</button>
+      </div>
+    </div>
+
+    <!-- Filter & Search Bar -->
+    <div class="chat-sidebar-filter-bar">
+      <div class="chat-filter-chips">
+        <button type="button" class="chat-filter-chip active" id="chatFilterAll" onclick="setChatSidebarFilter('all')">전체</button>
+        <button type="button" class="chat-filter-chip" id="chatFilterSub" onclick="setChatSidebarFilter('sub')">⭐ 구독자</button>
+        <button type="button" class="chat-filter-chip" id="chatFilterCheese" onclick="setChatSidebarFilter('cheese')">🧀 후원</button>
+      </div>
+      <div class="chat-search-wrap">
+        <input type="text" id="chatSidebarSearchInput" placeholder="🔍 닉네임 / 메시지 검색..." oninput="filterDockedChatItems(this.value)">
+        <button type="button" class="chat-search-clear" onclick="clearChatSidebarSearch()">✕</button>
+      </div>
+    </div>
+
+    <!-- Real-time Chat Feed List -->
+    <div id="dockedChatFeed" class="docked-chat-feed">
+      <div id="dockedChatEmptyGuide" class="docked-chat-empty-guide">
+        <div style="font-size: 32px; margin-bottom: 8px;">📡</div>
+        <div style="font-weight: 800; font-size: 13px; color: #fff; margin-bottom: 4px;">방송 연결 대기 중</div>
+        <div style="font-size: 11.5px; color: var(--text-sub); line-height: 1.5;">
+          상단 입력창에 치지직 방송 링크를 넣고<br><b style="color: var(--chzzk-green);">[방송 연결하기]</b>를 누르면<br>시청자들의 채팅이 실시간으로 뜹니다.
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar Footer / Status Bar -->
+    <div class="chat-sidebar-footer">
+      <div class="chat-scroll-status" id="chatAutoScrollIndicator">
+        <label class="chat-scroll-toggle-label">
+          <input type="checkbox" id="chatAutoScrollToggle" checked onchange="toggleChatAutoScroll(this.checked)">
+          <span>자동 스크롤</span>
+        </label>
+      </div>
+      <button type="button" id="chatNewMsgFloatingBtn" class="chat-new-msg-btn" style="display: none;" onclick="scrollChatToBottom()">
+        <span>새 메시지 수신 ▼</span>
+      </button>
+      <div style="font-size: 11px; color: var(--text-sub);">
+        <span id="dockedChatViewerSpeed">초당 0건</span>
+      </div>
+    </div>
+  </aside>
+</div> <!-- #appMainLayout -->
+
+<!-- Floating Chat Toggle Tab (화면 우측 고정 탭) -->
+<button type="button" id="floatingChatTabBtn" class="floating-chat-tab-btn" onclick="toggleDockedChatSidebar()" title="실시간 채팅창 펼치기">
+  <span>💬</span>
+  <span>채팅창</span>
+  <span id="floatingChatBadgeCount" class="badge-tag" style="background: var(--chzzk-green); color: #000; font-size: 9px; padding: 1px 4px; font-weight: 900;">0</span>
+</button>
 
     <!-- 📄 Footer & Legal Disclaimers (저작권 및 면책 조항) -->
     <footer style="margin-top: 40px; padding: 22px 20px; border-top: 1px solid rgba(255, 255, 255, 0.08); background: rgba(8, 12, 20, 0.65); border-radius: 12px; font-size: 11.5px; color: var(--text-sub); line-height: 1.6;">
@@ -3462,7 +4258,8 @@
         </div>
       </div>
     </footer>
-  </div>
+  </div> <!-- #appWorkspaceArea -->
+</div> <!-- .container -->
 
   <!-- 🔄 Pokemon Faint Switch Modal (기절 시 출전 포켓몬 선택 모달) -->
   <div id="pokeFaintSwitchModal" class="modal-backdrop">
@@ -4849,6 +5646,7 @@
     let isChannelLive = false;
     let currentLiveTitle = '';
     let currentViewerCount = 0;
+    let currentCategory = '';
 
     const statusLiveBadge = document.getElementById('statusLiveBadge');
     const statusViewerInfo = document.getElementById('statusViewerInfo');
@@ -5204,6 +6002,13 @@
         statusViewerInfo.style.display = 'none';
         if (drawerLiveBadge) drawerLiveBadge.style.display = 'none';
       }
+
+      // Sync Docked Chat Sidebar Live Pill
+      const dockedLive = document.getElementById('dockedChatLivePill');
+      if (dockedLive) {
+        dockedLive.className = (isConnected && isChannelLive) ? 'live-badge-pill live' : 'live-badge-pill offline';
+        dockedLive.innerHTML = (isConnected && isChannelLive) ? '🔴 LIVE' : '⚪ OFFLINE';
+      }
     }
 
     function setStatus(status, text, liveData = null) {
@@ -5228,6 +6033,7 @@
         if (drawerLiveBadge) drawerLiveBadge.style.display = 'none';
         currentChannelImageUrl = '';
         updateStreamerProfileUI();
+        updateLiveStatusUI(false, '', '', 0, '');
       }
     }
 
@@ -5269,8 +6075,16 @@
       const savedSes = localStorage.getItem('chzzk_nid_ses') || '';
       const authInput = document.getElementById('nidAuthInput');
       const sesInput = document.getElementById('nidSesInput');
+      const qAuth = document.getElementById('quickNidAuthInput');
+      const qSes = document.getElementById('quickNidSesInput');
+      const wAuth = document.getElementById('welcomeNidAuthInput');
+      const wSes = document.getElementById('welcomeNidSesInput');
       if (authInput && savedAuth) authInput.value = savedAuth;
       if (sesInput && savedSes) sesInput.value = savedSes;
+      if (qAuth && savedAuth) qAuth.value = savedAuth;
+      if (qSes && savedSes) qSes.value = savedSes;
+      if (wAuth && savedAuth) wAuth.value = savedAuth;
+      if (wSes && savedSes) wSes.value = savedSes;
       updateAdultCookieBadge();
     }
 
@@ -5279,36 +6093,437 @@
       localStorage.removeItem('chzzk_nid_ses');
       const authInput = document.getElementById('nidAuthInput');
       const sesInput = document.getElementById('nidSesInput');
+      const qAuth = document.getElementById('quickNidAuthInput');
+      const qSes = document.getElementById('quickNidSesInput');
+      const wAuth = document.getElementById('welcomeNidAuthInput');
+      const wSes = document.getElementById('welcomeNidSesInput');
       if (authInput) authInput.value = '';
       if (sesInput) sesInput.value = '';
+      if (qAuth) qAuth.value = '';
+      if (qSes) qSes.value = '';
+      if (wAuth) wAuth.value = '';
+      if (wSes) wSes.value = '';
       updateAdultCookieBadge();
       alert('저장된 19세 인증 쿠키가 삭제되었습니다.');
     }
 
-    document.getElementById('nidAuthInput')?.addEventListener('input', updateAdultCookieBadge);
-    document.getElementById('nidSesInput')?.addEventListener('input', updateAdultCookieBadge);
+    // =========================================================
+    // 🚀 NEW: Welcome Landing Screen & Channel Search Handlers
+    // =========================================================
+    let searchDebounceTimer = null;
 
-    // Connect Entry
-    connectBtn.addEventListener('click', async () => {
-      currentChannelId = extractChannelId(channelInput.value);
-      if (!currentChannelId) {
-        alert('올바른 치지직 채널 ID 또는 방송 URL을 입력해주세요.');
+    function handleWelcomeSearchInput(val) {
+      const clearBtn = document.getElementById('welcomeClearSearchBtn');
+      if (clearBtn) clearBtn.style.display = val ? 'block' : 'none';
+
+      if (searchDebounceTimer) {
+        clearTimeout(searchDebounceTimer);
+        searchDebounceTimer = null;
+      }
+
+      const q = (val || '').trim();
+      if (!q) {
+        const resBox = document.getElementById('welcomeSearchResultsBox');
+        if (resBox) resBox.style.display = 'none';
         return;
       }
 
-      closeConnectModal();
+      // Real-time live search with 250ms debounce
+      searchDebounceTimer = setTimeout(() => {
+        executeWelcomeSearch(true);
+      }, 250);
+    }
+
+    function clearWelcomeSearch() {
+      if (searchDebounceTimer) {
+        clearTimeout(searchDebounceTimer);
+        searchDebounceTimer = null;
+      }
+      const input = document.getElementById('welcomeSearchInput');
+      if (input) {
+        input.value = '';
+        input.focus();
+      }
+      const clearBtn = document.getElementById('welcomeClearSearchBtn');
+      if (clearBtn) clearBtn.style.display = 'none';
+      const resBox = document.getElementById('welcomeSearchResultsBox');
+      if (resBox) resBox.style.display = 'none';
+    }
+
+    function quickSearchStreamer(streamerName) {
+      const input = document.getElementById('welcomeSearchInput');
+      if (input) {
+        input.value = streamerName;
+        const clearBtn = document.getElementById('welcomeClearSearchBtn');
+        if (clearBtn) clearBtn.style.display = 'block';
+        executeWelcomeSearch();
+      }
+    }
+
+    function quickConnectSampleChannel(channelId = '1ad5aa0f6c6741b072528fad5e5e76b1') {
+      selectSearchStreamer(channelId, '기본 테스트 채널', '', false);
+    }
+
+    function toggleWelcomeAdultSettings() {
+      const fields = document.getElementById('welcomeAdultFields');
+      const icon = document.getElementById('welcomeAdultToggleIcon');
+      if (!fields || !icon) return;
+      const isOpen = fields.style.display !== 'none';
+      if (isOpen) {
+        fields.style.display = 'none';
+        icon.innerText = '▼';
+      } else {
+        fields.style.display = 'block';
+        icon.innerText = '▲';
+        setTimeout(() => document.getElementById('welcomeNidAuthInput')?.focus(), 50);
+      }
+    }
+
+    function formatFollowerCount(num) {
+      if (!num) return '0명';
+      if (num >= 10000) {
+        return (num / 10000).toFixed(1).replace(/\.0$/, '') + '만명';
+      }
+      return Number(num).toLocaleString() + '명';
+    }
+
+    async function executeWelcomeSearch(isLiveInput = false) {
+      if (searchDebounceTimer) {
+        clearTimeout(searchDebounceTimer);
+        searchDebounceTimer = null;
+      }
+      const input = document.getElementById('welcomeSearchInput');
+      const query = (input?.value || '').trim();
+      if (!query) {
+        if (!isLiveInput) {
+          alert('스트리머 이름 또는 치지직 채널 주소를 입력해주세요.');
+          input?.focus();
+        }
+        const resBox = document.getElementById('welcomeSearchResultsBox');
+        if (resBox) resBox.style.display = 'none';
+        return;
+      }
+
+      const directChannelId = extractChannelId(query);
+      const isDirectIdOrUrl = directChannelId && (query.startsWith('http') || query.length === 32 || query.includes('/live/') || query.includes('/channel/'));
+
+      const resBox = document.getElementById('welcomeSearchResultsBox');
+      const listContainer = document.getElementById('welcomeSearchResultsList');
+      const countText = document.getElementById('searchResultCountText');
+      const btnText = document.getElementById('welcomeSearchBtnText');
+      const btnIcon = document.getElementById('welcomeSearchBtnIcon');
+
+      if (btnText) btnText.innerText = '검색 중...';
+      if (btnIcon) btnIcon.innerText = '⏳';
+      if (resBox) resBox.style.display = 'flex';
+      if (listContainer && (!listContainer.children.length || !isLiveInput)) {
+        listContainer.innerHTML = '<div style="text-align: center; padding: 24px; color: var(--text-sub);"><div class="spinner" style="margin: 0 auto 10px; width: 24px; height: 24px;"></div>채널을 검색하고 팔로워 순으로 정렬하는 중...</div>';
+      }
+
+      try {
+        let channels = [];
+        let directCardHtml = '';
+        if (isDirectIdOrUrl) {
+          directCardHtml = `
+            <div class="streamer-search-card" style="border: 1.5px solid var(--chzzk-green); background: rgba(0, 255, 163, 0.08);" onclick="selectSearchStreamer('${directChannelId}', '입력한 방송', '', false)">
+              <div style="font-size: 26px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: rgba(0,255,163,0.15); border-radius: 50%;">📡</div>
+              <div class="streamer-card-info">
+                <div class="streamer-card-name-row">
+                  <span class="streamer-card-name" style="color: var(--chzzk-green);">입력한 주소/ID로 즉시 연결</span>
+                </div>
+                <div class="streamer-card-meta">
+                  <span>채널 ID: <b>${directChannelId}</b></span>
+                </div>
+              </div>
+              <button type="button" class="btn btn-primary streamer-card-connect-btn">
+                <span>즉시 연결 ➔</span>
+              </button>
+            </div>
+          `;
+        }
+
+        // Try local server proxy first
+        try {
+          const res = await fetch(`/api/chzzk/search?keyword=${encodeURIComponent(query)}`);
+          if (res.ok) {
+            const data = await res.json();
+            channels = data.channels || [];
+          }
+        } catch (e) {
+          console.warn('Local search proxy error, trying direct API:', e);
+        }
+
+        // Direct Chzzk API fallback
+        if (channels.length === 0 && !isDirectIdOrUrl) {
+          try {
+            const directRes = await fetch(`https://api.chzzk.naver.com/service/v1/search/channels?keyword=${encodeURIComponent(query)}&offset=0&size=20`);
+            if (directRes.ok) {
+              const directData = await directRes.json();
+              const rawData = directData?.content?.data || [];
+              channels = rawData.map(item => {
+                const ch = item.channel || {};
+                return {
+                  channelId: ch.channelId,
+                  channelName: ch.channelName || '',
+                  channelImageUrl: ch.channelImageUrl || '',
+                  followerCount: ch.followerCount || 0,
+                  openLive: !!ch.openLive,
+                  verifiedMark: !!ch.verifiedMark
+                };
+              });
+            }
+          } catch (e) {
+            console.warn('Direct Chzzk API error:', e);
+          }
+        }
+
+        // Sort by followerCount descending as requested!
+        channels.sort((a, b) => (b.followerCount || 0) - (a.followerCount || 0));
+
+        if (countText) {
+          countText.innerText = `검색 결과 ${channels.length}건`;
+        }
+
+        if (channels.length === 0 && !directCardHtml) {
+          if (listContainer) {
+            listContainer.innerHTML = `
+              <div style="text-align: center; padding: 24px; color: var(--text-sub); line-height: 1.6;">
+                <div style="font-size: 28px; margin-bottom: 6px;">🔍</div>
+                '<b>${escapeHtml(query)}</b>' 관련 채널을 찾을 수 없습니다.<br>
+                정확한 스트리머 닉네임이나 치지직 방송 URL을 입력해주세요.
+              </div>
+            `;
+          }
+          return;
+        }
+
+        let html = directCardHtml;
+        channels.forEach(c => {
+          const avatarUrl = c.channelImageUrl || 'delibird.png';
+          const liveBadge = c.openLive
+            ? '<span class="live-badge-pill live" style="font-size: 10px; padding: 2px 6px;">🔴 LIVE</span>'
+            : '<span class="live-badge-pill offline" style="font-size: 10px; padding: 2px 6px;">⚪ OFFLINE</span>';
+          const verifiedBadge = c.verifiedMark
+            ? '<span style="background: var(--chzzk-green); color: #000; font-size: 9px; font-weight: 900; border-radius: 50%; width: 14px; height: 14px; display: inline-flex; align-items: center; justify-content: center;" title="치지직 인증 채널">✓</span>'
+            : '';
+          const followerStr = formatFollowerCount(c.followerCount);
+          const safeName = escapeHtml(c.channelName || '치지직 스트리머');
+          const safeId = escapeHtml(c.channelId);
+
+          html += `
+            <div class="streamer-search-card" onclick="selectSearchStreamer('${safeId}', '${safeName}', '${c.channelImageUrl || ''}', ${c.openLive})">
+              <img src="${avatarUrl}" class="streamer-card-avatar" alt="${safeName}" onerror="this.src='delibird.png'">
+              <div class="streamer-card-info">
+                <div class="streamer-card-name-row">
+                  <span class="streamer-card-name">${safeName}</span>
+                  ${verifiedBadge}
+                  ${liveBadge}
+                </div>
+                <div class="streamer-card-meta">
+                  <span>👥 팔로워 <b>${followerStr}</b></span>
+                  <span style="color: rgba(255,255,255,0.3); font-size: 10px;">ID: ${safeId.substring(0, 10)}...</span>
+                </div>
+              </div>
+              <button type="button" class="btn btn-primary streamer-card-connect-btn">
+                <span>연결 ➔</span>
+              </button>
+            </div>
+          `;
+        });
+
+        if (listContainer) listContainer.innerHTML = html;
+
+      } catch (err) {
+        console.error('검색 오류:', err);
+        if (listContainer) {
+          listContainer.innerHTML = `<div style="text-align: center; padding: 20px; color: #f87171;">검색 중 오류가 발생했습니다: ${escapeHtml(err.message)}</div>`;
+        }
+      } finally {
+        if (btnText) btnText.innerText = '검색';
+        if (btnIcon) btnIcon.innerText = '🔍';
+      }
+    }
+
+    function selectSearchStreamer(channelId, channelName, avatarUrl, isLive) {
+      currentChannelId = channelId;
+      const mInput = document.getElementById('channelInput');
+      const qInput = document.getElementById('quickChannelInput');
+      if (mInput) mInput.value = channelId;
+      if (qInput) qInput.value = channelId;
+
+      enterWorkspace();
+      showToast(`📡 ${channelName} 방송에 연결을 시작합니다...`, '🚀');
+
       isManualDisconnect = false;
       reconnectAttempts = 0;
       serverIndexOffset = 0;
+      startConnectionFlow();
+    }
 
+    function enterWorkspace() {
+      const welcome = document.getElementById('welcomeLandingScreen');
+      const workspace = document.getElementById('appWorkspaceArea');
+      const backBtn = document.getElementById('welcomeBackToWorkspaceBtn');
+      if (welcome) welcome.style.display = 'none';
+      if (workspace) workspace.style.display = 'block';
+      if (backBtn) backBtn.style.display = 'inline-flex';
+      sessionStorage.setItem('entered_workspace', 'true');
+    }
+
+    function enterWorkspaceOffline() {
+      enterWorkspace();
+      showToast('⚡ 방송 연결 없이 오프라인 작업대로 입장했습니다.', '💡');
+    }
+
+    function openChangeChannelScreen() {
+      const welcome = document.getElementById('welcomeLandingScreen');
+      const workspace = document.getElementById('appWorkspaceArea');
+      const backBtn = document.getElementById('welcomeBackToWorkspaceBtn');
+      if (workspace) workspace.style.display = 'none';
+      if (welcome) welcome.style.display = 'flex';
+      if (backBtn) backBtn.style.display = 'inline-flex';
+      const input = document.getElementById('welcomeSearchInput');
+      if (input) {
+        input.focus();
+        input.select();
+      }
+    }
+
+    function returnToWorkspace() {
+      const welcome = document.getElementById('welcomeLandingScreen');
+      const workspace = document.getElementById('appWorkspaceArea');
+      if (welcome) welcome.style.display = 'none';
+      if (workspace) workspace.style.display = 'block';
+    }
+
+    // ==========================================
+    // 📺 Top Quick Broadcast Connect Bar Handlers
+    // ==========================================
+    function handleQuickChannelInputChange(val) {
+      const modalInput = document.getElementById('channelInput');
+      if (modalInput) modalInput.value = val;
+      const clearBtn = document.getElementById('quickClearInputBtn');
+      if (clearBtn) clearBtn.style.display = val ? 'block' : 'none';
+    }
+
+    function clearQuickChannelInput() {
+      const qInput = document.getElementById('quickChannelInput');
+      const mInput = document.getElementById('channelInput');
+      if (qInput) qInput.value = '';
+      if (mInput) mInput.value = '';
+      const clearBtn = document.getElementById('quickClearInputBtn');
+      if (clearBtn) clearBtn.style.display = 'none';
+      if (qInput) qInput.focus();
+    }
+
+    function fillQuickSampleChannel(channelId = '1ad5aa0f6c6741b072528fad5e5e76b1') {
+      const qInput = document.getElementById('quickChannelInput');
+      const mInput = document.getElementById('channelInput');
+      if (qInput) qInput.value = channelId;
+      if (mInput) mInput.value = channelId;
+      const clearBtn = document.getElementById('quickClearInputBtn');
+      if (clearBtn) clearBtn.style.display = 'block';
+      showToast('💡 샘플 채널이 입력되었습니다.', '📡');
+    }
+
+    function toggleQuickAdultSettings() {
+      const fields = document.getElementById('quickAdultFields');
+      const icon = document.getElementById('quickAdultToggleIcon');
+      if (!fields || !icon) return;
+      const isOpen = fields.style.display !== 'none';
+      if (isOpen) {
+        fields.style.display = 'none';
+        icon.innerText = '▼';
+      } else {
+        fields.style.display = 'block';
+        icon.innerText = '▲';
+        setTimeout(() => document.getElementById('quickNidAuthInput')?.focus(), 50);
+      }
+    }
+
+    function syncAdultCookieInputs(source) {
+      let auth = '', ses = '';
+      if (source === 'welcome') {
+        auth = (document.getElementById('welcomeNidAuthInput')?.value || '').trim();
+        ses = (document.getElementById('welcomeNidSesInput')?.value || '').trim();
+      } else if (source === 'quick') {
+        auth = (document.getElementById('quickNidAuthInput')?.value || '').trim();
+        ses = (document.getElementById('quickNidSesInput')?.value || '').trim();
+      } else {
+        auth = (document.getElementById('nidAuthInput')?.value || '').trim();
+        ses = (document.getElementById('nidSesInput')?.value || '').trim();
+      }
+
+      const wAuth = document.getElementById('welcomeNidAuthInput');
+      const wSes = document.getElementById('welcomeNidSesInput');
+      const qAuth = document.getElementById('quickNidAuthInput');
+      const qSes = document.getElementById('quickNidSesInput');
+      const mAuth = document.getElementById('nidAuthInput');
+      const mSes = document.getElementById('nidSesInput');
+
+      if (wAuth) wAuth.value = auth;
+      if (wSes) wSes.value = ses;
+      if (qAuth) qAuth.value = auth;
+      if (qSes) qSes.value = ses;
+      if (mAuth) mAuth.value = auth;
+      if (mSes) mSes.value = ses;
+
+      updateAdultCookieBadge();
+    }
+
+    async function submitQuickBroadcastConnect() {
+      const qInput = document.getElementById('quickChannelInput');
+      const rawVal = (qInput?.value || '').trim();
+      currentChannelId = extractChannelId(rawVal);
+      if (!currentChannelId) {
+        alert('올바른 치지직 채널 ID 또는 방송 URL을 입력해주세요.');
+        if (qInput) qInput.focus();
+        return;
+      }
+      const mInput = document.getElementById('channelInput');
+      if (mInput) mInput.value = rawVal;
+      isManualDisconnect = false;
+      reconnectAttempts = 0;
+      serverIndexOffset = 0;
       await startConnectionFlow();
-    });
+    }
+
+    function promptChangeBroadcastChannel() {
+      openChangeChannelScreen();
+    }
+
+    function disconnectBroadcast() {
+      disconnectBtn.click();
+      const barDisc = document.getElementById('broadcastBarDisconnected');
+      const barConn = document.getElementById('broadcastBarConnected');
+      if (barDisc) barDisc.style.display = 'block';
+      if (barConn) barConn.style.display = 'none';
+      openChangeChannelScreen();
+    }
+
+    // Connect Entry
+    if (connectBtn) {
+      connectBtn.addEventListener('click', async () => {
+        currentChannelId = extractChannelId(channelInput.value);
+        if (!currentChannelId) {
+          alert('올바른 치지직 채널 ID 또는 방송 URL을 입력해주세요.');
+          return;
+        }
+
+        closeConnectModal();
+        isManualDisconnect = false;
+        reconnectAttempts = 0;
+        serverIndexOffset = 0;
+
+        await startConnectionFlow();
+      });
+    }
 
     async function startConnectionFlow() {
       setStatus('connecting', '치지직 방송 접근 토큰 요청 중...');
 
-      const nidAuth = (document.getElementById('nidAuthInput')?.value || localStorage.getItem('chzzk_nid_aut') || '').trim();
-      const nidSes = (document.getElementById('nidSesInput')?.value || localStorage.getItem('chzzk_nid_ses') || '').trim();
+      const nidAuth = (document.getElementById('welcomeNidAuthInput')?.value || document.getElementById('quickNidAuthInput')?.value || document.getElementById('nidAuthInput')?.value || localStorage.getItem('chzzk_nid_aut') || '').trim();
+      const nidSes = (document.getElementById('welcomeNidSesInput')?.value || document.getElementById('quickNidSesInput')?.value || document.getElementById('nidSesInput')?.value || localStorage.getItem('chzzk_nid_ses') || '').trim();
 
       if (document.getElementById('saveCookieCheck')?.checked) {
         if (nidAuth) localStorage.setItem('chzzk_nid_aut', nidAuth);
@@ -5326,9 +6541,9 @@
         if (!res.ok || data.error) {
           setStatus('disconnected', '연결 실패');
           if (data.isAdult) {
-            openConnectModal();
-            toggleAdultCookieSettings(false); // force open
-            setTimeout(() => document.getElementById('nidAuthInput')?.focus(), 200);
+            openChangeChannelScreen();
+            toggleWelcomeAdultSettings();
+            setTimeout(() => document.getElementById('welcomeNidAuthInput')?.focus(), 200);
             alert(data.error || '🔞 19세(연령 제한) 방송입니다. [19세 방송 연결 설정]에 NID_AUT와 NID_SES 쿠키를 입력해주세요.');
           } else {
             alert('오류: ' + (data.error || '방송 정보를 불러올 수 없습니다.'));
@@ -5343,6 +6558,7 @@
         isChannelLive = !!data.isLive;
         currentLiveTitle = data.liveTitle || '';
         currentViewerCount = data.concurrentUserCount || 0;
+        currentCategory = data.categoryType || data.liveCategoryValue || '종합게임';
 
         updateStreamerProfileUI();
         startLiveStatusPolling();
@@ -5593,7 +6809,9 @@
         handleLivePollDonation(nickname, msgText, uid, donationInfo.payAmount, now);
       }
 
-      addChatToFeed(nickname, msgText, now, isSubscriber, isDonator);
+      addChatToFeed(nickname, msgText, now, isSubscriber, isDonator, donationInfo.isDonation ? donationInfo.payAmount : 0);
+      const quickChatCountEl = document.getElementById('quickCollectedChatCount');
+      if (quickChatCountEl) quickChatCountEl.innerText = chatLogCount.toLocaleString();
     }
 
     function parseLiveDonation(item, profileData) {
@@ -5705,26 +6923,300 @@
       drawBtn.disabled = (eligible.length === 0);
     }
 
-    function addChatToFeed(nickname, msg, time, isSub, isDonor) {
-      const div = document.createElement('div');
-      div.className = 'chat-item';
+    // ==========================================
+    // 💬 Docked Chat Sidebar Logic & Feed
+    // ==========================================
+    let chatAutoScrollEnabled = true;
+    let dockedChatActiveFilter = 'all'; // 'all' | 'sub' | 'cheese'
+    let dockedChatSearchQuery = '';
+    let chatRateCount = 0;
+    let chatRateInterval = null;
+    let popoutWindowRef = null;
 
-      let badgesHtml = '';
-      if (isSub) badgesHtml += `<span class="badge-tag badge-sub">⭐ 구독</span>`;
-      if (isDonor) badgesHtml += `<span class="badge-tag badge-follow">🧀 후원</span>`;
+    function initDockedChatSidebar() {
+      // Restore user sidebar preference
+      const savedCollapsed = localStorage.getItem('chat_sidebar_collapsed');
+      const layout = document.getElementById('appMainLayout');
+      const floatingBtn = document.getElementById('floatingChatTabBtn');
+      const stateText = document.getElementById('quickChatSidebarStateText');
 
-      div.innerHTML = `
-        ${badgesHtml}
-        <span class="chat-nick">${escapeHtml(nickname)}</span>
-        <span class="chat-msg">${escapeHtml(msg)}</span>
-        <span class="chat-time">${time}</span>
-      `;
-      chatFeed.appendChild(div);
-
-      if (chatFeed.children.length > 60) {
-        chatFeed.removeChild(chatFeed.firstChild);
+      if (savedCollapsed === 'true') {
+        if (layout) layout.classList.add('sidebar-collapsed');
+        if (floatingBtn) floatingBtn.style.display = 'flex';
+        if (stateText) stateText.innerText = '펼치기';
+      } else {
+        if (layout) layout.classList.remove('sidebar-collapsed');
+        if (floatingBtn) floatingBtn.style.display = 'none';
+        if (stateText) stateText.innerText = '접기';
       }
-      chatFeed.scrollTop = chatFeed.scrollHeight;
+
+      // Track scroll on feed to show/hide floating new message button
+      const feed = document.getElementById('dockedChatFeed');
+      if (feed) {
+        feed.addEventListener('scroll', () => {
+          const isAtBottom = (feed.scrollHeight - feed.scrollTop - feed.clientHeight) < 40;
+          const floatBtn = document.getElementById('chatNewMsgFloatingBtn');
+          if (isAtBottom && floatBtn) {
+            floatBtn.style.display = 'none';
+          }
+        });
+      }
+
+      // Calculate chats per second
+      if (chatRateInterval) clearInterval(chatRateInterval);
+      chatRateInterval = setInterval(() => {
+        const speedEl = document.getElementById('dockedChatViewerSpeed');
+        if (speedEl) {
+          speedEl.innerText = `초당 ${chatRateCount}건`;
+        }
+        chatRateCount = 0;
+      }, 1000);
+    }
+
+    function toggleDockedChatSidebar(forceState = null) {
+      const layout = document.getElementById('appMainLayout');
+      if (!layout) return;
+
+      if (forceState !== null) {
+        if (forceState) layout.classList.remove('sidebar-collapsed');
+        else layout.classList.add('sidebar-collapsed');
+      } else {
+        layout.classList.toggle('sidebar-collapsed');
+      }
+
+      const isCollapsed = layout.classList.contains('sidebar-collapsed');
+      const floatingBtn = document.getElementById('floatingChatTabBtn');
+      const stateText = document.getElementById('quickChatSidebarStateText');
+
+      if (floatingBtn) floatingBtn.style.display = isCollapsed ? 'flex' : 'none';
+      if (stateText) stateText.innerText = isCollapsed ? '펼치기' : '접기';
+      localStorage.setItem('chat_sidebar_collapsed', isCollapsed ? 'true' : 'false');
+    }
+
+    function toggleChatAutoScroll(enabled) {
+      chatAutoScrollEnabled = !!enabled;
+      if (chatAutoScrollEnabled) {
+        scrollChatToBottom();
+      }
+    }
+
+    function scrollChatToBottom() {
+      const feed = document.getElementById('dockedChatFeed');
+      if (feed) {
+        feed.scrollTop = feed.scrollHeight;
+      }
+      const floatBtn = document.getElementById('chatNewMsgFloatingBtn');
+      if (floatBtn) floatBtn.style.display = 'none';
+    }
+
+    function clearDockedChatFeed() {
+      const feed = document.getElementById('dockedChatFeed');
+      if (!feed) return;
+      feed.innerHTML = `
+        <div id="dockedChatEmptyGuide" class="docked-chat-empty-guide">
+          <div style="font-size: 32px; margin-bottom: 8px;">🧹</div>
+          <div style="font-weight: 800; font-size: 13px; color: #fff; margin-bottom: 4px;">채팅 피드가 초기화되었습니다</div>
+          <div style="font-size: 11.5px; color: var(--text-sub);">새로운 채팅이 올라오면 실시간으로 추가됩니다.</div>
+        </div>
+      `;
+      const floatBtn = document.getElementById('chatNewMsgFloatingBtn');
+      if (floatBtn) floatBtn.style.display = 'none';
+    }
+
+    function setChatSidebarFilter(type) {
+      dockedChatActiveFilter = type;
+      ['all', 'sub', 'cheese'].forEach(t => {
+        const btn = document.getElementById(`chatFilter${t.charAt(0).toUpperCase() + t.slice(1)}`);
+        if (btn) btn.classList.toggle('active', t === type);
+      });
+      applyDockedChatFilters();
+    }
+
+    function filterDockedChatItems(query) {
+      dockedChatSearchQuery = (query || '').trim().toLowerCase();
+      applyDockedChatFilters();
+    }
+
+    function clearChatSidebarSearch() {
+      const input = document.getElementById('chatSidebarSearchInput');
+      if (input) input.value = '';
+      dockedChatSearchQuery = '';
+      applyDockedChatFilters();
+    }
+
+    function applyDockedChatFilters() {
+      const feed = document.getElementById('dockedChatFeed');
+      if (!feed) return;
+      const items = feed.querySelectorAll('.docked-chat-item');
+      items.forEach(el => {
+        const isSub = el.dataset.sub === 'true';
+        const isDonor = el.dataset.donor === 'true';
+        const nick = (el.dataset.nick || '').toLowerCase();
+        const msg = (el.dataset.msg || '').toLowerCase();
+
+        let matchFilter = true;
+        if (dockedChatActiveFilter === 'sub' && !isSub) matchFilter = false;
+        if (dockedChatActiveFilter === 'cheese' && !isDonor) matchFilter = false;
+
+        let matchQuery = true;
+        if (dockedChatSearchQuery && !nick.includes(dockedChatSearchQuery) && !msg.includes(dockedChatSearchQuery)) {
+          matchQuery = false;
+        }
+
+        el.style.display = (matchFilter && matchQuery) ? 'flex' : 'none';
+      });
+    }
+
+    function popoutChatWindow() {
+      if (popoutWindowRef && !popoutWindowRef.closed) {
+        popoutWindowRef.focus();
+        return;
+      }
+      const title = `${currentChannelName || '치지직'} 실시간 채팅`;
+      popoutWindowRef = window.open('', 'ChzzkChatPopout', 'width=420,height=750,menubar=no,toolbar=no,location=no,status=no');
+      if (!popoutWindowRef) {
+        alert('팝업 차단이 감지되었습니다. 팝업을 허용해주세요.');
+        return;
+      }
+      popoutWindowRef.document.write(`
+        <!DOCTYPE html>
+        <html lang="ko">
+        <head>
+          <meta charset="UTF-8">
+          <title>${escapeHtml(title)}</title>
+          <style>
+            body { margin: 0; padding: 12px; background: #080c14; color: #fff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 13px; }
+            .header { padding: 10px 14px; background: #121826; border-radius: 8px; font-weight: 800; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border: 1px solid #232a3b; }
+            #feed { display: flex; flex-direction: column; gap: 6px; }
+            .item { padding: 8px 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 6px; line-height: 1.4; word-break: break-all; }
+            .nick { font-weight: 800; color: #00ffa3; margin-right: 6px; }
+            .badge { display: inline-block; padding: 1px 5px; font-size: 10px; font-weight: 800; border-radius: 4px; margin-right: 4px; background: rgba(255,215,0,0.2); color: #ffd700; }
+            .badge-sub { background: rgba(168,85,247,0.2); color: #c084fc; }
+            .time { font-size: 10px; color: #64748b; float: right; }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <span>💬 ${escapeHtml(title)}</span>
+            <span style="color:#00ffa3; font-size:11px;">🔴 LIVE</span>
+          </div>
+          <div id="feed"></div>
+        </body>
+        </html>
+      `);
+      popoutWindowRef.document.close();
+    }
+
+    function addChatToFeed(nickname, msg, time, isSub, isDonor, payAmount = 0) {
+      chatRateCount++;
+
+      // 1. Mobile Drawer Feed (Backward Compatibility)
+      if (chatFeed) {
+        const div = document.createElement('div');
+        div.className = 'chat-item';
+        let badgesHtml = '';
+        if (isSub) badgesHtml += `<span class="badge-tag badge-sub">⭐ 구독</span>`;
+        if (isDonor || payAmount > 0) badgesHtml += `<span class="badge-tag badge-follow">🧀 ${payAmount ? payAmount.toLocaleString() + '치즈' : '후원'}</span>`;
+        div.innerHTML = `
+          ${badgesHtml}
+          <span class="chat-nick">${escapeHtml(nickname)}</span>
+          <span class="chat-msg">${escapeHtml(msg)}</span>
+          <span class="chat-time">${time}</span>
+        `;
+        chatFeed.appendChild(div);
+        if (chatFeed.children.length > 60) {
+          chatFeed.removeChild(chatFeed.firstChild);
+        }
+        chatFeed.scrollTop = chatFeed.scrollHeight;
+      }
+
+      // 2. Docked Chat Sidebar Feed (NEW)
+      const dockedFeed = document.getElementById('dockedChatFeed');
+      if (dockedFeed) {
+        const emptyGuide = document.getElementById('dockedChatEmptyGuide');
+        if (emptyGuide) emptyGuide.style.display = 'none';
+
+        const itemEl = document.createElement('div');
+        const isCheeseDonation = isDonor || payAmount > 0;
+        itemEl.className = 'docked-chat-item' + (isCheeseDonation ? ' is-donation' : '');
+        itemEl.dataset.sub = isSub ? 'true' : 'false';
+        itemEl.dataset.donor = isCheeseDonation ? 'true' : 'false';
+        itemEl.dataset.nick = nickname;
+        itemEl.dataset.msg = msg;
+
+        let badgesHtml = '';
+        if (isSub) {
+          badgesHtml += `<span class="badge-tag badge-sub" style="font-size: 9.5px; padding: 1px 5px;">⭐ 구독</span>`;
+        }
+        if (isCheeseDonation) {
+          badgesHtml += `<span class="badge-tag badge-follow" style="font-size: 9.5px; padding: 1px 5px; background: rgba(255, 215, 0, 0.25); color: #ffd700; border: 1px solid rgba(255,215,0,0.4);">🧀 ${payAmount ? payAmount.toLocaleString() + '치즈' : '후원'}</span>`;
+        }
+
+        const nickClass = isCheeseDonation ? 'docked-chat-nick donor' : (isSub ? 'docked-chat-nick sub' : 'docked-chat-nick');
+
+        itemEl.innerHTML = `
+          <div class="docked-chat-header-row">
+            ${badgesHtml}
+            <span class="${nickClass}">${escapeHtml(nickname)}</span>
+            <span class="docked-chat-time">${time}</span>
+          </div>
+          <div class="docked-chat-msg">${escapeHtml(msg)}</div>
+        `;
+
+        let visible = true;
+        if (dockedChatActiveFilter === 'sub' && !isSub) visible = false;
+        if (dockedChatActiveFilter === 'cheese' && !isCheeseDonation) visible = false;
+        if (dockedChatSearchQuery) {
+          const lowerNick = nickname.toLowerCase();
+          const lowerMsg = msg.toLowerCase();
+          if (!lowerNick.includes(dockedChatSearchQuery) && !lowerMsg.includes(dockedChatSearchQuery)) {
+            visible = false;
+          }
+        }
+        itemEl.style.display = visible ? 'flex' : 'none';
+
+        dockedFeed.appendChild(itemEl);
+
+        if (dockedFeed.children.length > 150) {
+          dockedFeed.removeChild(dockedFeed.firstChild);
+        }
+
+        const isNearBottom = (dockedFeed.scrollHeight - dockedFeed.scrollTop - dockedFeed.clientHeight) < 60;
+        if (chatAutoScrollEnabled || isNearBottom) {
+          dockedFeed.scrollTop = dockedFeed.scrollHeight;
+        } else {
+          const floatBtn = document.getElementById('chatNewMsgFloatingBtn');
+          if (floatBtn) floatBtn.style.display = 'block';
+        }
+
+        const countBadge = document.getElementById('dockedChatCountBadge');
+        if (countBadge) countBadge.innerText = chatLogCount.toLocaleString();
+        const floatingBadge = document.getElementById('floatingChatBadgeCount');
+        if (floatingBadge) floatingBadge.innerText = chatLogCount.toLocaleString();
+      }
+
+      // 3. Mirror to Popout Window
+      if (popoutWindowRef && !popoutWindowRef.closed) {
+        try {
+          const pFeed = popoutWindowRef.document.getElementById('feed');
+          if (pFeed) {
+            const pDiv = popoutWindowRef.document.createElement('div');
+            pDiv.className = 'item';
+            let pBadge = '';
+            if (isSub) pBadge += '<span class="badge badge-sub">⭐구독</span>';
+            if (isDonor || payAmount > 0) pBadge += `<span class="badge">🧀${payAmount ? payAmount.toLocaleString() + '치즈' : '후원'}</span>`;
+            pDiv.innerHTML = `
+              <span class="time">${time}</span>
+              ${pBadge}
+              <span class="nick">${escapeHtml(nickname)}</span>
+              <span>${escapeHtml(msg)}</span>
+            `;
+            pFeed.appendChild(pDiv);
+            if (pFeed.children.length > 80) pFeed.removeChild(pFeed.firstChild);
+            popoutWindowRef.window.scrollTo(0, popoutWindowRef.document.body.scrollHeight);
+          }
+        } catch (e) {}
+      }
     }
 
     function escapeHtml(text) {
@@ -13027,6 +14519,23 @@
     initNewMatch(true);
     loadPokemonDataset();
     updateSettingsSummaryBadges();
+    initDockedChatSidebar();
+
+    // 🚀 NEW: Initialize Start Screen vs Workspace view state
+    function initWelcomeScreen() {
+      const welcome = document.getElementById('welcomeLandingScreen');
+      const workspace = document.getElementById('appWorkspaceArea');
+      const backBtn = document.getElementById('welcomeBackToWorkspaceBtn');
+      if (isConnected) {
+        if (welcome) welcome.style.display = 'none';
+        if (workspace) workspace.style.display = 'block';
+        if (backBtn) backBtn.style.display = 'inline-flex';
+      } else {
+        if (welcome) welcome.style.display = 'flex';
+        if (workspace) workspace.style.display = 'none';
+      }
+    }
+    initWelcomeScreen();
   </script>
 </body>
 </html>

@@ -7,7 +7,7 @@ import urllib.error
 import http.server
 import webbrowser
 import threading
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import urlparse, parse_qs, quote
 
 # Prevent Windows noconsole stdout/stderr NoneType crashes
 if sys.stdout is None:
@@ -74,8 +74,47 @@ class ChzzkProxyHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         parsed = urlparse(self.path)
         
+        # Search channels by streamer name sorted by follower count
+        if parsed.path.startswith('/api/chzzk/search'):
+            qs = parse_qs(parsed.query)
+            keyword = qs.get('keyword', [''])[0].strip()
+            if not keyword:
+                self.send_json({'channels': []})
+                return
+
+            search_url = f"https://api.chzzk.naver.com/service/v1/search/channels?keyword={quote(keyword)}&offset=0&size=30"
+            api_headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
+            }
+            try:
+                req = urllib.request.Request(search_url, headers=api_headers)
+                with urllib.request.urlopen(req, timeout=8) as resp:
+                    search_res = json.loads(resp.read().decode('utf-8'))
+
+                raw_items = search_res.get('content', {}).get('data', [])
+                channels = []
+                for item in raw_items:
+                    ch = item.get('channel', {})
+                    if ch and ch.get('channelId'):
+                        channels.append({
+                            'channelId': ch.get('channelId'),
+                            'channelName': ch.get('channelName', ''),
+                            'channelImageUrl': ch.get('channelImageUrl', ''),
+                            'followerCount': int(ch.get('followerCount', 0)),
+                            'openLive': bool(ch.get('openLive', False)),
+                            'verifiedMark': bool(ch.get('verifiedMark', False))
+                        })
+
+                # Sort by follower count in descending order as requested!
+                channels.sort(key=lambda x: x.get('followerCount', 0), reverse=True)
+                self.send_json({'channels': channels})
+                return
+            except Exception as e:
+                self.send_json({'error': f'채널 검색 오류: {str(e)}', 'channels': []}, status=500)
+                return
+
         # Proxy Chzzk API requests to avoid browser CORS issues
-        if parsed.path.startswith('/api/chzzk/'):
+        elif parsed.path.startswith('/api/chzzk/'):
             qs = parse_qs(parsed.query)
             raw_channel_id = qs.get('channelId', [''])[0]
             nid_auth = qs.get('nidAuth', [''])[0].strip()
