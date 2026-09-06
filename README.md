@@ -1,7 +1,7 @@
-# 🎮 치지직 대규모 시청자 추첨 & 룰렛 & 실시간 투표 & 포켓몬 배틀/퀴즈 쇼 플랫폼 (Chzzk Interactive Hub) v4.8.0
+# 🎮 치지직 대규모 시청자 추첨 & 룰렛 & 실시간 투표 & 포켓몬 배틀/퀴즈 쇼 플랫폼 (Chzzk Interactive Hub) v4.8.3
 
 ![Chzzk WebSocket Live](https://img.shields.io/badge/Chzzk-WebSocket%20Live-00ffa3?style=for-the-badge&logo=naver)
-![Version](https://img.shields.io/badge/Release-v4.8.0-purple?style=for-the-badge)
+![Version](https://img.shields.io/badge/Release-v4.8.3-purple?style=for-the-badge)
 ![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![HTML5 Canvas](https://img.shields.io/badge/HTML5-Canvas%20%26%20Audio-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
@@ -23,6 +23,30 @@
 | **05. 포켓몬 배틀 & 퀴즈 쇼 엔진 명세서** | 235마리 포켓몬 데이터, 데미지/상성 공식, 메가진화, 4대 퀴즈, 3단계 수동 힌트, 블라인드 투표 | [🎮 게임 엔진 바로가기](docs/05_pokemon_battle_and_quiz_engine_ko.md) |
 | **06. 빌드, 패키징 및 배포 가이드** | Windows 단일 실행 파일(`치지직추첨기.exe`) PyInstaller 빌드, 프로세스 락 해제, 소스 실행 | [📦 빌드 가이드 바로가기](docs/06_build_and_packaging_guide_ko.md) |
 | **07. v4.8.0 릴리즈 노트** | v4.8.0 신규 기능, UI/UX 개선 내역, 버그 수정 및 안정화 패치 요약 | [🚀 릴리즈 노트 바로가기](docs/07_release_notes_v4.8.0_ko.md) |
+| **08. v4.8.3 릴리즈 노트** | 스트리머 비밀 조작 모드, 자동 블라인드, 단축키, 취소 토글, 클릭 안정성 패치 | [🚀 v4.8.3 릴리즈 노트 바로가기](docs/08_release_notes_v4.8.3_ko.md) |
+
+---
+
+## 🌟 v4.8.3 주요 신규 및 개선 사항 (What's New in v4.8.3)
+
+### 1. 🎮 스트리머 비밀 조작 모드 & 보조 모니터 전용 독립 제어기 (`window.open`)
+- **보조 모니터 팝업 분리**: `[ ↗️ 비밀 제어창 분리 ]` 또는 단축키 `O`로 방송 화면과 완전히 분리된 보조 모니터 전용 독립 제어창 가동.
+- **실시간 양방향 정보 동기화**: 내 포켓몬 실시간 HP/PP, 상대 포켓몬 정보, **내 기술별 상성 배율 가이드 (2x 효과발군, 0.5x 반감, 0x 무효)** 즉시 계산.
+- **제어창 분리 시 방송 화면 자동 블라인드**: 제어창을 여는 즉시 OBS 방송 송출 화면의 기술 덱이 보안 카드로 자동 마스킹되어 시청자에게 전략과 마우스 커서가 일절 노출되지 않습니다.
+
+### 2. ⌨️ 완전한 키보드 단축키 엔진
+- **`Q, W, E, R`**: 1~4번 기술 선택 / **`Space` or `M`**: 메가진화 토글 / **`1, 2`**: 대기 팀원 교체 / **`B`**: 블라인드 토글 / **`O`**: 제어창 분리 / **`Esc`**: 선택 취소.
+
+### 3. 🔄 기술 및 교체 선택 토글 및 취소(Cancel) 완벽 지원
+- **재클릭 토글 취소**: 이미 선택된 기술 버튼이나 교체 카드를 다시 누르면 선택이 즉시 취소(해제)됩니다.
+- **`[✖️ 선택 취소 (Esc)]` 전용 버튼**: 행동 선택 시 상단에 취소 버튼이 나타나 원클릭 또는 `Esc` 키로 즉각 취소 가능.
+
+### 4. ⚡ 100ms 타이머 DOM 분리로 마우스 클릭 안정성 100% 확보
+- 100ms 타이머 주기에서는 시간 텍스트와 게이지 바만 경량 갱신하여 버튼 DOM 파괴를 방지, **첫 번째 클릭부터 씹힘 없이 100% 반응**합니다.
+
+### 5. 🎨 UI 편의성 개선
+- **플로팅 채팅창 아이콘 4배 확대 & 닫기 버튼과 위치 일원화**.
+- **기절 후 교체 시 시청자 투표 가림 처리**로 심리전 및 전략 보호.
 
 ---
 

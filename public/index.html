@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>치지직 대규모 시청자 추첨 & 룰렛 & 포켓몬 배틀 v4.7.0 | Chzzk Mega Raffle & Pokemon Battle</title>
+  <title>치지직 대규모 시청자 추첨 & 룰렛 & 포켓몬 배틀 v4.8.3 | Chzzk Mega Raffle & Pokemon Battle</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -3898,9 +3898,48 @@
             <!-- Right: Action Tabs & Selection Deck -->
             <div style="display: flex; flex-direction: column; gap: 6px;">
               
+              <!-- Streamer Privacy Mode & Popout Controller Toolbar -->
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; gap: 6px; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <span style="font-size: 11px; font-weight: 800; color: #ffd700;">🎮 스트리머 조작</span>
+                  <span class="badge-tag" style="background: rgba(255,255,255,0.06); color: var(--text-sub); font-size: 9px; padding: 1px 5px;">단축키: Q W E R</span>
+                </div>
+                <div style="display: flex; gap: 4px;">
+                  <button type="button" id="streamerBlindToggleBtn" class="btn-chip btn-chip-secondary" style="font-size: 10px; padding: 3px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;" onclick="toggleStreamerPrivacyBlind()" title="방송 화면에서 스트리머 선택 덱을 블라인드 처리 (단축키: B)">
+                    <span id="streamerBlindIcon">👁️</span> <span id="streamerBlindLabel">방송 블라인드 OFF</span>
+                  </button>
+                  <button type="button" id="streamerPopoutBtn" class="btn-chip btn-chip-secondary" style="font-size: 10px; padding: 3px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;" onclick="openStreamerControllerPopout()" title="보조 모니터용 독립 비밀 제어창 열기 (단축키: O)">
+                    <span>↗️</span> <span>비밀 제어창 분리</span>
+                  </button>
+                </div>
+              </div>
+
               <!-- Streamer Current Selection Status Badge -->
               <div id="streamerActionStatusBadge" style="background: rgba(255, 215, 0, 0.1); border: 1px dashed rgba(255, 215, 0, 0.4); border-radius: 8px; padding: 6px 10px; font-size: 11px; color: #ffd700; text-align: center; font-weight: 800;">
                 👑 스트리머: 행동 선택 대기 중...
+              </div>
+
+              <!-- Streamer Privacy Blind Deck (Shown when blind mode is active) -->
+              <div id="streamerPrivacyBlindDeck" style="display: none; background: rgba(15, 23, 42, 0.95); border: 1.5px solid rgba(0, 255, 163, 0.4); border-radius: 10px; padding: 16px; text-align: center; box-shadow: 0 0 20px rgba(0,255,163,0.1);">
+                <div style="font-size: 24px; margin-bottom: 6px;">🔒</div>
+                <div style="font-size: 14px; font-weight: 900; color: #00ffa3; margin-bottom: 4px;">스트리머 비밀 조작 모드 활성화됨</div>
+                <div style="font-size: 11px; color: var(--text-sub); line-height: 1.5; margin-bottom: 12px;">
+                  보조 모니터의 <b>비밀 제어창</b> 또는 <b>키보드 단축키</b>로 조작 중입니다.<br>
+                  방송 송출 화면에 기술 목록과 마우스 커서가 노출되지 않습니다.
+                </div>
+                <div style="display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; margin-bottom: 12px;">
+                  <span class="badge-tag" style="background: rgba(255,255,255,0.08); color: #fff; font-size: 10px;">⌨️ 기술: Q, W, E, R</span>
+                  <span class="badge-tag" style="background: rgba(0,255,163,0.15); color: #00ffa3; font-size: 10px;">🧬 메가: Space / M</span>
+                  <span class="badge-tag" style="background: rgba(56,189,248,0.15); color: #38bdf8; font-size: 10px;">🔄 교체: 1, 2</span>
+                </div>
+                <div style="display: flex; justify-content: center; gap: 8px;">
+                  <button type="button" class="btn-chip btn-chip-secondary" style="font-size: 11px; padding: 5px 12px;" onclick="toggleStreamerPrivacyBlind()">
+                    👁️ 블라인드 해제
+                  </button>
+                  <button type="button" class="btn-chip btn-chip-primary" style="font-size: 11px; padding: 5px 12px;" onclick="openStreamerControllerPopout()">
+                    🎮 제어창 열기
+                  </button>
+                </div>
               </div>
 
               <div id="streamerActionTabsBar" style="display: flex; gap: 6px;">
@@ -11723,6 +11762,7 @@
 
       if (sText) sText.innerText = `${Math.max(0, Math.round(sSlot.currentHP))} / ${sSlot.maxHP}`;
       if (vText) vText.innerText = `${Math.max(0, Math.round(vSlot.currentHP))} / ${vSlot.maxHP}`;
+      updateStreamerControllerPopout();
     }
 
     function setBattleDialogue(html) {
@@ -11740,10 +11780,29 @@
       const movesDeck = document.getElementById('arenaMoveButtonsDeck');
       const switchDeck = document.getElementById('arenaSwitchButtonsDeck');
       const megaContainer = document.getElementById('streamerMegaToggleContainer');
+      const blindDeck = document.getElementById('streamerPrivacyBlindDeck');
 
       if (switchBtn) {
         switchBtn.style.display = pokeBattleMode === '1v1' ? 'none' : 'inline-flex';
       }
+
+      if (streamerPrivacyBlind) {
+        if (blindDeck) blindDeck.style.display = 'block';
+        if (movesDeck) movesDeck.style.display = 'none';
+        if (switchDeck) switchDeck.style.display = 'none';
+        if (megaContainer) megaContainer.style.display = 'none';
+        if (tab === 'moves') {
+          if (movesBtn) movesBtn.classList.add('active');
+          if (switchBtn) switchBtn.classList.remove('active');
+        } else {
+          if (switchBtn) switchBtn.classList.add('active');
+          if (movesBtn) movesBtn.classList.remove('active');
+          renderStreamerSwitchDeck();
+        }
+        return;
+      }
+
+      if (blindDeck) blindDeck.style.display = 'none';
 
       if (tab === 'moves') {
         if (movesBtn) movesBtn.classList.add('active');
@@ -11788,7 +11847,7 @@
         return;
       }
 
-      container.innerHTML = candidates.map(c => {
+      container.innerHTML = candidates.map((c, sIdx) => {
         const p = c.slot.pokemon;
         const it = getItemObj(c.slot.item);
         const maxHP = c.slot.maxHP || 1;
@@ -11796,12 +11855,16 @@
         const hpPct = Math.round((curHP / maxHP) * 100);
         const isFainted = c.slot.fainted || curHP <= 0;
         const isSelected = pokeBattleState.streamerAction && pokeBattleState.streamerAction.type === 'switch' && pokeBattleState.streamerAction.targetIdx === c.idx;
+        const shortcutNum = sIdx + 1;
         return `
           <div class="poke-switch-card ${isFainted ? 'disabled' : ''} ${isSelected ? 'selected' : ''}" onclick="${isFainted ? '' : `handleStreamerSwitchSelect(${c.idx})`}">
             <div style="display: flex; align-items: center; gap: 10px;">
               <img src="${p.sprite_front}" alt="${p.name}" style="width: 38px; height: 38px; object-fit: contain; image-rendering: pixelated;">
               <div>
-                <div style="font-weight: 800; color: ${isSelected ? '#38bdf8' : '#fff'}; font-size: 13px;">${c.idx + 1}번. ${p.name} ${isSelected ? '✓' : ''}</div>
+                <div style="font-weight: 800; color: ${isSelected ? '#38bdf8' : '#fff'}; font-size: 13px;">
+                  <kbd style="background: rgba(56,189,248,0.2); border: 1px solid rgba(56,189,248,0.4); border-radius: 4px; padding: 1px 5px; font-size: 10px; margin-right: 4px; font-family: monospace; color: #38bdf8;">${shortcutNum}</kbd>
+                  ${c.idx + 1}번. ${p.name} ${isSelected ? '✓ <span style="font-size: 10px; color: #fca5a5; font-weight: normal; margin-left: 2px;">(다시 클릭 시 취소)</span>' : ''}
+                </div>
                 <div style="display: flex; gap: 4px; align-items: center; margin-top: 2px;">
                   ${p.types.map(t => `<span class="type-badge type-${t}" style="font-size: 8px; padding: 1px 4px;">${t}</span>`).join('')}
                   <span class="poke-item-badge" style="font-size: 9px; padding: 1px 6px;">${it.emoji} ${it.name}</span>
@@ -11847,6 +11910,8 @@
       } else {
         showToast('메가진화가 취소되었습니다.', '⚪');
       }
+
+      updateStreamerControllerPopout();
     }
 
     function updateStreamerActionStatusUI(isReveal = false) {
@@ -11882,6 +11947,7 @@
           badge.style.borderColor = 'rgba(0, 255, 163, 0.5)';
         }
       }
+      updateStreamerControllerPopout();
     }
 
     // --- Simultaneous Turn Selection Engine ---
@@ -11908,9 +11974,23 @@
       updateStreamerActionStatusUI();
 
       // Setup Streamer Right Deck
-      switchPokeActionTab('moves');
+      if (streamerPrivacyBlind) {
+        const blindDeck = document.getElementById('streamerPrivacyBlindDeck');
+        if (blindDeck) blindDeck.style.display = 'block';
+        const tabsBar = document.getElementById('streamerActionTabsBar');
+        if (tabsBar) tabsBar.style.display = 'none';
+        const megaContainer = document.getElementById('streamerMegaToggleContainer');
+        if (megaContainer) megaContainer.style.display = 'none';
+        const movesDeck = document.getElementById('arenaMoveButtonsDeck');
+        if (movesDeck) movesDeck.style.display = 'none';
+        const switchDeck = document.getElementById('arenaSwitchButtonsDeck');
+        if (switchDeck) switchDeck.style.display = 'none';
+      } else {
+        switchPokeActionTab('moves');
+      }
       renderStreamerMovesDeck();
       renderStreamerSwitchDeck();
+      updateStreamerControllerPopout();
 
       // Setup Viewers Left Deck
       const hud = document.getElementById('arenaViewersVoteHud');
@@ -11989,7 +12069,7 @@
 
       if (megaForm && !streamerTeamHasMegaEvolved && !sSlot.isMega) {
         if (megaContainer) megaContainer.style.display = 'block';
-        if (megaBtnTitle) megaBtnTitle.innerText = `🧬 ${megaForm.nameKo} 메가진화 (동시 발동)`;
+        if (megaBtnTitle) megaBtnTitle.innerHTML = `<kbd style="background: rgba(0,255,163,0.2); border: 1px solid rgba(0,255,163,0.4); border-radius: 4px; padding: 1px 5px; font-size: 10px; margin-right: 4px; font-family: monospace; color: #00ffa3;">Space</kbd> 🧬 ${megaForm.nameKo} 메가진화 (동시 발동)`;
         if (megaBtn) megaBtn.classList.toggle('active', streamerMegaSelected);
         if (megaPill) {
           megaPill.className = `mega-pill-badge ${streamerMegaSelected ? 'on' : 'off'}`;
@@ -12010,8 +12090,7 @@
           deck.innerHTML = `
             <button type="button" class="poke-move-btn ${isStruggleSelected ? 'selected' : ''}" onclick="handleStreamerStruggleSelect()" style="grid-column: 1 / -1; border: 2px solid #ef4444; background: rgba(239,68,68,0.15); padding: 12px;">
               <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-weight: 900; font-size: 14px; color: #ef4444;">💥 발버둥 (Struggle) ${isStruggleSelected ? '✓' : ''}</span>
-                <span class="badge-tag" style="background: #ef4444; color: #fff; font-size: 10px;">모든 기술 PP 소진</span>
+                <span style="font-weight: 900; font-size: 14px; color: #ef4444;"><kbd style="background: rgba(239,68,68,0.25); border: 1px solid #ef4444; border-radius: 4px; padding: 1px 5px; font-size: 10px; margin-right: 4px; font-family: monospace; color: #fff;">X</kbd> 💥 발버둥 (Struggle) ${isStruggleSelected ? '✓ <span style="font-size: 10px; color: #fca5a5; font-weight: normal; margin-left: 2px;">(다시 클릭 시 취소)</span>' : ''}</span>
               </div>
               <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-sub); margin-top: 4px;">
                 <span>위력 50 (노말) / 명중 100%</span>
@@ -12022,6 +12101,7 @@
           return;
         }
 
+        const keyShortcuts = ['Q', 'W', 'E', 'R'];
         deck.innerHTML = sSlot.pokemon.moves.map((m, i) => {
           const ppObj = sSlot.movesPP ? sSlot.movesPP[i] : null;
           const currentPP = ppObj ? ppObj.currentPP : (m.pp || 15);
@@ -12041,7 +12121,10 @@
           return `
             <button type="button" class="poke-move-btn ${isSelected ? 'selected' : ''}" ${disabled ? 'disabled' : ''} onclick="handleStreamerMoveSelect(${i})" style="${isOutOfPP ? 'opacity: 0.45; border-color: rgba(239,68,68,0.3);' : ''}">
               <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-weight: 800; font-size: 13px; color: ${isSelected ? '#00ffa3' : (isOutOfPP ? '#94a3b8' : '#fff')};">${i+1}. ${m.name} ${isSelected ? '✓' : ''}</span>
+                <span style="font-weight: 800; font-size: 13px; color: ${isSelected ? '#00ffa3' : (isOutOfPP ? '#94a3b8' : '#fff')};">
+                  <kbd style="background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); border-radius: 4px; padding: 1px 5px; font-size: 10px; margin-right: 4px; font-family: monospace; color: #ffd700;">${keyShortcuts[i] || (i+1)}</kbd>
+                  ${i+1}. ${m.name} ${isSelected ? '✓ <span style="font-size: 10px; color: #fca5a5; font-weight: normal; margin-left: 2px;">(다시 클릭 시 취소)</span>' : ''}
+                </span>
                 <div style="display: flex; gap: 4px; align-items: center;">
                   <span class="type-badge type-${m.type}" style="font-size: 9px; padding: 1px 4px;">${m.type}</span>
                   <span style="font-size: 10px; font-weight: 800; color: ${ppColor}; background: rgba(0,0,0,0.4); padding: 1px 5px; border-radius: 4px;">PP ${currentPP}/${maxPP}</span>
@@ -12059,14 +12142,58 @@
       }
     }
 
+    function cancelStreamerAction() {
+      if (pokeBattleState.phase !== 'simultaneous_turn' && pokeBattleState.phase !== 'streamer_turn') return;
+      if (!pokeBattleState.streamerAction) return;
+
+      pokeBattleState.streamerAction = null;
+      renderStreamerMovesDeck();
+      renderStreamerSwitchDeck();
+      updateStreamerActionStatusUI(false);
+      showToast(`👑 ${getStreamerName()} 행동 선택 취소됨`, '↩️');
+      updateStreamerControllerPopout();
+    }
+
     function handleStreamerStruggleSelect() {
       if (pokeBattleState.phase !== 'simultaneous_turn' && pokeBattleState.phase !== 'streamer_turn') return;
+
+      // Toggle cancellation if already selected struggle
+      if (pokeBattleState.streamerAction && pokeBattleState.streamerAction.type === 'move' && pokeBattleState.streamerAction.move && pokeBattleState.streamerAction.move.name === '발버둥') {
+        cancelStreamerAction();
+        return;
+      }
+
       const struggleMove = { name: '발버둥', type: '노말', category: '물리', power: 50, acc: 100, isStruggle: true };
       pokeBattleState.streamerAction = { type: 'move', moveIdx: -1, move: struggleMove, isMega: false };
       renderStreamerMovesDeck();
       renderStreamerSwitchDeck();
-      updateStreamerActionStatusUI();
-      showToast(`👑 ${getStreamerName()} [발버둥] 선택 완료!`, '💥');
+      updateStreamerActionStatusUI(false);
+      showToast(`👑 ${getStreamerName()} [발버둥] 선택 완료! 🔒 (다시 클릭시 취소)`, '💥');
+      updateStreamerControllerPopout();
+    }
+
+    function updateStreamerControllerTimer() {
+      if (!streamerControllerWindow || streamerControllerWindow.closed) return;
+      try {
+        const doc = streamerControllerWindow.document;
+        if (!doc) return;
+        const isFaintPhase = pokeBattleState.phase === 'faint_switch_streamer';
+        const tText = doc.getElementById('popTimerText');
+        const tFill = doc.getElementById('popTimerFill');
+        if (isFaintPhase) {
+          if (tText) tText.innerText = `${Math.max(0, pokeBattleState.faintTimerRemaining || 0).toFixed(1)}s`;
+          if (tFill) {
+            const pct = ((pokeBattleState.faintTimerRemaining || 0) / (pokeBattleState.faintTimerTotal || 30)) * 100;
+            tFill.style.width = `${Math.max(0, Math.min(100, pct))}%`;
+          }
+        } else {
+          if (tText) tText.innerText = `${Math.max(0, pokeBattleState.turnTimerRemaining || 0).toFixed(1)}s`;
+          if (tFill) {
+            const pct = ((pokeBattleState.turnTimerRemaining || 0) / (pokeBattleState.turnTimerTotal || 30)) * 100;
+            tFill.style.width = `${Math.max(0, Math.min(100, pct))}%`;
+          }
+        }
+      } catch (err) {}
     }
 
     function renderPokeTurnTimerUI() {
@@ -12077,6 +12204,7 @@
         const pct = (Math.max(0, pokeBattleState.turnTimerRemaining) / pokeBattleState.turnTimerTotal) * 100;
         tFill.style.width = `${pct}%`;
       }
+      updateStreamerControllerTimer();
     }
 
     function renderViewersVotingTimer() {
@@ -12088,6 +12216,13 @@
 
     function handleStreamerMoveSelect(moveIdx) {
       if (pokeBattleState.phase !== 'simultaneous_turn' && pokeBattleState.phase !== 'streamer_turn') return;
+
+      // Toggle cancellation if already selected this move
+      if (pokeBattleState.streamerAction && pokeBattleState.streamerAction.type === 'move' && pokeBattleState.streamerAction.moveIdx === moveIdx) {
+        cancelStreamerAction();
+        return;
+      }
+
       const sSlot = streamerTeam[streamerActiveIdx];
       const ppObj = sSlot.movesPP ? sSlot.movesPP[moveIdx] : null;
       if (ppObj && ppObj.currentPP <= 0) {
@@ -12103,12 +12238,19 @@
       renderStreamerSwitchDeck();
       updateStreamerActionStatusUI(false);
 
-      showToast(`👑 ${getStreamerName()} 행동 선택 완료! 🔒 (타이머 종료 시 공개)`, '🎯');
+      showToast(`👑 ${getStreamerName()} 행동 선택 완료! 🔒 (다시 클릭시 취소)`, '🎯');
+      updateStreamerControllerPopout();
     }
 
     function handleStreamerSwitchSelect(targetIdx) {
       if (pokeBattleState.phase !== 'simultaneous_turn' && pokeBattleState.phase !== 'streamer_turn') return;
       if (streamerTeam[targetIdx].fainted) return;
+
+      // Toggle cancellation if already selected this switch
+      if (pokeBattleState.streamerAction && pokeBattleState.streamerAction.type === 'switch' && pokeBattleState.streamerAction.targetIdx === targetIdx) {
+        cancelStreamerAction();
+        return;
+      }
 
       pokeBattleState.streamerAction = { type: 'switch', targetIdx, targetPokemon: streamerTeam[targetIdx].pokemon, isMega: false };
 
@@ -12116,17 +12258,693 @@
       renderStreamerSwitchDeck();
       updateStreamerActionStatusUI(false);
 
-      showToast(`👑 ${getStreamerName()} 교체 결정 완료! 🔒 (타이머 종료 시 공개)`, '🔄');
+      showToast(`👑 ${getStreamerName()} 교체 결정 완료! 🔒 (다시 클릭시 취소)`, '🔄');
+      updateStreamerControllerPopout();
     }
 
-    function handleStreamerStruggleSelect() {
+    // --- Streamer Privacy Mode & Keyboard Shortcuts Engine ---
+    let streamerPrivacyBlind = false;
+    let streamerControllerWindow = null;
+
+    function handleStreamerShortcutSwitch(candidateOffset) {
       if (pokeBattleState.phase !== 'simultaneous_turn' && pokeBattleState.phase !== 'streamer_turn') return;
-      const struggleMove = { name: '발버둥', type: '노말', category: '물리', power: 50, acc: 100, isStruggle: true };
-      pokeBattleState.streamerAction = { type: 'move', moveIdx: -1, move: struggleMove, isMega: false };
-      renderStreamerMovesDeck();
-      renderStreamerSwitchDeck();
-      updateStreamerActionStatusUI(false);
-      showToast(`👑 ${getStreamerName()} 발버둥 선택 완료! 🔒`, '💥');
+      if (pokeBattleMode === '1v1') {
+        showToast('1v1 에이스 배틀은 교체가 지원되지 않습니다.', '⚠️');
+        return;
+      }
+      const teamSize = pokeBattleMode === '3v3' ? 3 : 1;
+      const candidates = [];
+      for (let i = 0; i < teamSize; i++) {
+        if (i !== streamerActiveIdx) candidates.push(i);
+      }
+      if (candidateOffset >= candidates.length) return;
+      const targetIdx = candidates[candidateOffset];
+      if (streamerTeam[targetIdx].fainted || streamerTeam[targetIdx].currentHP <= 0) {
+        showToast(`⚠️ [${streamerTeam[targetIdx].pokemon.name}]은(는) 기절하여 교체할 수 없습니다!`, '⚠️');
+        return;
+      }
+      handleStreamerSwitchSelect(targetIdx);
+    }
+
+    let streamerFaintAliveSlots = [];
+
+    function handleStreamerShortcutFaint(candidateOffset) {
+      if (pokeBattleState.phase !== 'faint_switch_streamer') return;
+      let alive = streamerFaintAliveSlots;
+      if (!alive || alive.length === 0) {
+        const teamSize = pokeBattleMode === '3v3' ? 3 : 1;
+        alive = [];
+        for (let i = 0; i < teamSize; i++) {
+          if (!streamerTeam[i].fainted && streamerTeam[i].currentHP > 0) {
+            alive.push(i);
+          }
+        }
+      }
+      if (candidateOffset >= alive.length) return;
+      handleStreamerFaintSelect(alive[candidateOffset]);
+    }
+
+    function handleBattleGlobalKeydown(e) {
+      const activeEl = document.activeElement;
+      if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA' || activeEl.tagName === 'SELECT' || activeEl.isContentEditable)) {
+        return;
+      }
+
+      if (!pokeBattleState.active) return;
+
+      if (pokeBattleState.phase === 'simultaneous_turn' || pokeBattleState.phase === 'streamer_turn') {
+        if (e.code === 'Escape' || e.code === 'Backspace') {
+          e.preventDefault();
+          cancelStreamerAction();
+        } else if (e.code === 'KeyQ') {
+          e.preventDefault();
+          handleStreamerMoveSelect(0);
+        } else if (e.code === 'KeyW') {
+          e.preventDefault();
+          handleStreamerMoveSelect(1);
+        } else if (e.code === 'KeyE') {
+          e.preventDefault();
+          handleStreamerMoveSelect(2);
+        } else if (e.code === 'KeyR') {
+          e.preventDefault();
+          handleStreamerMoveSelect(3);
+        } else if (e.code === 'Space' || e.code === 'KeyM') {
+          e.preventDefault();
+          toggleStreamerMega();
+        } else if (e.code === 'Digit1' || e.code === 'Numpad1') {
+          e.preventDefault();
+          handleStreamerShortcutSwitch(0);
+        } else if (e.code === 'Digit2' || e.code === 'Numpad2') {
+          e.preventDefault();
+          handleStreamerShortcutSwitch(1);
+        } else if (e.code === 'KeyB') {
+          e.preventDefault();
+          toggleStreamerPrivacyBlind();
+        } else if (e.code === 'KeyO') {
+          e.preventDefault();
+          openStreamerControllerPopout();
+        } else if (e.code === 'KeyX') {
+          const sSlot = streamerTeam[streamerActiveIdx];
+          const allOutOfPP = sSlot.movesPP && sSlot.movesPP.length > 0 && sSlot.movesPP.every(x => x.currentPP <= 0);
+          if (allOutOfPP) {
+            e.preventDefault();
+            handleStreamerStruggleSelect();
+          }
+        }
+      } else if (pokeBattleState.phase === 'faint_switch_streamer') {
+        if (e.code === 'Digit1' || e.code === 'Numpad1' || e.code === 'KeyQ') {
+          e.preventDefault();
+          handleStreamerShortcutFaint(0);
+        } else if (e.code === 'Digit2' || e.code === 'Numpad2' || e.code === 'KeyW') {
+          e.preventDefault();
+          handleStreamerShortcutFaint(1);
+        }
+      }
+    }
+    window.addEventListener('keydown', handleBattleGlobalKeydown);
+
+    function toggleStreamerPrivacyBlind() {
+      streamerPrivacyBlind = !streamerPrivacyBlind;
+
+      const icon = document.getElementById('streamerBlindIcon');
+      const label = document.getElementById('streamerBlindLabel');
+      const btn = document.getElementById('streamerBlindToggleBtn');
+      const blindDeck = document.getElementById('streamerPrivacyBlindDeck');
+      const tabsBar = document.getElementById('streamerActionTabsBar');
+      const megaContainer = document.getElementById('streamerMegaToggleContainer');
+      const movesDeck = document.getElementById('arenaMoveButtonsDeck');
+      const switchDeck = document.getElementById('arenaSwitchButtonsDeck');
+
+      if (streamerPrivacyBlind) {
+        if (icon) icon.innerText = '🔒';
+        if (label) label.innerText = '방송 블라인드 ON';
+        if (btn) {
+          btn.style.background = 'rgba(0, 255, 163, 0.2)';
+          btn.style.borderColor = '#00ffa3';
+          btn.style.color = '#00ffa3';
+          btn.classList.add('active');
+        }
+        if (blindDeck) blindDeck.style.display = 'block';
+        if (tabsBar) tabsBar.style.display = 'none';
+        if (megaContainer) megaContainer.style.display = 'none';
+        if (movesDeck) movesDeck.style.display = 'none';
+        if (switchDeck) switchDeck.style.display = 'none';
+        showToast('🔒 방송 화면 블라인드가 활성화되었습니다. (단축키/제어창으로 안전 조작)', '🛡️');
+      } else {
+        if (icon) icon.innerText = '👁️';
+        if (label) label.innerText = '방송 블라인드 OFF';
+        if (btn) {
+          btn.style.background = '';
+          btn.style.borderColor = '';
+          btn.style.color = '';
+          btn.classList.remove('active');
+        }
+        if (blindDeck) blindDeck.style.display = 'none';
+        if (tabsBar) tabsBar.style.display = 'flex';
+        switchPokeActionTab(streamerActionTab);
+        showToast('👁️ 방송 화면 블라인드가 해제되었습니다.', '👀');
+      }
+
+      updateStreamerControllerPopout();
+    }
+
+    function openStreamerControllerPopout() {
+      // Auto-enable privacy blind on main broadcast screen when popout is opened
+      if (!streamerPrivacyBlind) {
+        toggleStreamerPrivacyBlind();
+      }
+
+      if (streamerControllerWindow && !streamerControllerWindow.closed) {
+        streamerControllerWindow.focus();
+        updateStreamerControllerPopout();
+        return;
+      }
+
+      const width = 460;
+      const height = 640;
+      const left = window.screen.width ? (window.screen.width - width - 30) : 100;
+      const top = 50;
+
+      try {
+        streamerControllerWindow = window.open('', 'StreamerPokemonController', `width=${width},height=${height},left=${left},top=${top},menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes`);
+      } catch (err) {
+        console.error('Popout window open error:', err);
+      }
+
+      if (!streamerControllerWindow) {
+        showToast('⚠️ 팝업 차단이 감지되었습니다. 브라우저 주소창의 팝업 허용 설정을 확인해주세요.', '⚠️');
+        return;
+      }
+
+      const doc = streamerControllerWindow.document;
+      doc.open();
+      doc.write(`<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>🎮 포켓몬 배틀 - 스트리머 비밀 제어기</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", sans-serif; }
+    body { background: #080c14; color: #f8fafc; padding: 12px; user-select: none; font-size: 13px; line-height: 1.4; }
+    .header-bar { display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 10px; }
+    .title { font-weight: 900; font-size: 14px; color: #ffd700; display: flex; align-items: center; gap: 6px; }
+    .timer-wrap { display: flex; align-items: center; gap: 8px; }
+    .timer-text { font-weight: 900; color: #00ffa3; font-family: monospace; font-size: 14px; }
+    .progress-bar { width: 100%; height: 5px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; margin-bottom: 10px; }
+    .progress-fill { height: 100%; width: 100%; background: linear-gradient(90deg, #38bdf8, #00ffa3); transition: width 0.1s linear; }
+    
+    .card { background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 10px; margin-bottom: 8px; }
+    .badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 800; }
+    .kbd { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); border-radius: 3px; padding: 1px 4px; font-size: 10px; color: #ffd700; font-family: monospace; }
+    
+    .active-poke-row { display: flex; align-items: center; gap: 10px; }
+    .poke-img { width: 56px; height: 56px; object-fit: contain; image-rendering: pixelated; }
+    .hp-bar-track { width: 100%; height: 8px; background: rgba(0,0,0,0.5); border-radius: 4px; overflow: hidden; margin-top: 4px; }
+    .hp-bar-fill { height: 100%; background: linear-gradient(90deg, #22c55e, #4ade80); transition: width 0.3s ease; }
+    
+    .status-alert { background: rgba(255, 215, 0, 0.1); border: 1px dashed rgba(255, 215, 0, 0.4); border-radius: 8px; padding: 6px 10px; font-size: 11px; color: #ffd700; text-align: center; font-weight: 800; margin-bottom: 8px; }
+    .status-alert.selected { background: rgba(0, 255, 163, 0.15); border: 1px solid #00ffa3; color: #00ffa3; }
+
+    .mega-btn { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: rgba(168, 85, 247, 0.15); border: 1.5px solid rgba(168, 85, 247, 0.5); border-radius: 8px; cursor: pointer; color: #fff; margin-bottom: 8px; font-weight: 800; font-size: 12px; transition: all 0.2s; }
+    .mega-btn:hover { background: rgba(168, 85, 247, 0.25); transform: translateY(-1px); }
+    .mega-btn.active { background: linear-gradient(135deg, rgba(236,72,153,0.35), rgba(168,85,247,0.35)); border-color: #ec4899; box-shadow: 0 0 12px rgba(236,72,153,0.4); color: #00ffa3; }
+
+    .moves-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 8px; }
+    .move-btn { background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; padding: 8px 10px; cursor: pointer; text-align: left; color: #fff; transition: all 0.15s; display: flex; flex-direction: column; gap: 3px; position: relative; }
+    .move-btn * { pointer-events: none; }
+    .move-btn:hover:not(:disabled) { transform: translateY(-2px); border-color: #00ffa3; background: rgba(0, 255, 163, 0.12); }
+    .move-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .move-btn.selected { border: 2px solid #00ffa3 !important; background: rgba(0, 255, 163, 0.2) !important; box-shadow: 0 0 12px rgba(0, 255, 163, 0.4) !important; }
+
+    .switch-row { display: flex; flex-direction: column; gap: 5px; margin-bottom: 8px; }
+    .switch-card { display: flex; justify-content: space-between; align-items: center; background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; padding: 6px 10px; cursor: pointer; transition: all 0.15s; }
+    .switch-card * { pointer-events: none; }
+    .switch-card:hover:not(.disabled) { border-color: #38bdf8; background: rgba(56, 189, 248, 0.12); }
+    .switch-card.selected { border: 1.5px solid #38bdf8 !important; background: rgba(56, 189, 248, 0.2) !important; box-shadow: 0 0 10px rgba(56, 189, 248, 0.3); }
+    .switch-card.disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .btn-cancel { background: rgba(239, 68, 68, 0.25); border: 1px solid #ef4444; color: #fca5a5; border-radius: 6px; padding: 2px 8px; font-size: 11px; cursor: pointer; font-weight: 800; transition: all 0.15s; }
+    .btn-cancel:hover { background: rgba(239, 68, 68, 0.45); color: #fff; }
+
+    .quick-tools { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 8px; margin-top: 6px; }
+    .btn-small { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; padding: 4px 8px; color: #cbd5e1; font-size: 11px; cursor: pointer; font-weight: 700; }
+    .btn-small:hover { background: rgba(255,255,255,0.15); color: #fff; }
+    .btn-small.active { background: rgba(0,255,163,0.2); border-color: #00ffa3; color: #00ffa3; }
+
+    .type-badge { font-size: 9px; padding: 1px 4px; border-radius: 3px; font-weight: 800; display: inline-block; color: #fff; }
+    .type-노말 { background: #9fa19f; } .type-불꽃 { background: #e62829; } .type-물 { background: #2980ef; }
+    .type-풀 { background: #3fa129; } .type-전기 { background: #fac000; color: #000; } .type-얼음 { background: #3dcef3; color: #000; }
+    .type-격투 { background: #ff8000; } .type-독 { background: #9141cb; } .type-땅 { background: #915121; }
+    .type-비행 { background: #81b9ef; } .type-에스퍼 { background: #ef4179; } .type-벌레 { background: #91a119; }
+    .type-바위 { background: #afa981; } .type-고스트 { background: #704170; } .type-드래곤 { background: #5060e1; }
+    .type-악 { background: #50413f; } .type-강철 { background: #60a1b8; } .type-페어리 { background: #ef70ef; }
+  </style>
+</head>
+<body>
+  <div class="header-bar">
+    <div class="title">
+      <span>🎮</span> <span id="popTitle">스트리머 비밀 제어기</span>
+    </div>
+    <div class="timer-wrap">
+      <span class="badge" style="background: rgba(255,215,0,0.2); color: #ffd700;" id="popRoundBadge">ROUND 1</span>
+      <span class="timer-text" id="popTimerText">30.0s</span>
+    </div>
+  </div>
+  <div class="progress-bar">
+    <div class="progress-fill" id="popTimerFill"></div>
+  </div>
+
+  <div id="popStatusAlert" class="status-alert">
+    행동 선택 대기 중...
+  </div>
+
+  <!-- Active Pokemon Summary -->
+  <div class="card" id="popActivePokeCard">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+      <span style="font-size: 11px; font-weight: 800; color: #ffd700;">내 출전 포켓몬</span>
+      <span id="popPokeItemBadge" class="badge" style="background: rgba(255,215,0,0.15); color: #ffd700;">🎒 도구</span>
+    </div>
+    <div class="active-poke-row">
+      <img id="popPokeSprite" class="poke-img" src="" alt="포켓몬">
+      <div style="flex: 1;">
+        <div style="display: flex; justify-content: space-between; align-items: baseline;">
+          <span id="popPokeName" style="font-size: 14px; font-weight: 900; color: #fff;"></span>
+          <span id="popPokeHPText" style="font-size: 12px; font-weight: 800; color: #4ade80;"></span>
+        </div>
+        <div class="hp-bar-track">
+          <div id="popPokeHPBar" class="hp-bar-fill"></div>
+        </div>
+        <div id="popPokeTypes" style="display: flex; gap: 4px; margin-top: 4px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Opponent Pokemon Quick Hint -->
+  <div class="card" id="popOpponentCard" style="background: rgba(30, 41, 59, 0.5); padding: 6px 10px; margin-bottom: 8px;">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <img id="popOpponentSprite" style="width: 28px; height: 28px; object-fit: contain; image-rendering: pixelated;" src="" alt="상대">
+        <div>
+          <span style="font-size: 11px; color: #94a3b8;">상대(시청자):</span>
+          <b id="popOpponentName" style="color: #38bdf8; font-size: 12px; margin-left: 4px;"></b>
+        </div>
+      </div>
+      <div id="popOpponentTypes" style="display: flex; gap: 3px;"></div>
+    </div>
+  </div>
+
+  <!-- Mega Evolution Toggle -->
+  <div id="popMegaContainer" style="display: none;">
+    <button type="button" id="popMegaBtn" class="mega-btn" onclick="triggerMega()">
+      <div style="display: flex; align-items: center; gap: 6px;">
+        <span style="font-size: 14px;">🧬</span>
+        <span id="popMegaTitle">메가진화 (동시 발동)</span>
+      </div>
+      <span id="popMegaPill" class="badge" style="background: rgba(255,255,255,0.1); color: #fff;">
+        <kbd class="kbd">Space</kbd> OFF
+      </span>
+    </button>
+  </div>
+
+  <!-- 4 Moves Grid -->
+  <div style="font-size: 11px; font-weight: 800; color: #94a3b8; margin-bottom: 4px; display: flex; justify-content: space-between;">
+    <span>⚔️ 기술 선택 (단축키: Q, W, E, R)</span>
+    <span id="popChoiceLockedAlert" style="color: #f43f5e; font-size: 10px; display: none;">구애 도구 고정</span>
+  </div>
+  <div class="moves-grid" id="popMovesGrid">
+    <!-- Populated by updateStreamerControllerPopout -->
+  </div>
+
+  <!-- Switch Teammates Section -->
+  <div id="popSwitchSection" style="margin-top: 4px;">
+    <div style="font-size: 11px; font-weight: 800; color: #94a3b8; margin-bottom: 4px;">
+      🔄 팀원 교체 (단축키: 1, 2)
+    </div>
+    <div class="switch-row" id="popSwitchList">
+      <!-- Populated by updateStreamerControllerPopout -->
+    </div>
+  </div>
+
+  <!-- Faint Switch Section (Only when fainted) -->
+  <div id="popFaintSection" style="display: none; margin-top: 4px;">
+    <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; border-radius: 8px; padding: 8px; margin-bottom: 8px; text-align: center;">
+      <div style="color: #ef4444; font-weight: 900; font-size: 13px;">💀 출전 포켓몬 기절!</div>
+      <div style="font-size: 11px; color: #fca5a5;">다음 출전 포켓몬을 선택하세요 (단축키: 1, 2)</div>
+    </div>
+    <div class="switch-row" id="popFaintList"></div>
+  </div>
+
+  <!-- Bottom Quick Tools -->
+  <div class="quick-tools">
+    <button type="button" id="popBlindBtn" class="btn-small" onclick="triggerBlind()">
+      👁️ 방송 블라인드 <kbd class="kbd">B</kbd>
+    </button>
+    <div style="font-size: 10px; color: #64748b;">
+      ※ 키보드로 제어기 창에서도 즉시 선택 가능
+    </div>
+  </div>
+
+  <script>
+    function triggerMove(i) {
+      if (window.opener && !window.opener.closed) {
+        window.opener.handleStreamerMoveSelect(i);
+      }
+    }
+    function triggerCancel() {
+      if (window.opener && !window.opener.closed) {
+        window.opener.cancelStreamerAction();
+      }
+    }
+    function triggerStruggle() {
+      if (window.opener && !window.opener.closed) {
+        window.opener.handleStreamerStruggleSelect();
+      }
+    }
+    function triggerMega() {
+      if (window.opener && !window.opener.closed) {
+        window.opener.toggleStreamerMega();
+      }
+    }
+    function triggerSwitch(i) {
+      if (window.opener && !window.opener.closed) {
+        window.opener.handleStreamerSwitchSelect(i);
+      }
+    }
+    function triggerFaintSelect(i) {
+      if (window.opener && !window.opener.closed) {
+        window.opener.handleStreamerFaintSelect(i);
+      }
+    }
+    function triggerBlind() {
+      if (window.opener && !window.opener.closed) {
+        window.opener.toggleStreamerPrivacyBlind();
+      }
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (window.opener && !window.opener.closed) {
+        if (e.code === 'Escape' || e.code === 'Backspace') {
+          e.preventDefault();
+          window.opener.cancelStreamerAction();
+          return;
+        }
+        window.opener.handleBattleGlobalKeydown(e);
+      }
+    });
+  <\/script>
+</body>
+</html>`);
+      doc.close();
+
+      setTimeout(() => {
+        updateStreamerControllerPopout();
+      }, 50);
+      showToast('🎮 스트리머 독립 제어창이 열렸습니다. 보조 모니터로 이동해 사용하세요!', '🚀');
+    }
+
+    function updateStreamerControllerPopout() {
+      if (!streamerControllerWindow || streamerControllerWindow.closed) return;
+
+      try {
+        const doc = streamerControllerWindow.document;
+        if (!doc || !doc.getElementById('popMovesGrid')) return;
+
+        const isFaintPhase = pokeBattleState.phase === 'faint_switch_streamer';
+
+        const rBadge = doc.getElementById('popRoundBadge');
+        if (rBadge) rBadge.innerText = `ROUND ${pokeBattleState.round || 1}`;
+
+        const tText = doc.getElementById('popTimerText');
+        const tFill = doc.getElementById('popTimerFill');
+        if (isFaintPhase) {
+          if (tText) tText.innerText = `${Math.max(0, pokeBattleState.faintTimerRemaining || 0).toFixed(1)}s`;
+          if (tFill) {
+            const pct = ((pokeBattleState.faintTimerRemaining || 0) / (pokeBattleState.faintTimerTotal || 30)) * 100;
+            tFill.style.width = `${Math.max(0, Math.min(100, pct))}%`;
+          }
+        } else {
+          if (tText) tText.innerText = `${Math.max(0, pokeBattleState.turnTimerRemaining || 0).toFixed(1)}s`;
+          if (tFill) {
+            const pct = ((pokeBattleState.turnTimerRemaining || 0) / (pokeBattleState.turnTimerTotal || 30)) * 100;
+            tFill.style.width = `${Math.max(0, Math.min(100, pct))}%`;
+          }
+        }
+
+        const popBlindBtn = doc.getElementById('popBlindBtn');
+        if (popBlindBtn) {
+          popBlindBtn.className = `btn-small ${streamerPrivacyBlind ? 'active' : ''}`;
+          popBlindBtn.innerHTML = `🔒 방송 블라인드: <b>${streamerPrivacyBlind ? 'ON' : 'OFF'}</b> <kbd class="kbd">B</kbd>`;
+        }
+
+        const statusEl = doc.getElementById('popStatusAlert');
+        if (statusEl) {
+          if (!pokeBattleState.streamerAction) {
+            statusEl.className = 'status-alert';
+            statusEl.innerHTML = '👑 <b>행동 선택 대기 중...</b> (단축키: Q, W, E, R / 1, 2)';
+          } else {
+            statusEl.className = 'status-alert selected';
+            let actSummary = '';
+            if (pokeBattleState.streamerAction.type === 'move') {
+              const m = pokeBattleState.streamerAction.move;
+              const isMega = pokeBattleState.streamerAction.isMega;
+              actSummary = `[${isMega ? '🧬 MEGA ' : ''}${m.name}]`;
+            } else if (pokeBattleState.streamerAction.type === 'switch') {
+              const tp = pokeBattleState.streamerAction.targetPokemon;
+              actSummary = `[${tp.name} 교체]`;
+            }
+            statusEl.innerHTML = `
+              <div style="display: flex; justify-content: space-between; align-items: center; gap: 6px;">
+                <div style="text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                  👑 <b>선택 완료</b>: <b style="color: #fff;">${actSummary}</b> 🔒
+                </div>
+                <button type="button" class="btn-cancel" onclick="triggerCancel()">
+                  ✖️ 선택 취소 (Esc)
+                </button>
+              </div>
+            `;
+          }
+        }
+
+        const sSlot = streamerTeam[streamerActiveIdx];
+        const sP = sSlot ? sSlot.pokemon : null;
+        const vSlot = viewersTeam[viewersActiveIdx];
+        const vP = vSlot ? vSlot.pokemon : null;
+
+        if (sSlot && sP) {
+          const sSpr = doc.getElementById('popPokeSprite');
+          if (sSpr) sSpr.src = sP.sprite_front || sP.sprite_back;
+
+          const sName = doc.getElementById('popPokeName');
+          if (sName) sName.innerHTML = sSlot.isMega ? `<span style="color: #00ffa3;">🧬 MEGA</span> ${sP.name}` : sP.name;
+
+          const sHPText = doc.getElementById('popPokeHPText');
+          if (sHPText) sHPText.innerText = `${Math.max(0, Math.round(sSlot.currentHP))} / ${sSlot.maxHP}`;
+
+          const sHPBar = doc.getElementById('popPokeHPBar');
+          if (sHPBar) {
+            const hpPct = Math.max(0, (sSlot.currentHP / sSlot.maxHP) * 100);
+            sHPBar.style.width = `${hpPct}%`;
+            sHPBar.style.background = hpPct > 50 ? 'linear-gradient(90deg, #22c55e, #4ade80)' : hpPct > 20 ? 'linear-gradient(90deg, #eab308, #facc15)' : 'linear-gradient(90deg, #ef4444, #f87171)';
+          }
+
+          const sTypes = doc.getElementById('popPokeTypes');
+          if (sTypes) {
+            sTypes.innerHTML = sP.types.map(t => `<span class="type-badge type-${t}">${t}</span>`).join('');
+          }
+
+          const sItem = getItemObj(sSlot.item);
+          const sItemBadge = doc.getElementById('popPokeItemBadge');
+          if (sItemBadge) {
+            sItemBadge.innerHTML = sSlot.isMega ? '🧬 MEGA' : `${sItem.emoji} ${sItem.name}`;
+          }
+
+          if (vSlot && vP) {
+            const oSpr = doc.getElementById('popOpponentSprite');
+            if (oSpr) oSpr.src = vP.sprite_front;
+            const oName = doc.getElementById('popOpponentName');
+            if (oName) oName.innerText = vSlot.isMega ? `[MEGA] ${vP.name}` : vP.name;
+            const oTypes = doc.getElementById('popOpponentTypes');
+            if (oTypes) {
+              oTypes.innerHTML = vP.types.map(t => `<span class="type-badge type-${t}">${t}</span>`).join('');
+            }
+          }
+
+          const megaForm = getAvailableMegaEvolution(sSlot.pokemon, sSlot.item);
+          const megaCont = doc.getElementById('popMegaContainer');
+          const megaBtn = doc.getElementById('popMegaBtn');
+          const megaTitle = doc.getElementById('popMegaTitle');
+          const megaPill = doc.getElementById('popMegaPill');
+
+          if (megaForm && !streamerTeamHasMegaEvolved && !sSlot.isMega && !isFaintPhase) {
+            if (megaCont) megaCont.style.display = 'block';
+            if (megaTitle) megaTitle.innerText = `🧬 ${megaForm.nameKo} 메가진화 (동시 발동)`;
+            if (megaBtn) megaBtn.className = `mega-btn ${streamerMegaSelected ? 'active' : ''}`;
+            if (megaPill) {
+              megaPill.className = `badge ${streamerMegaSelected ? 'active' : ''}`;
+              megaPill.style.background = streamerMegaSelected ? 'rgba(0,255,163,0.3)' : 'rgba(255,255,255,0.1)';
+              megaPill.style.color = streamerMegaSelected ? '#00ffa3' : '#fff';
+              megaPill.innerHTML = `<kbd class="kbd">Space</kbd> ${streamerMegaSelected ? '🧬 MEGA ON' : 'OFF'}`;
+            }
+          } else {
+            if (megaCont) megaCont.style.display = 'none';
+          }
+
+          const movesGrid = doc.getElementById('popMovesGrid');
+          const choiceAlert = doc.getElementById('popChoiceLockedAlert');
+          if (choiceAlert) {
+            choiceAlert.style.display = sSlot.choiceMove ? 'inline-block' : 'none';
+          }
+
+          const allOutOfPP = sSlot.movesPP && sSlot.movesPP.length > 0 && sSlot.movesPP.every(x => x.currentPP <= 0);
+          if (movesGrid) {
+            if (allOutOfPP) {
+              const isStruggleSelected = pokeBattleState.streamerAction && pokeBattleState.streamerAction.move && pokeBattleState.streamerAction.move.name === '발버둥';
+              movesGrid.innerHTML = `
+                <button type="button" class="move-btn ${isStruggleSelected ? 'selected' : ''}" onclick="triggerStruggle()" style="grid-column: 1 / -1; border-color: #ef4444; background: rgba(239,68,68,0.2);">
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-weight: 900; color: #ef4444;"><kbd class="kbd">X</kbd> 💥 발버둥 (Struggle) ${isStruggleSelected ? '✓ <span style="font-size: 10px; color: #fca5a5; margin-left: 2px;">(취소)</span>' : ''}</span>
+                    <span class="badge" style="background: #ef4444; color: #fff;">모든 PP 소진</span>
+                  </div>
+                  <div style="font-size: 11px; color: #fca5a5; margin-top: 3px;">위력 50 / 최대 HP의 25% 반동 피해</div>
+                </button>
+              `;
+            } else {
+              const keyShortcuts = ['Q', 'W', 'E', 'R'];
+              movesGrid.innerHTML = sSlot.pokemon.moves.map((m, i) => {
+                const ppObj = sSlot.movesPP ? sSlot.movesPP[i] : null;
+                const currentPP = ppObj ? ppObj.currentPP : (m.pp || 15);
+                const maxPP = ppObj ? ppObj.maxPP : (m.pp || 15);
+                const isOutOfPP = currentPP <= 0;
+
+                const isChoiceLocked = sSlot.choiceMove && sSlot.choiceMove.name !== m.name;
+                const isAssaultVestBlocked = sSlot.item === 'assault_vest' && m.category === '변화';
+                const disabled = isChoiceLocked || isAssaultVestBlocked || isOutOfPP || isFaintPhase;
+                const isSelected = pokeBattleState.streamerAction && pokeBattleState.streamerAction.type === 'move' && pokeBattleState.streamerAction.moveIdx === i;
+
+                let effectTag = '';
+                if (vP && m.power > 0) {
+                  let mult = 1.0;
+                  vP.types.forEach(defType => {
+                    if (pokeTypeChart[m.type] && pokeTypeChart[m.type][defType] !== undefined) {
+                      mult *= pokeTypeChart[m.type][defType];
+                    }
+                  });
+                  if (mult >= 2.0) {
+                    effectTag = `<span class="badge" style="background: rgba(239,68,68,0.25); color: #f87171; border: 1px solid #ef4444; font-size: 9px;">${mult}x 효과발군</span>`;
+                  } else if (mult > 0 && mult < 1.0) {
+                    effectTag = `<span class="badge" style="background: rgba(148,163,184,0.2); color: #94a3b8; font-size: 9px;">${mult}x 반감</span>`;
+                  } else if (mult === 0) {
+                    effectTag = `<span class="badge" style="background: rgba(100,116,139,0.3); color: #64748b; font-size: 9px;">0x 무효</span>`;
+                  }
+                }
+
+                let ppColor = '#ffd700';
+                if (currentPP <= 0) ppColor = '#ef4444';
+                else if (currentPP <= 3) ppColor = '#f97316';
+                else if (currentPP === maxPP) ppColor = '#4ade80';
+
+                return `
+                  <button type="button" class="move-btn ${isSelected ? 'selected' : ''}" ${disabled ? 'disabled' : ''} onclick="triggerMove(${i})">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                      <span style="font-weight: 800; color: ${isSelected ? '#00ffa3' : '#fff'}; font-size: 12px;">
+                        <kbd class="kbd">${keyShortcuts[i]}</kbd> ${m.name} ${isSelected ? '✓ <span style="font-size: 10px; color: #fca5a5; margin-left: 2px;">(취소)</span>' : ''}
+                      </span>
+                      <span class="type-badge type-${m.type}">${m.type}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; font-size: 10px; color: ${isSelected ? '#86efac' : '#94a3b8'}; margin-top: 2px;">
+                      <span>${m.category === '변화' ? '🛡️ 변화' : `위력 ${m.power}`}</span>
+                      <span style="color: ${ppColor}; font-weight: 800;">PP ${currentPP}/${maxPP}</span>
+                    </div>
+                    ${effectTag ? `<div style="margin-top: 2px;">${effectTag}</div>` : ''}
+                  </button>
+                `;
+              }).join('');
+            }
+          }
+
+          const switchSection = doc.getElementById('popSwitchSection');
+          const switchList = doc.getElementById('popSwitchList');
+          if (switchSection && switchList) {
+            if (pokeBattleMode === '1v1') {
+              switchSection.style.display = 'none';
+            } else {
+              switchSection.style.display = isFaintPhase ? 'none' : 'block';
+              const teamSize = pokeBattleMode === '3v3' ? 3 : 1;
+              const candidates = [];
+              for (let i = 0; i < teamSize; i++) {
+                if (i !== streamerActiveIdx) candidates.push({ idx: i, slot: streamerTeam[i] });
+              }
+
+              switchList.innerHTML = candidates.map((c, sIdx) => {
+                const p = c.slot.pokemon;
+                const curHP = Math.max(0, c.slot.currentHP || 0);
+                const maxHP = c.slot.maxHP || 1;
+                const isFainted = c.slot.fainted || curHP <= 0;
+                const isSelected = pokeBattleState.streamerAction && pokeBattleState.streamerAction.type === 'switch' && pokeBattleState.streamerAction.targetIdx === c.idx;
+                const shortcutNum = sIdx + 1;
+
+                return `
+                  <div class="switch-card ${isFainted ? 'disabled' : ''} ${isSelected ? 'selected' : ''}" onclick="${isFainted ? '' : `triggerSwitch(${c.idx})`}">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <kbd class="kbd">${shortcutNum}</kbd>
+                      <img src="${p.sprite_front}" alt="${p.name}" style="width: 28px; height: 28px; object-fit: contain; image-rendering: pixelated;">
+                      <div>
+                        <div style="font-weight: 800; font-size: 12px; color: ${isSelected ? '#38bdf8' : '#fff'};">${c.idx+1}번. ${p.name} ${isSelected ? '✓ <span style="font-size: 10px; color: #fca5a5; margin-left: 2px;">(취소)</span>' : ''}</div>
+                        <div style="display: flex; gap: 3px; margin-top: 1px;">
+                          ${p.types.map(t => `<span class="type-badge type-${t}">${t}</span>`).join('')}
+                        </div>
+                      </div>
+                    </div>
+                    <div style="text-align: right;">
+                      <span style="font-size: 11px; font-weight: 800; color: ${isFainted ? '#ef4444' : '#4ade80'};">${isFainted ? '💀 기절' : `HP ${curHP}/${maxHP}`}</span>
+                    </div>
+                  </div>
+                `;
+              }).join('');
+            }
+          }
+
+          const faintSection = doc.getElementById('popFaintSection');
+          const faintList = doc.getElementById('popFaintList');
+          if (faintSection && faintList) {
+            if (isFaintPhase) {
+              faintSection.style.display = 'block';
+              const teamSize = pokeBattleMode === '3v3' ? 3 : 1;
+              const aliveSlots = [];
+              for (let i = 0; i < teamSize; i++) {
+                if (!streamerTeam[i].fainted && streamerTeam[i].currentHP > 0) aliveSlots.push(i);
+              }
+              faintList.innerHTML = aliveSlots.map((idx, fIdx) => {
+                const slot = streamerTeam[idx];
+                const p = slot.pokemon;
+                const shortcutNum = fIdx + 1;
+                return `
+                  <div class="switch-card" onclick="triggerFaintSelect(${idx})" style="border-color: #ffd700; background: rgba(255,215,0,0.1);">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <kbd class="kbd">${shortcutNum}</kbd>
+                      <img src="${p.sprite_front}" alt="${p.name}" style="width: 32px; height: 32px; object-fit: contain; image-rendering: pixelated;">
+                      <div>
+                        <div style="font-weight: 800; font-size: 13px; color: #ffd700;">[${idx+1}번] ${p.name}</div>
+                        <div style="display: flex; gap: 3px; margin-top: 2px;">
+                          ${p.types.map(t => `<span class="type-badge type-${t}">${t}</span>`).join('')}
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <button type="button" class="btn-small" style="background: #ffd700; color: #000; font-weight: 900;">⚡ 출전</button>
+                    </div>
+                  </div>
+                `;
+              }).join('');
+            } else {
+              faintSection.style.display = 'none';
+            }
+          }
+        }
+      } catch (err) {
+        console.error('Error updating streamer popout window:', err);
+      }
     }
 
     function finishSimultaneousPokeTurn() {
@@ -12980,23 +13798,26 @@
 
     function openStreamerFaintSwitchModal(aliveSlots) {
       pokeBattleState.phase = 'faint_switch_streamer';
+      streamerFaintAliveSlots = aliveSlots || [];
       const modal = document.getElementById('pokeFaintSwitchModal');
       const title = document.getElementById('pokeFaintSwitchTitle');
       const subTitle = document.getElementById('pokeFaintSwitchSubTitle');
       const list = document.getElementById('pokeFaintSwitchCandidatesList');
 
       if (title) title.innerText = `👑 ${getStreamerName()}: 다음 출전 포켓몬 선택`;
-      if (subTitle) subTitle.innerText = '포켓몬이 쓰러졌습니다! 경기장에 투입할 다음 포켓몬을 선택하세요.';
+      if (subTitle) subTitle.innerText = '포켓몬이 쓰러졌습니다! 경기장에 투입할 다음 포켓몬을 선택하세요. (단축키: 1, 2 또는 제어창)';
 
       if (list) {
-        list.innerHTML = aliveSlots.map(idx => {
+        list.innerHTML = aliveSlots.map((idx, fIdx) => {
           const slot = streamerTeam[idx];
           const p = slot.pokemon;
           const it = getItemObj(slot.item);
           const slotNum = idx + 1;
+          const shortcutNum = fIdx + 1;
           return `
             <div class="poke-switch-card" onclick="handleStreamerFaintSelect(${idx})">
               <div style="display: flex; align-items: center; gap: 10px;">
+                <kbd style="background: rgba(255,215,0,0.2); border: 1px solid rgba(255,215,0,0.4); border-radius: 4px; padding: 2px 6px; font-size: 12px; font-family: monospace; color: #ffd700; font-weight: 900;">${shortcutNum}</kbd>
                 <img src="${p.sprite_front}" alt="${p.name}" style="width: 48px; height: 48px; object-fit: contain; image-rendering: pixelated;">
                 <div>
                   <div style="font-weight: 800; font-size: 14px; color: #fff;">[${slotNum}번] ${p.name}</div>
@@ -13008,7 +13829,7 @@
               </div>
               <div style="text-align: right;">
                 <div style="font-size: 12px; font-weight: 800; color: #4ade80;">HP ${slot.currentHP} / ${slot.maxHP}</div>
-                <button type="button" class="btn btn-primary" style="padding: 4px 12px; font-size: 11px; margin-top: 4px;">⚡ ${slotNum}번 출전</button>
+                <button type="button" class="btn btn-primary" style="padding: 4px 12px; font-size: 11px; margin-top: 4px;">⚡ ${slotNum}번 출전 <kbd style="font-size: 9px; opacity: 0.8; margin-left: 2px;">[${shortcutNum}]</kbd></button>
               </div>
             </div>
           `;
@@ -13016,6 +13837,7 @@
       }
 
       if (modal) modal.classList.add('active');
+      updateStreamerControllerPopout();
 
       // Timer for Streamer (synced with pokeStreamerDurationSelect)
       const sTimer = parseFloat(document.getElementById('pokeStreamerDurationSelect')?.value || document.getElementById('drawerPokeStreamerDurationSelect')?.value || 30.0) || 30.0;
@@ -13043,6 +13865,7 @@
         const pct = (Math.max(0, pokeBattleState.faintTimerRemaining) / pokeBattleState.faintTimerTotal) * 100;
         tFill.style.width = `${pct}%`;
       }
+      updateStreamerControllerTimer();
     }
 
     async function handleStreamerFaintSelect(idx) {
@@ -13054,6 +13877,7 @@
       updateArenaActivePokemonUI();
       renderArenaTeamBallsHUD();
       updateArenaHPBars();
+      updateStreamerControllerPopout();
 
       const spr = document.getElementById('arenaStreamerSprite');
       if (spr) spr.classList.remove('poke-sprite-fainted');
@@ -13226,6 +14050,7 @@
     function finishPokeBattle(winnerActor) {
       pokeBattleState.active = false;
       pokeBattleState.phase = 'ended';
+      updateStreamerControllerPopout();
 
       const isStreamerWinner = winnerActor === 'streamer';
       const winnerTeam = isStreamerWinner ? streamerTeam : viewersTeam;
