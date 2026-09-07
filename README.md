@@ -1,7 +1,7 @@
-# 🎮 치지직 대규모 시청자 추첨 & 룰렛 & 실시간 투표 & 포켓몬 배틀/퀴즈 쇼 플랫폼 (Chzzk Interactive Hub) v4.8.4
+# 🎮 치지직 대규모 시청자 추첨 & 룰렛 & 실시간 투표 & 포켓몬 배틀/퀴즈 쇼 플랫폼 (Chzzk Interactive Hub) v4.9.0
 
 ![Chzzk WebSocket Live](https://img.shields.io/badge/Chzzk-WebSocket%20Live-00ffa3?style=for-the-badge&logo=naver)
-![Version](https://img.shields.io/badge/Release-v4.8.4-purple?style=for-the-badge)
+![Version](https://img.shields.io/badge/Release-v4.9.0-purple?style=for-the-badge)
 ![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![HTML5 Canvas](https://img.shields.io/badge/HTML5-Canvas%20%26%20Audio-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
@@ -25,6 +25,21 @@
 | **07. v4.8.0 릴리즈 노트** | v4.8.0 신규 기능, UI/UX 개선 내역, 버그 수정 및 안정화 패치 요약 | [🚀 릴리즈 노트 바로가기](docs/07_release_notes_v4.8.0_ko.md) |
 | **08. v4.8.3 릴리즈 노트** | 스트리머 비밀 조작 모드, 자동 블라인드, 단축키, 취소 토글, 클릭 안정성 패치 | [🚀 v4.8.3 릴리즈 노트 바로가기](docs/08_release_notes_v4.8.3_ko.md) |
 | **09. v4.8.4 릴리즈 노트** | 실시간 채팅창 오버레이(메인 밀림 0px 방지), 채팅창 닉네임 원클릭 시청자 채팅 추적(TTS) | [🚀 v4.8.4 릴리즈 노트 바로가기](docs/09_release_notes_v4.8.4_ko.md) |
+
+## 🌟 v4.9.0 주요 신규 및 개선 사항 (What's New in v4.9.0)
+
+### 1. 🎬 포케로그(PokéRogue) 4/5세대 원작 포켓몬 기술 애니메이션 전면 도입 (72종 전수 적용)
+- **오픈소스 에셋 출처**: 포케로그 공식 에셋 저장소([pagefaultgames/pokerogue-assets](https://github.com/pagefaultgames/pokerogue-assets))에서 4/5세대 원작 스타일 기술 연출 데이터(JSON) 및 2D 도트 스프라이트 시트(PNG 49종) 추출·연동.
+- **72개 기술 100% 매칭**: 화염방사, 10만볼트, 인파이트, 지진, 칼춤, 도깨비불, 문포스 등 게임 내 존재하는 72개 기술 전체에 대해 원작 프레임별 셀, 각도, 좌표, 불투명도, 투사체 궤적 렌더링 구현.
+- **양방향 공격 지원**: 스트리머(좌 ➔ 우)뿐만 아니라 시청자(우 ➔ 좌)의 공격 시에도 투사체와 파티클이 상대방 방향으로 자연스럽게 반전(`flipHoriz`)되어 비행.
+- **타격감 및 픽셀 아트 최적화**: 기술 프레임에 맞춘 시전자 도약/반동 모션 및 피격자 흔들림(`poke-hit-shake`) 동기화, `imageSmoothingEnabled = false`로 4/5세대 특유의 선명한 픽셀 그래픽 감성 100% 보존.
+
+### 2. ⚖️ 포켓몬 본가 공식 배틀 메커니즘 전면 반영 및 불일치 수정
+- **상태이상 전면 구현**: 화상(물리공격 50% 반감, 매턴 1/16 데미지, 불꽃 무효), 마비(스피드 50% 반감, 25% 행동불가, 전기/땅 무효), 맹독(매턴 1/16 누적 데미지, 독/강철 무효), 얼음(매턴 20% 해제).
+- **체력 회복 및 랭크업/다운**: 날개쉬기/달의불빛(최대 HP 50% 즉시 회복), 칼춤(공+2), 철벽(방+2), 록커트(스피드+2), 용의춤(공+1, 스피드+1), 나비춤(특공/특방/스피드+1), 인파이트(시전자 방/특방 -1 하락).
+- **특수 전술/필드기**: 스텔스록(교체 투입 시 상성별 최대 HP의 3.125%~50% 피해), 길동무(피격 기절 시 공격한 상대 즉시 동귀어진).
+- **흡혈, 반동 및 우선도**: 기가드레인/드레인펀치(입힌 피해 50% 흡수), 플레어드라이브/볼트태클/브레이브버드(33% 반동 피해), 얼음뭉치/기습/야습(우선도 +1, 기습 실패 판정).
+- **배틀 HUD 시각화**: 체력바 옆 공식 상태이상 뱃지(`🔥 화상`, `⚡ 마비`, `🟣 독`, `💀 맹독`, `❄️ 얼음`) 및 실시간 랭크 변동 뱃지 표시.
 
 ---
 
@@ -172,6 +187,8 @@ pyinstaller 치지직추첨기.spec --noconfirm
 | 구분 (Category) | 리소스 및 출처 (Resource & Link) | 사용 용도 및 설명 (Description) |
 | :--- | :--- | :--- |
 | **치지직 방송 API** | **[NAVER CHZZK](https://chzzk.naver.com/)** | 치지직 공식 Search API, Live Detail REST API 및 실시간 채팅 웹소켓 연동 |
+| **포켓몬 기술 애니메이션** | **[PokéRogue](https://github.com/pagefaultgames/pokerogue) / [pokerogue-assets](https://github.com/pagefaultgames/pokerogue-assets)** | 4/5세대(NDS) 원작 스타일 2D 도트 기술 애니메이션 프레임 데이터(JSON 72종) 및 스프라이트 시트(PNG 49종) |
+| **포켓몬 배틀 공식 룰** | **Pokémon Generation IV/V Battle Mechanics** | 상태이상(화상/마비/독/얼음), 랭크업/다운, 장판기(스텔스록), 흡혈, 반동, 길동무 등 본가 공식 전투 규칙 및 상성 공식 |
 | **포켓몬 데이터** | **[PokéAPI](https://pokeapi.co/)** | 포켓몬 235마리 공식 도감 번호, 기본 종족치, 타입, 도감 설명, 울음소리(Cries) 및 기술 메타데이터 |
 | **포켓몬 스프라이트** | **[Pokémon Showdown](https://play.pokemonshowdown.com/)** | 포켓몬 배틀 전면 애니메이션 스프라이트 및 스트리머 진영 전용 메가진화 46종 후방(Back) 스프라이트 에셋 |
 | **포켓몬 위키** | **[Bulbapedia](https://bulbapedia.bulbagarden.net/)** / **[포켓몬 위키](https://pokemon.fandom.com/ko/)** | 포켓몬 및 기술/지닌도구 한국어 공식 번역명, 8~9세대 공식 도감 설명, 18개 상성 타입 차트 및 메가진화 레퍼런스 |

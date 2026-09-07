@@ -1,0 +1,461 @@
+{
+  "10만마력": {
+    "jsonFile": "high-horsepower.json",
+    "graphics": [
+      "PRAS- High Horse Power",
+      "PRAS- High Horse Power"
+    ]
+  },
+  "10만볼트": {
+    "jsonFile": "thunderbolt.json",
+    "graphics": [
+      "PRAS- Electric"
+    ]
+  },
+  "고드름떨구기": {
+    "jsonFile": "icicle-crash.json",
+    "graphics": [
+      "PRAS- Ice"
+    ]
+  },
+  "기가드레인": {
+    "jsonFile": "giga-drain.json",
+    "graphics": [
+      "PRAS- Giga Drain",
+      "PRAS- Giga Drain"
+    ]
+  },
+  "기습": {
+    "jsonFile": "sucker-punch.json",
+    "graphics": [
+      "PRAS- Strike"
+    ]
+  },
+  "길동무": {
+    "jsonFile": "destiny-bond.json",
+    "graphics": [
+      "PRAS- Shadow Sneak",
+      "PRAS- Shadow Sneak"
+    ]
+  },
+  "깨물어부수기": {
+    "jsonFile": "crunch.json",
+    "graphics": [
+      "PRAS- Bite"
+    ]
+  },
+  "나비춤": {
+    "jsonFile": "quiver-dance.json",
+    "graphics": [
+      "PRAS- Quiver Dance"
+    ]
+  },
+  "날개쉬기": {
+    "jsonFile": "roost.json",
+    "graphics": [
+      "PRAS- Roost"
+    ]
+  },
+  "냉동빔": {
+    "jsonFile": "ice-beam.json",
+    "graphics": [
+      "PRAS- Ice",
+      "PRAS- Ice"
+    ]
+  },
+  "누르기": {
+    "jsonFile": "body-slam.json",
+    "graphics": [
+      "PRAS- Strike"
+    ]
+  },
+  "눈보라": {
+    "jsonFile": "blizzard.json",
+    "graphics": [
+      "PRAS- Ice"
+    ]
+  },
+  "달의불빛": {
+    "jsonFile": "moonlight.json",
+    "graphics": [
+      "PRAS- Moonlight"
+    ]
+  },
+  "대지의힘": {
+    "jsonFile": "earth-power.json",
+    "graphics": [
+      "PRAS- Earth Power"
+    ]
+  },
+  "더스트슈트": {
+    "jsonFile": "gunk-shot.json",
+    "graphics": [
+      "PRAS- Gunk Shot",
+      "PRAS- Gunk Shot"
+    ]
+  },
+  "도깨비불": {
+    "jsonFile": "will-o-wisp.json",
+    "graphics": [
+      "PRAS- Will O Wisp"
+    ]
+  },
+  "독찌르기": {
+    "jsonFile": "poison-jab.json",
+    "graphics": [
+      "PRAS- Poison Jab",
+      "PRAS- Poison Jab"
+    ]
+  },
+  "드래곤크루": {
+    "jsonFile": "dragon-claw.json",
+    "graphics": [
+      "PRAS- Dragon Claw",
+      "PRAS- Dragon Claw"
+    ]
+  },
+  "드레인펀치": {
+    "jsonFile": "drain-punch.json",
+    "graphics": [
+      "PRAS- Drain Punch",
+      "PRAS- Drain Punch"
+    ]
+  },
+  "러스터캐논": {
+    "jsonFile": "flash-cannon.json",
+    "graphics": [
+      "PRAS- Flash Cannon"
+    ]
+  },
+  "록커트": {
+    "jsonFile": "rock-polish.json",
+    "graphics": [
+      "PRAS- Rock Polish"
+    ]
+  },
+  "리프블레이드": {
+    "jsonFile": "leaf-blade.json",
+    "graphics": [
+      "PRAS- Grass",
+      "PRAS- Grass"
+    ]
+  },
+  "매지컬샤인": {
+    "jsonFile": "dazzling-gleam.json",
+    "graphics": [
+      "PRAS- Recovery"
+    ]
+  },
+  "맹독": {
+    "jsonFile": "toxic.json",
+    "graphics": [
+      "PRAS- Poison"
+    ]
+  },
+  "명상": {
+    "jsonFile": "calm-mind.json",
+    "graphics": [
+      "PRAS- Screech"
+    ]
+  },
+  "문포스": {
+    "jsonFile": "moonblast.json",
+    "graphics": [
+      "PRAS- Moonblast",
+      "PRAS- Moonblast"
+    ]
+  },
+  "번개": {
+    "jsonFile": "thunder.json",
+    "graphics": [
+      "PRAS- Electric"
+    ]
+  },
+  "벌레의야단법석": {
+    "jsonFile": "bug-buzz.json",
+    "graphics": [
+      "PRAS- Bug Buzz"
+    ]
+  },
+  "벌크업": {
+    "jsonFile": "bulk-up.json",
+    "graphics": [
+      "PRAS- Bulk Up",
+      "PRAS- Bulk Up"
+    ]
+  },
+  "볼트태클": {
+    "jsonFile": "volt-tackle.json",
+    "graphics": [
+      "PRAS- Electric"
+    ]
+  },
+  "불대문자": {
+    "jsonFile": "fire-blast.json",
+    "graphics": [
+      "PRAS- Fire",
+      "PRAS- Fire"
+    ]
+  },
+  "불릿펀치": {
+    "jsonFile": "bullet-punch.json",
+    "graphics": [
+      "PRAS- Strike"
+    ]
+  },
+  "브레이브버드": {
+    "jsonFile": "brave-bird.json",
+    "graphics": [
+      "PRAS- Brave Bird"
+    ]
+  },
+  "사념의박치기": {
+    "jsonFile": "zen-headbutt.json",
+    "graphics": [
+      "PRAS- Strike",
+      "PRAS- Strike"
+    ]
+  },
+  "사이코쇼크": {
+    "jsonFile": "psyshock.json",
+    "graphics": [
+      "PRAS- Swords Dance + Signal Beam"
+    ]
+  },
+  "사이코키네시스": {
+    "jsonFile": "psychic.json",
+    "graphics": [
+      "PRAS- Psychic BG"
+    ]
+  },
+  "섀도볼": {
+    "jsonFile": "shadow-ball.json",
+    "graphics": [
+      "PRAS- Shadow Ball",
+      "PRAS- Shadow Ball"
+    ]
+  },
+  "섀도크루": {
+    "jsonFile": "shadow-claw.json",
+    "graphics": [
+      "PRAS- Shadow Claw"
+    ]
+  },
+  "솔라빔": {
+    "jsonFile": "solar-beam.json",
+    "graphics": [
+      "PRAS- Orbs"
+    ]
+  },
+  "스텔스록": {
+    "jsonFile": "stealth-rock.json",
+    "graphics": [
+      "PRAS- Stealth Rock",
+      "PRAS- Stealth Rock"
+    ]
+  },
+  "스톤샤워": {
+    "jsonFile": "rock-slide.json",
+    "graphics": [
+      "PRAS- Rock"
+    ]
+  },
+  "스톤에지": {
+    "jsonFile": "stone-edge.json",
+    "graphics": [
+      "PRAS- Stealth Rock"
+    ]
+  },
+  "시저크로스": {
+    "jsonFile": "x-scissor.json",
+    "graphics": [
+      "PRAS- X Scissor",
+      "PRAS- X Scissor"
+    ]
+  },
+  "아이언헤드": {
+    "jsonFile": "iron-head.json",
+    "graphics": [
+      "PRAS- Iron Head",
+      "PRAS- Iron Head"
+    ]
+  },
+  "아쿠아브레이크": {
+    "jsonFile": "liquidation.json",
+    "graphics": [
+      "PRAS- Water"
+    ]
+  },
+  "악의파동": {
+    "jsonFile": "dark-pulse.json",
+    "graphics": [
+      "PRAS- Dark Pulse",
+      "PRAS- Dark Pulse"
+    ]
+  },
+  "야습": {
+    "jsonFile": "shadow-sneak.json",
+    "graphics": [
+      "PRAS- Shadow Sneak",
+      "PRAS- Shadow Sneak"
+    ]
+  },
+  "얼음뭉치": {
+    "jsonFile": "ice-shard.json",
+    "graphics": [
+      "PRAS- Ice",
+      "PRAS- Ice"
+    ]
+  },
+  "에너지볼": {
+    "jsonFile": "energy-ball.json",
+    "graphics": [
+      "PRAS- Energy Ball",
+      "PRAS- Energy Ball"
+    ]
+  },
+  "에어슬래시": {
+    "jsonFile": "air-slash.json",
+    "graphics": [
+      "PRAS- Air Slash"
+    ]
+  },
+  "역린": {
+    "jsonFile": "outrage.json",
+    "graphics": [
+      "PRAS- Fire",
+      "PRAS- Fire"
+    ]
+  },
+  "오물폭탄": {
+    "jsonFile": "sludge-bomb.json",
+    "graphics": [
+      "PRAS- Sludge Bomb",
+      "PRAS- Sludge Bomb"
+    ]
+  },
+  "용의춤": {
+    "jsonFile": "dragon-dance.json",
+    "graphics": [
+      "PRAS- Dragon Dance"
+    ]
+  },
+  "용의파동": {
+    "jsonFile": "dragon-pulse.json",
+    "graphics": [
+      "PRAS- Dragon Pulse",
+      "PRAS- Dragon Pulse"
+    ]
+  },
+  "유턴": {
+    "jsonFile": "u-turn.json",
+    "graphics": [
+      "PRAS- U-Turn"
+    ]
+  },
+  "이판사판태클": {
+    "jsonFile": "double-edge.json",
+    "graphics": [
+      "PRAS- Strike"
+    ]
+  },
+  "인파이트": {
+    "jsonFile": "close-combat.json",
+    "graphics": [
+      "PRAS- Strike",
+      "PRAS- Strike"
+    ]
+  },
+  "전기자석파": {
+    "jsonFile": "thunder-wave.json",
+    "graphics": [
+      "PRAS- Electric"
+    ]
+  },
+  "지진": {
+    "jsonFile": "earthquake.json",
+    "graphics": [
+      "PRAS- Rock"
+    ]
+  },
+  "철벽": {
+    "jsonFile": "iron-defense.json",
+    "graphics": [
+      "PRAS- Ice"
+    ]
+  },
+  "치근거리기": {
+    "jsonFile": "play-rough.json",
+    "graphics": [
+      "PRAS- Love"
+    ]
+  },
+  "칼춤": {
+    "jsonFile": "swords-dance.json",
+    "graphics": [
+      "PRAS- Swords Dance + Signal Beam"
+    ]
+  },
+  "코멧펀치": {
+    "jsonFile": "meteor-mash.json",
+    "graphics": [
+      "PRAS- Meteor Mash"
+    ]
+  },
+  "탁쳐서떨구기": {
+    "jsonFile": "knock-off.json",
+    "graphics": [
+      "PRAS- Strike"
+    ]
+  },
+  "파도타기": {
+    "jsonFile": "surf.json",
+    "graphics": []
+  },
+  "파동탄": {
+    "jsonFile": "aura-sphere.json",
+    "graphics": [
+      "PRAS- Aura Sphere",
+      "PRAS- Aura Sphere"
+    ]
+  },
+  "파워젬": {
+    "jsonFile": "power-gem.json",
+    "graphics": [
+      "PRAS- Rock"
+    ]
+  },
+  "폭포오르기": {
+    "jsonFile": "waterfall.json",
+    "graphics": [
+      "PRAS- Water"
+    ]
+  },
+  "플레어드라이브": {
+    "jsonFile": "flare-blitz.json",
+    "graphics": [
+      "PRAS- Fire"
+    ]
+  },
+  "하이드로펌프": {
+    "jsonFile": "hydro-pump.json",
+    "graphics": [
+      "PRAS- Hydro Pump",
+      "PRAS- Hydro Pump"
+    ]
+  },
+  "하이퍼보이스": {
+    "jsonFile": "hyper-voice.json",
+    "graphics": [
+      "PRAS- Uproar",
+      "PRAS- Uproar"
+    ]
+  },
+  "화염방사": {
+    "jsonFile": "flamethrower.json",
+    "graphics": [
+      "PRAS- Fire",
+      "PRAS- Fire"
+    ]
+  }
+}

@@ -1894,16 +1894,57 @@
       50% { transform: translateY(-8px); }
     }
 
-    @keyframes pokeAttackLunge {
-      0% { transform: translateX(0); }
-      40% { transform: translateX(30px) scale(1.08); }
-      100% { transform: translateX(0); }
+    @keyframes pokeAttackLungeRight {
+      0% { transform: translate(0, 0) scale(1); }
+      35% { transform: translate(75px, -22px) scale(1.14) rotate(4deg); }
+      55% { transform: translate(50px, -15px) scale(1.08); }
+      100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+    }
+
+    @keyframes pokeAttackLungeLeft {
+      0% { transform: translate(0, 0) scale(1); }
+      35% { transform: translate(-75px, 22px) scale(1.14) rotate(-4deg); }
+      55% { transform: translate(-50px, 15px) scale(1.08); }
+      100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+    }
+
+    @keyframes pokeAttackHop {
+      0% { transform: translateY(0) scale(1); }
+      35% { transform: translateY(-24px) scale(1.1); }
+      70% { transform: translateY(-6px) scale(1.04); }
+      100% { transform: translateY(0) scale(1); }
     }
 
     @keyframes pokeHitShake {
       0%, 100% { transform: translate(0, 0); filter: drop-shadow(0 8px 16px rgba(0,0,0,0.5)); }
-      20%, 60% { transform: translate(-10px, 4px); filter: brightness(2) contrast(1.5) drop-shadow(0 0 15px #ef4444); }
-      40%, 80% { transform: translate(10px, -4px); filter: brightness(1.8) drop-shadow(0 0 15px #ef4444); }
+      15%, 45%, 75% { transform: translate(-14px, 4px) rotate(-3deg); filter: brightness(2.5) contrast(1.6) drop-shadow(0 0 20px #ef4444); }
+      30%, 60%, 90% { transform: translate(14px, -4px) rotate(3deg); filter: brightness(2.2) contrast(1.4) drop-shadow(0 0 20px #ef4444); }
+    }
+
+    @keyframes pokeCritImpact {
+      0% { transform: scale(1); filter: brightness(3.5) contrast(2) drop-shadow(0 0 30px #ffd700); }
+      20% { transform: scale(1.22) translate(-12px, -8px); filter: brightness(2.6) drop-shadow(0 0 25px #f59e0b); }
+      45% { transform: scale(0.92) translate(12px, 8px); filter: brightness(2) drop-shadow(0 0 20px #ef4444); }
+      70% { transform: translate(-6px, 3px); filter: brightness(1.5); }
+      100% { transform: scale(1) translate(0, 0); filter: drop-shadow(0 8px 16px rgba(0,0,0,0.5)); }
+    }
+
+    @keyframes arenaShakeLight {
+      0%, 100% { transform: translate(0, 0); }
+      20% { transform: translate(-4px, 3px); }
+      40% { transform: translate(4px, -3px); }
+      60% { transform: translate(-3px, 2px); }
+      80% { transform: translate(3px, -2px); }
+    }
+
+    @keyframes arenaShakeHeavy {
+      0%, 100% { transform: translate(0, 0); }
+      10% { transform: translate(-10px, 8px) rotate(-0.5deg); }
+      25% { transform: translate(10px, -8px) rotate(0.5deg); }
+      40% { transform: translate(-8px, 6px); }
+      55% { transform: translate(8px, -6px); }
+      70% { transform: translate(-5px, 4px); }
+      85% { transform: translate(5px, -3px); }
     }
 
     @keyframes pokeFaint {
@@ -1911,9 +1952,15 @@
       100% { transform: translateY(40px); opacity: 0; }
     }
 
-    .poke-sprite-attacker { animation: pokeAttackLunge 0.5s ease-in-out !important; }
-    .poke-sprite-damaged { animation: pokeHitShake 0.6s ease-in-out !important; }
+    .poke-sprite-attacker { animation: pokeAttackLungeRight 0.45s ease-in-out !important; }
+    .poke-lunge-right { animation: pokeAttackLungeRight 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important; }
+    .poke-lunge-left { animation: pokeAttackLungeLeft 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important; }
+    .poke-hop { animation: pokeAttackHop 0.45s ease-out !important; }
+    .poke-sprite-damaged { animation: pokeHitShake 0.55s ease-in-out !important; }
+    .poke-sprite-crit { animation: pokeCritImpact 0.65s ease-in-out !important; }
     .poke-sprite-fainted { animation: pokeFaint 0.8s forwards !important; }
+    .arena-shake-light { animation: arenaShakeLight 0.4s ease-in-out !important; }
+    .arena-shake-heavy { animation: arenaShakeHeavy 0.6s ease-in-out !important; }
 
     /* Battle Arena Stadium Stage */
     .poke-arena-container {
@@ -3828,7 +3875,8 @@
           </div>
 
           <!-- Arena Stadium Visual Box -->
-          <div class="poke-arena-container">
+          <div class="poke-arena-container" id="pokeArenaContainer">
+            <canvas id="pokeBattleVfxCanvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 15;"></canvas>
             <div class="poke-arena-field">
               
               <!-- Player (Streamer) Field (Left / Bottom-Left) -->
@@ -11165,15 +11213,15 @@
     var streamerMegaSelected = false;
 
     var streamerTeam = [
-      { pokemon: null, item: 'charizardite_x', currentHP: 0, maxHP: 0, fainted: false, isMega: false, choiceMove: null, itemUsed: false, rankAtk: 0, rankSpA: 0 },
-      { pokemon: null, item: 'gengarite', currentHP: 0, maxHP: 0, fainted: false, isMega: false, choiceMove: null, itemUsed: false, rankAtk: 0, rankSpA: 0 },
-      { pokemon: null, item: 'focus_sash', currentHP: 0, maxHP: 0, fainted: false, isMega: false, choiceMove: null, itemUsed: false, rankAtk: 0, rankSpA: 0 }
+      { pokemon: null, item: 'charizardite_x', currentHP: 0, maxHP: 0, fainted: false, isMega: false, choiceMove: null, itemUsed: false, rankAtk: 0, rankDef: 0, rankSpA: 0, rankSpD: 0, rankSpe: 0, status: null, toxicTurns: 0, destinyBond: false, flinched: false },
+      { pokemon: null, item: 'gengarite', currentHP: 0, maxHP: 0, fainted: false, isMega: false, choiceMove: null, itemUsed: false, rankAtk: 0, rankDef: 0, rankSpA: 0, rankSpD: 0, rankSpe: 0, status: null, toxicTurns: 0, destinyBond: false, flinched: false },
+      { pokemon: null, item: 'focus_sash', currentHP: 0, maxHP: 0, fainted: false, isMega: false, choiceMove: null, itemUsed: false, rankAtk: 0, rankDef: 0, rankSpA: 0, rankSpD: 0, rankSpe: 0, status: null, toxicTurns: 0, destinyBond: false, flinched: false }
     ];
 
     var viewersTeam = [
-      { pokemon: null, item: 'focus_sash', currentHP: 0, maxHP: 0, fainted: false, isMega: false, choiceMove: null, itemUsed: false, rankAtk: 0, rankSpA: 0 },
-      { pokemon: null, item: 'blastoisinite', currentHP: 0, maxHP: 0, fainted: false, isMega: false, choiceMove: null, itemUsed: false, rankAtk: 0, rankSpA: 0 },
-      { pokemon: null, item: 'choice_band', currentHP: 0, maxHP: 0, fainted: false, isMega: false, choiceMove: null, itemUsed: false, rankAtk: 0, rankSpA: 0 }
+      { pokemon: null, item: 'focus_sash', currentHP: 0, maxHP: 0, fainted: false, isMega: false, choiceMove: null, itemUsed: false, rankAtk: 0, rankDef: 0, rankSpA: 0, rankSpD: 0, rankSpe: 0, status: null, toxicTurns: 0, destinyBond: false, flinched: false },
+      { pokemon: null, item: 'blastoisinite', currentHP: 0, maxHP: 0, fainted: false, isMega: false, choiceMove: null, itemUsed: false, rankAtk: 0, rankDef: 0, rankSpA: 0, rankSpD: 0, rankSpe: 0, status: null, toxicTurns: 0, destinyBond: false, flinched: false },
+      { pokemon: null, item: 'choice_band', currentHP: 0, maxHP: 0, fainted: false, isMega: false, choiceMove: null, itemUsed: false, rankAtk: 0, rankDef: 0, rankSpA: 0, rankSpD: 0, rankSpe: 0, status: null, toxicTurns: 0, destinyBond: false, flinched: false }
     ];
 
     var streamerActiveIdx = 0;
@@ -11251,6 +11299,7 @@
         allPokemonItems = data.items || [];
         allMegaEvolutions = data.mega_evolutions || [];
         pokeTypeChart = data.type_chart || {};
+        loadPokerogueMoveAnims();
       } catch (e) {
         console.warn('Failed to load pokemon_data.json', e);
       }
@@ -11732,7 +11781,14 @@
         streamerTeam[i].choiceMove = null;
         streamerTeam[i].itemUsed = false;
         streamerTeam[i].rankAtk = 0;
+        streamerTeam[i].rankDef = 0;
         streamerTeam[i].rankSpA = 0;
+        streamerTeam[i].rankSpD = 0;
+        streamerTeam[i].rankSpe = 0;
+        streamerTeam[i].status = null;
+        streamerTeam[i].toxicTurns = 0;
+        streamerTeam[i].destinyBond = false;
+        streamerTeam[i].flinched = false;
 
         streamerTeam[i].movesPP = sP.moves.map(m => ({
           name: m.name,
@@ -11748,7 +11804,14 @@
         viewersTeam[i].choiceMove = null;
         viewersTeam[i].itemUsed = false;
         viewersTeam[i].rankAtk = 0;
+        viewersTeam[i].rankDef = 0;
         viewersTeam[i].rankSpA = 0;
+        viewersTeam[i].rankSpD = 0;
+        viewersTeam[i].rankSpe = 0;
+        viewersTeam[i].status = null;
+        viewersTeam[i].toxicTurns = 0;
+        viewersTeam[i].destinyBond = false;
+        viewersTeam[i].flinched = false;
         viewersTeam[i].movesPP = vP.moves.map(m => ({
           name: m.name,
           currentPP: (m.pp !== undefined ? m.pp : (m.max_pp || 15)),
@@ -11759,17 +11822,26 @@
       // Reset arena sprites & animations
       const sSpr = document.getElementById('arenaStreamerSprite');
       if (sSpr) {
-        sSpr.classList.remove('poke-sprite-fainted', 'poke-sprite-attacker', 'poke-sprite-damaged');
+        sSpr.classList.remove('poke-sprite-fainted', 'poke-sprite-attacker', 'poke-sprite-damaged', 'poke-sprite-crit', 'poke-lunge-right', 'poke-lunge-left', 'poke-hop');
         sSpr.style.opacity = '1';
         sSpr.style.transform = 'none';
         sSpr.style.filter = 'none';
       }
       const vSpr = document.getElementById('arenaViewersSprite');
       if (vSpr) {
-        vSpr.classList.remove('poke-sprite-fainted', 'poke-sprite-attacker', 'poke-sprite-damaged');
+        vSpr.classList.remove('poke-sprite-fainted', 'poke-sprite-attacker', 'poke-sprite-damaged', 'poke-sprite-crit', 'poke-lunge-right', 'poke-lunge-left', 'poke-hop');
         vSpr.style.opacity = '1';
         vSpr.style.transform = 'none';
         vSpr.style.filter = 'none';
+      }
+      const arenaBox = document.getElementById('pokeArenaContainer');
+      if (arenaBox) {
+        arenaBox.classList.remove('arena-shake-light', 'arena-shake-heavy');
+      }
+      const vfxCanvas = document.getElementById('pokeBattleVfxCanvas');
+      if (vfxCanvas) {
+        const vfxCtx = vfxCanvas.getContext('2d');
+        if (vfxCtx) vfxCtx.clearRect(0, 0, vfxCanvas.width, vfxCanvas.height);
       }
 
       streamerActiveIdx = 0;
@@ -11781,6 +11853,8 @@
 
       pokeBattleState.active = true;
       pokeBattleState.round = 1;
+      pokeBattleState.streamerStealthRock = false;
+      pokeBattleState.viewersStealthRock = false;
       pokeBattleState.phase = 'streamer_turn';
       pokeBattleState.streamerAction = null;
       pokeBattleState.viewersAction = null;
@@ -11795,6 +11869,47 @@
       startStreamerPokeTurn();
     }
 
+    function getPokeStatWithRank(baseStat, rank) {
+      const clampedRank = Math.max(-6, Math.min(6, rank || 0));
+      let mult = 1.0;
+      if (clampedRank >= 0) mult = (2 + clampedRank) / 2;
+      else mult = 2 / (2 - clampedRank);
+      return Math.floor(baseStat * mult);
+    }
+
+    function getStatusBadgeHtml(status) {
+      if (!status) return '';
+      const map = {
+        'brn': '<span class="poke-status-badge" style="background: #ef4444; color: #fff; font-size: 10px; padding: 1px 5px; border-radius: 4px; font-weight: 800; margin-left: 5px;">🔥 화상</span>',
+        'par': '<span class="poke-status-badge" style="background: #eab308; color: #000; font-size: 10px; padding: 1px 5px; border-radius: 4px; font-weight: 800; margin-left: 5px;">⚡ 마비</span>',
+        'psn': '<span class="poke-status-badge" style="background: #a855f7; color: #fff; font-size: 10px; padding: 1px 5px; border-radius: 4px; font-weight: 800; margin-left: 5px;">🟣 독</span>',
+        'tox': '<span class="poke-status-badge" style="background: #7e22ce; color: #fff; font-size: 10px; padding: 1px 5px; border-radius: 4px; font-weight: 800; margin-left: 5px;">💀 맹독</span>',
+        'frz': '<span class="poke-status-badge" style="background: #06b6d4; color: #fff; font-size: 10px; padding: 1px 5px; border-radius: 4px; font-weight: 800; margin-left: 5px;">❄️ 얼음</span>'
+      };
+      return map[status] || '';
+    }
+
+    function getRanksBadgeHtml(slot) {
+      if (!slot) return '';
+      const badges = [];
+      if (slot.rankAtk) badges.push(`공${slot.rankAtk > 0 ? '+' + slot.rankAtk : slot.rankAtk}`);
+      if (slot.rankDef) badges.push(`방${slot.rankDef > 0 ? '+' + slot.rankDef : slot.rankDef}`);
+      if (slot.rankSpA) badges.push(`특공${slot.rankSpA > 0 ? '+' + slot.rankSpA : slot.rankSpA}`);
+      if (slot.rankSpD) badges.push(`특방${slot.rankSpD > 0 ? '+' + slot.rankSpD : slot.rankSpD}`);
+      if (slot.rankSpe) badges.push(`스피드${slot.rankSpe > 0 ? '+' + slot.rankSpe : slot.rankSpe}`);
+      if (badges.length === 0) return '';
+      return `<span style="font-size: 9px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); border-radius: 4px; padding: 1px 4px; color: #ffd700; margin-left: 4px;">${badges.join(' ')}</span>`;
+    }
+
+    function calculateBattleSpeed(slot) {
+      if (!slot || !slot.pokemon) return 50;
+      let spe = slot.pokemon.stats.spe;
+      if (slot.rankSpe) spe = getPokeStatWithRank(spe, slot.rankSpe);
+      if (slot.item === 'choice_scarf') spe = Math.floor(spe * 1.5);
+      if (slot.status === 'par') spe = Math.floor(spe * 0.5); // 마비 시 스피드 50%
+      return Math.max(1, spe);
+    }
+
     function updateArenaActivePokemonUI() {
       const sSlot = streamerTeam[streamerActiveIdx];
       const vSlot = viewersTeam[viewersActiveIdx];
@@ -11803,7 +11918,8 @@
 
       const sNameEl = document.getElementById('arenaStreamerName');
       if (sNameEl) {
-        sNameEl.innerHTML = sSlot.isMega ? `<span class="mega-tag-badge">🧬 MEGA</span> ${sP.name}` : sP.name;
+        const megaPrefix = sSlot.isMega ? `<span class="mega-tag-badge">🧬 MEGA</span> ` : '';
+        sNameEl.innerHTML = `${megaPrefix}${sP.name}${getStatusBadgeHtml(sSlot.status)}${getRanksBadgeHtml(sSlot)}`;
       }
       const sSpr = document.getElementById('arenaStreamerSprite');
       if (sSpr) {
@@ -11823,7 +11939,8 @@
 
       const vNameEl = document.getElementById('arenaViewersName');
       if (vNameEl) {
-        vNameEl.innerHTML = vSlot.isMega ? `<span class="mega-tag-badge">🧬 MEGA</span> ${vP.name}` : vP.name;
+        const megaPrefix = vSlot.isMega ? `<span class="mega-tag-badge">🧬 MEGA</span> ` : '';
+        vNameEl.innerHTML = `${megaPrefix}${vP.name}${getStatusBadgeHtml(vSlot.status)}${getRanksBadgeHtml(vSlot)}`;
       }
       const vSpr = document.getElementById('arenaViewersSprite');
       if (vSpr) {
@@ -13489,79 +13606,83 @@
       pokeBattleState.phase = 'executing';
       document.getElementById('arenaViewersVoteHud').style.display = 'none';
 
-      const sAct = pokeBattleState.streamerAction;
-      const vAct = pokeBattleState.viewersAction;
+      try {
+        const sAct = pokeBattleState.streamerAction;
+        const vAct = pokeBattleState.viewersAction;
 
-      // 1. Handle Switches First (Priority +6)
-      if (sAct.type === 'switch') {
-        await executeSwitchAnimation('streamer', sAct.targetIdx);
-      }
-      if (vAct.type === 'switch') {
-        await executeSwitchAnimation('viewers', vAct.targetIdx);
-      }
+        // 1. Handle Switches First (Priority +6)
+        if (sAct.type === 'switch') {
+          await executeSwitchAnimation('streamer', sAct.targetIdx);
+        }
+        if (vAct.type === 'switch') {
+          await executeSwitchAnimation('viewers', vAct.targetIdx);
+        }
 
-      // If both switched, round ends immediately
-      if (sAct.type === 'switch' && vAct.type === 'switch') {
+        // If both switched, round ends immediately
+        if (sAct.type === 'switch' && vAct.type === 'switch') {
+          await handleRoundEndEffects();
+          return;
+        }
+
+        // 2. Determine Action Order for Attacks
+        const sSlot = streamerTeam[streamerActiveIdx];
+        const vSlot = viewersTeam[viewersActiveIdx];
+
+        if (sAct.type === 'move' && vAct.type === 'move') {
+          const sMove = sAct.move;
+          const vMove = vAct.move;
+
+          const priorityMoves = ['전광석화', '신속', '야습', '기습', '얼음뭉치'];
+          const sPriority = (sMove && priorityMoves.includes(sMove.name)) ? 1 : 0;
+          const vPriority = (vMove && priorityMoves.includes(vMove.name)) ? 1 : 0;
+
+          let sSpeed = calculateBattleSpeed(sSlot);
+          let vSpeed = calculateBattleSpeed(vSlot);
+
+          let streamerFirst = true;
+          if (sPriority > vPriority) streamerFirst = true;
+          else if (vPriority > sPriority) streamerFirst = false;
+          else streamerFirst = sSpeed >= vSpeed;
+
+          const firstActor = streamerFirst ? 'streamer' : 'viewers';
+          const secondActor = streamerFirst ? 'viewers' : 'streamer';
+          const firstAct = streamerFirst ? sAct : vAct;
+          const secondAct = streamerFirst ? vAct : sAct;
+
+          // Attack 1
+          const firstFainted = await executeSingleAttack(firstActor, firstAct.move, firstAct.isMega);
+          if (firstFainted) {
+            await handleFaintPhase(firstActor === 'streamer' ? 'viewers' : 'streamer');
+            return;
+          }
+
+          await new Promise(r => setTimeout(r, 1000));
+
+          // Attack 2 (if defender didn't faint)
+          const secondFainted = await executeSingleAttack(secondActor, secondAct.move, secondAct.isMega);
+          if (secondFainted) {
+            await handleFaintPhase(secondActor === 'streamer' ? 'viewers' : 'streamer');
+            return;
+          }
+        } else if (sAct.type === 'move' && vAct.type === 'switch') {
+          const fainted = await executeSingleAttack('streamer', sAct.move, sAct.isMega);
+          if (fainted) {
+            await handleFaintPhase('viewers');
+            return;
+          }
+        } else if (sAct.type === 'switch' && vAct.type === 'move') {
+          const fainted = await executeSingleAttack('viewers', vAct.move, vAct.isMega);
+          if (fainted) {
+            await handleFaintPhase('streamer');
+            return;
+          }
+        }
+
         await handleRoundEndEffects();
-        return;
+      } catch (seqErr) {
+        console.error('Unexpected error in executeBattleTurnSequence:', seqErr);
+        await handleRoundEndEffects();
       }
-
-      // 2. Determine Action Order for Attacks
-      const sSlot = streamerTeam[streamerActiveIdx];
-      const vSlot = viewersTeam[viewersActiveIdx];
-
-      if (sAct.type === 'move' && vAct.type === 'move') {
-        const sMove = sAct.move;
-        const vMove = vAct.move;
-
-        const sPriority = (sMove.name === '전광석화' || sMove.name === '신속' || sMove.name === '야습' || sMove.name === '기습') ? 1 : 0;
-        const vPriority = (vMove.name === '전광석화' || vMove.name === '신속' || vMove.name === '야습' || vMove.name === '기습') ? 1 : 0;
-
-        let sSpeed = sSlot.pokemon.stats.spe;
-        if (sSlot.item === 'choice_scarf') sSpeed = Math.floor(sSpeed * 1.5);
-        let vSpeed = vSlot.pokemon.stats.spe;
-        if (vSlot.item === 'choice_scarf') vSpeed = Math.floor(vSpeed * 1.5);
-
-        let streamerFirst = true;
-        if (sPriority > vPriority) streamerFirst = true;
-        else if (vPriority > sPriority) streamerFirst = false;
-        else streamerFirst = sSpeed >= vSpeed;
-
-        const firstActor = streamerFirst ? 'streamer' : 'viewers';
-        const secondActor = streamerFirst ? 'viewers' : 'streamer';
-        const firstAct = streamerFirst ? sAct : vAct;
-        const secondAct = streamerFirst ? vAct : sAct;
-
-        // Attack 1
-        const firstFainted = await executeSingleAttack(firstActor, firstAct.move, firstAct.isMega);
-        if (firstFainted) {
-          await handleFaintPhase(firstActor === 'streamer' ? 'viewers' : 'streamer');
-          return;
-        }
-
-        await new Promise(r => setTimeout(r, 1000));
-
-        // Attack 2 (if defender didn't faint)
-        const secondFainted = await executeSingleAttack(secondActor, secondAct.move, secondAct.isMega);
-        if (secondFainted) {
-          await handleFaintPhase(secondActor === 'streamer' ? 'viewers' : 'streamer');
-          return;
-        }
-      } else if (sAct.type === 'move' && vAct.type === 'switch') {
-        const fainted = await executeSingleAttack('streamer', sAct.move, sAct.isMega);
-        if (fainted) {
-          await handleFaintPhase('viewers');
-          return;
-        }
-      } else if (sAct.type === 'switch' && vAct.type === 'move') {
-        const fainted = await executeSingleAttack('viewers', vAct.move, vAct.isMega);
-        if (fainted) {
-          await handleFaintPhase('streamer');
-          return;
-        }
-      }
-
-      await handleRoundEndEffects();
     }
 
     async function executeMegaEvolution(actor) {
@@ -13640,6 +13761,24 @@
           spr.style.transform = 'scale(0.5)';
           setTimeout(() => { spr.style.transform = 'scale(1)'; }, 300);
         }
+        // Stealth rock check
+        if (pokeBattleState.streamerStealthRock && streamerTeam[targetIdx].currentHP > 0) {
+          let rockMult = 1.0;
+          sP.types.forEach(t => {
+            if (pokeTypeChart['바위'] && pokeTypeChart['바위'][t] !== undefined) rockMult *= pokeTypeChart['바위'][t];
+          });
+          const rockDmg = Math.max(1, Math.floor(streamerTeam[targetIdx].maxHP * 0.125 * rockMult));
+          streamerTeam[targetIdx].currentHP = Math.max(0, streamerTeam[targetIdx].currentHP - rockDmg);
+          updateArenaHPBars();
+          setBattleDialogue(`🪨 날카로운 바위(스텔스록)가 <b>[${sP.name}]</b>에게 꽂혔다! (-${rockDmg})`);
+          await new Promise(r => setTimeout(r, 800));
+          if (streamerTeam[targetIdx].currentHP <= 0) {
+            streamerTeam[targetIdx].fainted = true;
+            renderArenaTeamBallsHUD();
+            setBattleDialogue(`💀 <b>[${sP.name}]</b>은(는) 스텔스록 데미지로 쓰러졌다!`);
+            await new Promise(r => setTimeout(r, 800));
+          }
+        }
       } else {
         viewersTeam[viewersActiveIdx].choiceMove = null;
         viewersActiveIdx = targetIdx;
@@ -13653,9 +13792,1727 @@
           spr.style.transform = 'scale(0.5)';
           setTimeout(() => spr.style.transform = 'scale(1)', 300);
         }
+        // Stealth rock check
+        if (pokeBattleState.viewersStealthRock && viewersTeam[targetIdx].currentHP > 0) {
+          let rockMult = 1.0;
+          vP.types.forEach(t => {
+            if (pokeTypeChart['바위'] && pokeTypeChart['바위'][t] !== undefined) rockMult *= pokeTypeChart['바위'][t];
+          });
+          const rockDmg = Math.max(1, Math.floor(viewersTeam[targetIdx].maxHP * 0.125 * rockMult));
+          viewersTeam[targetIdx].currentHP = Math.max(0, viewersTeam[targetIdx].currentHP - rockDmg);
+          updateArenaHPBars();
+          setBattleDialogue(`🪨 날카로운 바위(스텔스록)가 <b>[${vP.name}]</b>에게 꽂혔다! (-${rockDmg})`);
+          await new Promise(r => setTimeout(r, 800));
+          if (viewersTeam[targetIdx].currentHP <= 0) {
+            viewersTeam[targetIdx].fainted = true;
+            renderArenaTeamBallsHUD();
+            setBattleDialogue(`💀 <b>[${vP.name}]</b>은(는) 스텔스록 데미지로 쓰러졌다!`);
+            await new Promise(r => setTimeout(r, 800));
+          }
+        }
       }
       await new Promise(r => setTimeout(r, 900));
     }
+
+    // ==========================================
+    // Pokemon Battle Motion & Visual FX Engine
+    // ==========================================
+    let battleAudioCtx = null;
+    function getBattleAudioContext() {
+      try {
+        if (!battleAudioCtx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (AudioCtx) battleAudioCtx = new AudioCtx();
+        }
+        if (battleAudioCtx && battleAudioCtx.state === 'suspended') {
+          battleAudioCtx.resume().catch(() => {});
+        }
+        return battleAudioCtx;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function playBattleSoundFx(soundType) {
+      try {
+        const ctx = getBattleAudioContext();
+        if (!ctx) return;
+        const now = ctx.currentTime;
+
+        if (soundType === 'hit_normal') {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(160, now);
+          osc.frequency.exponentialRampToValueAtTime(30, now + 0.15);
+          gain.gain.setValueAtTime(0.28, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.16);
+
+          const bufferSize = Math.floor(ctx.sampleRate * 0.08);
+          const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+          const noise = ctx.createBufferSource();
+          noise.buffer = buffer;
+          const noiseFilter = ctx.createBiquadFilter();
+          noiseFilter.type = 'lowpass';
+          noiseFilter.frequency.setValueAtTime(1100, now);
+          const noiseGain = ctx.createGain();
+          noiseGain.gain.setValueAtTime(0.22, now);
+          noiseGain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+          noise.connect(noiseFilter);
+          noiseFilter.connect(noiseGain);
+          noiseGain.connect(ctx.destination);
+          noise.start(now);
+          noise.stop(now + 0.09);
+
+        } else if (soundType === 'hit_heavy') {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(130, now);
+          osc.frequency.exponentialRampToValueAtTime(20, now + 0.35);
+          gain.gain.setValueAtTime(0.38, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.36);
+
+          const bufferSize = Math.floor(ctx.sampleRate * 0.25);
+          const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+          const noise = ctx.createBufferSource();
+          noise.buffer = buffer;
+          const noiseFilter = ctx.createBiquadFilter();
+          noiseFilter.type = 'lowpass';
+          noiseFilter.frequency.setValueAtTime(450, now);
+          const noiseGain = ctx.createGain();
+          noiseGain.gain.setValueAtTime(0.32, now);
+          noiseGain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+          noise.connect(noiseFilter);
+          noiseFilter.connect(noiseGain);
+          noiseGain.connect(ctx.destination);
+          noise.start(now);
+          noise.stop(now + 0.26);
+
+        } else if (soundType === 'slash') {
+          const bufferSize = Math.floor(ctx.sampleRate * 0.18);
+          const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+          const noise = ctx.createBufferSource();
+          noise.buffer = buffer;
+          const filter = ctx.createBiquadFilter();
+          filter.type = 'bandpass';
+          filter.frequency.setValueAtTime(3200, now);
+          filter.frequency.exponentialRampToValueAtTime(700, now + 0.18);
+          filter.Q.value = 3;
+          const gain = ctx.createGain();
+          gain.gain.setValueAtTime(0.32, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.18);
+          noise.connect(filter);
+          filter.connect(gain);
+          gain.connect(ctx.destination);
+          noise.start(now);
+          noise.stop(now + 0.19);
+
+        } else if (soundType === 'projectile') {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(260, now);
+          osc.frequency.exponentialRampToValueAtTime(820, now + 0.28);
+          gain.gain.setValueAtTime(0.22, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.28);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.29);
+
+        } else if (soundType === 'beam') {
+          const osc = ctx.createOscillator();
+          const osc2 = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sawtooth';
+          osc2.type = 'square';
+          osc.frequency.setValueAtTime(480, now);
+          osc.frequency.linearRampToValueAtTime(160, now + 0.42);
+          osc2.frequency.setValueAtTime(484, now);
+          osc2.frequency.linearRampToValueAtTime(162, now + 0.42);
+          gain.gain.setValueAtTime(0.26, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.42);
+          osc.connect(gain);
+          osc2.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc2.start(now);
+          osc.stop(now + 0.44);
+          osc2.stop(now + 0.44);
+
+        } else if (soundType === 'earthquake') {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(70, now);
+          osc.frequency.linearRampToValueAtTime(32, now + 0.55);
+          gain.gain.setValueAtTime(0.35, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.55);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.57);
+
+        } else if (soundType === 'buff') {
+          const freqs = [523.25, 659.25, 783.99, 1046.50];
+          freqs.forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            const noteStart = now + idx * 0.08;
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, noteStart);
+            gain.gain.setValueAtTime(0.18, noteStart);
+            gain.gain.exponentialRampToValueAtTime(0.005, noteStart + 0.26);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(noteStart);
+            osc.stop(noteStart + 0.28);
+          });
+
+        } else if (soundType === 'ailment') {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(440, now);
+          osc.frequency.exponentialRampToValueAtTime(130, now + 0.38);
+          gain.gain.setValueAtTime(0.22, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.38);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.4);
+
+        } else if (soundType === 'miss') {
+          const bufferSize = Math.floor(ctx.sampleRate * 0.12);
+          const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+          const noise = ctx.createBufferSource();
+          noise.buffer = buffer;
+          const filter = ctx.createBiquadFilter();
+          filter.type = 'bandpass';
+          filter.frequency.setValueAtTime(900, now);
+          filter.frequency.exponentialRampToValueAtTime(300, now + 0.12);
+          const gain = ctx.createGain();
+          gain.gain.setValueAtTime(0.15, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
+          noise.connect(filter);
+          filter.connect(gain);
+          gain.connect(ctx.destination);
+          noise.start(now);
+          noise.stop(now + 0.13);
+        }
+      } catch (err) {
+        // audio muted or unsupported
+      }
+    }
+
+    function getPokeMoveMotionType(move) {
+      if (!move) return 'heavy_tackle';
+      const name = move.name || '';
+      const cat = move.category || '';
+      const type = move.type || '';
+
+      // 1. Unique Signature VFX
+      if (name === '불대문자') return 'fire_blast';
+      if (name === '파도타기') return 'surf';
+      if (name === '기가드레인') return 'drain';
+      if (name === '파워젬') return 'gem';
+      if (name === '치근거리기') return 'fairy_play';
+      if (name === '역린') return 'outrage';
+      if (name === '깨물어부수기') return 'bite';
+      if (name === '기습' || name === '탁쳐서떨구기') return 'dark_strike';
+      if (name === '하이퍼보이스' || name === '벌레의야단법석') return 'sonic';
+      if (name === '사이코키네시스' || name === '사이코쇼크') return 'psychic';
+      if (name === '문포스' || name === '매지컬샤인') return 'moonforce';
+      if (name === '고드름떨구기' || name === '얼음뭉치') return 'icicle';
+      if (name === '독찌르기' || name === '더스트슈트') return 'poison_jab';
+      if (name === '플레어드라이브') return 'rush_fire';
+      if (name === '볼트태클') return 'rush_electric';
+      if (name === '브레이브버드') return 'rush_flying';
+      if (name === '아쿠아브레이크' || name === '폭포오르기') return 'rush_water';
+      if (/펀치|인파이트/.test(name)) return 'fist';
+
+      // 2. Buff / Status
+      if (cat === '변화' || move.power === 0) {
+        if (/맹독|도깨비불|전기자석파|길동무|최면술|수면|하품|이상한빛|뽐내기|유혹|헤롱헤롱|압정|그림자분신/.test(name)) {
+          return 'ailment';
+        }
+        return 'buff';
+      }
+
+      // 3. Slash / Blade
+      if (/베기|클로|크루|블레이드|에어슬래시|깜짝베기|시저크로스|섀도크루|야습|드래곤크루|스톤에지|자르기|절각|연속자르기/.test(name)) {
+        return 'slash';
+      }
+
+      // 4. Ground / Earthquake
+      if (/지진|대지의힘|땅고르기|구멍파기|암석봉인|스톤샤워|매그니튜드|모래바람|락블라스트/.test(name)) {
+        return 'ground';
+      }
+
+      // 5. Continuous Stream
+      if (/화염방사|하이드로펌프|열탕|물대포|오물폭탄|오물웨이브|용의숨결|눈보라|오로라빔/.test(name)) {
+        return 'stream';
+      }
+
+      // 6. Beam / Cannon / Ray
+      if (/솔라빔|10만볼트|번개|냉동빔|용의파동|파동탄|러스터캐논|악의파동|파괴광선/.test(name)) {
+        return 'beam';
+      }
+
+      // 7. Projectile
+      if (/섀도볼|에너지볼|기합탄|불꽃세례|원시의힘|씨기관총|암석|바위날리기|미사일|고속스핀/.test(name)) {
+        return 'projectile';
+      }
+
+      // 8. Heavy Tackle / Body contact
+      return 'heavy_tackle';
+    }
+
+    function getPokeTypeVfxColors(type) {
+      const colorMap = {
+        '불꽃': { primary: '#ff4d00', secondary: '#ffa500', glow: 'rgba(255, 77, 0, 0.85)' },
+        '물': { primary: '#0ea5e9', secondary: '#7dd3fc', glow: 'rgba(14, 165, 233, 0.85)' },
+        '풀': { primary: '#22c55e', secondary: '#a7f3d0', glow: 'rgba(34, 197, 94, 0.85)' },
+        '전기': { primary: '#eab308', secondary: '#fef08a', glow: 'rgba(234, 179, 8, 0.9)' },
+        '얼음': { primary: '#06b6d4', secondary: '#cffafe', glow: 'rgba(6, 182, 212, 0.85)' },
+        '격투': { primary: '#dc2626', secondary: '#fca5a5', glow: 'rgba(220, 38, 38, 0.85)' },
+        '독': { primary: '#9333ea', secondary: '#e9d5ff', glow: 'rgba(147, 51, 234, 0.85)' },
+        '땅': { primary: '#b45309', secondary: '#fde68a', glow: 'rgba(180, 83, 9, 0.85)' },
+        '비행': { primary: '#38bdf8', secondary: '#e0f2fe', glow: 'rgba(56, 189, 248, 0.85)' },
+        '에스퍼': { primary: '#ec4899', secondary: '#fbcfe8', glow: 'rgba(236, 72, 153, 0.85)' },
+        '벌레': { primary: '#84cc16', secondary: '#d9f99d', glow: 'rgba(132, 204, 22, 0.85)' },
+        '바위': { primary: '#78716c', secondary: '#e7e5e4', glow: 'rgba(120, 113, 108, 0.85)' },
+        '고스트': { primary: '#6366f1', secondary: '#c7d2fe', glow: 'rgba(99, 102, 241, 0.85)' },
+        '드래곤': { primary: '#4338ca', secondary: '#a5b4fc', glow: 'rgba(67, 56, 202, 0.85)' },
+        '악': { primary: '#334155', secondary: '#94a3b8', glow: 'rgba(51, 65, 85, 0.85)' },
+        '강철': { primary: '#64748b', secondary: '#f8fafc', glow: 'rgba(100, 116, 139, 0.85)' },
+        '페어리': { primary: '#f43f5e', secondary: '#fecdd3', glow: 'rgba(244, 63, 94, 0.85)' },
+        '노말': { primary: '#cbd5e1', secondary: '#ffffff', glow: 'rgba(203, 213, 225, 0.85)' }
+      };
+      return colorMap[type] || { primary: '#00ffa3', secondary: '#ffffff', glow: 'rgba(0, 255, 163, 0.85)' };
+    }
+
+    // --- PokéRogue Authentic Move Animation Engine ---
+    let pokerogueMoveAnims = null;
+    const pokerogueSpritesheetCache = {};
+
+    async function loadPokerogueMoveAnims() {
+      if (pokerogueMoveAnims) return;
+      try {
+        const res = await fetch('./battle_anims/all_move_anims.json');
+        if (res.ok) {
+          pokerogueMoveAnims = await res.json();
+          console.log('[PokéRogue] Loaded authentic move animation database:', Object.keys(pokerogueMoveAnims).length, 'moves');
+        }
+      } catch (e) {
+        console.warn('Failed to load battle_anims/all_move_anims.json', e);
+      }
+    }
+
+    function getPokerogueSpritesheet(name) {
+      if (!name) return null;
+      if (pokerogueSpritesheetCache[name]) return pokerogueSpritesheetCache[name];
+      const img = new Image();
+      img.src = './battle_anims/images/' + encodeURIComponent(name) + '.png';
+      pokerogueSpritesheetCache[name] = img;
+      return img;
+    }
+
+    async function playPokerogueMoveAnim(actor, moveName, hitResult = { hit: true, isCrit: false, typeMult: 1.0, finalDamage: 50 }) {
+      if (!pokerogueMoveAnims) {
+        await loadPokerogueMoveAnims();
+      }
+      const animData = pokerogueMoveAnims ? pokerogueMoveAnims[moveName] : null;
+      if (!animData) return false;
+
+      const isStreamer = actor === 'streamer';
+      const attackerSpr = isStreamer ? document.getElementById('arenaStreamerSprite') : document.getElementById('arenaViewersSprite');
+      const defenderSpr = isStreamer ? document.getElementById('arenaViewersSprite') : document.getElementById('arenaStreamerSprite');
+      const canvas = document.getElementById('pokeBattleVfxCanvas');
+      if (!attackerSpr || !defenderSpr || !canvas) return false;
+
+      const configs = Array.isArray(animData) ? animData : [animData];
+      const hasSeparateOpp = configs.length > 1;
+      const config = (hasSeparateOpp && !isStreamer) ? configs[1] : configs[0];
+      if (!config || !config.frames || config.frames.length === 0) return false;
+
+      const img = getPokerogueSpritesheet(config.graphic);
+      if (!img) return false;
+      if (!img.complete) {
+        await new Promise(resolve => {
+          img.onload = () => resolve();
+          img.onerror = () => resolve();
+        });
+      }
+      if (!img.naturalWidth) return false;
+
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width || canvas.offsetWidth || 800;
+      canvas.height = rect.height || canvas.offsetHeight || 320;
+      const ctx = canvas.getContext('2d');
+      ctx.imageSmoothingEnabled = false;
+
+      const atkRect = attackerSpr.getBoundingClientRect();
+      const defRect = defenderSpr.getBoundingClientRect();
+      const pUser = {
+        x: atkRect.left - rect.left + atkRect.width / 2,
+        y: atkRect.top - rect.top + atkRect.height / 2
+      };
+      const pTarget = {
+        x: defRect.left - rect.left + defRect.width / 2,
+        y: defRect.top - rect.top + defRect.height / 2
+      };
+
+      const canvasDx = pTarget.x - pUser.x;
+      const canvasDy = pTarget.y - pUser.y;
+      const canvasDist = Math.sqrt(canvasDx * canvasDx + canvasDy * canvasDy);
+      const refDist = Math.sqrt(128 * 128 + 64 * 64);
+      const arenaScale = Math.max(0.8, Math.min(2.0, canvasDist / refDist));
+
+      const normalX = -canvasDy / (canvasDist || 1);
+      const normalY = canvasDx / (canvasDist || 1);
+      const flipHoriz = (!hasSeparateOpp && !isStreamer);
+
+      // Play attacker motion
+      attackerSpr.classList.add(isStreamer ? 'poke-lunge-right' : 'poke-lunge-left');
+      setTimeout(() => attackerSpr.classList.remove('poke-lunge-right', 'poke-lunge-left'), 400);
+
+      const frameDelay = 45;
+      for (let f = 0; f < config.frames.length; f++) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        attackerSpr.style.transform = '';
+        defenderSpr.style.transform = '';
+
+        const frameItems = config.frames[f];
+        for (const item of frameItems) {
+          const target = item.target;
+          if (target === 0) {
+            const nudgeX = flipHoriz ? -item.x : item.x;
+            attackerSpr.style.transform = `translate(${nudgeX * 0.3}px, ${item.y * 0.3}px)`;
+            continue;
+          }
+          if (target === 1) {
+            const nudgeX = flipHoriz ? -item.x : item.x;
+            defenderSpr.style.transform = `translate(${nudgeX * 0.3}px, ${item.y * 0.3}px)`;
+            continue;
+          }
+          if (target === 2 && item.visible !== false) {
+            let posX = pTarget.x;
+            let posY = pTarget.y;
+            const focus = item.focus;
+
+            if (focus === 1) { // TARGET
+              const offX = (item.x - 128) * (flipHoriz ? -1 : 1);
+              const offY = (item.y + 64);
+              posX = pTarget.x + offX * arenaScale;
+              posY = pTarget.y + offY * arenaScale;
+            } else if (focus === 2) { // USER
+              const offX = item.x * (flipHoriz ? -1 : 1);
+              posX = pUser.x + offX * arenaScale;
+              posY = pUser.y + item.y * arenaScale;
+            } else if (focus === 3) { // USER_TARGET
+              const t = item.x / 128;
+              const refPerp = item.y - (-64 * t);
+              posX = pUser.x + t * canvasDx + normalX * refPerp * arenaScale;
+              posY = pUser.y + t * canvasDy + normalY * refPerp * arenaScale;
+            } else if (focus === 4) { // SCREEN
+              const offX = item.x * (flipHoriz ? -1 : 1);
+              posX = canvas.width / 2 + offX * arenaScale;
+              posY = canvas.height / 2 + item.y * arenaScale;
+            }
+
+            const cellIdx = item.graphicFrame || 0;
+            const col = cellIdx % 5;
+            const row = Math.floor(cellIdx / 5);
+            const srcX = col * 96;
+            const srcY = row * 96;
+
+            const zoomX = (item.zoomX != null ? item.zoomX : 100) / 100;
+            const zoomY = (item.zoomY != null ? item.zoomY : 100) / 100;
+            const mirrorSign = (item.mirror ? -1 : 1) * (flipHoriz ? -1 : 1);
+            const scaleX = zoomX * mirrorSign * arenaScale;
+            const scaleY = zoomY * arenaScale;
+            const opacity = (item.opacity != null ? item.opacity : 255) / 255;
+            const angle = (-(item.angle || 0)) * (Math.PI / 180) * (flipHoriz ? -1 : 1);
+
+            ctx.save();
+            ctx.translate(posX, posY);
+            ctx.rotate(angle);
+            ctx.scale(scaleX, scaleY);
+            ctx.globalAlpha = Math.max(0, Math.min(1, opacity));
+            if (item.blendType === 1) {
+              ctx.globalCompositeOperation = 'lighter';
+            }
+            ctx.drawImage(img, srcX, srcY, 96, 96, -48, -48, 96, 96);
+            ctx.restore();
+          }
+        }
+
+        await new Promise(r => setTimeout(r, frameDelay));
+      }
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      attackerSpr.style.transform = '';
+      defenderSpr.style.transform = '';
+
+      if (hitResult.hit) {
+        defenderSpr.classList.add('poke-hit-shake');
+        setTimeout(() => defenderSpr.classList.remove('poke-hit-shake'), 450);
+      }
+      return true;
+    }
+
+    async function playPokeMoveAnimation(actor, move, hitResult = { hit: true, isCrit: false, typeMult: 1.0, finalDamage: 10 }) {
+      const motionType = getPokeMoveMotionType(move);
+      playBattleSoundFx(motionType);
+
+      if (!hitResult.hit) {
+        playBattleSoundFx('miss');
+        const attackerSpr = (actor === 'streamer') ? document.getElementById('arenaStreamerSprite') : document.getElementById('arenaViewersSprite');
+        if (attackerSpr) {
+          attackerSpr.classList.add('poke-hop');
+          setTimeout(() => attackerSpr.classList.remove('poke-hop'), 400);
+        }
+        await new Promise(r => setTimeout(r, 450));
+        return;
+      }
+
+      // 1. Prioritize authentic PokéRogue 4th/5th gen sprite animation
+      const prSuccess = await playPokerogueMoveAnim(actor, move.name, hitResult);
+      if (prSuccess) {
+        playBattleSoundFx(hitResult.isCrit ? 'crit' : (hitResult.typeMult >= 2.0 ? 'supereffective' : (hitResult.typeMult < 1.0 && hitResult.typeMult > 0 ? 'notvery' : 'hit')));
+        return;
+      }
+
+      // 2. Fallback to procedural Canvas VFX
+
+      const isStreamer = actor === 'streamer';
+      const attackerSpr = isStreamer ? document.getElementById('arenaStreamerSprite') : document.getElementById('arenaViewersSprite');
+      const defenderSpr = isStreamer ? document.getElementById('arenaViewersSprite') : document.getElementById('arenaStreamerSprite');
+      const arenaBox = document.getElementById('pokeArenaContainer');
+      const canvas = document.getElementById('pokeBattleVfxCanvas');
+
+      if (!attackerSpr || !defenderSpr || !canvas) {
+        return;
+      }
+
+      const colors = getPokeTypeVfxColors(move.type);
+
+      // Coordinate alignment
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width || canvas.offsetWidth || 800;
+      canvas.height = rect.height || canvas.offsetHeight || 320;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const atkRect = attackerSpr.getBoundingClientRect();
+      const defRect = defenderSpr.getBoundingClientRect();
+      const p1 = {
+        x: atkRect.left - rect.left + atkRect.width / 2,
+        y: atkRect.top - rect.top + atkRect.height / 2
+      };
+      const p2 = {
+        x: defRect.left - rect.left + defRect.width / 2,
+        y: defRect.top - rect.top + defRect.height / 2
+      };
+
+      // Attacker sprite motion
+      const isLunge = ['fist', 'bite', 'rush_fire', 'rush_electric', 'rush_flying', 'rush_water', 'heavy_tackle', 'outrage', 'dark_strike', 'slash'].includes(motionType);
+      if (isLunge) {
+        attackerSpr.classList.add(isStreamer ? 'poke-lunge-right' : 'poke-lunge-left');
+        setTimeout(() => attackerSpr.classList.remove('poke-lunge-right', 'poke-lunge-left'), 480);
+      } else {
+        attackerSpr.classList.add('poke-hop');
+        setTimeout(() => attackerSpr.classList.remove('poke-hop'), 480);
+      }
+
+      // If attack misses
+      if (!hitResult.hit) {
+        playBattleSoundFx('miss');
+        await new Promise(r => setTimeout(r, 450));
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        return;
+      }
+
+      try {
+        // --- 1. BUFF (칼춤, 용의춤, 나비춤 등) ---
+        if (motionType === 'buff') {
+          playBattleSoundFx('buff');
+          const startTime = performance.now();
+          const duration = 600;
+          const sparkles = Array.from({ length: 26 }, () => ({
+            x: p1.x + (Math.random() - 0.5) * 80,
+            y: p1.y + 40 - Math.random() * 20,
+            speedY: 1.2 + Math.random() * 2.0,
+            speedX: (Math.random() - 0.5) * 0.8,
+            size: 3 + Math.random() * 4,
+            life: 0,
+            maxLife: 300 + Math.random() * 280
+          }));
+
+          await new Promise(resolve => {
+            let doneTimer = setTimeout(() => { ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }, duration + 80);
+            function renderBuff(t) {
+              const elapsed = t - startTime;
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+              const ringAlpha = Math.max(0, Math.min(1, Math.sin((elapsed / duration) * Math.PI) * 0.75));
+              ctx.save();
+              ctx.strokeStyle = colors.primary;
+              ctx.lineWidth = 4;
+              ctx.shadowColor = colors.glow;
+              ctx.shadowBlur = 15;
+              ctx.globalAlpha = ringAlpha;
+              ctx.beginPath();
+              ctx.ellipse(p1.x, p1.y + 35, 45 + elapsed * 0.05, 18, 0, 0, Math.PI * 2);
+              ctx.stroke();
+              ctx.restore();
+
+              sparkles.forEach(s => {
+                s.life += 16;
+                s.y -= s.speedY;
+                s.x += s.speedX;
+                const alpha = Math.max(0, Math.min(1, 1 - (s.life / s.maxLife)));
+                if (alpha > 0) {
+                  ctx.save();
+                  ctx.globalAlpha = alpha;
+                  ctx.fillStyle = colors.secondary;
+                  ctx.shadowColor = colors.glow;
+                  ctx.shadowBlur = 10;
+                  ctx.beginPath();
+                  ctx.arc(s.x, s.y, Math.max(0.1, s.size), 0, Math.PI * 2);
+                  ctx.fill();
+                  ctx.restore();
+                }
+              });
+
+              if (elapsed < duration) requestAnimationFrame(renderBuff);
+              else { clearTimeout(doneTimer); ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }
+            }
+            requestAnimationFrame(renderBuff);
+          });
+          return;
+        }
+
+        // --- 2. AILMENT (도깨비불, 맹독, 전기자석파, 길동무) ---
+        if (motionType === 'ailment') {
+          playBattleSoundFx('ailment');
+          const startTime = performance.now();
+          const duration = 550;
+          await new Promise(resolve => {
+            let doneTimer = setTimeout(() => { ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }, duration + 80);
+            function renderAilment(t) {
+              const elapsed = t - startTime;
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+              const progress = Math.min(1, Math.max(0, elapsed / duration));
+              const alpha = Math.max(0, Math.min(1, Math.sin(progress * Math.PI) * 0.85));
+
+              ctx.save();
+              ctx.globalAlpha = alpha;
+              ctx.strokeStyle = colors.primary;
+              ctx.lineWidth = 3;
+              ctx.shadowColor = colors.glow;
+              ctx.shadowBlur = 12;
+              for (let i = 0; i < 3; i++) {
+                const r = Math.max(5, 30 + i * 15 - (progress * 25));
+                ctx.beginPath();
+                ctx.ellipse(p2.x, p2.y + Math.sin(progress * 8 + i) * 10, r, Math.max(3, r * 0.5), 0, 0, Math.PI * 2);
+                ctx.stroke();
+              }
+              ctx.restore();
+
+              if (elapsed < duration) requestAnimationFrame(renderAilment);
+              else { clearTimeout(doneTimer); ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }
+            }
+            requestAnimationFrame(renderAilment);
+          });
+          return;
+        }
+
+        // --- 3. FIRE BLAST (불대문자: 거대한 大자 화염성 회전 비행 & 폭발) ---
+        if (motionType === 'fire_blast') {
+          playBattleSoundFx('projectile');
+          const duration = 520;
+          const startTime = performance.now();
+          await new Promise(resolve => {
+            let doneTimer = setTimeout(() => { ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }, duration + 80);
+            function renderFireBlast(t) {
+              const elapsed = t - startTime;
+              const progress = Math.min(1, Math.max(0, elapsed / duration));
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+              const curX = p1.x + (p2.x - p1.x) * progress;
+              const curY = p1.y + (p2.y - p1.y) * progress - Math.sin(progress * Math.PI) * 35;
+              const scale = 0.6 + progress * 0.8;
+              const rot = progress * Math.PI * 2;
+
+              ctx.save();
+              ctx.translate(curX, curY);
+              ctx.rotate(rot);
+              ctx.scale(scale, scale);
+              ctx.shadowColor = '#ff4d00';
+              ctx.shadowBlur = 24;
+
+              // Draw '大' star fiery limbs
+              const arms = [
+                { x: 0, y: -26 },
+                { x: 0, y: 0 },
+                { x: -28, y: -4 },
+                { x: 28, y: -4 },
+                { x: -22, y: 26 },
+                { x: 22, y: 26 }
+              ];
+
+              ctx.strokeStyle = '#ff3300';
+              ctx.lineWidth = 12;
+              ctx.lineCap = 'round';
+              ctx.beginPath();
+              // Top to center
+              ctx.moveTo(0, -26); ctx.lineTo(0, 0);
+              // Horizontal bar
+              ctx.moveTo(-28, -4); ctx.lineTo(28, -4);
+              // Bottom left leg
+              ctx.moveTo(0, 0); ctx.lineTo(-22, 26);
+              // Bottom right leg
+              ctx.moveTo(0, 0); ctx.lineTo(22, 26);
+              ctx.stroke();
+
+              // Inner yellow hot core
+              ctx.strokeStyle = '#ffd700';
+              ctx.lineWidth = 5;
+              ctx.stroke();
+
+              arms.forEach(a => {
+                ctx.fillStyle = '#ffffff';
+                ctx.beginPath();
+                ctx.arc(a.x, a.y, 5, 0, Math.PI * 2);
+                ctx.fill();
+              });
+
+              ctx.restore();
+
+              if (progress < 1) requestAnimationFrame(renderFireBlast);
+              else { clearTimeout(doneTimer); ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }
+            }
+            requestAnimationFrame(renderFireBlast);
+          });
+        }
+
+        // --- 4. SURF (파도타기: 거대한 청록빛 해일 파도가 솟구쳐 덮침) ---
+        else if (motionType === 'surf') {
+          playBattleSoundFx('earthquake');
+          const duration = 540;
+          const startTime = performance.now();
+          await new Promise(resolve => {
+            let doneTimer = setTimeout(() => { ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }, duration + 80);
+            function renderSurf(t) {
+              const elapsed = t - startTime;
+              const progress = Math.min(1, Math.max(0, elapsed / duration));
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+              const waveX = p1.x + (p2.x - p1.x) * progress;
+              const waveH = Math.sin(progress * Math.PI) * 90;
+
+              ctx.save();
+              ctx.shadowColor = '#0ea5e9';
+              ctx.shadowBlur = 20;
+
+              // Wave body gradient
+              const grad = ctx.createLinearGradient(waveX - 60, p1.y, waveX + 40, p1.y);
+              grad.addColorStop(0, 'rgba(14, 165, 233, 0.2)');
+              grad.addColorStop(0.7, 'rgba(14, 165, 233, 0.85)');
+              grad.addColorStop(1, 'rgba(125, 211, 252, 0.95)');
+
+              ctx.fillStyle = grad;
+              ctx.beginPath();
+              ctx.moveTo(waveX - 70, p2.y + 40);
+              ctx.quadraticCurveTo(waveX, p2.y + 40 - waveH * 1.3, waveX + 35, p2.y + 40 - waveH * 0.9);
+              ctx.quadraticCurveTo(waveX + 10, p2.y + 40 - waveH * 0.3, waveX + 35, p2.y + 40);
+              ctx.closePath();
+              ctx.fill();
+
+              // Foaming white crest
+              ctx.fillStyle = '#ffffff';
+              for (let i = 0; i < 5; i++) {
+                const fx = waveX + (i - 2) * 12;
+                const fy = p2.y + 40 - waveH * 1.1 + Math.sin(elapsed * 0.03 + i) * 6;
+                ctx.beginPath();
+                ctx.arc(fx, fy, Math.max(0.1, 7 - i), 0, Math.PI * 2);
+                ctx.fill();
+              }
+              ctx.restore();
+
+              if (progress < 1) requestAnimationFrame(renderSurf);
+              else { clearTimeout(doneTimer); ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }
+            }
+            requestAnimationFrame(renderSurf);
+          });
+        }
+
+        // --- 5. FIST (인파이트, 드레인펀치, 불릿펀치, 코멧펀치: 다중 고속 연타 펀치) ---
+        else if (motionType === 'fist') {
+          playBattleSoundFx('hit_heavy');
+          const duration = 460;
+          const startTime = performance.now();
+          const punches = [
+            { t: 0.1, dx: -18, dy: -12, color: colors.primary },
+            { t: 0.35, dx: 16, dy: 10, color: colors.secondary },
+            { t: 0.6, dx: -8, dy: 14, color: colors.primary },
+            { t: 0.82, dx: 14, dy: -14, color: '#ffffff' }
+          ];
+          await new Promise(resolve => {
+            let doneTimer = setTimeout(() => { ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }, duration + 80);
+            function renderFist(t) {
+              const elapsed = t - startTime;
+              const progress = Math.min(1, Math.max(0, elapsed / duration));
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+              punches.forEach(p => {
+                if (progress >= p.t && progress <= p.t + 0.28) {
+                  const subP = (progress - p.t) / 0.28;
+                  const alpha = Math.max(0, Math.min(1, Math.sin(subP * Math.PI)));
+                  const r = 16 + subP * 28;
+
+                  ctx.save();
+                  ctx.globalAlpha = alpha;
+                  ctx.strokeStyle = p.color;
+                  ctx.lineWidth = 4;
+                  ctx.shadowColor = colors.glow;
+                  ctx.shadowBlur = 18;
+                  ctx.beginPath();
+                  ctx.arc(p2.x + p.dx, p2.y + p.dy, r, 0, Math.PI * 2);
+                  ctx.stroke();
+
+                  // Punch impact cross lines
+                  ctx.beginPath();
+                  ctx.moveTo(p2.x + p.dx - r * 0.8, p2.y + p.dy);
+                  ctx.lineTo(p2.x + p.dx + r * 0.8, p2.y + p.dy);
+                  ctx.moveTo(p2.x + p.dx, p2.y + p.dy - r * 0.8);
+                  ctx.lineTo(p2.x + p.dx, p2.y + p.dy + r * 0.8);
+                  ctx.stroke();
+                  ctx.restore();
+                }
+              });
+
+              if (progress < 1) requestAnimationFrame(renderFist);
+              else { clearTimeout(doneTimer); ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }
+            }
+            requestAnimationFrame(renderFist);
+          });
+        }
+
+        // --- 6. BITE (깨물어부수기: 상하에서 닫히는 보라빛 암흑 송곳니 턱) ---
+        else if (motionType === 'bite') {
+          playBattleSoundFx('hit_heavy');
+          const duration = 420;
+          const startTime = performance.now();
+          await new Promise(resolve => {
+            let doneTimer = setTimeout(() => { ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }, duration + 80);
+            function renderBite(t) {
+              const elapsed = t - startTime;
+              const progress = Math.min(1, Math.max(0, elapsed / duration));
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+              const closeP = progress < 0.6 ? (progress / 0.6) : 1;
+              const gap = (1 - closeP) * 45;
+              const alpha = progress < 0.6 ? 1 : Math.max(0, 1 - (progress - 0.6) / 0.4);
+
+              ctx.save();
+              ctx.globalAlpha = alpha;
+              ctx.fillStyle = '#a855f7';
+              ctx.shadowColor = '#6b21a8';
+              ctx.shadowBlur = 20;
+
+              // Top jaw teeth
+              for (let i = -2; i <= 2; i++) {
+                const tx = p2.x + i * 14;
+                const ty = p2.y - gap - 6;
+                ctx.beginPath();
+                ctx.moveTo(tx - 6, ty - 18);
+                ctx.lineTo(tx + 6, ty - 18);
+                ctx.lineTo(tx, ty);
+                ctx.closePath();
+                ctx.fill();
+              }
+
+              // Bottom jaw teeth
+              for (let i = -2; i <= 2; i++) {
+                const tx = p2.x + i * 14;
+                const ty = p2.y + gap + 6;
+                ctx.beginPath();
+                ctx.moveTo(tx - 6, ty + 18);
+                ctx.lineTo(tx + 6, ty + 18);
+                ctx.lineTo(tx, ty);
+                ctx.closePath();
+                ctx.fill();
+              }
+              ctx.restore();
+
+              if (progress < 1) requestAnimationFrame(renderBite);
+              else { clearTimeout(doneTimer); ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }
+            }
+            requestAnimationFrame(renderBite);
+          });
+        }
+
+        // --- 7. RUSH FIRE / ELECTRIC / FLYING / WATER (돌진기들) ---
+        else if (motionType === 'rush_fire' || motionType === 'rush_electric' || motionType === 'rush_flying' || motionType === 'rush_water') {
+          playBattleSoundFx(motionType === 'rush_electric' ? 'beam' : 'earthquake');
+          const duration = 380;
+          const startTime = performance.now();
+          await new Promise(resolve => {
+            let doneTimer = setTimeout(() => { ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }, duration + 80);
+            function renderRush(t) {
+              const elapsed = t - startTime;
+              const progress = Math.min(1, Math.max(0, elapsed / duration));
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+              const curX = p1.x + (p2.x - p1.x) * progress;
+              const curY = p1.y + (p2.y - p1.y) * progress;
+
+              ctx.save();
+              ctx.shadowColor = colors.glow;
+              ctx.shadowBlur = 24;
+
+              // Aura sphere
+              ctx.fillStyle = colors.primary;
+              ctx.beginPath();
+              ctx.arc(curX, curY, 26 + Math.sin(progress * 12) * 4, 0, Math.PI * 2);
+              ctx.fill();
+
+              // Inner core
+              ctx.fillStyle = colors.secondary;
+              ctx.beginPath();
+              ctx.arc(curX, curY, 14, 0, Math.PI * 2);
+              ctx.fill();
+
+              // Trailing particles
+              ctx.strokeStyle = colors.secondary;
+              ctx.lineWidth = 3;
+              for (let i = 0; i < 4; i++) {
+                const ang = Math.PI + (Math.random() - 0.5) * 1.5;
+                const len = 20 + Math.random() * 30;
+                ctx.beginPath();
+                ctx.moveTo(curX, curY);
+                ctx.lineTo(curX + Math.cos(ang) * len, curY + Math.sin(ang) * len);
+                ctx.stroke();
+              }
+              ctx.restore();
+
+              if (progress < 1) requestAnimationFrame(renderRush);
+              else { clearTimeout(doneTimer); ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }
+            }
+            requestAnimationFrame(renderRush);
+          });
+        }
+
+        // --- 8. HEAVY TACKLE (10만마력, 몸통박치기, 이판사판태클, 사념의박치기 등: 소닉붐 충격파) ---
+        else if (motionType === 'heavy_tackle') {
+          playBattleSoundFx('hit_heavy');
+          const duration = 340;
+          const startTime = performance.now();
+          await new Promise(resolve => {
+            let doneTimer = setTimeout(() => { ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }, duration + 80);
+            function renderTackle(t) {
+              const elapsed = t - startTime;
+              const progress = Math.min(1, Math.max(0, elapsed / duration));
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+              const curX = p1.x + (p2.x - p1.x) * progress;
+              const curY = p1.y + (p2.y - p1.y) * progress;
+
+              ctx.save();
+              ctx.strokeStyle = colors.primary;
+              ctx.lineWidth = 4;
+              ctx.shadowColor = colors.glow;
+              ctx.shadowBlur = 18;
+              ctx.globalAlpha = Math.max(0, 1 - progress * 0.4);
+
+              // Sonic rings expanding behind attacker toward defender
+              for (let r = 1; r <= 3; r++) {
+                const ringProgress = Math.max(0, progress - r * 0.15);
+                if (ringProgress > 0) {
+                  ctx.beginPath();
+                  ctx.ellipse(p1.x + (p2.x - p1.x) * ringProgress, p1.y + (p2.y - p1.y) * ringProgress, 18 * r, 28 * r, 0, 0, Math.PI * 2);
+                  ctx.stroke();
+                }
+              }
+              ctx.restore();
+
+              if (progress < 1) requestAnimationFrame(renderTackle);
+              else { clearTimeout(doneTimer); ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }
+            }
+            requestAnimationFrame(renderTackle);
+          });
+        }
+
+        // --- 9. ICICLE (고드름떨구기, 얼음뭉치: 상공에서 떨어지는 대형 고드름 낙하) ---
+        else if (motionType === 'icicle') {
+          playBattleSoundFx('slash');
+          const duration = 440;
+          const startTime = performance.now();
+          const icicles = [
+            { x: p2.x - 22, startT: 0 },
+            { x: p2.x + 18, startT: 0.15 },
+            { x: p2.x - 4, startT: 0.3 }
+          ];
+          await new Promise(resolve => {
+            let doneTimer = setTimeout(() => { ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }, duration + 80);
+            function renderIcicles(t) {
+              const elapsed = t - startTime;
+              const progress = Math.min(1, Math.max(0, elapsed / duration));
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+              icicles.forEach(ic => {
+                if (progress >= ic.startT) {
+                  const subP = Math.min(1, (progress - ic.startT) / 0.45);
+                  const curY = (p2.y - 140) + 140 * subP;
+
+                  ctx.save();
+                  ctx.fillStyle = '#67e8f9';
+                  ctx.shadowColor = '#06b6d4';
+                  ctx.shadowBlur = 15;
+                  ctx.beginPath();
+                  ctx.moveTo(ic.x - 7, curY - 35);
+                  ctx.lineTo(ic.x + 7, curY - 35);
+                  ctx.lineTo(ic.x, curY);
+                  ctx.closePath();
+                  ctx.fill();
+
+                  // Inner ice shine
+                  ctx.fillStyle = '#ffffff';
+                  ctx.beginPath();
+                  ctx.moveTo(ic.x - 2, curY - 30);
+                  ctx.lineTo(ic.x + 2, curY - 30);
+                  ctx.lineTo(ic.x, curY - 5);
+                  ctx.closePath();
+                  ctx.fill();
+                  ctx.restore();
+                }
+              });
+
+              if (progress < 1) requestAnimationFrame(renderIcicles);
+              else { clearTimeout(doneTimer); ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }
+            }
+            requestAnimationFrame(renderIcicles);
+          });
+        }
+
+        // --- 10. POISON JAB (독찌르기, 더스트슈트: 독침 관통 및 맹독 기포 분출) ---
+        else if (motionType === 'poison_jab') {
+          playBattleSoundFx('slash');
+          const duration = 380;
+          const startTime = performance.now();
+          await new Promise(resolve => {
+            let doneTimer = setTimeout(() => { ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }, duration + 80);
+            function renderPoisonJab(t) {
+              const elapsed = t - startTime;
+              const progress = Math.min(1, Math.max(0, elapsed / duration));
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+              ctx.save();
+              ctx.shadowColor = '#a855f7';
+              ctx.shadowBlur = 20;
+
+              // Venom stabs
+              for (let i = 0; i < 3; i++) {
+                const stabP = Math.sin((progress + i * 0.2) * Math.PI);
+                ctx.strokeStyle = i % 2 === 0 ? '#9333ea' : '#c084fc';
+                ctx.lineWidth = 5;
+                ctx.beginPath();
+                ctx.moveTo(p1.x + (p2.x - p1.x) * 0.7, p2.y + (i - 1) * 16);
+                ctx.lineTo(p2.x + 25 * stabP, p2.y + (i - 1) * 16);
+                ctx.stroke();
+              }
+              ctx.restore();
+
+              if (progress < 1) requestAnimationFrame(renderPoisonJab);
+              else { clearTimeout(doneTimer); ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }
+            }
+            requestAnimationFrame(renderPoisonJab);
+          });
+        }
+
+        // --- 11. FAIRY PLAY (치근거리기: 핑크빛 만화풍 난투 구름 및 별/하트 이펙트) ---
+        else if (motionType === 'fairy_play') {
+          playBattleSoundFx('hit_normal');
+          const duration = 440;
+          const startTime = performance.now();
+          await new Promise(resolve => {
+            let doneTimer = setTimeout(() => { ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }, duration + 80);
+            function renderFairyPlay(t) {
+              const elapsed = t - startTime;
+              const progress = Math.min(1, Math.max(0, elapsed / duration));
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+              ctx.save();
+              ctx.shadowColor = '#f43f5e';
+              ctx.shadowBlur = 18;
+
+              // Cartoon dust clouds
+              for (let i = 0; i < 6; i++) {
+                const ang = (i / 6) * Math.PI * 2 + progress * 4;
+                const dist = 24 + Math.sin(progress * 10 + i) * 12;
+                ctx.fillStyle = i % 2 === 0 ? 'rgba(254, 205, 211, 0.7)' : 'rgba(244, 63, 94, 0.75)';
+                ctx.beginPath();
+                ctx.arc(p2.x + Math.cos(ang) * dist, p2.y + Math.sin(ang) * dist, Math.max(0.1, 14 - progress * 4), 0, Math.PI * 2);
+                ctx.fill();
+              }
+
+              // Floating starbursts
+              ctx.fillStyle = '#ffd700';
+              for (let j = 0; j < 4; j++) {
+                const sx = p2.x + Math.sin(progress * 8 + j) * 35;
+                const sy = p2.y + Math.cos(progress * 8 + j) * 30;
+                ctx.beginPath();
+                ctx.arc(sx, sy, 4, 0, Math.PI * 2);
+                ctx.fill();
+              }
+              ctx.restore();
+
+              if (progress < 1) requestAnimationFrame(renderFairyPlay);
+              else { clearTimeout(doneTimer); ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }
+            }
+            requestAnimationFrame(renderFairyPlay);
+          });
+        }
+
+        // --- 12. OUTRAGE (역린: 핏빛 용의 분노 오라와 3연속 붉은 참격) ---
+        else if (motionType === 'outrage') {
+          playBattleSoundFx('slash');
+          const duration = 440;
+          const startTime = performance.now();
+          await new Promise(resolve => {
+            let doneTimer = setTimeout(() => { ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }, duration + 80);
+            function renderOutrage(t) {
+              const elapsed = t - startTime;
+              const progress = Math.min(1, Math.max(0, elapsed / duration));
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+              ctx.save();
+              ctx.strokeStyle = '#dc2626';
+              ctx.lineWidth = 6;
+              ctx.lineCap = 'round';
+              ctx.shadowColor = '#ef4444';
+              ctx.shadowBlur = 24;
+
+              // 3 brutal staggered bloody claw slashes
+              for (let i = 0; i < 3; i++) {
+                const subP = Math.min(1, Math.max(0, (progress - i * 0.2) / 0.4));
+                if (subP > 0 && subP < 1) {
+                  const len = Math.sin(subP * Math.PI) * 65;
+                  const yOff = (i - 1) * 18;
+                  ctx.beginPath();
+                  ctx.moveTo(p2.x - len * 0.7, p2.y + yOff - len * 0.7);
+                  ctx.lineTo(p2.x + len * 0.7, p2.y + yOff + len * 0.7);
+                  ctx.stroke();
+                }
+              }
+              ctx.restore();
+
+              if (progress < 1) requestAnimationFrame(renderOutrage);
+              else { clearTimeout(doneTimer); ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }
+            }
+            requestAnimationFrame(renderOutrage);
+          });
+        }
+
+        // --- 13. DARK STRIKE (기습, 탁쳐서떨구기: 암흑 그림자 참격) ---
+        else if (motionType === 'dark_strike') {
+          playBattleSoundFx('slash');
+          const duration = 340;
+          const startTime = performance.now();
+          await new Promise(resolve => {
+            let doneTimer = setTimeout(() => { ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }, duration + 80);
+            function renderDarkStrike(t) {
+              const elapsed = t - startTime;
+              const progress = Math.min(1, Math.max(0, elapsed / duration));
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+              const slashLen = Math.sin(progress * Math.PI) * 80;
+              ctx.save();
+              ctx.strokeStyle = '#3b0764';
+              ctx.lineWidth = 7;
+              ctx.shadowColor = '#a855f7';
+              ctx.shadowBlur = 25;
+              ctx.beginPath();
+              ctx.moveTo(p2.x + slashLen * 0.7, p2.y - slashLen * 0.7);
+              ctx.lineTo(p2.x - slashLen * 0.7, p2.y + slashLen * 0.7);
+              ctx.stroke();
+
+              // Inner neon violet edge
+              ctx.strokeStyle = '#e9d5ff';
+              ctx.lineWidth = 2;
+              ctx.stroke();
+              ctx.restore();
+
+              if (progress < 1) requestAnimationFrame(renderDarkStrike);
+              else { clearTimeout(doneTimer); ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }
+            }
+            requestAnimationFrame(renderDarkStrike);
+          });
+        }
+
+        // --- 14. SONIC (하이퍼보이스, 벌레의야단법석: 동심원 진동 음파) ---
+        else if (motionType === 'sonic') {
+          playBattleSoundFx('beam');
+          const duration = 460;
+          const startTime = performance.now();
+          await new Promise(resolve => {
+            let doneTimer = setTimeout(() => { ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }, duration + 80);
+            function renderSonic(t) {
+              const elapsed = t - startTime;
+              const progress = Math.min(1, Math.max(0, elapsed / duration));
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+              ctx.save();
+              ctx.strokeStyle = colors.primary;
+              ctx.shadowColor = colors.glow;
+              ctx.shadowBlur = 18;
+
+              for (let i = 0; i < 4; i++) {
+                const ringP = Math.max(0, progress - i * 0.18);
+                if (ringP > 0) {
+                  const ringX = p1.x + (p2.x - p1.x) * ringP;
+                  const ringY = p1.y + (p2.y - p1.y) * ringP;
+                  ctx.lineWidth = Math.max(1, (1 - ringP) * 5);
+                  ctx.globalAlpha = Math.max(0, 1 - ringP);
+                  ctx.beginPath();
+                  ctx.arc(ringX, ringY, 18 + ringP * 45, 0, Math.PI * 2);
+                  ctx.stroke();
+                }
+              }
+              ctx.restore();
+
+              if (progress < 1) requestAnimationFrame(renderSonic);
+              else { clearTimeout(doneTimer); ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }
+            }
+            requestAnimationFrame(renderSonic);
+          });
+        }
+
+        // --- 15. PSYCHIC (사이코키네시스, 사이코쇼크: 시공간 왜곡 사이키델릭 소용돌이) ---
+        else if (motionType === 'psychic') {
+          playBattleSoundFx('beam');
+          const duration = 480;
+          const startTime = performance.now();
+          await new Promise(resolve => {
+            let doneTimer = setTimeout(() => { ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }, duration + 80);
+            function renderPsychic(t) {
+              const elapsed = t - startTime;
+              const progress = Math.min(1, Math.max(0, elapsed / duration));
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+              ctx.save();
+              ctx.shadowColor = '#ec4899';
+              ctx.shadowBlur = 20;
+
+              for (let i = 0; i < 3; i++) {
+                const rot = progress * Math.PI * 3 + i * (Math.PI / 3);
+                const rx = 35 + Math.sin(progress * Math.PI) * 20;
+                const ry = 18 + Math.sin(progress * Math.PI) * 10;
+                ctx.save();
+                ctx.translate(p2.x, p2.y);
+                ctx.rotate(rot);
+                ctx.strokeStyle = i % 2 === 0 ? '#ec4899' : '#f472b6';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.restore();
+              }
+              ctx.restore();
+
+              if (progress < 1) requestAnimationFrame(renderPsychic);
+              else { clearTimeout(doneTimer); ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }
+            }
+            requestAnimationFrame(renderPsychic);
+          });
+        }
+
+        // --- 16. MOONFORCE (문포스, 매지컬샤인: 천상의 보름달 및 무지개 프리즘 광선) ---
+        else if (motionType === 'moonforce') {
+          playBattleSoundFx('beam');
+          const duration = 480;
+          const startTime = performance.now();
+          await new Promise(resolve => {
+            let doneTimer = setTimeout(() => { ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }, duration + 80);
+            function renderMoonforce(t) {
+              const elapsed = t - startTime;
+              const progress = Math.min(1, Math.max(0, elapsed / duration));
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+              // Moon disc above attacker
+              ctx.save();
+              ctx.shadowColor = '#fbcfe8';
+              ctx.shadowBlur = 25;
+              ctx.fillStyle = 'rgba(255, 241, 242, 0.9)';
+              ctx.beginPath();
+              ctx.arc(p1.x, p1.y - 45, 24, 0, Math.PI * 2);
+              ctx.fill();
+
+              // Radiant rainbow starbeam
+              if (progress > 0.2) {
+                const beamP = (progress - 0.2) / 0.8;
+                ctx.strokeStyle = '#f43f5e';
+                ctx.lineWidth = Math.max(1, Math.sin(beamP * Math.PI) * 18);
+                ctx.beginPath();
+                ctx.moveTo(p1.x, p1.y - 45);
+                ctx.lineTo(p2.x, p2.y);
+                ctx.stroke();
+
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = Math.max(1, Math.sin(beamP * Math.PI) * 6);
+                ctx.stroke();
+              }
+              ctx.restore();
+
+              if (progress < 1) requestAnimationFrame(renderMoonforce);
+              else { clearTimeout(doneTimer); ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }
+            }
+            requestAnimationFrame(renderMoonforce);
+          });
+        }
+
+        // --- 17. DRAIN (기가드레인: 적에게서 에너지를 흡수하는 녹색 나선) ---
+        else if (motionType === 'drain') {
+          playBattleSoundFx('buff');
+          const duration = 500;
+          const startTime = performance.now();
+          await new Promise(resolve => {
+            let doneTimer = setTimeout(() => { ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }, duration + 80);
+            function renderDrain(t) {
+              const elapsed = t - startTime;
+              const progress = Math.min(1, Math.max(0, elapsed / duration));
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+              ctx.save();
+              ctx.shadowColor = '#22c55e';
+              ctx.shadowBlur = 15;
+              ctx.fillStyle = '#4ade80';
+
+              for (let i = 0; i < 5; i++) {
+                const orbP = Math.min(1, Math.max(0, (progress - i * 0.12) / 0.6));
+                if (orbP > 0 && orbP < 1) {
+                  // Flows from defender (p2) to attacker (p1)
+                  const ox = p2.x + (p1.x - p2.x) * orbP;
+                  const oy = p2.y + (p1.y - p2.y) * orbP + Math.sin(orbP * Math.PI * 4 + i) * 20;
+                  ctx.beginPath();
+                  ctx.arc(ox, oy, 6, 0, Math.PI * 2);
+                  ctx.fill();
+                }
+              }
+              ctx.restore();
+
+              if (progress < 1) requestAnimationFrame(renderDrain);
+              else { clearTimeout(doneTimer); ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }
+            }
+            requestAnimationFrame(renderDrain);
+          });
+        }
+
+        // --- 18. GEM (파워젬: 보석 다각 파편 회전 및 폭발) ---
+        else if (motionType === 'gem') {
+          playBattleSoundFx('projectile');
+          const duration = 440;
+          const startTime = performance.now();
+          await new Promise(resolve => {
+            let doneTimer = setTimeout(() => { ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }, duration + 80);
+            function renderGem(t) {
+              const elapsed = t - startTime;
+              const progress = Math.min(1, Math.max(0, elapsed / duration));
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+              ctx.save();
+              ctx.shadowColor = '#eab308';
+              ctx.shadowBlur = 18;
+
+              for (let i = 0; i < 5; i++) {
+                const ang = (i / 5) * Math.PI * 2 + progress * 6;
+                const dist = (1 - progress) * 50;
+                const gx = p2.x + Math.cos(ang) * dist;
+                const gy = p2.y + Math.sin(ang) * dist;
+
+                ctx.fillStyle = ['#ef4444', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6'][i];
+                ctx.beginPath();
+                ctx.arc(gx, gy, 7, 0, Math.PI * 2);
+                ctx.fill();
+              }
+              ctx.restore();
+
+              if (progress < 1) requestAnimationFrame(renderGem);
+              else { clearTimeout(doneTimer); ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }
+            }
+            requestAnimationFrame(renderGem);
+          });
+        }
+
+        // --- 19. CONTINUOUS STREAM (화염방사, 하이드로펌프, 눈보라, 오물폭탄: 안전 알파 클램핑 적용) ---
+        else if (motionType === 'stream') {
+          playBattleSoundFx('projectile');
+          const duration = 480;
+          const startTime = performance.now();
+          const droplets = [];
+
+          await new Promise(resolve => {
+            let doneTimer = setTimeout(() => { ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }, duration + 80);
+            function renderStream(t) {
+              const elapsed = t - startTime;
+              const progress = Math.min(1, Math.max(0, elapsed / duration));
+
+              if (progress < 0.8) {
+                for (let i = 0; i < 3; i++) {
+                  droplets.push({
+                    prog: 0,
+                    speed: 0.035 + Math.random() * 0.02,
+                    spreadY: (Math.random() - 0.5) * 40,
+                    size: 6 + Math.random() * 7
+                  });
+                }
+              }
+
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+              droplets.forEach(d => {
+                d.prog += d.speed;
+                if (d.prog <= 1) {
+                  const dx = p1.x + (p2.x - p1.x) * d.prog;
+                  const dy = p1.y + (p2.y - p1.y) * d.prog + d.spreadY * Math.sin(Math.max(0, Math.min(1, d.prog)) * Math.PI);
+                  const safeAlpha = Math.max(0, Math.min(1, Math.sin(Math.max(0, Math.min(1, d.prog)) * Math.PI) * 0.9));
+                  ctx.save();
+                  ctx.globalAlpha = safeAlpha;
+                  ctx.fillStyle = colors.primary;
+                  ctx.shadowColor = colors.glow;
+                  ctx.shadowBlur = 12;
+                  ctx.beginPath();
+                  ctx.arc(dx, dy, Math.max(0.1, d.size), 0, Math.PI * 2);
+                  ctx.fill();
+                  ctx.restore();
+                }
+              });
+
+              if (elapsed < duration) requestAnimationFrame(renderStream);
+              else { clearTimeout(doneTimer); ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }
+            }
+            requestAnimationFrame(renderStream);
+          });
+        }
+
+        // --- 20. BEAM / CANNON (10만볼트, 번개, 냉동빔, 솔라빔, 러스터캐논 등: 고출력 광선) ---
+        else if (motionType === 'beam') {
+          playBattleSoundFx('beam');
+          const duration = 440;
+          const startTime = performance.now();
+
+          await new Promise(resolve => {
+            let doneTimer = setTimeout(() => { ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }, duration + 80);
+            function renderBeam(t) {
+              const elapsed = t - startTime;
+              const progress = Math.min(1, Math.max(0, elapsed / duration));
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+              const pulse = Math.sin(progress * Math.PI);
+              const beamWidth = 24 * pulse;
+
+              ctx.save();
+              ctx.shadowColor = colors.glow;
+              ctx.shadowBlur = 25;
+
+              // Outer beam
+              ctx.strokeStyle = colors.primary;
+              ctx.lineWidth = Math.max(1, beamWidth);
+              ctx.lineCap = 'round';
+              ctx.beginPath();
+              ctx.moveTo(p1.x, p1.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.stroke();
+
+              // Inner laser core
+              ctx.strokeStyle = '#ffffff';
+              ctx.lineWidth = Math.max(1, beamWidth * 0.4);
+              ctx.beginPath();
+              ctx.moveTo(p1.x, p1.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.stroke();
+
+              // Electric zigzag arcs
+              for (let j = 0; j < 2; j++) {
+                ctx.strokeStyle = colors.secondary;
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(p1.x, p1.y);
+                const segments = 6;
+                for (let s = 1; s < segments; s++) {
+                  const segP = s / segments;
+                  const sx = p1.x + (p2.x - p1.x) * segP + (Math.random() - 0.5) * 20;
+                  const sy = p1.y + (p2.y - p1.y) * segP + (Math.random() - 0.5) * 20;
+                  ctx.lineTo(sx, sy);
+                }
+                ctx.lineTo(p2.x, p2.y);
+                ctx.stroke();
+              }
+              ctx.restore();
+
+              if (elapsed < duration) requestAnimationFrame(renderBeam);
+              else { clearTimeout(doneTimer); ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }
+            }
+            requestAnimationFrame(renderBeam);
+          });
+        }
+
+        // --- 21. GROUND (지진, 스톤샤워, 대지의힘: 대지 충격파 및 암석 기둥) ---
+        else if (motionType === 'ground') {
+          playBattleSoundFx('earthquake');
+          const duration = 500;
+          const startTime = performance.now();
+
+          await new Promise(resolve => {
+            let doneTimer = setTimeout(() => { ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }, duration + 80);
+            function renderGround(t) {
+              const elapsed = t - startTime;
+              const progress = Math.min(1, Math.max(0, elapsed / duration));
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+              const curWaveX = p1.x + (p2.x - p1.x) * progress;
+              const curWaveY = p1.y + 40 + (p2.y - p1.y) * progress;
+
+              ctx.save();
+              ctx.strokeStyle = colors.primary;
+              ctx.lineWidth = 4;
+              ctx.shadowColor = colors.glow;
+              ctx.shadowBlur = 15;
+              ctx.globalAlpha = Math.max(0, Math.min(1, Math.sin(progress * Math.PI)));
+              ctx.beginPath();
+              ctx.ellipse(curWaveX, curWaveY, Math.max(1, 35 * progress), Math.max(1, 12 * progress), 0, 0, Math.PI * 2);
+              ctx.stroke();
+
+              // Earth pillars erupting under defender
+              if (progress > 0.45) {
+                const rockP = (progress - 0.45) / 0.55;
+                ctx.fillStyle = colors.secondary;
+                for (let r = 0; r < 4; r++) {
+                  const rx = p2.x + (r - 1.5) * 16;
+                  const ry = p2.y + 40;
+                  const h = Math.sin(rockP * Math.PI) * (30 + r * 6);
+                  ctx.beginPath();
+                  ctx.moveTo(rx - 8, ry);
+                  ctx.lineTo(rx, ry - h);
+                  ctx.lineTo(rx + 8, ry);
+                  ctx.closePath();
+                  ctx.fill();
+                }
+              }
+              ctx.restore();
+
+              if (elapsed < duration) requestAnimationFrame(renderGround);
+              else { clearTimeout(doneTimer); ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }
+            }
+            requestAnimationFrame(renderGround);
+          });
+        }
+
+        // --- 22. SLASH (스톤에지, 시저크로스, 섀도크루, 리프블레이드, 에어슬래시 등: 쾌속 참격) ---
+        else if (motionType === 'slash') {
+          playBattleSoundFx('slash');
+          const duration = 280;
+          const startTime = performance.now();
+
+          await new Promise(resolve => {
+            let doneTimer = setTimeout(() => { ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }, duration + 80);
+            function renderSlash(t) {
+              const elapsed = t - startTime;
+              const progress = Math.min(1, Math.max(0, elapsed / duration));
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+              const slashLen = 70 * Math.sin(progress * Math.PI);
+              ctx.save();
+              ctx.strokeStyle = colors.primary;
+              ctx.shadowColor = colors.glow;
+              ctx.shadowBlur = 20;
+              ctx.lineWidth = 5;
+              ctx.lineCap = 'round';
+
+              // Slash 1: Diagonal \
+              ctx.beginPath();
+              ctx.moveTo(p2.x - slashLen * 0.7, p2.y - slashLen * 0.7);
+              ctx.lineTo(p2.x + slashLen * 0.7, p2.y + slashLen * 0.7);
+              ctx.stroke();
+
+              // Slash 2: Diagonal /
+              if (progress > 0.2) {
+                ctx.strokeStyle = colors.secondary;
+                ctx.beginPath();
+                ctx.moveTo(p2.x + slashLen * 0.7, p2.y - slashLen * 0.7);
+                ctx.lineTo(p2.x - slashLen * 0.7, p2.y + slashLen * 0.7);
+                ctx.stroke();
+              }
+              ctx.restore();
+
+              if (elapsed < duration) requestAnimationFrame(renderSlash);
+              else { clearTimeout(doneTimer); ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }
+            }
+            requestAnimationFrame(renderSlash);
+          });
+        }
+
+        // --- 23. PROJECTILE (에너지볼, 섀도볼: 궤적 투사체) ---
+        else {
+          playBattleSoundFx('projectile');
+          const duration = 360;
+          const startTime = performance.now();
+          const trail = [];
+
+          await new Promise(resolve => {
+            let doneTimer = setTimeout(() => { ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }, duration + 80);
+            function renderProj(t) {
+              const elapsed = t - startTime;
+              const progress = Math.min(1, Math.max(0, elapsed / duration));
+              const easeP = progress * progress;
+              const curX = p1.x + (p2.x - p1.x) * easeP;
+              const curY = p1.y + (p2.y - p1.y) * easeP - Math.sin(progress * Math.PI) * 45;
+
+              trail.push({ x: curX, y: curY, alpha: 1, radius: 10 + Math.random() * 4 });
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+              trail.forEach(pt => {
+                pt.alpha *= 0.82;
+                if (pt.alpha > 0.05) {
+                  ctx.save();
+                  ctx.globalAlpha = Math.max(0, Math.min(1, pt.alpha * 0.7));
+                  ctx.fillStyle = colors.secondary;
+                  ctx.shadowColor = colors.glow;
+                  ctx.shadowBlur = 12;
+                  ctx.beginPath();
+                  ctx.arc(pt.x, pt.y, Math.max(0.1, pt.radius * pt.alpha), 0, Math.PI * 2);
+                  ctx.fill();
+                  ctx.restore();
+                }
+              });
+
+              ctx.save();
+              ctx.fillStyle = colors.primary;
+              ctx.shadowColor = colors.glow;
+              ctx.shadowBlur = 20;
+              ctx.beginPath();
+              ctx.arc(curX, curY, 14, 0, Math.PI * 2);
+              ctx.fill();
+              ctx.fillStyle = '#ffffff';
+              ctx.beginPath();
+              ctx.arc(curX, curY, 7, 0, Math.PI * 2);
+              ctx.fill();
+              ctx.restore();
+
+              if (progress < 1) requestAnimationFrame(renderProj);
+              else { clearTimeout(doneTimer); ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }
+            }
+            requestAnimationFrame(renderProj);
+          });
+        }
+      } catch (err) {
+        console.error('Error during move VFX rendering:', err);
+      } finally {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+
+      // ==========================================
+      // UNIVERSAL IMPACT EVENT (Sparks, Shake, Audio)
+      // ==========================================
+      const isHeavy = hitResult.isCrit || hitResult.typeMult >= 2.0 || hitResult.finalDamage >= 60;
+      playBattleSoundFx(isHeavy ? 'hit_heavy' : 'hit_normal');
+
+      // Defender Sprite Hit Reaction
+      defenderSpr.classList.remove('poke-sprite-damaged', 'poke-sprite-crit');
+      void defenderSpr.offsetWidth;
+      defenderSpr.classList.add(hitResult.isCrit ? 'poke-sprite-crit' : 'poke-sprite-damaged');
+      setTimeout(() => {
+        defenderSpr.classList.remove('poke-sprite-damaged', 'poke-sprite-crit');
+      }, 550);
+
+      // Arena Screen Shake
+      if (arenaBox) {
+        arenaBox.classList.remove('arena-shake-light', 'arena-shake-heavy');
+        void arenaBox.offsetWidth;
+        arenaBox.classList.add(isHeavy ? 'arena-shake-heavy' : 'arena-shake-light');
+        setTimeout(() => {
+          arenaBox.classList.remove('arena-shake-light', 'arena-shake-heavy');
+        }, isHeavy ? 600 : 400);
+      }
+
+      // Explosive Hit Sparks
+      const sparkDuration = 320;
+      const sparkStart = performance.now();
+      const sparkCount = isHeavy ? 28 : 18;
+      const sparks = Array.from({ length: sparkCount }, () => {
+        const angle = Math.random() * Math.PI * 2;
+        const spd = 2.5 + Math.random() * (isHeavy ? 6.5 : 4.0);
+        return {
+          x: p2.x,
+          y: p2.y,
+          vx: Math.cos(angle) * spd,
+          vy: Math.sin(angle) * spd,
+          size: 3 + Math.random() * 4,
+          color: Math.random() > 0.4 ? colors.primary : colors.secondary
+        };
+      });
+
+      await new Promise(resolve => {
+        let doneTimer = setTimeout(() => { ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }, sparkDuration + 80);
+        function renderSparks(t) {
+          const elapsed = t - sparkStart;
+          const progress = Math.min(1, Math.max(0, elapsed / sparkDuration));
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+          const ringR = Math.max(0.1, progress * (isHeavy ? 60 : 40));
+          ctx.save();
+          ctx.strokeStyle = colors.primary;
+          ctx.shadowColor = colors.glow;
+          ctx.shadowBlur = 15;
+          ctx.lineWidth = Math.max(1, (1 - progress) * 6);
+          ctx.globalAlpha = Math.max(0, Math.min(1, 1 - progress));
+          ctx.beginPath();
+          ctx.arc(p2.x, p2.y, ringR, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
+
+          sparks.forEach(s => {
+            s.x += s.vx;
+            s.y += s.vy;
+            const curR = Math.max(0.1, s.size * (1 - progress * 0.7));
+            ctx.save();
+            ctx.globalAlpha = Math.max(0, Math.min(1, 1 - progress));
+            ctx.fillStyle = s.color;
+            ctx.shadowColor = colors.glow;
+            ctx.shadowBlur = 10;
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, curR, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+          });
+
+          if (elapsed < sparkDuration) requestAnimationFrame(renderSparks);
+          else { clearTimeout(doneTimer); ctx.clearRect(0, 0, canvas.width, canvas.height); resolve(); }
+        }
+        requestAnimationFrame(renderSparks);
+      });
+    }
+
 
     async function executeSingleAttack(actor, move, isMega = false) {
       const isStreamer = actor === 'streamer';
@@ -13671,6 +15528,46 @@
       const defender = defenderSlot.pokemon;
       const attackerSpr = isStreamer ? document.getElementById('arenaStreamerSprite') : document.getElementById('arenaViewersSprite');
       const defenderSpr = isStreamer ? document.getElementById('arenaViewersSprite') : document.getElementById('arenaStreamerSprite');
+
+      // 1. Flinch (풀죽음) Check
+      if (attackerSlot.flinched) {
+        attackerSlot.flinched = false;
+        setBattleDialogue(`💫 <b>${attacker.name}</b>은(는) 풀이 죽어 기술을 쓸 수 없었다!`);
+        await new Promise(r => setTimeout(r, 800));
+        return false;
+      }
+
+      // 2. Freeze (얼음) Check
+      if (attackerSlot.status === 'frz') {
+        if (Math.random() < 0.2) {
+          attackerSlot.status = null;
+          updateArenaActivePokemonUI();
+          setBattleDialogue(`❄️ <b>${attacker.name}</b>의 얼음이 녹았다!`);
+          await new Promise(r => setTimeout(r, 600));
+        } else {
+          setBattleDialogue(`❄️ <b>${attacker.name}</b>은(는) 꽁꽁 얼어붙어 움직일 수 없다!`);
+          await new Promise(r => setTimeout(r, 800));
+          return false;
+        }
+      }
+
+      // 3. Paralysis (마비 25% 행동 불가) Check
+      if (attackerSlot.status === 'par' && Math.random() < 0.25) {
+        setBattleDialogue(`⚡ <b>${attacker.name}</b>은(는) 몸이 저려 기술을 쓸 수 없었다!`);
+        await new Promise(r => setTimeout(r, 800));
+        return false;
+      }
+
+      // 4. Sucker Punch (기습: 상대가 공격기를 쓰지 않으면 실패) Check
+      if (move.name === '기습') {
+        const opponentAct = isStreamer ? pokeBattleState.viewersAction : pokeBattleState.streamerAction;
+        const isOpponentAttacking = opponentAct && opponentAct.type === 'move' && opponentAct.move && opponentAct.move.category !== '변화';
+        if (!isOpponentAttacking) {
+          setBattleDialogue(`💨 하지만 기습은 실패했다!`);
+          await new Promise(r => setTimeout(r, 800));
+          return false;
+        }
+      }
 
       // Choice Item Lock
       if (attackerSlot.item === 'choice_band' || attackerSlot.item === 'choice_specs' || attackerSlot.item === 'choice_scarf') {
@@ -13688,77 +15585,180 @@
         }
       }
 
-      // 1. Announce attack
+      // Announce attack
       setBattleDialogue(`${isStreamer ? '👑' : '👥'} <b>${attacker.name}</b>의 <b>[${move.name}]</b>! ${ppRemainingText}`);
-      if (attackerSpr) {
-        attackerSpr.classList.add('poke-sprite-attacker');
-        setTimeout(() => attackerSpr.classList.remove('poke-sprite-attacker'), 500);
+
+      // Accuracy check (Struggle never misses)
+      const hit = isStruggle || (Math.random() * 100 <= move.acc);
+
+      // Status / Buff moves check
+      const isStatusMove = !isStruggle && (move.category === '변화' || move.power === 0);
+      const isSpecial = move.category === '특수';
+
+      // Damage calculation
+      let isCrit = false;
+      let typeMult = 1.0;
+      let finalDamage = 0;
+
+      if (hit && !isStatusMove) {
+        let atkStat = isSpecial ? attacker.stats.spa : attacker.stats.atk;
+        let defStat = isSpecial ? defender.stats.spd : defender.stats.def;
+
+        // Rank modifiers
+        if (isSpecial) {
+          if (attackerSlot.rankSpA) atkStat = getPokeStatWithRank(atkStat, attackerSlot.rankSpA);
+          if (defenderSlot.rankSpD) defStat = getPokeStatWithRank(defStat, defenderSlot.rankSpD);
+        } else {
+          if (attackerSlot.rankAtk) atkStat = getPokeStatWithRank(atkStat, attackerSlot.rankAtk);
+          if (defenderSlot.rankDef) defStat = getPokeStatWithRank(defStat, defenderSlot.rankDef);
+          // Burn halves physical attack power!
+          if (attackerSlot.status === 'brn') atkStat = Math.floor(atkStat * 0.5);
+        }
+
+        // Item offensive buffs
+        if (!isSpecial && attackerSlot.item === 'choice_band') atkStat = Math.floor(atkStat * 1.5);
+        if (isSpecial && attackerSlot.item === 'choice_specs') atkStat = Math.floor(atkStat * 1.5);
+
+        // Item defensive buffs
+        if (isSpecial && defenderSlot.item === 'assault_vest') defStat = Math.floor(defStat * 1.5);
+        if (defenderSlot.item === 'eviolite' && defender.name === '피카츄') {
+          defStat = Math.floor(defStat * 1.5);
+        }
+
+        // STAB (자속 보정)
+        const stab = (!isStruggle && attacker.types.includes(move.type)) ? 1.5 : 1.0;
+
+        // Type Effectiveness (Struggle deals neutral damage)
+        if (!isStruggle) {
+          defender.types.forEach(defType => {
+            if (pokeTypeChart[move.type] && pokeTypeChart[move.type][defType] !== undefined) {
+              typeMult *= pokeTypeChart[move.type][defType];
+            }
+          });
+        }
+
+        // Item: Expert Belt
+        if (!isStruggle && attackerSlot.item === 'expert_belt' && typeMult >= 2.0) {
+          typeMult *= 1.2;
+        }
+
+        // Critical Hit (High critical moves like Stone Edge, Shadow Claw have higher rate)
+        const isHighCritMove = (move.name === '스톤에지' || move.name === '섀도크루');
+        let critChance = 0.0625;
+        if (attackerSlot.item === 'scope_lens') critChance = 0.125;
+        if (isHighCritMove) critChance = (attackerSlot.item === 'scope_lens') ? 0.5 : 0.25;
+
+        isCrit = Math.random() < critChance;
+        const critMult = isCrit ? 1.5 : 1.0;
+        if (isCrit) pokeBattleState.stats.crits++;
+        if (typeMult >= 2.0) pokeBattleState.stats.superEffective++;
+
+        // Life Orb bonus
+        const itemDmgMult = attackerSlot.item === 'life_orb' ? 1.3 : 1.0;
+
+        const randomFactor = (Math.floor(Math.random() * 16) + 85) / 100;
+        let baseDmg = Math.floor((((2 * 50 / 5 + 2) * move.power * (atkStat / Math.max(1, defStat))) / 50) + 2);
+        finalDamage = Math.max(1, Math.floor(baseDmg * stab * typeMult * critMult * itemDmgMult * randomFactor));
       }
 
-      await new Promise(r => setTimeout(r, 600));
+      // Execute Motion & Visual FX Animation
+      await playPokeMoveAnimation(actor, move, { hit, isCrit, typeMult, finalDamage });
 
-      // 2. Accuracy check (Struggle never misses)
-      const hit = isStruggle || (Math.random() * 100 <= move.acc);
       if (!hit) {
         setBattleDialogue(`💨 하지만 공격은 빗나갔다!`);
+        await new Promise(r => setTimeout(r, 800));
         return false;
       }
 
-      // 3. Status / Buff moves
-      if (!isStruggle && (move.category === '변화' || move.power === 0)) {
-        attackerSlot.rankAtk += 1;
-        attackerSlot.rankSpA += 1;
-        setBattleDialogue(`✨ <b>${attacker.name}</b>의 공격력과 특수공격력이 상승했다!`);
-        return false;
-      }
-
-      // 4. Damage calculation
-      const isSpecial = move.category === '특수';
-      let atkStat = isSpecial ? attacker.stats.spa : attacker.stats.atk;
-      let defStat = isSpecial ? defender.stats.spd : defender.stats.def;
-
-      // Item offensive buffs
-      if (!isSpecial && attackerSlot.item === 'choice_band') atkStat = Math.floor(atkStat * 1.5);
-      if (isSpecial && attackerSlot.item === 'choice_specs') atkStat = Math.floor(atkStat * 1.5);
-      if (attackerSlot.rankAtk > 0) atkStat = Math.floor(atkStat * (1 + 0.5 * attackerSlot.rankAtk));
-
-      // Item defensive buffs
-      if (isSpecial && defenderSlot.item === 'assault_vest') defStat = Math.floor(defStat * 1.5);
-      if (defenderSlot.item === 'eviolite' && defender.name === '피카츄') {
-        defStat = Math.floor(defStat * 1.5);
-      }
-
-      // STAB (자속 보정)
-      const stab = (!isStruggle && attacker.types.includes(move.type)) ? 1.5 : 1.0;
-
-      // Type Effectiveness (Struggle deals neutral damage)
-      let typeMult = 1.0;
-      if (!isStruggle) {
-        defender.types.forEach(defType => {
-          if (pokeTypeChart[move.type] && pokeTypeChart[move.type][defType] !== undefined) {
-            typeMult *= pokeTypeChart[move.type][defType];
+      // ==========================================
+      // AUTHENTIC STATUS & BUFF MOVES RESOLUTION
+      // ==========================================
+      if (isStatusMove) {
+        if (move.name === '도깨비불') {
+          if (defender.types.includes('불꽃')) {
+            setBattleDialogue(`💨 불꽃 타입인 <b>${defender.name}</b>에게는 화상이 통하지 않는다!`);
+          } else if (defenderSlot.status) {
+            setBattleDialogue(`💨 <b>${defender.name}</b>은(는) 이미 상태이상에 걸려 있다!`);
+          } else {
+            defenderSlot.status = 'brn';
+            updateArenaActivePokemonUI();
+            setBattleDialogue(`🔥 <b>${defender.name}</b>은(는) 화상을 입었다! (물리공격력 50% 반감 및 지속 피해)`);
           }
-        });
+        } else if (move.name === '전기자석파') {
+          if (defender.types.includes('전기') || defender.types.includes('땅')) {
+            setBattleDialogue(`💨 <b>${defender.name}</b>에게는 전기가 통하지 않는다!`);
+          } else if (defenderSlot.status) {
+            setBattleDialogue(`💨 <b>${defender.name}</b>은(는) 이미 상태이상에 걸려 있다!`);
+          } else {
+            defenderSlot.status = 'par';
+            updateArenaActivePokemonUI();
+            setBattleDialogue(`⚡ <b>${defender.name}</b>은(는) 마비되었다! (스피드 50% 반감 및 25% 확률 행동불가)`);
+          }
+        } else if (move.name === '맹독') {
+          if (defender.types.includes('독') || defender.types.includes('강철')) {
+            setBattleDialogue(`💨 <b>${defender.name}</b>에게는 맹독이 통하지 않는다!`);
+          } else if (defenderSlot.status) {
+            setBattleDialogue(`💨 <b>${defender.name}</b>은(는) 이미 상태이상에 걸려 있다!`);
+          } else {
+            defenderSlot.status = 'tox';
+            defenderSlot.toxicTurns = 1;
+            updateArenaActivePokemonUI();
+            setBattleDialogue(`🟣 <b>${defender.name}</b>은(는) 맹독에 걸렸다! (매 턴 누적 독 피해)`);
+          }
+        } else if (move.name === '날개쉬기' || move.name === '달의불빛') {
+          const heal = Math.floor(attackerSlot.maxHP * 0.5);
+          attackerSlot.currentHP = Math.min(attackerSlot.maxHP, attackerSlot.currentHP + heal);
+          updateArenaHPBars();
+          setBattleDialogue(`💚 <b>${attacker.name}</b>은(는) 체력을 ${heal} 회복했다!`);
+        } else if (move.name === '칼춤') {
+          attackerSlot.rankAtk = Math.min(6, (attackerSlot.rankAtk || 0) + 2);
+          updateArenaActivePokemonUI();
+          setBattleDialogue(`⚔️ <b>${attacker.name}</b>의 공격력이 크게 상승했다! (+2랭크)`);
+        } else if (move.name === '철벽') {
+          attackerSlot.rankDef = Math.min(6, (attackerSlot.rankDef || 0) + 2);
+          updateArenaActivePokemonUI();
+          setBattleDialogue(`🛡️ <b>${attacker.name}</b>의 방어력이 크게 상승했다! (+2랭크)`);
+        } else if (move.name === '록커트') {
+          attackerSlot.rankSpe = Math.min(6, (attackerSlot.rankSpe || 0) + 2);
+          updateArenaActivePokemonUI();
+          setBattleDialogue(`⚡ <b>${attacker.name}</b>의 스피드가 크게 상승했다! (+2랭크)`);
+        } else if (move.name === '용의춤') {
+          attackerSlot.rankAtk = Math.min(6, (attackerSlot.rankAtk || 0) + 1);
+          attackerSlot.rankSpe = Math.min(6, (attackerSlot.rankSpe || 0) + 1);
+          updateArenaActivePokemonUI();
+          setBattleDialogue(`🐉 <b>${attacker.name}</b>의 공격력과 스피드가 상승했다! (+1랭크)`);
+        } else if (move.name === '나비춤') {
+          attackerSlot.rankSpA = Math.min(6, (attackerSlot.rankSpA || 0) + 1);
+          attackerSlot.rankSpD = Math.min(6, (attackerSlot.rankSpD || 0) + 1);
+          attackerSlot.rankSpe = Math.min(6, (attackerSlot.rankSpe || 0) + 1);
+          updateArenaActivePokemonUI();
+          setBattleDialogue(`🦋 <b>${attacker.name}</b>의 특수공격, 특수방어, 스피드가 상승했다! (+1랭크)`);
+        } else if (move.name === '명상') {
+          attackerSlot.rankSpA = Math.min(6, (attackerSlot.rankSpA || 0) + 1);
+          attackerSlot.rankSpD = Math.min(6, (attackerSlot.rankSpD || 0) + 1);
+          updateArenaActivePokemonUI();
+          setBattleDialogue(`🧘 <b>${attacker.name}</b>의 특수공격과 특수방어가 상승했다! (+1랭크)`);
+        } else if (move.name === '벌크업') {
+          attackerSlot.rankAtk = Math.min(6, (attackerSlot.rankAtk || 0) + 1);
+          attackerSlot.rankDef = Math.min(6, (attackerSlot.rankDef || 0) + 1);
+          updateArenaActivePokemonUI();
+          setBattleDialogue(`💪 <b>${attacker.name}</b>의 공격력과 방어력이 상승했다! (+1랭크)`);
+        } else if (move.name === '스텔스록') {
+          if (isStreamer) pokeBattleState.viewersStealthRock = true;
+          else pokeBattleState.streamerStealthRock = true;
+          setBattleDialogue(`🪨 상대 진영 주위에 날카로운 바위(스텔스록)가 흩뿌려졌다!`);
+        } else if (move.name === '길동무') {
+          attackerSlot.destinyBond = true;
+          setBattleDialogue(`👻 <b>${attacker.name}</b>은(는) 상대를 길동무로 삼으려 하고 있다!`);
+        } else {
+          attackerSlot.rankAtk = Math.min(6, (attackerSlot.rankAtk || 0) + 1);
+          attackerSlot.rankSpA = Math.min(6, (attackerSlot.rankSpA || 0) + 1);
+          updateArenaActivePokemonUI();
+          setBattleDialogue(`✨ <b>${attacker.name}</b>의 랭크가 상승했다!`);
+        }
+        await new Promise(r => setTimeout(r, 800));
+        return false;
       }
-
-      // Item: Expert Belt
-      if (!isStruggle && attackerSlot.item === 'expert_belt' && typeMult >= 2.0) {
-        typeMult *= 1.2;
-      }
-
-      // Critical Hit
-      const critChance = attackerSlot.item === 'scope_lens' ? 0.125 : 0.0625;
-      const isCrit = Math.random() < critChance;
-      const critMult = isCrit ? 1.5 : 1.0;
-      if (isCrit) pokeBattleState.stats.crits++;
-      if (typeMult >= 2.0) pokeBattleState.stats.superEffective++;
-
-      // Life Orb bonus
-      const itemDmgMult = attackerSlot.item === 'life_orb' ? 1.3 : 1.0;
-
-      const randomFactor = (Math.floor(Math.random() * 16) + 85) / 100;
-      let baseDmg = Math.floor((((2 * 50 / 5 + 2) * move.power * (atkStat / Math.max(1, defStat))) / 50) + 2);
-      let finalDamage = Math.max(1, Math.floor(baseDmg * stab * typeMult * critMult * itemDmgMult * randomFactor));
 
       // Apply damage
       const prevHP = defenderSlot.currentHP;
@@ -13784,12 +15784,6 @@
         pokeBattleState.stats.viewersDamage += (prevHP - remainingHP);
       }
 
-      // Defender hit visual animation
-      if (defenderSpr) {
-        defenderSpr.classList.add('poke-sprite-defender');
-        setTimeout(() => defenderSpr.classList.remove('poke-sprite-defender'), 500);
-      }
-
       updateArenaHPBars();
 
       // Dialogue feedback
@@ -13802,7 +15796,34 @@
       setBattleDialogue(feedback);
       await new Promise(r => setTimeout(r, 800));
 
-      // Struggle Recoil Damage (25% max HP)
+      // 1. Drain Leech (기가드레인, 드레인펀치: 데미지의 50% 흡수)
+      if ((move.name === '기가드레인' || move.name === '드레인펀치') && attackerSlot.currentHP > 0) {
+        const drainHeal = Math.max(1, Math.floor(finalDamage * 0.5));
+        attackerSlot.currentHP = Math.min(attackerSlot.maxHP, attackerSlot.currentHP + drainHeal);
+        updateArenaHPBars();
+        setBattleDialogue(`💚 <b>${attacker.name}</b>은(는) 상대의 체력을 흡수했다! (+${drainHeal})`);
+        await new Promise(r => setTimeout(r, 600));
+      }
+
+      // 2. Recoil Moves (플레어드라이브, 볼트태클, 브레이브버드, 이판사판태클: 데미지의 33% 반동)
+      if ((move.name === '플레어드라이브' || move.name === '볼트태클' || move.name === '브레이브버드' || move.name === '이판사판태클') && attackerSlot.currentHP > 0) {
+        const recoilDmg = Math.max(1, Math.floor(finalDamage / 3));
+        attackerSlot.currentHP = Math.max(0, attackerSlot.currentHP - recoilDmg);
+        updateArenaHPBars();
+        setBattleDialogue(`💥 <b>${attacker.name}</b>은(는) 반동으로 상처를 입었다! (-${recoilDmg})`);
+        await new Promise(r => setTimeout(r, 600));
+      }
+
+      // 3. Self Stat Drops (인파이트: 방어/특방 1랭크 하락)
+      if (move.name === '인파이트' && attackerSlot.currentHP > 0) {
+        attackerSlot.rankDef = Math.max(-6, (attackerSlot.rankDef || 0) - 1);
+        attackerSlot.rankSpD = Math.max(-6, (attackerSlot.rankSpD || 0) - 1);
+        updateArenaActivePokemonUI();
+        setBattleDialogue(`💥 <b>${attacker.name}</b>의 방어와 특수방어가 떨어졌다! (-1랭크)`);
+        await new Promise(r => setTimeout(r, 600));
+      }
+
+      // 4. Struggle Recoil Damage (25% max HP)
       if (isStruggle && attackerSlot.currentHP > 0) {
         const struggleRecoil = Math.max(1, Math.floor(attackerSlot.maxHP * 0.25));
         attackerSlot.currentHP = Math.max(0, attackerSlot.currentHP - struggleRecoil);
@@ -13811,8 +15832,7 @@
         await new Promise(r => setTimeout(r, 600));
       }
 
-      // Post-hit Item Effects
-      // 1. Life Orb recoil (HP 10%)
+      // 5. Post-hit Item Effects
       if (attackerSlot.item === 'life_orb' && attackerSlot.currentHP > 0) {
         const recoil = Math.max(1, Math.floor(attackerSlot.maxHP * 0.1));
         attackerSlot.currentHP = Math.max(0, attackerSlot.currentHP - recoil);
@@ -13821,7 +15841,6 @@
         await new Promise(r => setTimeout(r, 600));
       }
 
-      // 2. Rocky Helmet (울퉁불퉁멧 1/6 recoil on physical)
       if (!isSpecial && defenderSlot.item === 'rocky_helmet' && attackerSlot.currentHP > 0) {
         const recoil = Math.max(1, Math.floor(attackerSlot.maxHP / 6));
         attackerSlot.currentHP = Math.max(0, attackerSlot.currentHP - recoil);
@@ -13830,7 +15849,6 @@
         await new Promise(r => setTimeout(r, 600));
       }
 
-      // 3. Weakness Policy (약점보험 +2 Atk/+2 SpA on super-effective)
       if (typeMult >= 2.0 && defenderSlot.item === 'weakness_policy' && !defenderSlot.itemUsed && defenderSlot.currentHP > 0) {
         defenderSlot.itemUsed = true;
         defenderSlot.rankAtk += 2;
@@ -13839,7 +15857,6 @@
         await new Promise(r => setTimeout(r, 800));
       }
 
-      // 4. Sitrus Berry Heal
       if (defenderSlot.item === 'sitrus_berry' && !defenderSlot.itemUsed && defenderSlot.currentHP > 0 && defenderSlot.currentHP <= defenderSlot.maxHP * 0.5) {
         const heal = Math.max(1, Math.round(defenderSlot.maxHP * 0.25));
         defenderSlot.currentHP = Math.min(defenderSlot.maxHP, defenderSlot.currentHP + heal);
@@ -13849,15 +15866,84 @@
         await new Promise(r => setTimeout(r, 800));
       }
 
-      // Faint Check
+      // 6. Secondary Status / Debuff Effects on Defender (if alive)
+      if (defenderSlot.currentHP > 0 && !defenderSlot.fainted) {
+        // Burn 10%
+        if ((move.name === '화염방사' || move.name === '불대문자' || move.name === '플레어드라이브') && !defender.types.includes('불꽃') && !defenderSlot.status && Math.random() < 0.1) {
+          defenderSlot.status = 'brn';
+          updateArenaActivePokemonUI();
+          setBattleDialogue(`🔥 <b>${defender.name}</b>은(는) 화상을 입었다!`);
+          await new Promise(r => setTimeout(r, 600));
+        }
+        // Paralysis
+        const parChance = (move.name === '번개') ? 0.3 : ((move.name === '10만볼트' || move.name === '볼트태클') ? 0.1 : 0);
+        if (parChance > 0 && !defender.types.includes('전기') && !defender.types.includes('땅') && !defenderSlot.status && Math.random() < parChance) {
+          defenderSlot.status = 'par';
+          updateArenaActivePokemonUI();
+          setBattleDialogue(`⚡ <b>${defender.name}</b>은(는) 마비되었다!`);
+          await new Promise(r => setTimeout(r, 600));
+        }
+        // Poison 30%
+        if ((move.name === '오물폭탄' || move.name === '독찌르기' || move.name === '더스트슈트') && !defender.types.includes('독') && !defender.types.includes('강철') && !defenderSlot.status && Math.random() < 0.3) {
+          defenderSlot.status = 'psn';
+          updateArenaActivePokemonUI();
+          setBattleDialogue(`🟣 <b>${defender.name}</b>은(는) 독에 걸렸다!`);
+          await new Promise(r => setTimeout(r, 600));
+        }
+        // Freeze 10%
+        if ((move.name === '냉동빔' || move.name === '눈보라') && !defender.types.includes('얼음') && !defenderSlot.status && Math.random() < 0.1) {
+          defenderSlot.status = 'frz';
+          updateArenaActivePokemonUI();
+          setBattleDialogue(`❄️ <b>${defender.name}</b>은(는) 꽁꽁 얼어붙었다!`);
+          await new Promise(r => setTimeout(r, 600));
+        }
+        // Stat drops
+        if (move.name === '깨물어부수기' && Math.random() < 0.2) {
+          defenderSlot.rankDef = Math.max(-6, (defenderSlot.rankDef || 0) - 1);
+          updateArenaActivePokemonUI();
+          setBattleDialogue(`🛡️ <b>${defender.name}</b>의 방어력이 떨어졌다! (-1랭크)`);
+          await new Promise(r => setTimeout(r, 600));
+        }
+        if ((move.name === '섀도볼' || move.name === '에너지볼' || move.name === '대지의힘') && Math.random() < (move.name === '섀도볼' ? 0.2 : 0.1)) {
+          defenderSlot.rankSpD = Math.max(-6, (defenderSlot.rankSpD || 0) - 1);
+          updateArenaActivePokemonUI();
+          setBattleDialogue(`🔮 <b>${defender.name}</b>의 특수방어력이 떨어졌다! (-1랭크)`);
+          await new Promise(r => setTimeout(r, 600));
+        }
+        if (move.name === '문포스' && Math.random() < 0.3) {
+          defenderSlot.rankSpA = Math.max(-6, (defenderSlot.rankSpA || 0) - 1);
+          updateArenaActivePokemonUI();
+          setBattleDialogue(`✨ <b>${defender.name}</b>의 특수공격력이 떨어졌다! (-1랭크)`);
+          await new Promise(r => setTimeout(r, 600));
+        }
+        // Flinch
+        const flinchChance = (move.name === '악의파동') ? 0.2 : ((move.name === '에어슬래시' || move.name === '아이언헤드' || move.name === '스톤샤워') ? 0.3 : 0);
+        if (flinchChance > 0 && Math.random() < flinchChance) {
+          defenderSlot.flinched = true;
+        }
+      }
+
+      // 7. Faint Check & Destiny Bond Trigger
       if (defenderSlot.currentHP <= 0) {
         defenderSlot.fainted = true;
         if (defenderSpr) defenderSpr.classList.add('poke-sprite-fainted');
         renderArenaTeamBallsHUD();
         await new Promise(r => setTimeout(r, 800));
         setBattleDialogue(`💀 <b>${defender.name}</b>은(는) 쓰러졌다!`);
+
+        // Destiny Bond (길동무 동귀어진)
+        if (defenderSlot.destinyBond && attackerSlot.currentHP > 0) {
+          attackerSlot.currentHP = 0;
+          attackerSlot.fainted = true;
+          if (attackerSpr) attackerSpr.classList.add('poke-sprite-fainted');
+          renderArenaTeamBallsHUD();
+          updateArenaHPBars();
+          await new Promise(r => setTimeout(r, 800));
+          setBattleDialogue(`👻 <b>${defender.name}</b>의 길동무로 인해 <b>${attacker.name}</b>도 함께 쓰러졌다!`);
+        }
         return true;
       }
+
       if (attackerSlot.currentHP <= 0) {
         attackerSlot.fainted = true;
         if (attackerSpr) attackerSpr.classList.add('poke-sprite-fainted');
@@ -13871,16 +15957,79 @@
     }
 
     async function handleRoundEndEffects() {
-      // Leftovers & Black Sludge recovery
       const sSlot = streamerTeam[streamerActiveIdx];
       const vSlot = viewersTeam[viewersActiveIdx];
 
+      // Burn / Poison / Toxic damage
+      const slots = [
+        { slot: sSlot, side: 'streamer' },
+        { slot: vSlot, side: 'viewers' }
+      ];
+
+      for (const item of slots) {
+        const sl = item.slot;
+        if (sl.fainted || sl.currentHP <= 0) continue;
+
+        // Burn damage: 1/16 max HP
+        if (sl.status === 'brn') {
+          const dmg = Math.max(1, Math.floor(sl.maxHP / 16));
+          sl.currentHP = Math.max(0, sl.currentHP - dmg);
+          updateArenaHPBars();
+          setBattleDialogue(`🔥 <b>${sl.pokemon.name}</b>은(는) 화상 데미지를 입었다! (-${dmg})`);
+          await new Promise(r => setTimeout(r, 600));
+          if (sl.currentHP <= 0) {
+            sl.fainted = true;
+            renderArenaTeamBallsHUD();
+            setBattleDialogue(`💀 <b>${sl.pokemon.name}</b>은(는) 화상으로 쓰러졌다!`);
+            await new Promise(r => setTimeout(r, 800));
+            await handleFaintPhase(item.side);
+            return;
+          }
+        }
+
+        // Poison damage: 1/8 max HP
+        if (sl.status === 'psn') {
+          const dmg = Math.max(1, Math.floor(sl.maxHP / 8));
+          sl.currentHP = Math.max(0, sl.currentHP - dmg);
+          updateArenaHPBars();
+          setBattleDialogue(`🟣 <b>${sl.pokemon.name}</b>은(는) 독 데미지를 입었다! (-${dmg})`);
+          await new Promise(r => setTimeout(r, 600));
+          if (sl.currentHP <= 0) {
+            sl.fainted = true;
+            renderArenaTeamBallsHUD();
+            setBattleDialogue(`💀 <b>${sl.pokemon.name}</b>은(는) 독으로 쓰러졌다!`);
+            await new Promise(r => setTimeout(r, 800));
+            await handleFaintPhase(item.side);
+            return;
+          }
+        }
+
+        // Toxic damage: cumulative 1/16 per turn
+        if (sl.status === 'tox') {
+          sl.toxicTurns = (sl.toxicTurns || 1) + 1;
+          const dmg = Math.max(1, Math.floor(sl.maxHP * Math.min(8, sl.toxicTurns) / 16));
+          sl.currentHP = Math.max(0, sl.currentHP - dmg);
+          updateArenaHPBars();
+          setBattleDialogue(`💀 <b>${sl.pokemon.name}</b>은(는) 맹독 데미지를 입었다! (-${dmg})`);
+          await new Promise(r => setTimeout(r, 600));
+          if (sl.currentHP <= 0) {
+            sl.fainted = true;
+            renderArenaTeamBallsHUD();
+            setBattleDialogue(`💀 <b>${sl.pokemon.name}</b>은(는) 맹독으로 쓰러졌다!`);
+            await new Promise(r => setTimeout(r, 800));
+            await handleFaintPhase(item.side);
+            return;
+          }
+        }
+      }
+
+      // Leftovers & Black Sludge recovery
       if (sSlot.item === 'leftovers' && sSlot.currentHP > 0 && sSlot.currentHP < sSlot.maxHP) {
         const heal = Math.max(1, Math.round(sSlot.maxHP / 16));
         sSlot.currentHP = Math.min(sSlot.maxHP, sSlot.currentHP + heal);
         updateArenaHPBars();
         setBattleDialogue(`🍎 <b>${sSlot.pokemon.name}</b>은(는) 먹어남은음식으로 체력을 조금 회복했다!`);
-        await new Promise(r => setTimeout(r, 700));
+        await new Promise(r => setTimeout(r, 600));
       }
 
       if (vSlot.item === 'leftovers' && vSlot.currentHP > 0 && vSlot.currentHP < vSlot.maxHP) {
@@ -13888,14 +16037,21 @@
         vSlot.currentHP = Math.min(vSlot.maxHP, vSlot.currentHP + heal);
         updateArenaHPBars();
         setBattleDialogue(`🍎 <b>${vSlot.pokemon.name}</b>은(는) 먹어남은음식으로 체력을 조금 회복했다!`);
-        await new Promise(r => setTimeout(r, 700));
+        await new Promise(r => setTimeout(r, 600));
       }
+
+      // Reset 1-turn effects
+      sSlot.destinyBond = false;
+      sSlot.flinched = false;
+      vSlot.destinyBond = false;
+      vSlot.flinched = false;
 
       pokeBattleState.round++;
       pokeBattleState.stats.totalRounds++;
       updateArenaHPBars();
       startSimultaneousPokeTurn();
     }
+
 
     // --- Faint Phase & Replacement Selection ---
     async function handleFaintPhase(faintedSide) {
@@ -14237,17 +16393,27 @@
       // Reset arena sprites & animations
       const sSpr = document.getElementById('arenaStreamerSprite');
       if (sSpr) {
-        sSpr.classList.remove('poke-sprite-fainted', 'poke-sprite-attacker', 'poke-sprite-damaged');
+        sSpr.classList.remove('poke-sprite-fainted', 'poke-sprite-attacker', 'poke-sprite-damaged', 'poke-sprite-crit', 'poke-lunge-right', 'poke-lunge-left', 'poke-hop');
         sSpr.style.opacity = '1';
         sSpr.style.transform = 'none';
         sSpr.style.filter = 'none';
       }
       const vSpr = document.getElementById('arenaViewersSprite');
       if (vSpr) {
-        vSpr.classList.remove('poke-sprite-fainted', 'poke-sprite-attacker', 'poke-sprite-damaged');
+        vSpr.classList.remove('poke-sprite-fainted', 'poke-sprite-attacker', 'poke-sprite-damaged', 'poke-sprite-crit', 'poke-lunge-right', 'poke-lunge-left', 'poke-hop');
         vSpr.style.opacity = '1';
         vSpr.style.transform = 'none';
         vSpr.style.filter = 'none';
+      }
+
+      const arenaBox = document.getElementById('pokeArenaContainer');
+      if (arenaBox) {
+        arenaBox.classList.remove('arena-shake-light', 'arena-shake-heavy');
+      }
+      const vfxCanvas = document.getElementById('pokeBattleVfxCanvas');
+      if (vfxCanvas) {
+        const vfxCtx = vfxCanvas.getContext('2d');
+        if (vfxCtx) vfxCtx.clearRect(0, 0, vfxCanvas.width, vfxCanvas.height);
       }
 
       document.getElementById('pokeBattleArenaStage').style.display = 'none';
