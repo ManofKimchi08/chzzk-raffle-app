@@ -162,10 +162,10 @@ class ChzzkProxyHandler(http.server.SimpleHTTPRequestHandler):
 
                 chat_cid = content_obj.get('chatChannelId')
                 status = content_obj.get('status', 'CLOSE')
-                is_live = (status == 'OPEN')
+                is_live = (status == 'OPEN') or (content_obj.get('openLive') is True) or (content_obj.get('channel', {}).get('openLive') is True)
                 live_title = content_obj.get('liveTitle', '')
                 channel_name = content_obj.get('channel', {}).get('channelName', '')
-                concurrent_user_count = content_obj.get('concurrentUserCount', 0)
+                concurrent_user_count = int(content_obj.get('concurrentUserCount', 0) or 0)
                 category = content_obj.get('liveCategoryValue', '')
                 open_date = content_obj.get('openDate', '')
                 channel_image = content_obj.get('channel', {}).get('channelImageUrl', '')

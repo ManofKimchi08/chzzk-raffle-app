@@ -1,7 +1,7 @@
-# 🎮 치지직 대규모 시청자 추첨 & 룰렛 & 실시간 투표 & 포켓몬 배틀/퀴즈 쇼 플랫폼 (Chzzk Interactive Hub) v4.8.3
+# 🎮 치지직 대규모 시청자 추첨 & 룰렛 & 실시간 투표 & 포켓몬 배틀/퀴즈 쇼 플랫폼 (Chzzk Interactive Hub) v4.8.4
 
 ![Chzzk WebSocket Live](https://img.shields.io/badge/Chzzk-WebSocket%20Live-00ffa3?style=for-the-badge&logo=naver)
-![Version](https://img.shields.io/badge/Release-v4.8.3-purple?style=for-the-badge)
+![Version](https://img.shields.io/badge/Release-v4.8.4-purple?style=for-the-badge)
 ![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![HTML5 Canvas](https://img.shields.io/badge/HTML5-Canvas%20%26%20Audio-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
@@ -24,6 +24,29 @@
 | **06. 빌드, 패키징 및 배포 가이드** | Windows 단일 실행 파일(`치지직추첨기.exe`) PyInstaller 빌드, 프로세스 락 해제, 소스 실행 | [📦 빌드 가이드 바로가기](docs/06_build_and_packaging_guide_ko.md) |
 | **07. v4.8.0 릴리즈 노트** | v4.8.0 신규 기능, UI/UX 개선 내역, 버그 수정 및 안정화 패치 요약 | [🚀 릴리즈 노트 바로가기](docs/07_release_notes_v4.8.0_ko.md) |
 | **08. v4.8.3 릴리즈 노트** | 스트리머 비밀 조작 모드, 자동 블라인드, 단축키, 취소 토글, 클릭 안정성 패치 | [🚀 v4.8.3 릴리즈 노트 바로가기](docs/08_release_notes_v4.8.3_ko.md) |
+| **09. v4.8.4 릴리즈 노트** | 실시간 채팅창 오버레이(메인 밀림 0px 방지), 채팅창 닉네임 원클릭 시청자 채팅 추적(TTS) | [🚀 v4.8.4 릴리즈 노트 바로가기](docs/09_release_notes_v4.8.4_ko.md) |
+
+---
+
+## 🌟 v4.8.4 주요 신규 및 개선 사항 (What's New in v4.8.4)
+
+### 1. 💬 실시간 채팅창 오버레이 (Floating Overlay Drawer) 전면 개편
+- **메인 컨텐츠 밀림/축소 0px 방지**: 채팅창 개폐 시 메인 컨텐츠(포켓몬 배틀, 룰렛, 추첨기 등)가 옆으로 밀리거나 찌그러지지 않고 **100% 정중앙 풀 와이드 원본 크기를 완벽 유지**합니다.
+- **하드웨어 가속 슬라이드 인**: 화면 우측 상단 레이어로 자연스럽게 떠오르는 오버레이 구조로 전환되었습니다.
+- **일체형 플로팅 토글 탭 핸들**: 화면 우측 고정 토글 버튼이 채팅창 열림 시 **채팅창 좌측 테두리에 일체형 닫기 핸들(`✕ 닫기`)**로 매끄럽게 결합 연동됩니다.
+
+### 2. 👆 채팅창 닉네임 원클릭 시청자 채팅 내역 & 실시간 추적 모달 연동
+- **채팅창 닉네임 원클릭 오픈**: 실시간 도킹 채팅창, 모바일 채팅창, 팝아웃 새 창에서 시청자 닉네임을 클릭하면 해당 시청자의 **실시간 채팅 내역 & 추적 모달(`userChatModal`)**이 즉시 열립니다.
+- **스마트 3단계 시청자 매칭**: 고유 UID 1순위 매칭 ➡️ 닉네임 2순위 역추적 ➡️ 미등록 시청자 임시 프로필 자동 생성을 지원하여 100% 정확하게 대상을 식별합니다.
+- **실시간 라이브 추적 & TTS 음성 낭독**: 모달이 열려 있는 동안 해당 시청자가 새 채팅을 입력하면 `🔴 LIVE NEW` 뱃지와 함께 실시간 자동 추가되며, TTS 음성으로 즉시 낭독됩니다.
+
+### 3. 🎨 닉네임 시각 피드백 (Hover Affordance) & 역할별 테마 컬러
+- 닉네임 호버 시 부드러운 네온 하이라이트 알약(Pill) 배경, 밑줄 효과, 손가락 커서(`cursor: pointer`) 및 안내 툴팁 제공.
+- 일반 시청자(네온 그린), 구독자(바이올렛), 치즈 후원자(골드) 등 역할별 고유 테마 컬러 연동.
+
+### 4. 🛠️ 방송 라이브(LIVE) 상태 동기화 & 방송 변경 모달 중복 버그 수정
+- 연결 중(`connecting`) 직전 수집된 방송 라이브 정보가 지워지던 문제를 해결하여 접속 즉시 `🔴 LIVE`, 시청자 수, 프로필 아바타 정상 표시.
+- `[방송 변경]` 클릭 시 구버전 모달 중복 출력을 제거하고 최신 웰컴 검색 화면으로 단독 오픈 일원화.
 
 ---
 

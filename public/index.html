@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>치지직 대규모 시청자 추첨 & 룰렛 & 포켓몬 배틀 v4.8.3 | Chzzk Mega Raffle & Pokemon Battle</title>
+  <title>치지직 대규모 시청자 추첨 & 룰렛 & 포켓몬 배틀 v4.8.4 | Chzzk Mega Raffle & Pokemon Battle</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -27,6 +27,7 @@
       --border-color: #232a3b;
       --danger: #ff4757;
       --warning: #ffa502;
+      --chat-sidebar-w: 390px;
     }
 
     * {
@@ -272,6 +273,12 @@
     .btn-chat-toggle:hover {
       background: #334155;
       border-color: rgba(255, 255, 255, 0.2);
+    }
+    .btn-chat-toggle.active {
+      background: rgba(0, 255, 163, 0.18);
+      border-color: var(--chzzk-green);
+      color: var(--chzzk-green);
+      box-shadow: 0 0 14px rgba(0, 255, 163, 0.25);
     }
 
     .chat-badge {
@@ -967,6 +974,15 @@
       font-weight: 700;
       color: #fff;
       margin-right: 6px;
+      cursor: pointer;
+      border-radius: 4px;
+      padding: 1px 4px;
+      transition: all 0.15s ease;
+    }
+    .chat-nick:hover {
+      background: rgba(0, 255, 163, 0.15);
+      color: var(--chzzk-green);
+      text-decoration: underline;
     }
 
     .chat-msg {
@@ -2331,49 +2347,50 @@
     }
 
     /* ========================================================= */
-    /* 💬 NEW: Docked Split Chat Sidebar (상시 분할 실시간 채팅창) */
+    /* 💬 Overlay Floating Chat Sidebar (오버레이 플로팅 실시간 채팅창) */
     /* ========================================================= */
     .app-main-layout {
-      display: flex;
-      gap: 20px;
-      align-items: flex-start;
       width: 100%;
       position: relative;
+      display: block;
     }
     .app-main-content {
-      flex: 1;
+      width: 100%;
       min-width: 0;
-      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .docked-chat-sidebar {
-      width: 380px;
-      min-width: 380px;
-      max-width: 420px;
-      height: calc(100vh - 170px);
-      min-height: 680px;
-      position: sticky;
-      top: 15px;
-      background: rgba(14, 19, 29, 0.96);
-      border: 1.5px solid rgba(0, 255, 163, 0.25);
-      border-radius: 14px;
+      width: var(--chat-sidebar-w, 390px);
+      min-width: 0;
+      max-width: 100vw;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(12, 17, 26, 0.97);
+      border-left: 1.5px solid rgba(0, 255, 163, 0.35);
+      border-top: none;
+      border-right: none;
+      border-bottom: none;
+      border-radius: 18px 0 0 18px;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 255, 163, 0.05);
-      backdrop-filter: blur(14px);
+      box-shadow: -12px 0 45px rgba(0, 0, 0, 0.85), 0 0 35px rgba(0, 255, 163, 0.12);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
       overflow: hidden;
-      transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-      z-index: 20;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s ease, visibility 0.3s;
+      z-index: 1050;
+      transform: translateX(0);
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
     }
     .app-main-layout.sidebar-collapsed .docked-chat-sidebar {
-      width: 0 !important;
-      min-width: 0 !important;
-      max-width: 0 !important;
-      margin: 0 !important;
-      padding: 0 !important;
-      border: none !important;
+      transform: translateX(100%);
       opacity: 0;
+      visibility: hidden;
       pointer-events: none;
-      transform: translateX(40px);
     }
     .chat-sidebar-header {
       padding: 12px 14px;
@@ -2525,12 +2542,32 @@
       font-weight: 800;
       color: #fff;
       font-size: 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      transition: all 0.15s ease;
+      border-radius: 4px;
+      padding: 1px 4px;
+      margin-left: -4px;
+    }
+    .docked-chat-nick:hover {
+      background: rgba(0, 255, 163, 0.15);
+      color: var(--chzzk-green) !important;
+      text-decoration: underline;
     }
     .docked-chat-nick.sub {
       color: #a855f7;
     }
+    .docked-chat-nick.sub:hover {
+      background: rgba(168, 85, 247, 0.18);
+      color: #c084fc !important;
+    }
     .docked-chat-nick.donor {
       color: #ffd700;
+    }
+    .docked-chat-nick.donor:hover {
+      background: rgba(255, 215, 0, 0.18);
+      color: #ffe066 !important;
     }
     .docked-chat-time {
       font-size: 10px;
@@ -2593,7 +2630,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Floating Chat Toggle Tab (4배 확대 & 동일 위치 열기/닫기 지원) */
+    /* Floating Chat Toggle Tab (화면 우측 고정 탭 & 동일 위치 열기/닫기 지원) */
     .floating-chat-tab-btn {
       position: fixed;
       right: 0;
@@ -2617,8 +2654,8 @@
       min-height: 155px;
       box-shadow: -6px 0 24px rgba(0, 255, 163, 0.3), 0 8px 24px rgba(0, 0, 0, 0.6);
       backdrop-filter: blur(12px);
-      z-index: 100;
-      transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 1060;
+      transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1), background 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
       user-select: none;
     }
     .floating-chat-tab-btn:hover {
@@ -2627,6 +2664,7 @@
       padding-left: 18px;
     }
     .floating-chat-tab-btn.is-open {
+      right: var(--chat-sidebar-w, 390px);
       border-color: rgba(255, 107, 129, 0.85);
       background: linear-gradient(135deg, rgba(30, 18, 24, 0.96), rgba(16, 8, 12, 0.98));
       box-shadow: -6px 0 24px rgba(255, 107, 129, 0.35), 0 8px 24px rgba(0, 0, 0, 0.6);
@@ -2665,21 +2703,21 @@
       box-shadow: 0 2px 8px rgba(0, 255, 163, 0.4);
     }
 
-    @media (max-width: 1180px) {
-      .docked-chat-sidebar {
-        width: 320px;
-        min-width: 320px;
+    @media (max-width: 1200px) {
+      :root {
+        --chat-sidebar-w: 340px;
       }
     }
-    @media (max-width: 980px) {
-      .app-main-layout {
-        flex-direction: column;
+    @media (max-width: 768px) {
+      :root {
+        --chat-sidebar-w: 100vw;
       }
       .docked-chat-sidebar {
-        width: 100%;
-        min-width: 100%;
-        position: static;
-        height: 500px;
+        border-radius: 0;
+        border-left: none;
+      }
+      .floating-chat-tab-btn.is-open {
+        display: none !important;
       }
     }
 
@@ -5458,7 +5496,7 @@
       <div class="modal-footer" style="margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
         <div style="font-size: 13px; color: var(--text-sub); display: flex; align-items: center; gap: 8px; font-weight: 600;">
           <span class="live-dot" style="background: var(--chzzk-green); width: 9px; height: 9px;"></span>
-          <span>당첨자가 방송 채팅을 입력하면 창에 실시간으로 자동 추가됩니다.</span>
+          <span>해당 시청자가 방송 채팅을 입력하면 창에 실시간으로 자동 추가됩니다.</span>
         </div>
         <button type="button" id="closeUserChatModalBottomBtn" class="btn btn-secondary" style="padding: 10px 24px; font-size: 14px; font-weight: 800; border-radius: 8px;">닫기</button>
       </div>
@@ -5772,12 +5810,11 @@
     // 🗂️ MODAL & DRAWER HANDLERS (A안)
     // ==========================================
     function openConnectModal() {
-      connectionModal.classList.add('active');
+      openChangeChannelScreen();
     }
     function closeConnectModal() {
       connectionModal.classList.remove('active');
     }
-    openConnectModalBtn.addEventListener('click', openConnectModal);
     closeConnectModalBtn.addEventListener('click', closeConnectModal);
     connectModalCancelBtn.addEventListener('click', closeConnectModal);
 
@@ -6101,10 +6138,24 @@
         connectBtnLabel.innerText = '방송 변경';
         disconnectBtn.style.display = 'inline-flex';
         if (liveData) {
-          updateLiveStatusUI(liveData.isLive, liveData.channelName, liveData.liveTitle, liveData.concurrentUserCount, liveData.channelImageUrl);
+          updateLiveStatusUI(
+            liveData.isLive !== undefined ? liveData.isLive : isChannelLive,
+            liveData.channelName || currentChannelName,
+            liveData.liveTitle !== undefined ? liveData.liveTitle : currentLiveTitle,
+            liveData.concurrentUserCount !== undefined ? liveData.concurrentUserCount : currentViewerCount,
+            liveData.channelImageUrl || currentChannelImageUrl
+          );
         } else {
           updateLiveStatusUI(isChannelLive, currentChannelName, currentLiveTitle, currentViewerCount, currentChannelImageUrl);
         }
+      } else if (status === 'connecting') {
+        isConnected = false;
+        connectBtnLabel.innerText = '연결 중...';
+        disconnectBtn.style.display = 'none';
+        statusText.innerText = text;
+        statusLiveBadge.style.display = 'none';
+        statusViewerInfo.style.display = 'none';
+        if (drawerLiveBadge) drawerLiveBadge.style.display = 'none';
       } else {
         isConnected = false;
         connectBtnLabel.innerText = '방송 연결';
@@ -6114,6 +6165,9 @@
         statusViewerInfo.style.display = 'none';
         if (drawerLiveBadge) drawerLiveBadge.style.display = 'none';
         currentChannelImageUrl = '';
+        isChannelLive = false;
+        currentLiveTitle = '';
+        currentViewerCount = 0;
         updateStreamerProfileUI();
         updateLiveStatusUI(false, '', '', 0, '');
       }
@@ -6428,13 +6482,16 @@
 
     function selectSearchStreamer(channelId, channelName, avatarUrl, isLive) {
       currentChannelId = channelId;
+      if (channelName && channelName !== '입력한 방송') currentChannelName = channelName;
+      if (avatarUrl) currentChannelImageUrl = avatarUrl;
+      if (isLive !== undefined && isLive !== null) isChannelLive = !!isLive;
       const mInput = document.getElementById('channelInput');
       const qInput = document.getElementById('quickChannelInput');
       if (mInput) mInput.value = channelId;
       if (qInput) qInput.value = channelId;
 
       enterWorkspace();
-      showToast(`📡 ${channelName} 방송에 연결을 시작합니다...`, '🚀');
+      showToast(`📡 ${currentChannelName} 방송에 연결을 시작합니다...`, '🚀');
 
       isManualDisconnect = false;
       reconnectAttempts = 0;
@@ -6459,6 +6516,8 @@
     }
 
     function openChangeChannelScreen() {
+      const connModal = document.getElementById('connectionModal');
+      if (connModal) connModal.classList.remove('active');
       const welcome = document.getElementById('welcomeLandingScreen');
       const workspace = document.getElementById('appWorkspaceArea');
       const backBtn = document.getElementById('welcomeBackToWorkspaceBtn');
@@ -6578,14 +6637,6 @@
       openChangeChannelScreen();
     }
 
-    function disconnectBroadcast() {
-      disconnectBtn.click();
-      const barDisc = document.getElementById('broadcastBarDisconnected');
-      const barConn = document.getElementById('broadcastBarConnected');
-      if (barDisc) barDisc.style.display = 'block';
-      if (barConn) barConn.style.display = 'none';
-      openChangeChannelScreen();
-    }
 
     // Connect Entry
     if (connectBtn) {
@@ -6714,7 +6765,8 @@
                 isLive: isChannelLive,
                 channelName: currentChannelName,
                 liveTitle: currentLiveTitle,
-                concurrentUserCount: currentViewerCount
+                concurrentUserCount: currentViewerCount,
+                channelImageUrl: currentChannelImageUrl
               });
               reconnectAttempts = 0;
             }
@@ -6747,31 +6799,44 @@
       };
     }
 
-    disconnectBtn.addEventListener('click', () => {
+    function disconnectBroadcast() {
       isManualDisconnect = true;
-      if (ws) ws.close();
+      if (ws) {
+        try { ws.close(); } catch (e) {}
+      }
       if (pingInterval) clearInterval(pingInterval);
       if (liveStatusPollingInterval) clearInterval(liveStatusPollingInterval);
       setStatus('disconnected', '방송 미연결');
+      const barDisc = document.getElementById('broadcastBarDisconnected');
+      const barConn = document.getElementById('broadcastBarConnected');
+      if (barDisc) barDisc.style.display = 'block';
+      if (barConn) barConn.style.display = 'none';
+      openChangeChannelScreen();
+    }
+
+    disconnectBtn.addEventListener('click', () => {
+      disconnectBroadcast();
     });
 
     function startLiveStatusPolling() {
       if (liveStatusPollingInterval) clearInterval(liveStatusPollingInterval);
-      liveStatusPollingInterval = setInterval(async () => {
-        if (!isConnected || isManualDisconnect) return;
+      const poll = async () => {
+        if (!isConnected || isManualDisconnect || !currentChannelId) return;
         try {
-          const nidAuth = (document.getElementById('nidAuthInput')?.value || localStorage.getItem('chzzk_nid_aut') || '').trim();
-          const nidSes = (document.getElementById('nidSesInput')?.value || localStorage.getItem('chzzk_nid_ses') || '').trim();
+          const nidAuth = (document.getElementById('welcomeNidAuthInput')?.value || document.getElementById('quickNidAuthInput')?.value || document.getElementById('nidAuthInput')?.value || localStorage.getItem('chzzk_nid_aut') || '').trim();
+          const nidSes = (document.getElementById('welcomeNidSesInput')?.value || document.getElementById('quickNidSesInput')?.value || document.getElementById('nidSesInput')?.value || localStorage.getItem('chzzk_nid_ses') || '').trim();
           let apiUrl = `/api/chzzk/?channelId=${encodeURIComponent(currentChannelId)}`;
           if (nidAuth) apiUrl += `&nidAuth=${encodeURIComponent(nidAuth)}`;
           if (nidSes) apiUrl += `&nidSes=${encodeURIComponent(nidSes)}`;
           const res = await fetch(apiUrl);
           const data = await res.json();
-          if (data) {
+          if (data && !data.error) {
             updateLiveStatusUI(data.isLive, data.channelName, data.liveTitle, data.concurrentUserCount, data.channelImageUrl);
           }
         } catch (e) {}
-      }, 20000);
+      };
+      liveStatusPollingInterval = setInterval(poll, 15000);
+      setTimeout(poll, 2500);
     }
 
     // Donator Level Parser
@@ -6895,7 +6960,7 @@
         handleLivePollDonation(nickname, msgText, uid, donationInfo.payAmount, now);
       }
 
-      addChatToFeed(nickname, msgText, now, isSubscriber, isDonator, donationInfo.isDonation ? donationInfo.payAmount : 0);
+      addChatToFeed(nickname, msgText, now, isSubscriber, isDonator, donationInfo.isDonation ? donationInfo.payAmount : 0, uid);
       const quickChatCountEl = document.getElementById('quickCollectedChatCount');
       if (quickChatCountEl) quickChatCountEl.innerText = chatLogCount.toLocaleString();
     }
@@ -7052,6 +7117,15 @@
         if (tabText) tabText.innerText = '닫기';
         if (badge) badge.style.display = 'none';
       }
+
+      const openDrawerBtn = document.getElementById('openChatDrawerBtn');
+      if (openDrawerBtn) {
+        if (isCollapsed) {
+          openDrawerBtn.classList.remove('active');
+        } else {
+          openDrawerBtn.classList.add('active');
+        }
+      }
     }
 
     function initDockedChatSidebar() {
@@ -7207,7 +7281,8 @@
             .header { padding: 10px 14px; background: #121826; border-radius: 8px; font-weight: 800; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border: 1px solid #232a3b; }
             #feed { display: flex; flex-direction: column; gap: 6px; }
             .item { padding: 8px 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 6px; line-height: 1.4; word-break: break-all; }
-            .nick { font-weight: 800; color: #00ffa3; margin-right: 6px; }
+            .nick { font-weight: 800; color: #00ffa3; margin-right: 6px; cursor: pointer; border-radius: 3px; padding: 1px 3px; transition: all 0.15s ease; }
+            .nick:hover { text-decoration: underline; background: rgba(0, 255, 163, 0.18); }
             .badge { display: inline-block; padding: 1px 5px; font-size: 10px; font-weight: 800; border-radius: 4px; margin-right: 4px; background: rgba(255,215,0,0.2); color: #ffd700; }
             .badge-sub { background: rgba(168,85,247,0.2); color: #c084fc; }
             .time { font-size: 10px; color: #64748b; float: right; }
@@ -7225,8 +7300,18 @@
       popoutWindowRef.document.close();
     }
 
-    function addChatToFeed(nickname, msg, time, isSub, isDonor, payAmount = 0) {
+    function addChatToFeed(nickname, msg, time, isSub, isDonor, payAmount = 0, uid = '') {
       chatRateCount++;
+
+      // If uid not provided, try resolving from participants map
+      if (!uid) {
+        for (const [pUid, p] of participants.entries()) {
+          if (p.nickname === nickname) {
+            uid = pUid;
+            break;
+          }
+        }
+      }
 
       // 1. Mobile Drawer Feed (Backward Compatibility)
       if (chatFeed) {
@@ -7237,7 +7322,7 @@
         if (isDonor || payAmount > 0) badgesHtml += `<span class="badge-tag badge-follow">🧀 ${payAmount ? payAmount.toLocaleString() + '치즈' : '후원'}</span>`;
         div.innerHTML = `
           ${badgesHtml}
-          <span class="chat-nick">${escapeHtml(nickname)}</span>
+          <span class="chat-nick" onclick="openUserChatByNickOrUid('${escapeHtml(uid)}', '${escapeHtml(nickname)}')" title="${escapeHtml(nickname)} 시청자 채팅 추적 및 상세 정보 열기">${escapeHtml(nickname)}</span>
           <span class="chat-msg">${escapeHtml(msg)}</span>
           <span class="chat-time">${time}</span>
         `;
@@ -7260,6 +7345,7 @@
         itemEl.dataset.sub = isSub ? 'true' : 'false';
         itemEl.dataset.donor = isCheeseDonation ? 'true' : 'false';
         itemEl.dataset.nick = nickname;
+        itemEl.dataset.uid = uid;
         itemEl.dataset.msg = msg;
 
         let badgesHtml = '';
@@ -7275,7 +7361,7 @@
         itemEl.innerHTML = `
           <div class="docked-chat-header-row">
             ${badgesHtml}
-            <span class="${nickClass}">${escapeHtml(nickname)}</span>
+            <span class="${nickClass}" onclick="openUserChatByNickOrUid('${escapeHtml(uid)}', '${escapeHtml(nickname)}')" title="${escapeHtml(nickname)} 시청자 채팅 추적 및 상세 정보 열기">${escapeHtml(nickname)}</span>
             <span class="docked-chat-time">${time}</span>
           </div>
           <div class="docked-chat-msg">${escapeHtml(msg)}</div>
@@ -7326,7 +7412,7 @@
             pDiv.innerHTML = `
               <span class="time">${time}</span>
               ${pBadge}
-              <span class="nick">${escapeHtml(nickname)}</span>
+              <span class="nick" onclick="window.opener && window.opener.openUserChatByNickOrUid('${escapeHtml(uid)}', '${escapeHtml(nickname)}'); try{window.opener.focus();}catch(e){}" style="cursor: pointer;" title="${escapeHtml(nickname)} 시청자 채팅 추적 및 상세 정보 열기">${escapeHtml(nickname)}</span>
               <span>${escapeHtml(msg)}</span>
             `;
             pFeed.appendChild(pDiv);
@@ -7554,17 +7640,45 @@
     });
 
     // ==========================================
-    // 💬 WINNER USER REAL-TIME CHAT TRACKER
+    // 💬 WINNER & VIEWER REAL-TIME CHAT TRACKER
     // ==========================================
+    function openUserChatByNickOrUid(uid, fallbackNick) {
+      openUserChatModal(uid, fallbackNick);
+    }
+
     function openUserChatModal(uid, fallbackNick) {
-      activeTrackingUserUID = uid;
-      
-      const p = participants.get(uid) || drawnWinners.find(w => w.uid === uid) || {
-        nickname: fallbackNick || uid.substring(0, 8),
-        uid: uid,
-        isSubscriber: false,
-        isDonator: false
-      };
+      let targetUid = uid;
+      let p = null;
+
+      // 1. Try finding in participants map or drawnWinners
+      if (targetUid && participants.has(targetUid)) {
+        p = participants.get(targetUid);
+      } else if (targetUid) {
+        p = drawnWinners.find(w => w.uid === targetUid);
+      }
+
+      // 2. If not found, search by nickname
+      if (!p && fallbackNick) {
+        for (const [pUid, part] of participants.entries()) {
+          if (part.nickname === fallbackNick) {
+            p = part;
+            targetUid = pUid;
+            break;
+          }
+        }
+      }
+
+      // 3. Fallback object if not registered yet
+      if (!p) {
+        p = {
+          nickname: fallbackNick || (targetUid ? targetUid.substring(0, 8) : '시청자'),
+          uid: targetUid || '-',
+          isSubscriber: false,
+          isDonator: false
+        };
+      }
+
+      activeTrackingUserUID = p.uid || targetUid || fallbackNick;
 
       userChatModalNick.innerText = p.nickname;
       userChatModalUid.innerText = p.uid;
@@ -7591,8 +7705,22 @@
 
       // Populate existing chat history
       userChatModalFeed.innerHTML = '';
-      const history = userChatHistory.get(uid) || [];
-      
+      let history = userChatHistory.get(activeTrackingUserUID) || [];
+      if (history.length === 0 && p.uid && userChatHistory.has(p.uid)) {
+        history = userChatHistory.get(p.uid);
+      }
+      if (history.length === 0 && p.nickname) {
+        for (const [hUid, msgs] of userChatHistory.entries()) {
+          if (msgs.some(m => m.nickname === p.nickname)) {
+            history = msgs;
+            activeTrackingUserUID = hUid;
+            p.uid = hUid;
+            userChatModalUid.innerText = hUid;
+            break;
+          }
+        }
+      }
+
       // If history is empty but participant had an initial msg, populate it
       if (history.length === 0 && p.msg) {
         history.push({
@@ -7602,13 +7730,13 @@
           isSubscriber: p.isSubscriber,
           isDonator: p.isDonator
         });
-        userChatHistory.set(uid, history);
+        userChatHistory.set(activeTrackingUserUID, history);
       }
 
       userChatModalMsgCount.innerText = history.length.toLocaleString();
 
       if (history.length === 0) {
-        userChatModalFeed.innerHTML = '<div style="color: var(--text-sub); text-align: center; padding: 80px 0; font-size: 16px; font-weight: 600;">아직 수집된 채팅 내역이 없습니다.<br><span style="font-size: 14px; color: #64748b; margin-top: 8px; display: inline-block;">당첨자가 방송에서 채팅을 입력하면 실시간으로 여기에 자동 추가됩니다.</span></div>';
+        userChatModalFeed.innerHTML = '<div style="color: var(--text-sub); text-align: center; padding: 80px 0; font-size: 16px; font-weight: 600;">아직 수집된 채팅 내역이 없습니다.<br><span style="font-size: 14px; color: #64748b; margin-top: 8px; display: inline-block;">해당 시청자가 방송에서 채팅을 입력하면 실시간으로 여기에 자동 추가됩니다.</span></div>';
       } else {
         history.forEach(item => {
           appendUserChatMessage(item, false);
@@ -8401,6 +8529,7 @@
     window.updateSettingsSummaryBadges = updateSettingsSummaryBadges;
     window.openUserChatModal = openUserChatModal;
     window.closeUserChatModal = closeUserChatModal;
+    window.openUserChatByNickOrUid = openUserChatByNickOrUid;
     window.userChatHistory = userChatHistory;
     window.participants = participants;
     window.drawnWinners = drawnWinners;
