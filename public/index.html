@@ -1961,6 +1961,21 @@
     .poke-sprite-fainted { animation: pokeFaint 0.8s forwards !important; }
     .arena-shake-light { animation: arenaShakeLight 0.4s ease-in-out !important; }
     .arena-shake-heavy { animation: arenaShakeHeavy 0.6s ease-in-out !important; }
+    @keyframes pokeMissDodgeRight {
+      0% { transform: translateX(0); opacity: 1; }
+      25% { transform: translateX(35px) scale(0.96); opacity: 0.7; }
+      65% { transform: translateX(35px) scale(0.96); opacity: 0.7; }
+      100% { transform: translateX(0) scale(1); opacity: 1; }
+    }
+    @keyframes pokeMissDodgeLeft {
+      0% { transform: translateX(0); opacity: 1; }
+      25% { transform: translateX(-35px) scale(0.96); opacity: 0.7; }
+      65% { transform: translateX(-35px) scale(0.96); opacity: 0.7; }
+      100% { transform: translateX(0) scale(1); opacity: 1; }
+    }
+    .poke-miss-dodge-right { animation: pokeMissDodgeRight 0.65s cubic-bezier(0.2, 0.8, 0.2, 1) !important; }
+    .poke-miss-dodge-left { animation: pokeMissDodgeLeft 0.65s cubic-bezier(0.2, 0.8, 0.2, 1) !important; }
+
 
     /* Battle Arena Stadium Stage */
     .poke-arena-container {
@@ -13815,8 +13830,541 @@
     }
 
     // ==========================================
-    // Pokemon Battle Motion & Visual FX Engine
+    // Authentic Gen 4/5 Pokemon Sound Effects & Presentation Engine
     // ==========================================
+    const pokeAudioCache = {};
+
+    function playAuthenticPokeSound(name, volume = 0.8) {
+      if (!name) return;
+      try {
+        let audio = pokeAudioCache[name];
+        if (!audio) {
+          audio = new Audio('./battle_anims/audio/' + encodeURIComponent(name));
+          pokeAudioCache[name] = audio;
+        }
+        audio.currentTime = 0;
+        audio.volume = Math.max(0, Math.min(1, volume));
+        const p = audio.play();
+        if (p && typeof p.catch === 'function') {
+          p.catch(() => {
+            playSynthesizedPokeSound(name);
+          });
+        }
+      } catch (e) {
+        playSynthesizedPokeSound(name);
+      }
+    }
+
+    function getMoveSoundFilename(moveName, category, type) {
+      if (!moveName) return 'Blow1.m4a';
+      if (/지진/.test(moveName)) return 'PRSFX- Earthquake.wav';
+      if (/사이코키네시스|사이코쇼크/.test(moveName)) return 'PRSFX- Psychic.wav';
+      if (/파도타기|하이드로펌프|폭포오르기|아쿠아브레이크|열탕|물대포/.test(moveName)) return 'PRSFX- Muddy Water.wav';
+      if (/냉동빔|눈보라|얼음뭉치|고드름떨구기/.test(moveName)) return 'PRSFX- Ice Beam.wav';
+      if (/스톤샤워|스톤에지|원시의힘|암석봉인|락블라스트/.test(moveName)) return 'PRSFX- Rock Slide.wav';
+      if (/에어슬래시|시저크로스|깜짝베기|리프블레이드|섀도크루|드래곤크루|베기/.test(moveName)) return 'PRSFX- Air Slash1.wav';
+      if (/불릿펀치|인파이트|드레인펀치|야습|아이언헤드/.test(moveName)) return 'PRSFX- Bullet Punch.wav';
+      if (/화염방사|불대문자/.test(moveName)) return 'Fire1.m4a';
+      if (/플레어드라이브|도깨비불/.test(moveName)) return 'Fire3.m4a';
+      if (/대지의힘|10만볼트|번개|볼트태클/.test(moveName)) return 'Earth4.m4a';
+      if (/솔라빔|용의파동|러스터캐논|악의파동|파괴광선|문포스|매지컬샤인|하이퍼보이스/.test(moveName)) return 'beam.wav';
+      if (category === '변화' || /춤|명상|벌크업|철벽|록커트|날개쉬기|달의불빛|스텔스록|길동무/.test(moveName)) return 'charge.wav';
+      if (/섀도볼|에너지볼|오물폭탄|더스트슈트|파워젬|치근거리기/.test(moveName)) return 'Blow1.m4a';
+      if (/유턴|기습|발버둥|탁쳐서떨구기/.test(moveName)) return 'Damage1.m4a';
+      if (/메테오매시|역린|이판사판태클/.test(moveName)) return 'Crash.m4a';
+      return 'Blow1.m4a';
+    }
+
+    function playHitReactionSound(hitResult) {
+      if (!hitResult || !hitResult.hit) {
+        playAuthenticPokeSound('flee.wav', 0.85);
+        return;
+      }
+      if (hitResult.isCrit || (hitResult.typeMult && hitResult.typeMult >= 2.0)) {
+        playAuthenticPokeSound('hit_strong.wav', 0.9);
+      } else if (hitResult.typeMult && hitResult.typeMult < 1.0 && hitResult.typeMult > 0) {
+        playAuthenticPokeSound('hit_weak.wav', 0.7);
+      } else {
+        playAuthenticPokeSound('hit.wav', 0.8);
+      }
+    }
+
+    // Robust Animation Loop for 60fps presentation (Immune to headless or background throttling)
+    function runPokeAnimLoop(duration, renderStep) {
+      return new Promise(resolve => {
+        const start = performance.now();
+        let frameTimer = null;
+        let isDone = false;
+
+        function frame() {
+          if (isDone) return;
+          const now = performance.now();
+          const elapsed = now - start;
+          const progress = Math.min(1, Math.max(0, elapsed / duration));
+          renderStep(progress, elapsed);
+          if (progress < 1) {
+            frameTimer = setTimeout(frame, 16);
+          } else {
+            isDone = true;
+            if (frameTimer) clearTimeout(frameTimer);
+            resolve();
+          }
+        }
+
+        setTimeout(() => {
+          if (!isDone) {
+            isDone = true;
+            if (frameTimer) clearTimeout(frameTimer);
+            renderStep(1, duration);
+            resolve();
+          }
+        }, duration + 80);
+
+        frame();
+      });
+    }
+
+    // Dynamic Camera Rumble on #pokeArenaContainer
+    let arenaRumbleTimer = null;
+    function triggerArenaCameraRumble(intensity = 12, durationMs = 500) {
+      const arena = document.getElementById('pokeArenaContainer');
+      if (!arena) return;
+      if (arenaRumbleTimer) {
+        clearTimeout(arenaRumbleTimer);
+        arenaRumbleTimer = null;
+      }
+      const start = performance.now();
+      function rumbleStep() {
+        const now = performance.now();
+        const elapsed = now - start;
+        if (elapsed >= durationMs) {
+          arena.style.transform = '';
+          arenaRumbleTimer = null;
+          return;
+        }
+        const decay = 1 - (elapsed / durationMs);
+        const curInt = intensity * decay;
+        const rx = (Math.random() * 2 - 1) * curInt;
+        const ry = (Math.random() * 2 - 1) * curInt * 0.75;
+        const rot = (Math.random() * 2 - 1) * (curInt * 0.08);
+        arena.style.transform = `translate(${rx.toFixed(1)}px, ${ry.toFixed(1)}px) rotate(${rot.toFixed(2)}deg)`;
+        arenaRumbleTimer = setTimeout(rumbleStep, 16);
+      }
+      rumbleStep();
+    }
+
+    // Screen Dimming & Elemental Atmosphere Tint
+    function getPokeTypeAtmosphereTint(type, moveName) {
+      if (moveName === '지진') return 'rgba(0, 0, 0, 0.65)';
+      if (moveName === '사이코키네시스' || moveName === '사이코쇼크') return 'rgba(130, 20, 170, 0.45)';
+      if (moveName === '파도타기') return 'rgba(10, 50, 150, 0.42)';
+      switch (type) {
+        case '불꽃': return 'rgba(180, 40, 0, 0.35)';
+        case '물': return 'rgba(10, 80, 180, 0.35)';
+        case '전기': return 'rgba(180, 140, 0, 0.35)';
+        case '풀': return 'rgba(20, 120, 40, 0.35)';
+        case '얼음': return 'rgba(20, 150, 200, 0.35)';
+        case '고스트':
+        case '악': return 'rgba(30, 10, 50, 0.45)';
+        case '에스퍼': return 'rgba(150, 20, 100, 0.35)';
+        case '드래곤': return 'rgba(50, 20, 140, 0.35)';
+        case '독': return 'rgba(90, 15, 120, 0.35)';
+        case '땅':
+        case '바위': return 'rgba(100, 60, 20, 0.35)';
+        case '페어리': return 'rgba(180, 60, 120, 0.30)';
+        default: return 'rgba(0, 0, 0, 0.28)';
+      }
+    }
+
+    // Full-screen White Flash for Critical / Super-Effective Hits
+    function triggerWhiteFlash(durationMs = 280) {
+      const canvas = document.getElementById('pokeBattleVfxCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      runPokeAnimLoop(durationMs, (progress) => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (progress < 1) {
+          const alpha = Math.max(0, (1 - progress) * 0.85);
+          ctx.save();
+          ctx.fillStyle = `rgba(255, 255, 255, ${alpha.toFixed(3)})`;
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.restore();
+        }
+      });
+    }
+
+    // Floating Miss Pill Badge Animation
+    async function renderPokeMissBadge(canvas, targetX, targetY) {
+      const ctx = canvas.getContext('2d');
+      await runPokeAnimLoop(650, (progress) => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        const floatY = targetY - progress * 32;
+        const alpha = progress < 0.7 ? 1 : Math.max(0, 1 - (progress - 0.7) / 0.3);
+
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        ctx.translate(targetX, floatY);
+
+        const badgeW = 100;
+        const badgeH = 32;
+        const r = 16;
+
+        ctx.fillStyle = 'rgba(220, 38, 38, 0.92)';
+        ctx.strokeStyle = '#fecaca';
+        ctx.lineWidth = 2;
+        ctx.shadowColor = '#ef4444';
+        ctx.shadowBlur = 14;
+
+        ctx.beginPath();
+        ctx.roundRect(-badgeW / 2, -badgeH / 2, badgeW, badgeH, r);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 14px "Noto Sans KR", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+        ctx.shadowBlur = 4;
+        ctx.fillText('💨 빗나감!', 0, 1);
+
+        ctx.restore();
+      });
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    // --- EBDX Cinematic: 1. Earthquake (지진) ---
+    async function playEarthquakeCinematic(actor, hitResult) {
+      const isStreamer = actor === 'streamer';
+      const attackerSpr = isStreamer ? document.getElementById('arenaStreamerSprite') : document.getElementById('arenaViewersSprite');
+      const defenderSpr = isStreamer ? document.getElementById('arenaViewersSprite') : document.getElementById('arenaStreamerSprite');
+      const canvas = document.getElementById('pokeBattleVfxCanvas');
+      if (!canvas || !attackerSpr || !defenderSpr) return;
+
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width || canvas.offsetWidth || 800;
+      canvas.height = rect.height || canvas.offsetHeight || 320;
+      const ctx = canvas.getContext('2d');
+
+      const atkRect = attackerSpr.getBoundingClientRect();
+      const defRect = defenderSpr.getBoundingClientRect();
+      const p1 = { x: atkRect.left - rect.left + atkRect.width / 2, y: atkRect.top - rect.top + atkRect.height / 2 };
+      const p2 = { x: defRect.left - rect.left + defRect.width / 2, y: defRect.top - rect.top + defRect.height / 2 };
+
+      attackerSpr.classList.add('poke-hop');
+      setTimeout(() => attackerSpr.classList.remove('poke-hop'), 400);
+
+      playAuthenticPokeSound('PRSFX- Earthquake.wav', 0.95);
+      triggerArenaCameraRumble(25, 950);
+
+      const groundY = Math.max(p1.y, p2.y) + 35;
+      const fissureStartX = Math.min(p1.x, p2.x) - 40;
+      const fissureEndX = Math.max(p1.x, p2.x) + 40;
+      const segCount = 14;
+      const fissurePoints = [];
+      for (let i = 0; i <= segCount; i++) {
+        const fx = fissureStartX + (fissureEndX - fissureStartX) * (i / segCount);
+        const fy = groundY + (i === 0 || i === segCount ? 0 : (Math.random() * 2 - 1) * 12);
+        fissurePoints.push({ x: fx, y: fy });
+      }
+
+      const shards = Array.from({ length: 30 }, () => ({
+        x: fissureStartX + Math.random() * (fissureEndX - fissureStartX),
+        y: groundY + (Math.random() - 0.5) * 10,
+        vy: -(3.5 + Math.random() * 5.5),
+        vx: (Math.random() - 0.5) * 3,
+        rot: Math.random() * Math.PI * 2,
+        vRot: (Math.random() - 0.5) * 0.2,
+        size: 4 + Math.random() * 7,
+        color: Math.random() > 0.4 ? '#b45309' : (Math.random() > 0.5 ? '#78350f' : '#f59e0b')
+      }));
+
+      await runPokeAnimLoop(850, (progress) => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // 1. Dark atmosphere screen dimming
+        const dimAlpha = Math.sin(progress * Math.PI) * 0.65;
+        ctx.save();
+        ctx.fillStyle = `rgba(0, 0, 0, ${dimAlpha.toFixed(3)})`;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.restore();
+
+        // 2. Fissure split glow & line
+        const drawProgress = Math.min(1, progress * 1.8);
+        const pointsToDraw = Math.floor(fissurePoints.length * drawProgress);
+        if (pointsToDraw > 1) {
+          ctx.save();
+          ctx.shadowColor = '#f97316';
+          ctx.shadowBlur = 24;
+          ctx.strokeStyle = '#ea580c';
+          ctx.lineWidth = 6;
+          ctx.beginPath();
+          ctx.moveTo(fissurePoints[0].x, fissurePoints[0].y);
+          for (let i = 1; i < pointsToDraw; i++) {
+            ctx.lineTo(fissurePoints[i].x, fissurePoints[i].y);
+          }
+          ctx.stroke();
+
+          ctx.strokeStyle = '#fef08a';
+          ctx.lineWidth = 2.5;
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        // 3. Flying earth shards
+        shards.forEach(s => {
+          s.x += s.vx;
+          s.y += s.vy;
+          s.vy += 0.22;
+          s.rot += s.vRot;
+          const alpha = Math.max(0, 1 - progress);
+
+          ctx.save();
+          ctx.globalAlpha = alpha;
+          ctx.translate(s.x, s.y);
+          ctx.rotate(s.rot);
+          ctx.fillStyle = s.color;
+          ctx.fillRect(-s.size / 2, -s.size / 2, s.size, s.size);
+          ctx.restore();
+        });
+      });
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      playHitReactionSound(hitResult);
+      if (hitResult.isCrit) {
+        triggerWhiteFlash(320);
+        defenderSpr.classList.add('poke-sprite-crit');
+        setTimeout(() => defenderSpr.classList.remove('poke-sprite-crit'), 650);
+      } else {
+        defenderSpr.classList.add('poke-hit-shake');
+        setTimeout(() => defenderSpr.classList.remove('poke-hit-shake'), 450);
+      }
+    }
+
+    // --- EBDX Cinematic: 2. Psychic (사이코키네시스) ---
+    async function playPsychicCinematic(actor, hitResult) {
+      const isStreamer = actor === 'streamer';
+      const attackerSpr = isStreamer ? document.getElementById('arenaStreamerSprite') : document.getElementById('arenaViewersSprite');
+      const defenderSpr = isStreamer ? document.getElementById('arenaViewersSprite') : document.getElementById('arenaStreamerSprite');
+      const canvas = document.getElementById('pokeBattleVfxCanvas');
+      if (!canvas || !attackerSpr || !defenderSpr) return;
+
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width || canvas.offsetWidth || 800;
+      canvas.height = rect.height || canvas.offsetHeight || 320;
+      const ctx = canvas.getContext('2d');
+
+      const defRect = defenderSpr.getBoundingClientRect();
+      const p2 = { x: defRect.left - rect.left + defRect.width / 2, y: defRect.top - rect.top + defRect.height / 2 };
+
+      attackerSpr.classList.add('poke-hop');
+      setTimeout(() => attackerSpr.classList.remove('poke-hop'), 400);
+
+      playAuthenticPokeSound('PRSFX- Psychic.wav', 0.9);
+
+      const liftDistance = 34;
+      defenderSpr.style.transition = 'transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.35s ease';
+      defenderSpr.style.transform = `translateY(-${liftDistance}px)`;
+      defenderSpr.style.filter = 'drop-shadow(0 0 26px #c084fc) brightness(1.4) contrast(1.2)';
+
+      await runPokeAnimLoop(800, (progress, elapsed) => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // 1. Cosmic purple screen dimming
+        const dimAlpha = Math.sin(progress * Math.PI) * 0.45;
+        ctx.save();
+        ctx.fillStyle = `rgba(130, 20, 170, ${dimAlpha.toFixed(3)})`;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.restore();
+
+        // 2. Swirling psychic distortion rings
+        ctx.save();
+        ctx.shadowColor = '#d946ef';
+        ctx.shadowBlur = 20;
+        for (let i = 0; i < 4; i++) {
+          const ringAngle = progress * Math.PI * 4 + i * (Math.PI / 2);
+          const rx = 38 + Math.sin(progress * Math.PI * 3 + i) * 16;
+          const ry = 16 + Math.cos(progress * Math.PI * 3 + i) * 8;
+          ctx.save();
+          ctx.translate(p2.x, p2.y - liftDistance * 0.8);
+          ctx.rotate(ringAngle);
+          ctx.strokeStyle = i % 2 === 0 ? '#ec4899' : '#a855f7';
+          ctx.lineWidth = 3;
+          ctx.globalAlpha = Math.max(0, Math.sin(progress * Math.PI) * 0.85);
+          ctx.beginPath();
+          ctx.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
+        }
+        ctx.restore();
+
+        if (elapsed > 200 && elapsed < 550) {
+          const shakeX = (Math.random() * 2 - 1) * 5;
+          defenderSpr.style.transform = `translate(${shakeX.toFixed(1)}px, -${liftDistance}px)`;
+        }
+      });
+
+      defenderSpr.style.transition = 'transform 0.12s cubic-bezier(0.8, 0, 1, 1), filter 0.12s ease';
+      defenderSpr.style.transform = 'translateY(0)';
+      defenderSpr.style.filter = '';
+
+      playHitReactionSound(hitResult);
+      triggerArenaCameraRumble(19, 500);
+
+      await runPokeAnimLoop(260, (prog) => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.save();
+        ctx.strokeStyle = '#ec4899';
+        ctx.shadowColor = '#d946ef';
+        ctx.shadowBlur = 18;
+        ctx.lineWidth = Math.max(1, (1 - prog) * 7);
+        ctx.globalAlpha = Math.max(0, 1 - prog);
+        ctx.beginPath();
+        ctx.ellipse(p2.x, p2.y + 20, prog * 70, prog * 28, 0, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+      });
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (hitResult.isCrit) {
+        triggerWhiteFlash(320);
+        defenderSpr.classList.add('poke-sprite-crit');
+        setTimeout(() => defenderSpr.classList.remove('poke-sprite-crit'), 650);
+      } else {
+        defenderSpr.classList.add('poke-hit-shake');
+        setTimeout(() => defenderSpr.classList.remove('poke-hit-shake'), 450);
+      }
+    }
+
+    // --- EBDX Cinematic: 3. Surf (파도타기) ---
+    async function playSurfCinematic(actor, hitResult) {
+      const isStreamer = actor === 'streamer';
+      const attackerSpr = isStreamer ? document.getElementById('arenaStreamerSprite') : document.getElementById('arenaViewersSprite');
+      const defenderSpr = isStreamer ? document.getElementById('arenaViewersSprite') : document.getElementById('arenaStreamerSprite');
+      const canvas = document.getElementById('pokeBattleVfxCanvas');
+      if (!canvas || !attackerSpr || !defenderSpr) return;
+
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width || canvas.offsetWidth || 800;
+      canvas.height = rect.height || canvas.offsetHeight || 320;
+      const ctx = canvas.getContext('2d');
+
+      const atkRect = attackerSpr.getBoundingClientRect();
+      const defRect = defenderSpr.getBoundingClientRect();
+      const p1 = { x: atkRect.left - rect.left + atkRect.width / 2, y: atkRect.top - rect.top + atkRect.height / 2 };
+      const p2 = { x: defRect.left - rect.left + defRect.width / 2, y: defRect.top - rect.top + defRect.height / 2 };
+
+      attackerSpr.classList.add('poke-hop');
+      setTimeout(() => attackerSpr.classList.remove('poke-hop'), 400);
+
+      playAuthenticPokeSound('PRSFX- Muddy Water.wav', 0.9);
+      triggerArenaCameraRumble(16, 750);
+
+      const droplets = Array.from({ length: 35 }, () => ({
+        x: p1.x + (p2.x - p1.x) * (0.3 + Math.random() * 0.7),
+        y: p2.y + (Math.random() - 0.5) * 40,
+        vx: (isStreamer ? 1 : -1) * (2 + Math.random() * 4),
+        vy: -(2.5 + Math.random() * 5),
+        size: 3 + Math.random() * 5,
+        color: Math.random() > 0.4 ? '#38bdf8' : (Math.random() > 0.5 ? '#bae6fd' : '#ffffff')
+      }));
+
+      await runPokeAnimLoop(750, (progress) => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // 1. Ocean blue screen tint
+        const dimAlpha = Math.sin(progress * Math.PI) * 0.42;
+        ctx.save();
+        ctx.fillStyle = `rgba(10, 50, 150, ${dimAlpha.toFixed(3)})`;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.restore();
+
+        // 2. Rolling tsunami wave crest moving across screen
+        const waveX = p1.x + (p2.x - p1.x) * progress;
+        const waveHeight = Math.sin(progress * Math.PI) * 70;
+        const baseY = canvas.height * 0.75;
+
+        ctx.save();
+        // Wave layer 1: Deep blue body
+        ctx.fillStyle = 'rgba(30, 58, 138, 0.75)';
+        ctx.beginPath();
+        ctx.moveTo(0, canvas.height);
+        ctx.lineTo(0, baseY);
+        for (let x = 0; x <= canvas.width; x += 20) {
+          const crest = Math.exp(-Math.pow((x - waveX) / 85, 2)) * waveHeight;
+          ctx.lineTo(x, baseY - crest);
+        }
+        ctx.lineTo(canvas.width, baseY);
+        ctx.lineTo(canvas.width, canvas.height);
+        ctx.closePath();
+        ctx.fill();
+
+        // Wave layer 2: Cyan foam
+        ctx.fillStyle = 'rgba(6, 182, 212, 0.65)';
+        ctx.beginPath();
+        ctx.moveTo(0, canvas.height);
+        ctx.lineTo(0, baseY + 10);
+        for (let x = 0; x <= canvas.width; x += 20) {
+          const crest = Math.exp(-Math.pow((x - (waveX - 15)) / 75, 2)) * (waveHeight * 0.9);
+          ctx.lineTo(x, baseY + 10 - crest);
+        }
+        ctx.lineTo(canvas.width, baseY + 10);
+        ctx.lineTo(canvas.width, canvas.height);
+        ctx.closePath();
+        ctx.fill();
+
+        // Wave crest spray line (white foam)
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 4;
+        ctx.shadowColor = '#38bdf8';
+        ctx.shadowBlur = 12;
+        ctx.beginPath();
+        for (let x = 0; x <= canvas.width; x += 15) {
+          const crest = Math.exp(-Math.pow((x - waveX) / 70, 2)) * waveHeight;
+          if (x === 0) ctx.moveTo(x, baseY - crest);
+          else ctx.lineTo(x, baseY - crest);
+        }
+        ctx.stroke();
+        ctx.restore();
+
+        if (progress > 0.4) {
+          droplets.forEach(d => {
+            d.x += d.vx;
+            d.y += d.vy;
+            d.vy += 0.2;
+            ctx.save();
+            ctx.fillStyle = d.color;
+            ctx.globalAlpha = Math.max(0, 1 - progress);
+            ctx.beginPath();
+            ctx.arc(d.x, d.y, d.size, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+          });
+        }
+
+        if (progress > 0.55 && progress < 0.85) {
+          defenderSpr.style.transform = 'translateY(18px)';
+        } else {
+          defenderSpr.style.transform = '';
+        }
+      });
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      defenderSpr.style.transform = '';
+
+      playHitReactionSound(hitResult);
+      if (hitResult.isCrit) {
+        triggerWhiteFlash(320);
+        defenderSpr.classList.add('poke-sprite-crit');
+        setTimeout(() => defenderSpr.classList.remove('poke-sprite-crit'), 650);
+      } else {
+        defenderSpr.classList.add('poke-hit-shake');
+        setTimeout(() => defenderSpr.classList.remove('poke-hit-shake'), 450);
+      }
+    }
+
+    // Web Audio API Synthesis Fallback
     let battleAudioCtx = null;
     function getBattleAudioContext() {
       try {
@@ -13833,7 +14381,7 @@
       }
     }
 
-    function playBattleSoundFx(soundType) {
+        function playSynthesizedPokeSound(soundType) {
       try {
         const ctx = getBattleAudioContext();
         if (!ctx) return;
@@ -14022,6 +14570,11 @@
       }
     }
 
+    // Alias playBattleSoundFx for backward compatibility
+    function playBattleSoundFx(soundType) {
+      playSynthesizedPokeSound(soundType);
+    }
+
     function getPokeMoveMotionType(move) {
       if (!move) return 'heavy_tackle';
       const name = move.name || '';
@@ -14135,7 +14688,7 @@
       return img;
     }
 
-    async function playPokerogueMoveAnim(actor, moveName, hitResult = { hit: true, isCrit: false, typeMult: 1.0, finalDamage: 50 }) {
+    async function playPokerogueMoveAnim(actor, moveName, hitResult = { hit: true, isCrit: false, typeMult: 1.0, finalDamage: 50 }, tint = null) {
       if (!pokerogueMoveAnims) {
         await loadPokerogueMoveAnims();
       }
@@ -14273,31 +14826,86 @@
       defenderSpr.style.transform = '';
 
       if (hitResult.hit) {
-        defenderSpr.classList.add('poke-hit-shake');
-        setTimeout(() => defenderSpr.classList.remove('poke-hit-shake'), 450);
+        playHitReactionSound(hitResult);
+        if (hitResult.isCrit) {
+          triggerWhiteFlash(320);
+          triggerArenaCameraRumble(22, 650);
+          defenderSpr.classList.add('poke-sprite-crit');
+          setTimeout(() => defenderSpr.classList.remove('poke-sprite-crit'), 650);
+        } else if (hitResult.typeMult >= 2.0) {
+          triggerWhiteFlash(200);
+          triggerArenaCameraRumble(16, 500);
+          defenderSpr.classList.add('poke-hit-shake');
+          setTimeout(() => defenderSpr.classList.remove('poke-hit-shake'), 450);
+        } else if (hitResult.typeMult < 1.0 && hitResult.typeMult > 0) {
+          triggerArenaCameraRumble(6, 300);
+          defenderSpr.classList.add('poke-hit-shake');
+          setTimeout(() => defenderSpr.classList.remove('poke-hit-shake'), 350);
+        } else {
+          triggerArenaCameraRumble(10, 400);
+          defenderSpr.classList.add('poke-hit-shake');
+          setTimeout(() => defenderSpr.classList.remove('poke-hit-shake'), 450);
+        }
       }
       return true;
     }
 
     async function playPokeMoveAnimation(actor, move, hitResult = { hit: true, isCrit: false, typeMult: 1.0, finalDamage: 10 }) {
-      const motionType = getPokeMoveMotionType(move);
-      playBattleSoundFx(motionType);
+      // 1. Enhanced Miss Feedback: dodge animation, flee sound, floating badge & 1.2s dialogue pause
+      if (!hitResult || !hitResult.hit) {
+        playAuthenticPokeSound('flee.wav', 0.85);
+        const isStreamer = actor === 'streamer';
+        const attackerSpr = isStreamer ? document.getElementById('arenaStreamerSprite') : document.getElementById('arenaViewersSprite');
+        const defenderSpr = isStreamer ? document.getElementById('arenaViewersSprite') : document.getElementById('arenaStreamerSprite');
+        const canvas = document.getElementById('pokeBattleVfxCanvas');
 
-      if (!hitResult.hit) {
-        playBattleSoundFx('miss');
-        const attackerSpr = (actor === 'streamer') ? document.getElementById('arenaStreamerSprite') : document.getElementById('arenaViewersSprite');
         if (attackerSpr) {
           attackerSpr.classList.add('poke-hop');
           setTimeout(() => attackerSpr.classList.remove('poke-hop'), 400);
         }
-        await new Promise(r => setTimeout(r, 450));
+        if (defenderSpr) {
+          const dodgeClass = isStreamer ? 'poke-miss-dodge-right' : 'poke-miss-dodge-left';
+          defenderSpr.classList.add(dodgeClass);
+          setTimeout(() => defenderSpr.classList.remove(dodgeClass), 650);
+        }
+        if (canvas && defenderSpr) {
+          const rect = canvas.getBoundingClientRect();
+          canvas.width = rect.width || canvas.offsetWidth || 800;
+          canvas.height = rect.height || canvas.offsetHeight || 320;
+          const defRect = defenderSpr.getBoundingClientRect();
+          const targetX = defRect.left - rect.left + defRect.width / 2;
+          const targetY = defRect.top - rect.top + 20;
+          await renderPokeMissBadge(canvas, targetX, targetY);
+        } else {
+          await new Promise(r => setTimeout(r, 650));
+        }
+        await new Promise(r => setTimeout(r, 550));
         return;
       }
 
-      // 1. Prioritize authentic PokéRogue 4th/5th gen sprite animation
-      const prSuccess = await playPokerogueMoveAnim(actor, move.name, hitResult);
+      // 2. EBDX Cinematic Special Routines: Earthquake, Psychic, Surf
+      if (move.name === '지진') {
+        await playEarthquakeCinematic(actor, hitResult);
+        return;
+      }
+      if (move.name === '사이코키네시스') {
+        await playPsychicCinematic(actor, hitResult);
+        return;
+      }
+      if (move.name === '파도타기') {
+        await playSurfCinematic(actor, hitResult);
+        return;
+      }
+
+      // 3. Play Authentic Move Cast Sound
+      const castSfx = getMoveSoundFilename(move.name, move.category, move.type);
+      playAuthenticPokeSound(castSfx);
+
+      const tint = getPokeTypeAtmosphereTint(move.type, move.name);
+
+      // 4. Prioritize authentic PokéRogue 4th/5th gen sprite animation
+      const prSuccess = await playPokerogueMoveAnim(actor, move.name, hitResult, tint);
       if (prSuccess) {
-        playBattleSoundFx(hitResult.isCrit ? 'crit' : (hitResult.typeMult >= 2.0 ? 'supereffective' : (hitResult.typeMult < 1.0 && hitResult.typeMult > 0 ? 'notvery' : 'hit')));
         return;
       }
 
@@ -15435,7 +16043,16 @@
       // UNIVERSAL IMPACT EVENT (Sparks, Shake, Audio)
       // ==========================================
       const isHeavy = hitResult.isCrit || hitResult.typeMult >= 2.0 || hitResult.finalDamage >= 60;
-      playBattleSoundFx(isHeavy ? 'hit_heavy' : 'hit_normal');
+      playHitReactionSound(hitResult);
+      if (hitResult.isCrit) {
+        triggerWhiteFlash(320);
+        triggerArenaCameraRumble(22, 650);
+      } else if (hitResult.typeMult >= 2.0) {
+        triggerWhiteFlash(200);
+        triggerArenaCameraRumble(16, 500);
+      } else {
+        triggerArenaCameraRumble(10, 400);
+      }
 
       // Defender Sprite Hit Reaction
       defenderSpr.classList.remove('poke-sprite-damaged', 'poke-sprite-crit');
@@ -15513,6 +16130,20 @@
       });
     }
 
+
+    // Global Developer Test Helper for Pokemon Battle Animations
+    window.testPokeAnim = async function(moveName = '지진', actor = 'streamer', isCrit = false, typeMult = 1.0) {
+      let dummyMove = { name: moveName, type: '노말', category: '물리', power: 80 };
+      if (typeof pokeMoveDatabase !== 'undefined') {
+        for (const m of Object.values(pokeMoveDatabase)) {
+          if (m && m.name === moveName) {
+            dummyMove = Object.assign({}, m);
+            break;
+          }
+        }
+      }
+      return await playPokeMoveAnimation(actor, dummyMove, { hit: true, isCrit, typeMult, finalDamage: 65 });
+    };
 
     async function executeSingleAttack(actor, move, isMega = false) {
       const isStreamer = actor === 'streamer';
@@ -15926,6 +16557,7 @@
       // 7. Faint Check & Destiny Bond Trigger
       if (defenderSlot.currentHP <= 0) {
         defenderSlot.fainted = true;
+        playAuthenticPokeSound('faint.wav', 0.9);
         if (defenderSpr) defenderSpr.classList.add('poke-sprite-fainted');
         renderArenaTeamBallsHUD();
         await new Promise(r => setTimeout(r, 800));
@@ -15935,6 +16567,7 @@
         if (defenderSlot.destinyBond && attackerSlot.currentHP > 0) {
           attackerSlot.currentHP = 0;
           attackerSlot.fainted = true;
+          playAuthenticPokeSound('faint.wav', 0.9);
           if (attackerSpr) attackerSpr.classList.add('poke-sprite-fainted');
           renderArenaTeamBallsHUD();
           updateArenaHPBars();
@@ -15946,6 +16579,7 @@
 
       if (attackerSlot.currentHP <= 0) {
         attackerSlot.fainted = true;
+        playAuthenticPokeSound('faint.wav', 0.9);
         if (attackerSpr) attackerSpr.classList.add('poke-sprite-fainted');
         renderArenaTeamBallsHUD();
         await new Promise(r => setTimeout(r, 800));
