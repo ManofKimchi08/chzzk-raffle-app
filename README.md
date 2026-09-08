@@ -1,7 +1,7 @@
-# 🎮 치지직 대규모 시청자 추첨 & 룰렛 & 실시간 투표 & 포켓몬 배틀/퀴즈 쇼 플랫폼 (Chzzk Interactive Hub) v4.9.0
+# 🎮 치지직 대규모 시청자 추첨 & 룰렛 & 실시간 투표 & 포켓몬 배틀/퀴즈 쇼 플랫폼 (Chzzk Interactive Hub) v5.0.0
 
 ![Chzzk WebSocket Live](https://img.shields.io/badge/Chzzk-WebSocket%20Live-00ffa3?style=for-the-badge&logo=naver)
-![Version](https://img.shields.io/badge/Release-v4.9.0-purple?style=for-the-badge)
+![Version](https://img.shields.io/badge/Release-v5.0.0-purple?style=for-the-badge)
 ![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![HTML5 Canvas](https://img.shields.io/badge/HTML5-Canvas%20%26%20Audio-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
@@ -25,8 +25,36 @@
 | **07. v4.8.0 릴리즈 노트** | v4.8.0 신규 기능, UI/UX 개선 내역, 버그 수정 및 안정화 패치 요약 | [🚀 릴리즈 노트 바로가기](docs/07_release_notes_v4.8.0_ko.md) |
 | **08. v4.8.3 릴리즈 노트** | 스트리머 비밀 조작 모드, 자동 블라인드, 단축키, 취소 토글, 클릭 안정성 패치 | [🚀 v4.8.3 릴리즈 노트 바로가기](docs/08_release_notes_v4.8.3_ko.md) |
 | **09. v4.8.4 릴리즈 노트** | 실시간 채팅창 오버레이(메인 밀림 0px 방지), 채팅창 닉네임 원클릭 시청자 채팅 추적(TTS) | [🚀 v4.8.4 릴리즈 노트 바로가기](docs/09_release_notes_v4.8.4_ko.md) |
+| **10. v5.0.0 릴리즈 노트** | 5세대 BGM 엔진 & 위기 동적 전환, 옵션창 복구, 기술 연출 스튜디오 설정 서랍 이전 | [🚀 v5.0.0 릴리즈 노트 바로가기](docs/10_release_notes_v5.0.0_ko.md) |
 
-## 🌟 v4.9.0 주요 신규 및 개선 사항 (What's New in v4.9.0)
+## 🌟 v5.0.0 주요 신규 및 개선 사항 (What's New in v5.0.0)
+
+### 1. 🎵 포켓몬 5세대 본가 공식 BGM 엔진 & 위기(빨간 피) 동적 크로스페이드
+- **닌텐도 DS 원작 OST 3종 탑재**:
+  - `Battle! (Trainer)`: 마스다 준이치 / 카게야마 쇼타 작곡의 통상 배틀곡
+  - `A Tight Spot During Battle! (戦い ピンチ！)`: 5세대 시그니처 위기 테마곡
+  - `Victory! (Trainer)`: 승리 공식 팡파레
+- **실시간 위기 자동 감지**: 생존 포켓몬이 **1마리** 남고 잔여 체력이 **20% 이하(빨간 피)**로 떨어지는 즉시 500ms 부드러운 볼륨 크로스페이드로 위기 테마로 전환됩니다. 체력 회복 시 통상곡 자동 복귀.
+- **경기장 헤더 BGM 컨트롤러**: 헤더 우측 캡슐(`🎵 [—O—]`)에서 원클릭 음소거 및 볼륨 조절 지원. 위기 돌입 시 경보 사이렌(`🚨`) 점멸.
+
+![경기장 헤더 BGM 컨트롤러](docs/images/bgm_controls_arena_header.png)
+![위기(빨간 피) 감지 및 BGM 동적 전환](docs/images/bgm_pinch_active_arena.png)
+
+### 2. 🎬 기술 연출 테스트기(Move Animation Studio) UX 재설계 & 설정창 이전
+- **대기 화면 중앙 카드 간소화**: `VS` 중앙 카드에서 보조 테스트 버튼을 제거하고 **`⚔️ 배틀 시작!`** 버튼만 집중 배치.
+- **설정창 내부로 이전**: 좌측 상세 설정 서랍의 **`⚔️ 포켓몬 배틀 모드 & 규칙`** 컨테이너 하단으로 이전하여 퀴즈 도구와 일관된 개발자 툴 레이아웃을 구축.
+- **원클릭 실행 & 전장 자동 연동**: 서랍 내 버튼 클릭 시 설정창이 부드럽게 닫히며 전장 배경과 함께 반투명 스튜디오 모달이 즉시 활성화됩니다.
+
+![설정 서랍 내 포켓몬 배틀 규칙 박스로 이전된 버튼](docs/images/drawer_studio_btn.png)
+![설정 서랍에서 실행된 기술 연출 스튜디오](docs/images/studio_opened_from_drawer.png)
+
+### 3. 🛠️ 상세 설정 서랍(옵션창) DOM 아키텍처 복구
+- 모달 내 미닫힘 태그 결함으로 인해 `.modal-backdrop`의 투명도(`opacity: 0; pointer-events: none`)가 옵션창에 상속되던 문제를 완전 해결.
+- 전체 태그 트리 100% 정규화 및 독립 레이아웃(`z-index: 1060`) 복원으로 원활한 개폐 및 설정 동기화 보장.
+
+![정상 복구된 옵션 설정 드로어](docs/images/settings_drawer_working.png)
+
+---
 
 ### 1. 🎬 포케로그(PokéRogue) 4/5세대 원작 포켓몬 기술 애니메이션 전면 도입 (72종 전수 적용)
 - **오픈소스 에셋 출처**: 포케로그 공식 에셋 저장소([pagefaultgames/pokerogue-assets](https://github.com/pagefaultgames/pokerogue-assets))에서 4/5세대 원작 스타일 기술 연출 데이터(JSON) 및 2D 도트 스프라이트 시트(PNG 49종) 추출·연동.

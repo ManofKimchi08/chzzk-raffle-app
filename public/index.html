@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>치지직 대규모 시청자 추첨 & 룰렛 & 포켓몬 배틀 v4.8.4 | Chzzk Mega Raffle & Pokemon Battle</title>
+  <title>치지직 대규모 시청자 추첨 & 룰렛 & 포켓몬 배틀 v5.0.0 | Chzzk Mega Raffle & Pokemon Battle</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -717,6 +717,17 @@
 
     .modal-backdrop.active .modal-content {
       transform: scale(1);
+    }
+
+    #pokeAnimStudioModal.studio-playing {
+      background: transparent !important;
+      backdrop-filter: none !important;
+      pointer-events: none !important;
+    }
+    #pokeAnimStudioModal.studio-playing .modal-content {
+      opacity: 0.15 !important;
+      pointer-events: none !important;
+      transform: scale(0.92) !important;
     }
 
     .modal-header {
@@ -3881,11 +3892,17 @@
               <span id="pokeBattlePhaseBadge" class="live-badge-pill live" style="font-size: 11px;">👑 스트리머 행동 선택</span>
             </div>
 
-            <!-- Right: Viewers Team Pokéball HUD -->
-            <div style="display: flex; align-items: center; gap: 10px;">
+            <!-- Right: Viewers Team Pokéball HUD & Controls -->
+            <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: flex-end;">
               <div id="arenaViewersBallsHUD" class="poke-ball-row"></div>
               <span class="badge-tag" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; font-size: 11px; font-weight: 800;">👥 시청자 연합</span>
-              <button type="button" class="btn-chip btn-chip-secondary" onclick="quitPokeBattle()">🏳️ 기권 / 새 매치</button>
+              <!-- BGM Controls -->
+              <div style="display: flex; align-items: center; gap: 3px; background: rgba(0,0,0,0.5); padding: 2px 7px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.15);" title="배경음악(BGM) 볼륨 및 음소거">
+                <button type="button" id="arenaBgmToggleBtn" style="background: none; border: none; color: #fff; cursor: pointer; font-size: 12px; padding: 1px 3px;" onclick="togglePokeBgm()" title="BGM 켜기/끄기">🎵</button>
+                <input type="range" id="arenaBgmVolumeSlider" min="0" max="1" step="0.05" value="0.35" style="width: 48px; height: 4px; accent-color: var(--chzzk-green); cursor: pointer;" oninput="setPokeBgmVolume(this.value)" title="BGM 볼륨">
+              </div>
+              <button type="button" class="btn-chip btn-chip-secondary" style="background: rgba(234, 179, 8, 0.15); color: #ffd700; border-color: rgba(234, 179, 8, 0.4); font-weight: 800; font-size: 11px; padding: 4px 8px;" onclick="openPokeAnimStudioModal()">🎬 기술 연출</button>
+              <button type="button" class="btn-chip btn-chip-secondary" style="font-size: 11px; padding: 4px 8px;" onclick="quitPokeBattle()">🏳️ 기권</button>
             </div>
           </div>
 
@@ -4498,6 +4515,141 @@
           <!-- Dynamically rendered 213 Pokemon cards -->
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- 🎬 Pokemon Move Animation Studio Modal (포켓몬 기술 연출 테스트 스튜디오) -->
+  <div id="pokeAnimStudioModal" class="modal-backdrop">
+    <div class="modal-content" style="max-width: 680px; width: 95%; max-height: 90vh; display: flex; flex-direction: column; border-color: rgba(234, 179, 8, 0.5); box-shadow: 0 16px 48px rgba(0,0,0,0.85);">
+      
+      <!-- Header -->
+      <div class="modal-header" style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 26px;">🎬</span>
+          <div>
+            <div style="font-size: 17px; font-weight: 900; color: #fff; display: flex; align-items: center; gap: 8px;">
+              <span>포켓몬 기술 연출 스튜디오</span>
+              <span class="badge-tag" style="background: rgba(234, 179, 8, 0.2); color: #ffd700; font-size: 11px;">Move Animation Studio</span>
+            </div>
+            <div style="font-size: 11px; color: var(--text-sub);">72개 본가 기술 도트 애니메이션, EBDX 시네마틱 연출, 4/5세대 원작 SE 사운드를 즉시 테스트합니다.</div>
+          </div>
+        </div>
+        <button type="button" class="modal-close-btn" onclick="closePokeAnimStudioModal()">✕</button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body" style="display: flex; flex-direction: column; gap: 14px; overflow-y: auto; padding: 16px 0;">
+        
+        <!-- 1. 기술 선택 (Move Selector) -->
+        <div style="background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px 14px;">
+          <label style="font-size: 12px; font-weight: 800; color: #ffd700; margin-bottom: 6px; display: block;">
+            ⚔️ 테스트할 기술 선택 (72개 기술)
+          </label>
+          <div style="display: flex; gap: 8px;">
+            <select id="animStudioMoveSelect" class="form-control" style="flex: 1; padding: 10px 12px; font-size: 13px; font-weight: 700; background: #080c14; border: 1.5px solid var(--border-color); color: #fff; border-radius: 8px;">
+              <!-- Dynamically populated 72 moves with special tags -->
+            </select>
+          </div>
+          <!-- Selected move details preview -->
+          <div id="animStudioMoveDetail" style="margin-top: 8px; font-size: 11px; color: var(--text-sub); display: flex; gap: 8px; align-items: center;">
+            <!-- Type, Cat, Power -->
+          </div>
+        </div>
+
+        <!-- 2. 시전자 & 공격 방향 -->
+        <div style="background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px 14px;">
+          <label style="font-size: 12px; font-weight: 800; color: #38bdf8; margin-bottom: 6px; display: block;">
+            🎭 시전자 및 공격 방향
+          </label>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <button type="button" id="animStudioActorStreamer" class="btn-chip btn-chip-primary active" style="padding: 10px; text-align: center; font-size: 12px; font-weight: 800;" onclick="setAnimStudioActor('streamer')">
+              👑 스트리머 (좌 ➡️ 우)
+            </button>
+            <button type="button" id="animStudioActorViewers" class="btn-chip btn-chip-secondary" style="padding: 10px; text-align: center; font-size: 12px; font-weight: 800;" onclick="setAnimStudioActor('viewers')">
+              👥 시청자 (우 ➡️ 좌)
+            </button>
+          </div>
+        </div>
+
+        <!-- 3. 판정 및 연출 옵션 -->
+        <div style="background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px 14px;">
+          <label style="font-size: 12px; font-weight: 800; color: var(--chzzk-green); margin-bottom: 8px; display: block;">
+            ⚙️ 판정 및 이펙트 옵션
+          </label>
+          <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; cursor: pointer; color: #fff;">
+              <input type="checkbox" id="animStudioHitToggle" checked style="width: 16px; height: 16px; accent-color: var(--chzzk-green);">
+              <span>🎯 명중 (해제 시 회피 & 💨 빗나감 뱃지)</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; cursor: pointer; color: #ffd700;">
+              <input type="checkbox" id="animStudioCritToggle" style="width: 16px; height: 16px; accent-color: #ffd700;">
+              <span>💥 급소 타격 (화이트 플래시 + 강타음)</span>
+            </label>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
+            <span style="font-size: 11px; color: var(--text-sub); font-weight: 700;">상성 배율:</span>
+            <div style="display: flex; gap: 6px;">
+              <button type="button" class="btn-chip btn-chip-secondary active" id="animStudioMultNormal" onclick="setAnimStudioMult(1.0)">1.0x 보통</button>
+              <button type="button" class="btn-chip btn-chip-secondary" id="animStudioMultSuper" onclick="setAnimStudioMult(2.0)">2.0x 굉장함</button>
+              <button type="button" class="btn-chip btn-chip-secondary" id="animStudioMultWeak" onclick="setAnimStudioMult(0.5)">0.5x 별로</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. 원작 SE 사운드 단독 청취 바 -->
+        <div style="background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label style="font-size: 12px; font-weight: 800; color: #f43f5e; margin-bottom: 0;">
+              🔊 4/5세대 원작 SE 사운드 단독 테스트
+            </label>
+            <span style="font-size: 10.5px; color: var(--text-sub);">클릭 시 즉시 재생</span>
+          </div>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <button type="button" class="btn-chip btn-chip-secondary" style="font-size: 11px; padding: 4px 10px;" onclick="playAuthenticPokeSound('PRSFX- Earthquake.wav')">🔊 지진</button>
+            <button type="button" class="btn-chip btn-chip-secondary" style="font-size: 11px; padding: 4px 10px;" onclick="playAuthenticPokeSound('PRSFX- Psychic.wav')">🔊 사이코</button>
+            <button type="button" class="btn-chip btn-chip-secondary" style="font-size: 11px; padding: 4px 10px;" onclick="playAuthenticPokeSound('PRSFX- Muddy Water.wav')">🔊 파도타기</button>
+            <button type="button" class="btn-chip btn-chip-secondary" style="font-size: 11px; padding: 4px 10px;" onclick="playAuthenticPokeSound('hit_strong.wav')">🔊 강타 피격</button>
+            <button type="button" class="btn-chip btn-chip-secondary" style="font-size: 11px; padding: 4px 10px;" onclick="playAuthenticPokeSound('hit.wav')">🔊 일반 피격</button>
+            <button type="button" class="btn-chip btn-chip-secondary" style="font-size: 11px; padding: 4px 10px;" onclick="playAuthenticPokeSound('faint.wav')">🔊 기절음</button>
+            <button type="button" class="btn-chip btn-chip-secondary" style="font-size: 11px; padding: 4px 10px;" onclick="playAuthenticPokeSound('flee.wav')">🔊 회피음</button>
+          </div>
+        </div>
+
+        <!-- 5. 5세대 공식 BGM 및 위기 동적 전환 테스트 -->
+        <div style="background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <label style="font-size: 12px; font-weight: 800; color: #a78bfa; margin-bottom: 0;">
+              🎵 5세대 본가 공식 BGM 및 위기(빨간 피) 전환 테스트
+            </label>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="font-size: 10.5px; color: var(--text-sub);">볼륨:</span>
+              <input type="range" min="0" max="1" step="0.05" value="0.35" style="width: 60px; height: 4px; accent-color: #a78bfa; cursor: pointer;" oninput="setPokeBgmVolume(this.value)">
+            </div>
+          </div>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <button type="button" class="btn-chip btn-chip-secondary" style="font-size: 11px; padding: 5px 12px; font-weight: 800; color: #38bdf8;" onclick="playPokeBattleBgm('normal', 300)">🎵 통상 배틀곡 (Battle! Trainer)</button>
+            <button type="button" class="btn-chip btn-chip-secondary" style="font-size: 11px; padding: 5px 12px; font-weight: 800; color: #ef4444; border-color: rgba(239,68,68,0.4);" onclick="playPokeBattleBgm('pinch', 300)">🚨 5세대 위기 테마 (HP 빨간 피)</button>
+            <button type="button" class="btn-chip btn-chip-secondary" style="font-size: 11px; padding: 5px 12px; font-weight: 800; color: #ffd700;" onclick="playPokeBattleBgm('victory', 300)">🏆 승리 팡파레</button>
+            <button type="button" class="btn-chip btn-chip-secondary" style="font-size: 11px; padding: 5px 10px; color: var(--text-sub);" onclick="stopPokeBattleBgm(300)">⏹️ BGM 정지</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Footer Buttons -->
+      <div class="modal-footer" style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 14px; display: flex; gap: 10px; justify-content: space-between; align-items: center;">
+        <span style="font-size: 11px; color: var(--text-sub);">💡 재생 시 모달이 반투명해지며 뒤쪽 전장에서 연출이 실시간 재생됩니다.</span>
+        <div style="display: flex; gap: 8px;">
+          <button type="button" id="animStudioPlayBtn" class="btn btn-primary" style="padding: 10px 24px; font-size: 14px; font-weight: 900; background: linear-gradient(135deg, #ffd700, #ff8800); color: #000; border: none;" onclick="triggerAnimStudioPlay()">
+            ▶️ 기술 연출 재생
+          </button>
+          <button type="button" class="btn btn-secondary" style="padding: 10px 18px; font-size: 13px;" onclick="closePokeAnimStudioModal()">
+            닫기
+          </button>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -5355,6 +5507,9 @@
               </select>
               <div style="font-size: 10px; color: var(--text-sub); margin-top: 4px;">스트리머와 시청자가 동시에 행동을 선택하는 제한 시간입니다.</div>
             </div>
+            <button type="button" id="openAnimStudioSetupBtn" class="btn btn-secondary" style="width: 100%; padding: 10px; font-size: 12px; font-weight: 800; margin-top: 6px; border-color: rgba(234, 179, 8, 0.5); color: #ffd700;" onclick="openPokeAnimStudioModal()">
+              🎬 기술 연출 테스트기 (Studio)
+            </button>
           </div>
         </div>
 
@@ -11881,6 +12036,7 @@
       updateArenaActivePokemonUI();
       renderArenaTeamBallsHUD();
       updateArenaHPBars();
+      playPokeBattleBgm('normal', 400);
       startStreamerPokeTurn();
     }
 
@@ -12024,6 +12180,7 @@
       if (sText) sText.innerText = `${Math.max(0, Math.round(sSlot.currentHP))} / ${sSlot.maxHP}`;
       if (vText) vText.innerText = `${Math.max(0, Math.round(vSlot.currentHP))} / ${vSlot.maxHP}`;
       updateStreamerControllerPopout();
+      checkPokeBattleBgmCondition();
     }
 
     function setBattleDialogue(html) {
@@ -13827,6 +13984,206 @@
         }
       }
       await new Promise(r => setTimeout(r, 900));
+    }
+
+    // ==========================================
+    // Authentic Gen 5 Pokemon Dynamic BGM Engine
+    // ==========================================
+    const pokeBgmState = {
+      enabled: true,
+      volume: 0.35,
+      currentTrackType: null, // 'normal' | 'pinch' | 'victory'
+      audioElements: {},
+      fadeInterval: null,
+      isPinch: false
+    };
+
+    function getPokeBgmAudio(trackType) {
+      if (!pokeBgmState.audioElements[trackType]) {
+        let file = '';
+        if (trackType === 'normal') file = 'bgm_battle_trainer.mp3';
+        else if (trackType === 'pinch') file = 'bgm_battle_low_hp.mp3';
+        else if (trackType === 'victory') file = 'bgm_victory_trainer.mp3';
+        
+        if (file) {
+          const audio = new Audio('./battle_anims/audio/' + file);
+          audio.loop = (trackType !== 'victory');
+          audio.volume = 0;
+          pokeBgmState.audioElements[trackType] = audio;
+        }
+      }
+      return pokeBgmState.audioElements[trackType];
+    }
+
+    function playPokeBattleBgm(trackType, fadeMs = 400) {
+      if (!pokeBgmState.enabled && trackType !== 'victory') return;
+      if (pokeBgmState.currentTrackType === trackType) {
+        const curr = getPokeBgmAudio(trackType);
+        if (curr && curr.paused) {
+          curr.play().catch(e => console.warn('BGM play blocked:', e));
+        }
+        return;
+      }
+
+      const prevType = pokeBgmState.currentTrackType;
+      const prevAudio = prevType ? getPokeBgmAudio(prevType) : null;
+      const nextAudio = getPokeBgmAudio(trackType);
+      if (!nextAudio) return;
+
+      pokeBgmState.currentTrackType = trackType;
+      pokeBgmState.isPinch = (trackType === 'pinch');
+
+      if (pokeBgmState.fadeInterval) {
+        clearInterval(pokeBgmState.fadeInterval);
+        pokeBgmState.fadeInterval = null;
+      }
+
+      const targetVol = pokeBgmState.enabled ? pokeBgmState.volume : 0;
+      nextAudio.volume = 0;
+      nextAudio.currentTime = 0;
+      const playPromise = nextAudio.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(e => console.warn('BGM play autoplay prevented:', e));
+      }
+
+      const steps = 15;
+      const stepTime = Math.max(10, Math.floor(fadeMs / steps));
+      let step = 0;
+
+      pokeBgmState.fadeInterval = setInterval(() => {
+        step++;
+        const progress = Math.min(1, step / steps);
+        if (prevAudio) {
+          prevAudio.volume = Math.max(0, targetVol * (1 - progress));
+        }
+        if (nextAudio && pokeBgmState.enabled) {
+          nextAudio.volume = Math.min(targetVol, targetVol * progress);
+        }
+        if (step >= steps) {
+          clearInterval(pokeBgmState.fadeInterval);
+          pokeBgmState.fadeInterval = null;
+          if (prevAudio) {
+            prevAudio.pause();
+            prevAudio.currentTime = 0;
+          }
+          if (nextAudio && pokeBgmState.enabled) {
+            nextAudio.volume = targetVol;
+          }
+        }
+      }, stepTime);
+
+      updateBgmUIControls();
+    }
+
+    function stopPokeBattleBgm(fadeMs = 400) {
+      if (pokeBgmState.fadeInterval) {
+        clearInterval(pokeBgmState.fadeInterval);
+        pokeBgmState.fadeInterval = null;
+      }
+
+      const curr = pokeBgmState.currentTrackType ? getPokeBgmAudio(pokeBgmState.currentTrackType) : null;
+      pokeBgmState.currentTrackType = null;
+      pokeBgmState.isPinch = false;
+
+      if (!curr || curr.paused) {
+        Object.values(pokeBgmState.audioElements).forEach(a => { if (a) { a.pause(); a.currentTime = 0; } });
+        updateBgmUIControls();
+        return;
+      }
+
+      const startVol = curr.volume;
+      const steps = 12;
+      const stepTime = Math.max(10, Math.floor(fadeMs / steps));
+      let step = 0;
+
+      const fadeOut = setInterval(() => {
+        step++;
+        const p = Math.min(1, step / steps);
+        curr.volume = Math.max(0, startVol * (1 - p));
+        if (step >= steps) {
+          clearInterval(fadeOut);
+          Object.values(pokeBgmState.audioElements).forEach(a => { if (a) { a.pause(); a.currentTime = 0; } });
+          updateBgmUIControls();
+        }
+      }, stepTime);
+    }
+
+    function setPokeBgmVolume(val) {
+      const num = Math.max(0, Math.min(1, parseFloat(val) || 0));
+      pokeBgmState.volume = num;
+      if (num > 0) pokeBgmState.enabled = true;
+      if (pokeBgmState.currentTrackType) {
+        const audio = getPokeBgmAudio(pokeBgmState.currentTrackType);
+        if (audio) audio.volume = pokeBgmState.enabled ? num : 0;
+      }
+      updateBgmUIControls();
+    }
+
+    function togglePokeBgm() {
+      pokeBgmState.enabled = !pokeBgmState.enabled;
+      if (pokeBgmState.currentTrackType) {
+        const audio = getPokeBgmAudio(pokeBgmState.currentTrackType);
+        if (audio) {
+          if (!pokeBgmState.enabled) {
+            audio.volume = 0;
+          } else {
+            audio.volume = pokeBgmState.volume;
+            if (audio.paused) audio.play().catch(() => {});
+          }
+        }
+      } else if (pokeBgmState.enabled && typeof pokeBattleState !== 'undefined' && pokeBattleState.active) {
+        checkPokeBattleBgmCondition();
+      }
+      updateBgmUIControls();
+    }
+
+    function updateBgmUIControls() {
+      const btn = document.getElementById('arenaBgmToggleBtn');
+      const slider = document.getElementById('arenaBgmVolumeSlider');
+      if (btn) {
+        btn.innerHTML = pokeBgmState.enabled ? (pokeBgmState.isPinch ? '🚨' : '🎵') : '🔇';
+        btn.title = pokeBgmState.enabled ? `BGM ON (${Math.round(pokeBgmState.volume * 100)}%)` : 'BGM 음소거됨';
+      }
+      if (slider) {
+        slider.value = pokeBgmState.enabled ? pokeBgmState.volume : 0;
+      }
+    }
+
+    function checkPokeBattleBgmCondition() {
+      if (typeof pokeBattleState === 'undefined' || !pokeBattleState.active) return;
+      if (pokeBattleState.phase === 'ended') return;
+
+      // Check streamer team status
+      let aliveCount = 0;
+      if (Array.isArray(streamerTeam)) {
+        for (let i = 0; i < streamerTeam.length; i++) {
+          const slot = streamerTeam[i];
+          if (slot && !slot.fainted && slot.currentHP > 0) {
+            aliveCount++;
+          }
+        }
+      }
+
+      const activeSlot = (Array.isArray(streamerTeam) && streamerTeam[streamerActiveIdx]) ? streamerTeam[streamerActiveIdx] : null;
+      const hpRatio = (activeSlot && activeSlot.maxHP > 0) ? (activeSlot.currentHP / activeSlot.maxHP) : 1.0;
+      const isRedHp = (hpRatio <= 0.20) && (activeSlot && activeSlot.currentHP > 0);
+
+      // Condition: Only 1 Pokemon remains AND its HP is in red zone (<= 20%)
+      const shouldBePinch = (aliveCount === 1 && isRedHp);
+
+      if (shouldBePinch) {
+        if (pokeBgmState.currentTrackType !== 'pinch') {
+          console.log('[BGM] 🚨 Pinch Low-HP Theme Triggered (Alive:', aliveCount, ', HP:', Math.round(hpRatio * 100) + '%)');
+          playPokeBattleBgm('pinch', 500);
+        }
+      } else {
+        if (pokeBgmState.currentTrackType === 'pinch') {
+          console.log('[BGM] 🎵 Reverting to Normal Battle Theme (Alive:', aliveCount, ', HP:', Math.round(hpRatio * 100) + '%)');
+          playPokeBattleBgm('normal', 500);
+        } else if (!pokeBgmState.currentTrackType && pokeBgmState.enabled) {
+          playPokeBattleBgm('normal', 400);
+        }
+      }
     }
 
     // ==========================================
@@ -16131,6 +16488,700 @@
     }
 
 
+    const pokeMoveDatabase = {
+      "에너지볼": {
+            "name": "에너지볼",
+            "type": "풀",
+            "category": "특수",
+            "power": 90,
+            "accuracy": 100
+      },
+      "솔라빔": {
+            "name": "솔라빔",
+            "type": "풀",
+            "category": "특수",
+            "power": 120,
+            "accuracy": 100
+      },
+      "오물폭탄": {
+            "name": "오물폭탄",
+            "type": "독",
+            "category": "특수",
+            "power": 90,
+            "accuracy": 100
+      },
+      "기가드레인": {
+            "name": "기가드레인",
+            "type": "풀",
+            "category": "특수",
+            "power": 75,
+            "accuracy": 100
+      },
+      "화염방사": {
+            "name": "화염방사",
+            "type": "불꽃",
+            "category": "특수",
+            "power": 90,
+            "accuracy": 100
+      },
+      "불대문자": {
+            "name": "불대문자",
+            "type": "불꽃",
+            "category": "특수",
+            "power": 110,
+            "accuracy": 100
+      },
+      "에어슬래시": {
+            "name": "에어슬래시",
+            "type": "비행",
+            "category": "특수",
+            "power": 75,
+            "accuracy": 100
+      },
+      "도깨비불": {
+            "name": "도깨비불",
+            "type": "불꽃",
+            "category": "변화",
+            "power": 0,
+            "accuracy": 100
+      },
+      "파도타기": {
+            "name": "파도타기",
+            "type": "물",
+            "category": "특수",
+            "power": 90,
+            "accuracy": 100
+      },
+      "하이드로펌프": {
+            "name": "하이드로펌프",
+            "type": "물",
+            "category": "특수",
+            "power": 110,
+            "accuracy": 100
+      },
+      "폭포오르기": {
+            "name": "폭포오르기",
+            "type": "물",
+            "category": "물리",
+            "power": 80,
+            "accuracy": 100
+      },
+      "아쿠아브레이크": {
+            "name": "아쿠아브레이크",
+            "type": "물",
+            "category": "물리",
+            "power": 85,
+            "accuracy": 100
+      },
+      "벌레의야단법석": {
+            "name": "벌레의야단법석",
+            "type": "벌레",
+            "category": "특수",
+            "power": 90,
+            "accuracy": 100
+      },
+      "시저크로스": {
+            "name": "시저크로스",
+            "type": "벌레",
+            "category": "물리",
+            "power": 80,
+            "accuracy": 100
+      },
+      "나비춤": {
+            "name": "나비춤",
+            "type": "벌레",
+            "category": "변화",
+            "power": 0,
+            "accuracy": 100
+      },
+      "누르기": {
+            "name": "누르기",
+            "type": "노말",
+            "category": "물리",
+            "power": 85,
+            "accuracy": 100
+      },
+      "이판사판태클": {
+            "name": "이판사판태클",
+            "type": "노말",
+            "category": "물리",
+            "power": 120,
+            "accuracy": 100
+      },
+      "칼춤": {
+            "name": "칼춤",
+            "type": "노말",
+            "category": "변화",
+            "power": 0,
+            "accuracy": 100
+      },
+      "독찌르기": {
+            "name": "독찌르기",
+            "type": "독",
+            "category": "물리",
+            "power": 80,
+            "accuracy": 100
+      },
+      "더스트슈트": {
+            "name": "더스트슈트",
+            "type": "독",
+            "category": "물리",
+            "power": 120,
+            "accuracy": 100
+      },
+      "맹독": {
+            "name": "맹독",
+            "type": "독",
+            "category": "변화",
+            "power": 0,
+            "accuracy": 100
+      },
+      "10만볼트": {
+            "name": "10만볼트",
+            "type": "전기",
+            "category": "특수",
+            "power": 90,
+            "accuracy": 100
+      },
+      "번개": {
+            "name": "번개",
+            "type": "전기",
+            "category": "특수",
+            "power": 110,
+            "accuracy": 100
+      },
+      "볼트태클": {
+            "name": "볼트태클",
+            "type": "전기",
+            "category": "물리",
+            "power": 120,
+            "accuracy": 100
+      },
+      "전기자석파": {
+            "name": "전기자석파",
+            "type": "전기",
+            "category": "변화",
+            "power": 0,
+            "accuracy": 100
+      },
+      "사이코키네시스": {
+            "name": "사이코키네시스",
+            "type": "에스퍼",
+            "category": "특수",
+            "power": 90,
+            "accuracy": 100
+      },
+      "문포스": {
+            "name": "문포스",
+            "type": "페어리",
+            "category": "특수",
+            "power": 95,
+            "accuracy": 100
+      },
+      "치근거리기": {
+            "name": "치근거리기",
+            "type": "페어리",
+            "category": "물리",
+            "power": 90,
+            "accuracy": 100
+      },
+      "매지컬샤인": {
+            "name": "매지컬샤인",
+            "type": "페어리",
+            "category": "특수",
+            "power": 80,
+            "accuracy": 100
+      },
+      "달의불빛": {
+            "name": "달의불빛",
+            "type": "페어리",
+            "category": "변화",
+            "power": 0,
+            "accuracy": 100
+      },
+      "플레어드라이브": {
+            "name": "플레어드라이브",
+            "type": "불꽃",
+            "category": "물리",
+            "power": 120,
+            "accuracy": 100
+      },
+      "냉동빔": {
+            "name": "냉동빔",
+            "type": "얼음",
+            "category": "특수",
+            "power": 90,
+            "accuracy": 100
+      },
+      "명상": {
+            "name": "명상",
+            "type": "에스퍼",
+            "category": "변화",
+            "power": 0,
+            "accuracy": 100
+      },
+      "스톤에지": {
+            "name": "스톤에지",
+            "type": "바위",
+            "category": "물리",
+            "power": 100,
+            "accuracy": 100
+      },
+      "인파이트": {
+            "name": "인파이트",
+            "type": "격투",
+            "category": "물리",
+            "power": 120,
+            "accuracy": 100
+      },
+      "사이코쇼크": {
+            "name": "사이코쇼크",
+            "type": "에스퍼",
+            "category": "특수",
+            "power": 80,
+            "accuracy": 100
+      },
+      "사념의박치기": {
+            "name": "사념의박치기",
+            "type": "에스퍼",
+            "category": "물리",
+            "power": 80,
+            "accuracy": 100
+      },
+      "파동탄": {
+            "name": "파동탄",
+            "type": "격투",
+            "category": "특수",
+            "power": 80,
+            "accuracy": 100
+      },
+      "드레인펀치": {
+            "name": "드레인펀치",
+            "type": "격투",
+            "category": "물리",
+            "power": 75,
+            "accuracy": 100
+      },
+      "벌크업": {
+            "name": "벌크업",
+            "type": "격투",
+            "category": "변화",
+            "power": 0,
+            "accuracy": 100
+      },
+      "섀도볼": {
+            "name": "섀도볼",
+            "type": "고스트",
+            "category": "특수",
+            "power": 80,
+            "accuracy": 100
+      },
+      "섀도크루": {
+            "name": "섀도크루",
+            "type": "고스트",
+            "category": "물리",
+            "power": 70,
+            "accuracy": 100
+      },
+      "길동무": {
+            "name": "길동무",
+            "type": "고스트",
+            "category": "변화",
+            "power": 0,
+            "accuracy": 100
+      },
+      "하이퍼보이스": {
+            "name": "하이퍼보이스",
+            "type": "노말",
+            "category": "특수",
+            "power": 90,
+            "accuracy": 100
+      },
+      "유턴": {
+            "name": "유턴",
+            "type": "벌레",
+            "category": "물리",
+            "power": 70,
+            "accuracy": 100
+      },
+      "지진": {
+            "name": "지진",
+            "type": "땅",
+            "category": "물리",
+            "power": 100,
+            "accuracy": 100
+      },
+      "스톤샤워": {
+            "name": "스톤샤워",
+            "type": "바위",
+            "category": "물리",
+            "power": 75,
+            "accuracy": 100
+      },
+      "록커트": {
+            "name": "록커트",
+            "type": "바위",
+            "category": "변화",
+            "power": 0,
+            "accuracy": 100
+      },
+      "역린": {
+            "name": "역린",
+            "type": "드래곤",
+            "category": "물리",
+            "power": 120,
+            "accuracy": 100
+      },
+      "드래곤크루": {
+            "name": "드래곤크루",
+            "type": "드래곤",
+            "category": "물리",
+            "power": 80,
+            "accuracy": 100
+      },
+      "용의춤": {
+            "name": "용의춤",
+            "type": "드래곤",
+            "category": "변화",
+            "power": 0,
+            "accuracy": 100
+      },
+      "리프블레이드": {
+            "name": "리프블레이드",
+            "type": "풀",
+            "category": "물리",
+            "power": 90,
+            "accuracy": 100
+      },
+      "악의파동": {
+            "name": "악의파동",
+            "type": "악",
+            "category": "특수",
+            "power": 80,
+            "accuracy": 100
+      },
+      "깨물어부수기": {
+            "name": "깨물어부수기",
+            "type": "악",
+            "category": "물리",
+            "power": 80,
+            "accuracy": 100
+      },
+      "탁쳐서떨구기": {
+            "name": "탁쳐서떨구기",
+            "type": "악",
+            "category": "물리",
+            "power": 65,
+            "accuracy": 100
+      },
+      "기습": {
+            "name": "기습",
+            "type": "악",
+            "category": "물리",
+            "power": 70,
+            "accuracy": 100
+      },
+      "코멧펀치": {
+            "name": "코멧펀치",
+            "type": "강철",
+            "category": "물리",
+            "power": 90,
+            "accuracy": 100
+      },
+      "러스터캐논": {
+            "name": "러스터캐논",
+            "type": "강철",
+            "category": "특수",
+            "power": 80,
+            "accuracy": 100
+      },
+      "불릿펀치": {
+            "name": "불릿펀치",
+            "type": "강철",
+            "category": "물리",
+            "power": 40,
+            "accuracy": 100
+      },
+      "아이언헤드": {
+            "name": "아이언헤드",
+            "type": "강철",
+            "category": "물리",
+            "power": 80,
+            "accuracy": 100
+      },
+      "철벽": {
+            "name": "철벽",
+            "type": "강철",
+            "category": "변화",
+            "power": 0,
+            "accuracy": 100
+      },
+      "야습": {
+            "name": "야습",
+            "type": "고스트",
+            "category": "물리",
+            "power": 40,
+            "accuracy": 100
+      },
+      "눈보라": {
+            "name": "눈보라",
+            "type": "얼음",
+            "category": "특수",
+            "power": 110,
+            "accuracy": 100
+      },
+      "고드름떨구기": {
+            "name": "고드름떨구기",
+            "type": "얼음",
+            "category": "물리",
+            "power": 85,
+            "accuracy": 100
+      },
+      "얼음뭉치": {
+            "name": "얼음뭉치",
+            "type": "얼음",
+            "category": "물리",
+            "power": 40,
+            "accuracy": 100
+      },
+      "브레이브버드": {
+            "name": "브레이브버드",
+            "type": "비행",
+            "category": "물리",
+            "power": 120,
+            "accuracy": 100
+      },
+      "파워젬": {
+            "name": "파워젬",
+            "type": "바위",
+            "category": "특수",
+            "power": 80,
+            "accuracy": 100
+      },
+      "대지의힘": {
+            "name": "대지의힘",
+            "type": "땅",
+            "category": "특수",
+            "power": 90,
+            "accuracy": 100
+      },
+      "10만마력": {
+            "name": "10만마력",
+            "type": "땅",
+            "category": "물리",
+            "power": 95,
+            "accuracy": 100
+      },
+      "스텔스록": {
+            "name": "스텔스록",
+            "type": "바위",
+            "category": "변화",
+            "power": 0,
+            "accuracy": 100
+      },
+      "용의파동": {
+            "name": "용의파동",
+            "type": "드래곤",
+            "category": "특수",
+            "power": 85,
+            "accuracy": 100
+      },
+      "날개쉬기": {
+            "name": "날개쉬기",
+            "type": "비행",
+            "category": "변화",
+            "power": 0,
+            "accuracy": 100
+      }
+};
+    // ==========================================
+    // Pokemon Move Animation Studio Controller
+    // ==========================================
+    let animStudioActor = 'streamer';
+    let animStudioMult = 1.0;
+
+    function openPokeAnimStudioModal() {
+      if (typeof closeSettingsDrawer === 'function') {
+        closeSettingsDrawer();
+      }
+      const modal = document.getElementById('pokeAnimStudioModal');
+      if (!modal) return;
+
+      const sel = document.getElementById('animStudioMoveSelect');
+      if (sel && sel.options.length === 0) {
+        populateAnimStudioMoves();
+      }
+
+      ensureArenaSpritesReady();
+      updateAnimStudioDetail();
+      modal.style.opacity = '';
+      modal.style.pointerEvents = '';
+      modal.classList.add('active');
+    }
+
+    function closePokeAnimStudioModal() {
+      const modal = document.getElementById('pokeAnimStudioModal');
+      if (modal) {
+        modal.classList.remove('active');
+        modal.classList.remove('studio-playing');
+        modal.style.opacity = '';
+        modal.style.pointerEvents = '';
+      }
+      if (typeof pokeBattleState === 'undefined' || !pokeBattleState.active) {
+        stopPokeBattleBgm(300);
+        const arenaStage = document.getElementById('pokeBattleArenaStage');
+        const setupStage = document.getElementById('pokeBattleSetupStage');
+        if (arenaStage && setupStage) {
+          arenaStage.style.display = 'none';
+          setupStage.style.display = 'block';
+        }
+      }
+    }
+
+    function setAnimStudioActor(actor) {
+      animStudioActor = actor;
+      const sBtn = document.getElementById('animStudioActorStreamer');
+      const vBtn = document.getElementById('animStudioActorViewers');
+      if (sBtn) sBtn.classList.toggle('active', actor === 'streamer');
+      if (vBtn) vBtn.classList.toggle('active', actor === 'viewers');
+    }
+
+    function setAnimStudioMult(mult) {
+      animStudioMult = mult;
+      const nBtn = document.getElementById('animStudioMultNormal');
+      const sBtn = document.getElementById('animStudioMultSuper');
+      const wBtn = document.getElementById('animStudioMultWeak');
+      if (nBtn) nBtn.classList.toggle('active', mult === 1.0);
+      if (sBtn) sBtn.classList.toggle('active', mult === 2.0);
+      if (wBtn) wBtn.classList.toggle('active', mult === 0.5);
+    }
+
+    function populateAnimStudioMoves() {
+      const sel = document.getElementById('animStudioMoveSelect');
+      if (!sel || typeof pokeMoveDatabase === 'undefined') return;
+
+      sel.innerHTML = '';
+      
+      // 1. EBDX Specials
+      const specialGroup = document.createElement('optgroup');
+      specialGroup.label = '🌟 EBDX 시네마틱 스페셜 기술 (카메라 럼블 + 고유 연출)';
+      const specials = ['지진', '사이코키네시스', '파도타기'];
+      specials.forEach(name => {
+        const opt = document.createElement('option');
+        opt.value = name;
+        opt.textContent = `🎬 [EBDX 시네마틱] ${name}`;
+        specialGroup.appendChild(opt);
+      });
+      sel.appendChild(specialGroup);
+
+      // 2. All 72 Moves
+      const normalGroup = document.createElement('optgroup');
+      normalGroup.label = '⚔️ 본가 4/5세대 도트 애니메이션 기술 (72종)';
+      const allMoves = Object.values(pokeMoveDatabase);
+      allMoves.sort((a, b) => a.name.localeCompare(b.name, 'ko'));
+
+      allMoves.forEach(m => {
+        if (specials.includes(m.name)) return;
+        const opt = document.createElement('option');
+        opt.value = m.name;
+        opt.textContent = `${m.name} (${m.type} / ${m.category} / 위력 ${m.power || 0})`;
+        normalGroup.appendChild(opt);
+      });
+      sel.appendChild(normalGroup);
+
+      sel.addEventListener('change', updateAnimStudioDetail);
+    }
+
+    function updateAnimStudioDetail() {
+      const sel = document.getElementById('animStudioMoveSelect');
+      const detail = document.getElementById('animStudioMoveDetail');
+      if (!sel || !detail || typeof pokeMoveDatabase === 'undefined') return;
+
+      const moveName = sel.value;
+      let move = null;
+      for (const m of Object.values(pokeMoveDatabase)) {
+        if (m.name === moveName) {
+          move = m;
+          break;
+        }
+      }
+      if (!move) {
+        detail.innerHTML = `<span>선택된 기술: <b>${moveName}</b></span>`;
+        return;
+      }
+
+      const isEbdx = ['지진', '사이코키네시스', '파도타기'].includes(moveName);
+      detail.innerHTML = `
+        <span class="badge-tag" style="background: rgba(255,255,255,0.1); color: #fff; font-size: 11px;">속성: <b>${move.type}</b></span>
+        <span style="color: ${move.category === '물리' ? '#f87171' : (move.category === '특수' ? '#60a5fa' : '#a78bfa')}; font-weight: 800; font-size: 11px;">분류: ${move.category}</span>
+        <span style="font-size: 11px;">위력: <b>${move.power || 0}</b></span>
+        <span style="font-size: 11px;">명중률: <b>${move.accuracy || 100}%</b></span>
+        ${isEbdx ? '<span style="color: #ffd700; font-weight: 800; background: rgba(255,215,0,0.15); padding: 2px 6px; border-radius: 4px; font-size: 10px;">🌟 EBDX 전용 시네마틱</span>' : '<span style="color: #38bdf8; font-weight: 800; background: rgba(56,189,248,0.15); padding: 2px 6px; border-radius: 4px; font-size: 10px;">🎮 NDS 원작 도트</span>'}
+      `;
+    }
+
+    function ensureArenaSpritesReady() {
+      const sSpr = document.getElementById('arenaStreamerSprite');
+      const vSpr = document.getElementById('arenaViewersSprite');
+      if (sSpr && (!sSpr.src || sSpr.src.endsWith('/') || sSpr.src.includes('about:blank'))) {
+        sSpr.src = 'pokemon/6.png';
+      }
+      if (vSpr && (!vSpr.src || vSpr.src.endsWith('/') || vSpr.src.includes('about:blank'))) {
+        vSpr.src = 'pokemon/25.png';
+      }
+      const arenaStage = document.getElementById('pokeBattleArenaStage');
+      if (arenaStage && arenaStage.style.display === 'none') {
+        arenaStage.style.display = 'flex';
+        const setupStage = document.getElementById('pokeBattleSetupStage');
+        if (setupStage) setupStage.style.display = 'none';
+      }
+    }
+
+    async function triggerAnimStudioPlay() {
+      const sel = document.getElementById('animStudioMoveSelect');
+      if (!sel) return;
+      const moveName = sel.value;
+      const hit = document.getElementById('animStudioHitToggle').checked;
+      const isCrit = document.getElementById('animStudioCritToggle').checked;
+      const typeMult = animStudioMult;
+
+      let moveObj = { name: moveName, type: '노말', category: '물리', power: 80 };
+      if (typeof pokeMoveDatabase !== 'undefined') {
+        for (const m of Object.values(pokeMoveDatabase)) {
+          if (m && m.name === moveName) {
+            moveObj = Object.assign({}, m);
+            break;
+          }
+        }
+      }
+
+      ensureArenaSpritesReady();
+
+      const modal = document.getElementById('pokeAnimStudioModal');
+      const playBtn = document.getElementById('animStudioPlayBtn');
+      if (playBtn) playBtn.disabled = true;
+
+      // Semi-transparent overlay so the entire stadium battle arena is visible
+      if (modal) {
+        modal.classList.add('studio-playing');
+      }
+
+      try {
+        await playPokeMoveAnimation(animStudioActor, moveObj, {
+          hit: hit,
+          isCrit: isCrit,
+          typeMult: typeMult,
+          finalDamage: 65
+        });
+      } finally {
+        if (modal) {
+          modal.classList.remove('studio-playing');
+        }
+        if (playBtn) playBtn.disabled = false;
+      }
+    }
+
+
     // Global Developer Test Helper for Pokemon Battle Animations
     window.testPokeAnim = async function(moveName = '지진', actor = 'streamer', isCrit = false, typeMult = 1.0) {
       let dummyMove = { name: moveName, type: '노말', category: '물리', power: 80 };
@@ -17002,6 +18053,7 @@
       }
 
       if (modal) modal.classList.add('active');
+      playPokeBattleBgm('victory', 400);
       launchConfetti();
     }
 
@@ -17012,6 +18064,7 @@
 
     function quitPokeBattle() {
       pokeBattleState.active = false;
+      stopPokeBattleBgm(300);
       clearInterval(pokeBattleState.streamerTimerInterval);
       clearInterval(pokeBattleState.viewersTimerInterval);
       clearInterval(pokeBattleState.faintTimerInterval);
