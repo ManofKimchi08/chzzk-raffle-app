@@ -1,7 +1,7 @@
-# 🎮 치지직 대규모 시청자 추첨 & 룰렛 & 실시간 투표 & 포켓몬 배틀/퀴즈 쇼 플랫폼 (Chzzk Interactive Hub) v5.0.0
+# 🎮 치지직 대규모 시청자 추첨 & 룰렛 & 실시간 투표 & 포켓몬 배틀/퀴즈 쇼 플랫폼 (Chzzk Interactive Hub) v5.1.0
 
 ![Chzzk WebSocket Live](https://img.shields.io/badge/Chzzk-WebSocket%20Live-00ffa3?style=for-the-badge&logo=naver)
-![Version](https://img.shields.io/badge/Release-v5.0.0-purple?style=for-the-badge)
+![Version](https://img.shields.io/badge/Release-v5.1.0-purple?style=for-the-badge)
 ![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![HTML5 Canvas](https://img.shields.io/badge/HTML5-Canvas%20%26%20Audio-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
@@ -26,6 +26,29 @@
 | **08. v4.8.3 릴리즈 노트** | 스트리머 비밀 조작 모드, 자동 블라인드, 단축키, 취소 토글, 클릭 안정성 패치 | [🚀 v4.8.3 릴리즈 노트 바로가기](docs/08_release_notes_v4.8.3_ko.md) |
 | **09. v4.8.4 릴리즈 노트** | 실시간 채팅창 오버레이(메인 밀림 0px 방지), 채팅창 닉네임 원클릭 시청자 채팅 추적(TTS) | [🚀 v4.8.4 릴리즈 노트 바로가기](docs/09_release_notes_v4.8.4_ko.md) |
 | **10. v5.0.0 릴리즈 노트** | 5세대 BGM 엔진 & 위기 동적 전환, 옵션창 복구, 기술 연출 스튜디오 설정 서랍 이전 | [🚀 v5.0.0 릴리즈 노트 바로가기](docs/10_release_notes_v5.0.0_ko.md) |
+| **11. v5.1.0 릴리즈 노트** | 포챔스 레귤레이션 M-C 공식 로스터(258마리) 100% 동기화, SFX 독립 볼륨, 기술 효과음 전수 개편 | [🚀 v5.1.0 릴리즈 노트 바로가기](docs/11_release_notes_v5.1.0_ko.md) |
+
+## 🌟 v5.1.0 주요 신규 및 개선 사항 (What's New in v5.1.0)
+
+### 1. 🏆 포챔스(PokéChamps) 레귤레이션 M-C 공식 로스터 100% 동기화
+- **미입국 19마리 전면 제거**: 대회 출전 불가 대상인 초전설(코라이돈, 미라이돈), 전설(우라오스), 사흉수(총지엔, 파오젠, 딩루, 위유이), 패러독스(날개치는머리 등 6종), 미입국 일반 포켓몬(다투곰, 어써러셔, 싸리용, 토오 등 6종)을 배틀 엔진에서 완전 제거.
+- **공식 M-C 신규 참전 15마리 완벽 입국**: 푸크린(#40), 페르시온(#53), 파오리(#83), 마임맨(#122), 꿀꺽몬(#317), 고고트(#673), 폭슬라이(#828), 케오퍼스(#853), 나이킹(#863), 창파나이트(#865), 찌르성게(#871), 빠르모트(#923), 올리르바(#930), 시비꼬(#931), 마피티프(#943)의 공식 종족값, 4개 실전기(PP 포함), 2D 전면/후면 스프라이트(총 30개 파일) 로컬 영구 등록.
+- **공식 258마리 체제 확립**: 기본 231종 + 폼체인지/리전폼 27종 = 총 258마리 엔트리 확립.
+
+![포챔스 M-C 신규 참전 포켓몬 빠르모트 실전 출전](docs/images/pochams_pawmot_battle_start.png)
+![빠르모트의 인파이트 발동 및 실시간 애니메이션/PP 차감](docs/images/pochams_pawmot_close_combat.png)
+
+### 2. 🔊 효과음(SFX) 독립 볼륨 조절 & 원클릭 음소거 시스템
+- **독립 2계통 오디오 제어**: BGM과 별개로 작동하는 효과음 슬라이더(0% ~ 100%) 및 🔊/🔇 음소거 토글 탑재. 실제 오디오 파일과 Web Audio API 합성 효과음 모두 정확히 비례 스케일링.
+- **3대 주요 영역 UI 컨트롤**: 포켓몬 셋업 툴바, 아레나 상단 전광판 HUD, 애니메이션 스튜디오 모달에 일체형 컨트롤 캡슐 제공 및 localStorage 영구 보존.
+
+![배틀 아레나 상단 HUD 일체형 오디오 제어 캡슐](docs/images/sfx_volume_controls_arena.png)
+
+### 3. ⚡ 기술 효과음(SFX) 매칭 전수 개편 & 배틀 엔진 3중 방어 가드
+- **108개 기술 사운드 매칭 전수 개편**: 10만볼트 등 전기 기술 진흙 둔탁음 ➔ 고전압 전격 빔 사운드(eam.wav), 기습/탁떨 피격 신음 ➔ 날카로운 물리 타격음(PRSFX- Bullet Punch.wav), 고위력 돌진/급류 충돌음(Crash.m4a, PRSFX- Muddy Water.wav) 등 대대적 업그레이드.
+- **방어적 3중 기절 가드**: 데미지 계산 도중 예외로 인해 0HP 포켓몬이 다음 라운드로 넘어가는 '좀비 버그' 원천 차단.
+
+---
 
 ## 🌟 v5.0.0 주요 신규 및 개선 사항 (What's New in v5.0.0)
 

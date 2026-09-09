@@ -727,6 +727,67 @@
       "sprite_back": "pokemon/form_38_alola_back.png"
     },
     {
+      "id": 40,
+      "code": "0040-000",
+      "name": "푸크린",
+      "types": [
+        "노말",
+        "페어리"
+      ],
+      "stats": {
+        "hp": 140,
+        "atk": 70,
+        "def": 45,
+        "spa": 85,
+        "spd": 50,
+        "spe": 45
+      },
+      "moves": [
+        {
+          "name": "매지컬샤인",
+          "type": "페어리",
+          "category": "특수",
+          "power": 80,
+          "acc": 100,
+          "desc": "눈부신 빛을 발산하여 상대에게 큰 피해를 준다.",
+          "pp": 10,
+          "max_pp": 10
+        },
+        {
+          "name": "하이퍼보이스",
+          "type": "노말",
+          "category": "특수",
+          "power": 90,
+          "acc": 100,
+          "desc": "소름 끼치는 음파를 울려 퍼뜨려 상대에게 데미지를 준다.",
+          "pp": 10,
+          "max_pp": 10
+        },
+        {
+          "name": "10만볼트",
+          "type": "전기",
+          "category": "특수",
+          "power": 90,
+          "acc": 100,
+          "desc": "강한 전격을 뿜어 상대를 공격한다. 마비 상태로 만들 때가 있다.",
+          "pp": 15,
+          "max_pp": 15
+        },
+        {
+          "name": "화염방사",
+          "type": "불꽃",
+          "category": "특수",
+          "power": 90,
+          "acc": 100,
+          "desc": "격렬한 불꽃을 상대에게 뿜어내어 공격한다. 화상 상태로 만들 때가 있다.",
+          "pp": 15,
+          "max_pp": 15
+        }
+      ],
+      "sprite_front": "pokemon/40.png",
+      "sprite_back": "pokemon/40_back.png"
+    },
+    {
       "id": 45,
       "code": "0045-000",
       "name": "라플레시아",
@@ -786,6 +847,66 @@
       ],
       "sprite_front": "pokemon/45.png",
       "sprite_back": "pokemon/45_back.png"
+    },
+    {
+      "id": 53,
+      "code": "0053-000",
+      "name": "페르시온",
+      "types": [
+        "노말"
+      ],
+      "stats": {
+        "hp": 65,
+        "atk": 70,
+        "def": 60,
+        "spa": 65,
+        "spd": 65,
+        "spe": 115
+      },
+      "moves": [
+        {
+          "name": "속이다",
+          "type": "노말",
+          "category": "물리",
+          "power": 40,
+          "acc": 100,
+          "desc": "선제공격하여 상대를 풀죽게 만든다. 첫 턴에만 성공한다.",
+          "pp": 10,
+          "max_pp": 10
+        },
+        {
+          "name": "은혜갚기",
+          "type": "노말",
+          "category": "물리",
+          "power": 102,
+          "acc": 100,
+          "desc": "트레이너를 향한 진심어린 마음을 실어 강력하게 공격한다.",
+          "pp": 20,
+          "max_pp": 20
+        },
+        {
+          "name": "기습",
+          "type": "악",
+          "category": "물리",
+          "power": 70,
+          "acc": 100,
+          "desc": "상대보다 먼저 공격한다. 상대가 공격 기술을 쓰지 않으면 실패한다.",
+          "pp": 5,
+          "max_pp": 5
+        },
+        {
+          "name": "유턴",
+          "type": "벌레",
+          "category": "물리",
+          "power": 70,
+          "acc": 100,
+          "desc": "공격한 뒤 재빠르게 돌아와 대기 중인 포켓몬과 교체한다.",
+          "pp": 20,
+          "max_pp": 20
+        }
+      ],
+      "sprite_front": "pokemon/53.png",
+      "sprite_back": "pokemon/53_back.png"
     },
     {
       "id": 59,
@@ -1212,6 +1333,67 @@
       "sprite_back": "pokemon/form_80_galar_back.png"
     },
     {
+      "id": 83,
+      "code": "0083-000",
+      "name": "파오리",
+      "types": [
+        "노말",
+        "비행"
+      ],
+      "stats": {
+        "hp": 52,
+        "atk": 90,
+        "def": 55,
+        "spa": 58,
+        "spd": 62,
+        "spe": 60
+      },
+      "moves": [
+        {
+          "name": "브레이브버드",
+          "type": "비행",
+          "category": "물리",
+          "power": 120,
+          "acc": 100,
+          "desc": "날개를 접고 낮은 고도로 돌진한다. 자신도 큰 반동 피해를 입는다.",
+          "pp": 15,
+          "max_pp": 15
+        },
+        {
+          "name": "리프블레이드",
+          "type": "풀",
+          "category": "물리",
+          "power": 90,
+          "acc": 100,
+          "desc": "식물의 줄기를 칼처럼 휘둘러 상대를 벤다. 급소에 맞기 쉽다.",
+          "pp": 15,
+          "max_pp": 15
+        },
+        {
+          "name": "깜짝베기",
+          "type": "악",
+          "category": "물리",
+          "power": 70,
+          "acc": 100,
+          "desc": "순간적으로 틈을 보아 순식간에 벤다. 급소에 맞기 쉽다.",
+          "pp": 15,
+          "max_pp": 15
+        },
+        {
+          "name": "인파이트",
+          "type": "격투",
+          "category": "물리",
+          "power": 120,
+          "acc": 100,
+          "desc": "가드를 풀고 전력으로 난타한다. 자신의 방어와 특수방어가 1랭크씩 떨어진다.",
+          "pp": 5,
+          "max_pp": 5
+        }
+      ],
+      "sprite_front": "pokemon/83.png",
+      "sprite_back": "pokemon/83_back.png"
+    },
+    {
       "id": 94,
       "code": "0094-000",
       "name": "팬텀",
@@ -1392,6 +1574,67 @@
       ],
       "sprite_front": "pokemon/121.png",
       "sprite_back": "pokemon/121_back.png"
+    },
+    {
+      "id": 122,
+      "code": "0122-000",
+      "name": "마임맨",
+      "types": [
+        "에스퍼",
+        "페어리"
+      ],
+      "stats": {
+        "hp": 40,
+        "atk": 45,
+        "def": 65,
+        "spa": 100,
+        "spd": 120,
+        "spe": 90
+      },
+      "moves": [
+        {
+          "name": "사이코키네시스",
+          "type": "에스퍼",
+          "category": "특수",
+          "power": 90,
+          "acc": 100,
+          "desc": "강한 염동력으로 상대를 압박한다. 상대의 특수방어를 떨어뜨릴 때가 있다.",
+          "pp": 10,
+          "max_pp": 10
+        },
+        {
+          "name": "매지컬샤인",
+          "type": "페어리",
+          "category": "특수",
+          "power": 80,
+          "acc": 100,
+          "desc": "눈부신 빛을 발산하여 상대에게 큰 피해를 준다.",
+          "pp": 10,
+          "max_pp": 10
+        },
+        {
+          "name": "10만볼트",
+          "type": "전기",
+          "category": "특수",
+          "power": 90,
+          "acc": 100,
+          "desc": "강한 전격을 뿜어 상대를 공격한다. 마비 상태로 만들 때가 있다.",
+          "pp": 15,
+          "max_pp": 15
+        },
+        {
+          "name": "섀도볼",
+          "type": "고스트",
+          "category": "특수",
+          "power": 80,
+          "acc": 100,
+          "desc": "검은 그림자 덩어리를 던져 공격한다. 상대의 특수방어를 떨어뜨릴 때가 있다.",
+          "pp": 15,
+          "max_pp": 15
+        }
+      ],
+      "sprite_front": "pokemon/122.png",
+      "sprite_back": "pokemon/122_back.png"
     },
     {
       "id": 127,
@@ -4000,6 +4243,66 @@
       "sprite_back": "pokemon/310_back.png"
     },
     {
+      "id": 317,
+      "code": "0317-000",
+      "name": "꿀꺽몬",
+      "types": [
+        "독"
+      ],
+      "stats": {
+        "hp": 100,
+        "atk": 73,
+        "def": 83,
+        "spa": 73,
+        "spd": 83,
+        "spe": 55
+      },
+      "moves": [
+        {
+          "name": "오물폭탄",
+          "type": "독",
+          "category": "특수",
+          "power": 90,
+          "acc": 100,
+          "desc": "더러운 오물을 내던져 공격한다. 독 상태로 만들 때가 있다.",
+          "pp": 10,
+          "max_pp": 10
+        },
+        {
+          "name": "냉동빔",
+          "type": "얼음",
+          "category": "특수",
+          "power": 90,
+          "acc": 100,
+          "desc": "얼어붙는 냉기를 뿜어내어 상대를 공격한다. 얼음 상태로 만들 때가 있다.",
+          "pp": 10,
+          "max_pp": 10
+        },
+        {
+          "name": "기가드레인",
+          "type": "풀",
+          "category": "특수",
+          "power": 75,
+          "acc": 100,
+          "desc": "상대의 양분을 빨아들여 공격한다. 준 데미지의 절반만큼 HP를 회복한다.",
+          "pp": 10,
+          "max_pp": 10
+        },
+        {
+          "name": "지진",
+          "type": "땅",
+          "category": "물리",
+          "power": 100,
+          "acc": 100,
+          "desc": "대지를 뒤흔들어 주변에 큰 충격을 가한다.",
+          "pp": 10,
+          "max_pp": 10
+        }
+      ],
+      "sprite_front": "pokemon/317.png",
+      "sprite_back": "pokemon/317_back.png"
+    },
+    {
       "id": 319,
       "code": "0319-000",
       "name": "샤크니아",
@@ -4601,6 +4904,67 @@
       ],
       "sprite_front": "pokemon/362.png",
       "sprite_back": "pokemon/362_back.png"
+    },
+    {
+      "id": 373,
+      "code": "0373-000",
+      "name": "보만다",
+      "types": [
+        "드래곤",
+        "비행"
+      ],
+      "stats": {
+        "hp": 95,
+        "atk": 135,
+        "def": 80,
+        "spa": 110,
+        "spd": 80,
+        "spe": 100
+      },
+      "moves": [
+        {
+          "name": "역린",
+          "type": "드래곤",
+          "category": "물리",
+          "power": 120,
+          "acc": 100,
+          "desc": "2-3턴 동안 날뛰며 상대를 맹공격한다.",
+          "pp": 10,
+          "max_pp": 10
+        },
+        {
+          "name": "용성군",
+          "type": "드래곤",
+          "category": "특수",
+          "power": 130,
+          "acc": 90,
+          "desc": "하늘에서 무수한 유성을 떨어뜨린다. 특수공격이 떨어진다.",
+          "pp": 5,
+          "max_pp": 5
+        },
+        {
+          "name": "지진",
+          "type": "땅",
+          "category": "물리",
+          "power": 100,
+          "acc": 100,
+          "desc": "지진의 흔들림으로 주위에 있는 모든 포켓몬을 공격한다.",
+          "pp": 10,
+          "max_pp": 10
+        },
+        {
+          "name": "불대문자",
+          "type": "불꽃",
+          "category": "특수",
+          "power": 110,
+          "acc": 85,
+          "desc": "대문자 모양의 맹렬한 불꽃으로 상대를 불태운다.",
+          "pp": 5,
+          "max_pp": 5
+        }
+      ],
+      "sprite_front": "pokemon/373.png",
+      "sprite_back": "pokemon/373_back.png"
     },
     {
       "id": 376,
@@ -8909,6 +9273,66 @@
       "sprite_back": "pokemon/671_back.png"
     },
     {
+      "id": 673,
+      "code": "0673-000",
+      "name": "고고트",
+      "types": [
+        "풀"
+      ],
+      "stats": {
+        "hp": 123,
+        "atk": 100,
+        "def": 62,
+        "spa": 97,
+        "spd": 81,
+        "spe": 68
+      },
+      "moves": [
+        {
+          "name": "우드혼",
+          "type": "풀",
+          "category": "물리",
+          "power": 75,
+          "acc": 100,
+          "desc": "뿔을 박아 체력을 흡수한다. 준 데미지의 절반만큼 HP를 회복한다.",
+          "pp": 10,
+          "max_pp": 10
+        },
+        {
+          "name": "지진",
+          "type": "땅",
+          "category": "물리",
+          "power": 100,
+          "acc": 100,
+          "desc": "대지를 뒤흔들어 주변에 큰 충격을 가한다.",
+          "pp": 10,
+          "max_pp": 10
+        },
+        {
+          "name": "우드해머",
+          "type": "풀",
+          "category": "물리",
+          "power": 120,
+          "acc": 100,
+          "desc": "몸 전체를 휘둘러 격렬하게 들이받는다. 자신도 약간의 반동 피해를 입는다.",
+          "pp": 15,
+          "max_pp": 15
+        },
+        {
+          "name": "스톤에지",
+          "type": "바위",
+          "category": "물리",
+          "power": 100,
+          "acc": 80,
+          "desc": "날카로운 바위를 솟구치게 찔러 공격한다. 급소에 맞기 쉽다.",
+          "pp": 5,
+          "max_pp": 5
+        }
+      ],
+      "sprite_front": "pokemon/673.png",
+      "sprite_back": "pokemon/673_back.png"
+    },
+    {
       "id": 675,
       "code": "0675-000",
       "name": "부란다",
@@ -11578,6 +12002,67 @@
       "sprite_back": "pokemon/766_back.png"
     },
     {
+      "id": 768,
+      "code": "0768-000",
+      "name": "갑주무사",
+      "types": [
+        "벌레",
+        "물"
+      ],
+      "stats": {
+        "hp": 75,
+        "atk": 125,
+        "def": 140,
+        "spa": 60,
+        "spd": 90,
+        "spe": 40
+      },
+      "moves": [
+        {
+          "name": "만나자마자",
+          "type": "벌레",
+          "category": "물리",
+          "power": 90,
+          "acc": 100,
+          "desc": "배틀에 나오자마자 맹공을 가한다. 강력한 선공기 (+2).",
+          "pp": 10,
+          "max_pp": 10
+        },
+        {
+          "name": "아쿠아브레이크",
+          "type": "물",
+          "category": "물리",
+          "power": 85,
+          "acc": 100,
+          "desc": "물방울을 모아 상대를 베어가른다. 방어를 떨어뜨릴 때가 있다.",
+          "pp": 10,
+          "max_pp": 10
+        },
+        {
+          "name": "기습",
+          "type": "악",
+          "category": "물리",
+          "power": 70,
+          "acc": 100,
+          "desc": "상대보다 먼저 공격한다. 상대가 공격 기술을 쓰지 않으면 실패한다.",
+          "pp": 5,
+          "max_pp": 5
+        },
+        {
+          "name": "흡혈",
+          "type": "벌레",
+          "category": "물리",
+          "power": 80,
+          "acc": 100,
+          "desc": "상대의 피를 빨아 입힌 데미지의 절반만큼 체력을 회복한다.",
+          "pp": 10,
+          "max_pp": 10
+        }
+      ],
+      "sprite_front": "pokemon/768.png",
+      "sprite_back": "pokemon/768_back.png"
+    },
+    {
       "id": 778,
       "code": "0778-000",
       "name": "따라큐",
@@ -11761,6 +12246,186 @@
       "sprite_back": "pokemon/784_back.png"
     },
     {
+      "id": 812,
+      "code": "0812-000",
+      "name": "고릴타",
+      "types": [
+        "풀"
+      ],
+      "stats": {
+        "hp": 100,
+        "atk": 125,
+        "def": 90,
+        "spa": 60,
+        "spd": 70,
+        "spe": 85
+      },
+      "moves": [
+        {
+          "name": "그래스슬라이더",
+          "type": "풀",
+          "category": "물리",
+          "power": 70,
+          "acc": 100,
+          "desc": "대지를 미끄러지듯 돌진하여 공격한다. 그래스필드 시 선공.",
+          "pp": 10,
+          "max_pp": 10
+        },
+        {
+          "name": "드럼어택",
+          "type": "풀",
+          "category": "물리",
+          "power": 80,
+          "acc": 100,
+          "desc": "나무 북을 두들겨 공격하며 상대의 스피드를 1랭크 떨어뜨린다.",
+          "pp": 10,
+          "max_pp": 10
+        },
+        {
+          "name": "10만마력",
+          "type": "땅",
+          "category": "물리",
+          "power": 95,
+          "acc": 95,
+          "desc": "맹렬한 힘으로 상대를 향해 돌진해 들이받는다.",
+          "pp": 10,
+          "max_pp": 10
+        },
+        {
+          "name": "탁쳐서떨구기",
+          "type": "악",
+          "category": "물리",
+          "power": 65,
+          "acc": 100,
+          "desc": "상대의 도구를 쳐서 떨어뜨리며 강한 타격을 입힌다.",
+          "pp": 20,
+          "max_pp": 20
+        }
+      ],
+      "sprite_front": "pokemon/812.png",
+      "sprite_back": "pokemon/812_back.png"
+    },
+    {
+      "id": 815,
+      "code": "0815-000",
+      "name": "에이스번",
+      "types": [
+        "불꽃"
+      ],
+      "stats": {
+        "hp": 80,
+        "atk": 116,
+        "def": 75,
+        "spa": 65,
+        "spd": 75,
+        "spe": 119
+      },
+      "moves": [
+        {
+          "name": "화염볼",
+          "type": "불꽃",
+          "category": "물리",
+          "power": 120,
+          "acc": 90,
+          "desc": "불타는 돌을 강하게 차올려 공격한다. 상대를 화상 입힐 때가 있다.",
+          "pp": 5,
+          "max_pp": 5
+        },
+        {
+          "name": "무릎차기",
+          "type": "격투",
+          "category": "물리",
+          "power": 130,
+          "acc": 90,
+          "desc": "높이 뛰어올라 무릎으로 찬다. 빗나가면 자신이 데미지를 입는다.",
+          "pp": 10,
+          "max_pp": 10
+        },
+        {
+          "name": "기습",
+          "type": "악",
+          "category": "물리",
+          "power": 70,
+          "acc": 100,
+          "desc": "상대보다 먼저 공격한다. 상대가 공격기를 내지 않으면 실패.",
+          "pp": 5,
+          "max_pp": 5
+        },
+        {
+          "name": "아이언헤드",
+          "type": "강철",
+          "category": "물리",
+          "power": 80,
+          "acc": 100,
+          "desc": "강철 같은 단단한 머리로 들이받는다. 풀죽게 만들 때가 있다.",
+          "pp": 15,
+          "max_pp": 15
+        }
+      ],
+      "sprite_front": "pokemon/815.png",
+      "sprite_back": "pokemon/815_back.png"
+    },
+    {
+      "id": 818,
+      "code": "0818-000",
+      "name": "인텔리레온",
+      "types": [
+        "물"
+      ],
+      "stats": {
+        "hp": 70,
+        "atk": 85,
+        "def": 65,
+        "spa": 125,
+        "spd": 65,
+        "spe": 120
+      },
+      "moves": [
+        {
+          "name": "하이드로스나이프",
+          "type": "물",
+          "category": "특수",
+          "power": 80,
+          "acc": 100,
+          "desc": "손가락 끝에서 물의 탄환을 쏘아낸다. 급소에 맞기 쉽다.",
+          "pp": 15,
+          "max_pp": 15
+        },
+        {
+          "name": "하이드로펌프",
+          "type": "물",
+          "category": "특수",
+          "power": 110,
+          "acc": 80,
+          "desc": "대량의 물을 강하게 뿜어내어 상대를 공격한다.",
+          "pp": 5,
+          "max_pp": 5
+        },
+        {
+          "name": "냉동빔",
+          "type": "얼음",
+          "category": "특수",
+          "power": 90,
+          "acc": 100,
+          "desc": "얼어붙는 냉기를 뿜어내어 공격한다. 얼릴 때가 있다.",
+          "pp": 10,
+          "max_pp": 10
+        },
+        {
+          "name": "에어슬래시",
+          "type": "비행",
+          "category": "특수",
+          "power": 75,
+          "acc": 95,
+          "desc": "공기의 칼날로 상대를 베어 공격한다. 풀죽게 만들 때가 있다.",
+          "pp": 15,
+          "max_pp": 15
+        }
+      ],
+      "sprite_front": "pokemon/818.png",
+      "sprite_back": "pokemon/818_back.png"
+    },
+    {
       "id": 823,
       "code": "0823-000",
       "name": "아머까오",
@@ -11820,6 +12485,66 @@
       ],
       "sprite_front": "pokemon/823.png",
       "sprite_back": "pokemon/823_back.png"
+    },
+    {
+      "id": 828,
+      "code": "0828-000",
+      "name": "폭슬라이",
+      "types": [
+        "악"
+      ],
+      "stats": {
+        "hp": 70,
+        "atk": 58,
+        "def": 58,
+        "spa": 87,
+        "spd": 92,
+        "spe": 90
+      },
+      "moves": [
+        {
+          "name": "악의파동",
+          "type": "악",
+          "category": "특수",
+          "power": 80,
+          "acc": 100,
+          "desc": "악의를 담은 어두운 오라를 발산한다. 상대를 풀죽게 만들 때가 있다.",
+          "pp": 15,
+          "max_pp": 15
+        },
+        {
+          "name": "바크아웃",
+          "type": "악",
+          "category": "특수",
+          "power": 55,
+          "acc": 95,
+          "desc": "상대를 거칠게 위협하며 짖어댄다. 상대의 특수공격을 1랭크 떨어뜨린다.",
+          "pp": 15,
+          "max_pp": 15
+        },
+        {
+          "name": "섀도볼",
+          "type": "고스트",
+          "category": "특수",
+          "power": 80,
+          "acc": 100,
+          "desc": "검은 그림자 덩어리를 던져 공격한다. 상대의 특수방어를 떨어뜨릴 때가 있다.",
+          "pp": 15,
+          "max_pp": 15
+        },
+        {
+          "name": "매지컬샤인",
+          "type": "페어리",
+          "category": "특수",
+          "power": 80,
+          "acc": 100,
+          "desc": "눈부신 빛을 발산하여 상대에게 큰 피해를 준다.",
+          "pp": 10,
+          "max_pp": 10
+        }
+      ],
+      "sprite_front": "pokemon/828.png",
+      "sprite_back": "pokemon/828_back.png"
     },
     {
       "id": 841,
@@ -12004,6 +12729,127 @@
       "sprite_back": "pokemon/844_back.png"
     },
     {
+      "id": 849,
+      "code": "0849-000",
+      "name": "스트린더",
+      "types": [
+        "전기",
+        "독"
+      ],
+      "stats": {
+        "hp": 75,
+        "atk": 98,
+        "def": 70,
+        "spa": 114,
+        "spd": 70,
+        "spe": 75
+      },
+      "moves": [
+        {
+          "name": "오버드라이브",
+          "type": "전기",
+          "category": "특수",
+          "power": 80,
+          "acc": 100,
+          "desc": "기타를 켜는 듯한 소리와 함께 강력한 전격을 뿜어낸다.",
+          "pp": 10,
+          "max_pp": 10
+        },
+        {
+          "name": "오물폭탄",
+          "type": "독",
+          "category": "특수",
+          "power": 90,
+          "acc": 100,
+          "desc": "더러운 오물을 내던져 공격하며 중독을 노린다.",
+          "pp": 10,
+          "max_pp": 10
+        },
+        {
+          "name": "폭음파",
+          "type": "노말",
+          "category": "특수",
+          "power": 140,
+          "acc": 100,
+          "desc": "고막을 찢는 엄청난 폭음으로 주위의 모든 포켓몬을 공격한다.",
+          "pp": 10,
+          "max_pp": 10
+        },
+        {
+          "name": "볼트체인지",
+          "type": "전기",
+          "category": "특수",
+          "power": 70,
+          "acc": 100,
+          "desc": "공격 후 곧바로 벤치의 다른 포켓몬과 교체한다.",
+          "pp": 20,
+          "max_pp": 20
+        }
+      ],
+      "sprite_front": "pokemon/849.png",
+      "sprite_back": "pokemon/849_back.png"
+    },
+    {
+      "id": 853,
+      "code": "0853-000",
+      "name": "케오퍼스",
+      "types": [
+        "격투"
+      ],
+      "stats": {
+        "hp": 80,
+        "atk": 118,
+        "def": 90,
+        "spa": 70,
+        "spd": 80,
+        "spe": 42
+      },
+      "moves": [
+        {
+          "name": "인파이트",
+          "type": "격투",
+          "category": "물리",
+          "power": 120,
+          "acc": 100,
+          "desc": "가드를 풀고 전력으로 난타한다. 자신의 방어와 특수방어가 1랭크씩 떨어진다.",
+          "pp": 5,
+          "max_pp": 5
+        },
+        {
+          "name": "아쿠아브레이크",
+          "type": "물",
+          "category": "물리",
+          "power": 85,
+          "acc": 100,
+          "desc": "물의 힘을 두른 촉수로 강타한다. 상대의 방어를 떨어뜨릴 때가 있다.",
+          "pp": 10,
+          "max_pp": 10
+        },
+        {
+          "name": "드레인펀치",
+          "type": "격투",
+          "category": "물리",
+          "power": 75,
+          "acc": 100,
+          "desc": "주먹에 에너지를 모아 펀치를 날린다. 가한 피해의 절반만큼 HP를 회복한다.",
+          "pp": 10,
+          "max_pp": 10
+        },
+        {
+          "name": "기습",
+          "type": "악",
+          "category": "물리",
+          "power": 70,
+          "acc": 100,
+          "desc": "상대보다 먼저 공격한다. 상대가 공격 기술을 쓰지 않으면 실패한다.",
+          "pp": 5,
+          "max_pp": 5
+        }
+      ],
+      "sprite_front": "pokemon/853.png",
+      "sprite_back": "pokemon/853_back.png"
+    },
+    {
       "id": 855,
       "code": "0855-000",
       "name": "포트데스",
@@ -12184,6 +13030,126 @@
       ],
       "sprite_front": "pokemon/861.png",
       "sprite_back": "pokemon/861_back.png"
+    },
+    {
+      "id": 863,
+      "code": "0863-000",
+      "name": "나이킹",
+      "types": [
+        "강철"
+      ],
+      "stats": {
+        "hp": 70,
+        "atk": 110,
+        "def": 100,
+        "spa": 50,
+        "spd": 60,
+        "spe": 50
+      },
+      "moves": [
+        {
+          "name": "아이언헤드",
+          "type": "강철",
+          "category": "물리",
+          "power": 80,
+          "acc": 100,
+          "desc": "강철 같은 단단한 머리로 들이받는다. 상대를 풀죽게 만들 때가 있다.",
+          "pp": 15,
+          "max_pp": 15
+        },
+        {
+          "name": "인파이트",
+          "type": "격투",
+          "category": "물리",
+          "power": 120,
+          "acc": 100,
+          "desc": "가드를 풀고 전력으로 난타한다. 자신의 방어와 특수방어가 1랭크씩 떨어진다.",
+          "pp": 5,
+          "max_pp": 5
+        },
+        {
+          "name": "탁쳐서떨구기",
+          "type": "악",
+          "category": "물리",
+          "power": 65,
+          "acc": 100,
+          "desc": "상대의 도구를 쳐서 떨어뜨리며 강한 타격을 입힌다.",
+          "pp": 20,
+          "max_pp": 20
+        },
+        {
+          "name": "야습",
+          "type": "고스트",
+          "category": "물리",
+          "power": 40,
+          "acc": 100,
+          "desc": "그림자를 늘려 사각에서 재빠르게 급습한다. 선제공격기.",
+          "pp": 30,
+          "max_pp": 30
+        }
+      ],
+      "sprite_front": "pokemon/863.png",
+      "sprite_back": "pokemon/863_back.png"
+    },
+    {
+      "id": 865,
+      "code": "0865-000",
+      "name": "창파나이트",
+      "types": [
+        "격투"
+      ],
+      "stats": {
+        "hp": 62,
+        "atk": 135,
+        "def": 95,
+        "spa": 68,
+        "spd": 82,
+        "spe": 65
+      },
+      "moves": [
+        {
+          "name": "스타어설트",
+          "type": "격투",
+          "category": "물리",
+          "power": 150,
+          "acc": 100,
+          "desc": "거대한 파 창을 꼬나쥐고 전력 돌격한다. 다음 턴에 움직일 수 없다.",
+          "pp": 5,
+          "max_pp": 5
+        },
+        {
+          "name": "리프블레이드",
+          "type": "풀",
+          "category": "물리",
+          "power": 90,
+          "acc": 100,
+          "desc": "식물의 줄기를 칼처럼 휘둘러 상대를 벤다. 급소에 맞기 쉽다.",
+          "pp": 15,
+          "max_pp": 15
+        },
+        {
+          "name": "인파이트",
+          "type": "격투",
+          "category": "물리",
+          "power": 120,
+          "acc": 100,
+          "desc": "가드를 풀고 전력으로 난타한다. 자신의 방어와 특수방어가 1랭크씩 떨어진다.",
+          "pp": 5,
+          "max_pp": 5
+        },
+        {
+          "name": "깜짝베기",
+          "type": "악",
+          "category": "물리",
+          "power": 70,
+          "acc": 100,
+          "desc": "순간적으로 틈을 보아 순식간에 벤다. 급소에 맞기 쉽다.",
+          "pp": 15,
+          "max_pp": 15
+        }
+      ],
+      "sprite_front": "pokemon/865.png",
+      "sprite_back": "pokemon/865_back.png"
     },
     {
       "id": 866,
@@ -12426,6 +13392,127 @@
       ],
       "sprite_front": "pokemon/870.png",
       "sprite_back": "pokemon/870_back.png"
+    },
+    {
+      "id": 871,
+      "code": "0871-000",
+      "name": "찌르성게",
+      "types": [
+        "전기"
+      ],
+      "stats": {
+        "hp": 48,
+        "atk": 101,
+        "def": 95,
+        "spa": 91,
+        "spd": 85,
+        "spe": 15
+      },
+      "moves": [
+        {
+          "name": "찌릿찌릿따끔따끔",
+          "type": "전기",
+          "category": "물리",
+          "power": 80,
+          "acc": 100,
+          "desc": "가시로 찔러 감전시킨다. 상대를 풀죽게 만들 때가 있다.",
+          "pp": 10,
+          "max_pp": 10
+        },
+        {
+          "name": "10만볼트",
+          "type": "전기",
+          "category": "특수",
+          "power": 90,
+          "acc": 100,
+          "desc": "강한 전격을 뿜어 상대를 공격한다. 마비 상태로 만들 때가 있다.",
+          "pp": 15,
+          "max_pp": 15
+        },
+        {
+          "name": "하이드로펌프",
+          "type": "물",
+          "category": "특수",
+          "power": 110,
+          "acc": 80,
+          "desc": "대량의 물을 맹렬한 기세로 상대에게 발사하여 공격한다.",
+          "pp": 5,
+          "max_pp": 5
+        },
+        {
+          "name": "독찌르기",
+          "type": "독",
+          "category": "물리",
+          "power": 80,
+          "acc": 100,
+          "desc": "독이 묻은 촉수나 가시로 찌른다. 독 상태로 만들 때가 있다.",
+          "pp": 20,
+          "max_pp": 20
+        }
+      ],
+      "sprite_front": "pokemon/871.png",
+      "sprite_back": "pokemon/871_back.png"
+    },
+    {
+      "id": 876,
+      "code": "0876-000",
+      "name": "에써르",
+      "types": [
+        "에스퍼",
+        "노말"
+      ],
+      "stats": {
+        "hp": 70,
+        "atk": 55,
+        "def": 65,
+        "spa": 105,
+        "spd": 105,
+        "spe": 85
+      },
+      "moves": [
+        {
+          "name": "와이드포스",
+          "type": "에스퍼",
+          "category": "특수",
+          "power": 80,
+          "acc": 100,
+          "desc": "사이코필드 전개 시 위력이 대폭 상승하는 염동 공격.",
+          "pp": 10,
+          "max_pp": 10
+        },
+        {
+          "name": "사이코키네시스",
+          "type": "에스퍼",
+          "category": "특수",
+          "power": 90,
+          "acc": 100,
+          "desc": "강한 염동력으로 공격하며 상대의 특수방어를 떨어뜨릴 때가 있다.",
+          "pp": 10,
+          "max_pp": 10
+        },
+        {
+          "name": "매지컬샤인",
+          "type": "페어리",
+          "category": "특수",
+          "power": 80,
+          "acc": 100,
+          "desc": "강한 빛을 뿜어내어 주위의 적을 공격한다.",
+          "pp": 10,
+          "max_pp": 10
+        },
+        {
+          "name": "명상",
+          "type": "에스퍼",
+          "category": "변화",
+          "power": 0,
+          "acc": 100,
+          "desc": "정신을 집중하여 특수공격과 특수방어를 1랭크씩 올린다.",
+          "pp": 20,
+          "max_pp": 20
+        }
+      ],
+      "sprite_front": "pokemon/876.png",
+      "sprite_back": "pokemon/876_back.png"
     },
     {
       "id": 877,
@@ -13099,6 +14186,67 @@
       "sprite_back": "pokemon/914_back.png"
     },
     {
+      "id": 923,
+      "code": "0923-000",
+      "name": "빠르모트",
+      "types": [
+        "전기",
+        "격투"
+      ],
+      "stats": {
+        "hp": 70,
+        "atk": 115,
+        "def": 70,
+        "spa": 70,
+        "spd": 60,
+        "spe": 105
+      },
+      "moves": [
+        {
+          "name": "전격일격",
+          "type": "전기",
+          "category": "물리",
+          "power": 60,
+          "acc": 100,
+          "desc": "양손에 전기를 모아 연속 펀치를 날린다. 마비 상태로 만들 때가 있다.",
+          "pp": 15,
+          "max_pp": 15
+        },
+        {
+          "name": "인파이트",
+          "type": "격투",
+          "category": "물리",
+          "power": 120,
+          "acc": 100,
+          "desc": "가드를 풀고 전력으로 난타한다. 자신의 방어와 특수방어가 1랭크씩 떨어진다.",
+          "pp": 5,
+          "max_pp": 5
+        },
+        {
+          "name": "속이다",
+          "type": "노말",
+          "category": "물리",
+          "power": 40,
+          "acc": 100,
+          "desc": "선제공격하여 상대를 풀죽게 만든다. 첫 턴에만 성공한다.",
+          "pp": 10,
+          "max_pp": 10
+        },
+        {
+          "name": "냉동펀치",
+          "type": "얼음",
+          "category": "물리",
+          "power": 75,
+          "acc": 100,
+          "desc": "냉기를 실은 주먹으로 공격한다. 얼음 상태로 만들 때가 있다.",
+          "pp": 15,
+          "max_pp": 15
+        }
+      ],
+      "sprite_front": "pokemon/923.png",
+      "sprite_back": "pokemon/923_back.png"
+    },
+    {
       "id": 925,
       "code": "0925-000",
       "name": "파밀리쥐",
@@ -13157,6 +14305,128 @@
       ],
       "sprite_front": "pokemon/925.png",
       "sprite_back": "pokemon/925_back.png"
+    },
+    {
+      "id": 930,
+      "code": "0930-000",
+      "name": "올리르바",
+      "types": [
+        "풀",
+        "노말"
+      ],
+      "stats": {
+        "hp": 78,
+        "atk": 69,
+        "def": 90,
+        "spa": 125,
+        "spd": 109,
+        "spe": 39
+      },
+      "moves": [
+        {
+          "name": "에너지볼",
+          "type": "풀",
+          "category": "특수",
+          "power": 90,
+          "acc": 100,
+          "desc": "자연의 힘을 구체로 모아 발사한다. 상대의 특수방어를 떨어뜨릴 때가 있다.",
+          "pp": 10,
+          "max_pp": 10
+        },
+        {
+          "name": "하이퍼보이스",
+          "type": "노말",
+          "category": "특수",
+          "power": 90,
+          "acc": 100,
+          "desc": "소름 끼치는 음파를 울려 퍼뜨려 상대에게 데미지를 준다.",
+          "pp": 10,
+          "max_pp": 10
+        },
+        {
+          "name": "대지의힘",
+          "type": "땅",
+          "category": "특수",
+          "power": 90,
+          "acc": 100,
+          "desc": "대지의 힘을 상대 발밑에서 폭발시킨다. 상대의 특수방어를 떨어뜨릴 때가 있다.",
+          "pp": 10,
+          "max_pp": 10
+        },
+        {
+          "name": "기가드레인",
+          "type": "풀",
+          "category": "특수",
+          "power": 75,
+          "acc": 100,
+          "desc": "상대의 양분을 빨아들여 공격한다. 준 데미지의 절반만큼 HP를 회복한다.",
+          "pp": 10,
+          "max_pp": 10
+        }
+      ],
+      "sprite_front": "pokemon/930.png",
+      "sprite_back": "pokemon/930_back.png"
+    },
+    {
+      "id": 931,
+      "code": "0931-000",
+      "name": "시비꼬",
+      "types": [
+        "노말",
+        "비행"
+      ],
+      "stats": {
+        "hp": 82,
+        "atk": 96,
+        "def": 51,
+        "spa": 45,
+        "spd": 51,
+        "spe": 92
+      },
+      "moves": [
+        {
+          "name": "브레이브버드",
+          "type": "비행",
+          "category": "물리",
+          "power": 120,
+          "acc": 100,
+          "desc": "날개를 접고 낮은 고도로 돌진한다. 자신도 큰 반동 피해를 입는다.",
+          "pp": 15,
+          "max_pp": 15
+        },
+        {
+          "name": "은혜갚기",
+          "type": "노말",
+          "category": "물리",
+          "power": 102,
+          "acc": 100,
+          "desc": "트레이너를 향한 진심어린 마음을 실어 강력하게 공격한다.",
+          "pp": 20,
+          "max_pp": 20
+        },
+        {
+          "name": "유턴",
+          "type": "벌레",
+          "category": "물리",
+          "power": 70,
+          "acc": 100,
+          "desc": "공격한 뒤 재빠르게 돌아와 대기 중인 포켓몬과 교체한다.",
+          "pp": 20,
+          "max_pp": 20
+        },
+        {
+          "name": "기습",
+          "type": "악",
+          "category": "물리",
+          "power": 70,
+          "acc": 100,
+          "desc": "상대보다 먼저 공격한다. 상대가 공격 기술을 쓰지 않으면 실패한다.",
+          "pp": 5,
+          "max_pp": 5
+        }
+      ],
+      "sprite_front": "pokemon/931.png",
+      "sprite_back": "pokemon/931_back.png"
     },
     {
       "id": 934,
@@ -13399,6 +14669,66 @@
       ],
       "sprite_front": "pokemon/939.png",
       "sprite_back": "pokemon/939_back.png"
+    },
+    {
+      "id": 943,
+      "code": "0943-000",
+      "name": "마피티프",
+      "types": [
+        "악"
+      ],
+      "stats": {
+        "hp": 80,
+        "atk": 120,
+        "def": 90,
+        "spa": 60,
+        "spd": 70,
+        "spe": 85
+      },
+      "moves": [
+        {
+          "name": "깨물어부수기",
+          "type": "악",
+          "category": "물리",
+          "power": 80,
+          "acc": 100,
+          "desc": "날카로운 이빨로 상대를 부스러뜨리듯 문다. 방어를 떨어뜨릴 때가 있다.",
+          "pp": 15,
+          "max_pp": 15
+        },
+        {
+          "name": "치근거리기",
+          "type": "페어리",
+          "category": "물리",
+          "power": 90,
+          "acc": 90,
+          "desc": "귀엽게 다가가 심하게 치근덕거려 공격한다. 상대의 공격을 떨어뜨릴 때가 있다.",
+          "pp": 10,
+          "max_pp": 10
+        },
+        {
+          "name": "인파이트",
+          "type": "격투",
+          "category": "물리",
+          "power": 120,
+          "acc": 100,
+          "desc": "가드를 풀고 전력으로 난타한다. 자신의 방어와 특수방어가 1랭크씩 떨어진다.",
+          "pp": 5,
+          "max_pp": 5
+        },
+        {
+          "name": "사이코팽",
+          "type": "에스퍼",
+          "category": "물리",
+          "power": 85,
+          "acc": 100,
+          "desc": "염동력을 입에 머금고 상대를 문다. 리플렉터나 빛의장막을 파괴한다.",
+          "pp": 10,
+          "max_pp": 10
+        }
+      ],
+      "sprite_front": "pokemon/943.png",
+      "sprite_back": "pokemon/943_back.png"
     },
     {
       "id": 952,
@@ -14005,6 +15335,70 @@
       ],
       "sprite_front": "pokemon/983.png",
       "sprite_back": "pokemon/983_back.png"
+    },
+    {
+      "id": 998,
+      "code": "0998-000",
+      "name": "드닐레이브",
+      "types": [
+        "드래곤",
+        "얼음"
+      ],
+      "stats": {
+        "hp": 115,
+        "atk": 145,
+        "def": 92,
+        "spa": 75,
+        "spd": 86,
+        "spe": 87
+      },
+      "moves": [
+        {
+          "name": "대검돌격",
+          "type": "드래곤",
+          "category": "물리",
+          "power": 120,
+          "acc": 100,
+          "desc": "등의 얼음 지느러미를 대검 삼아 돌진하는 초위력 기술.",
+          "pp": 5,
+          "max_pp": 5
+        },
+        {
+          "name": "고드름떨구기",
+          "type": "얼음",
+          "category": "물리",
+          "power": 85,
+          "acc": 90,
+          "desc": "커다란 고드름을 떨어뜨려 공격하며 풀죽게 만들 때가 있다.",
+          "pp": 10,
+          "max_pp": 10
+        },
+        {
+          "name": "지진",
+          "type": "땅",
+          "category": "물리",
+          "power": 100,
+          "acc": 100,
+          "desc": "강한 진동으로 상대를 타격한다.",
+          "pp": 10,
+          "max_pp": 10
+        },
+        {
+          "name": "얼음뭉치",
+          "type": "얼음",
+          "category": "물리",
+          "power": 40,
+          "acc": 100,
+          "desc": "얼음 조각을 뭉쳐 빠르게 날리는 선공기.",
+          "pp": 30,
+          "max_pp": 30
+        }
+      ],
+      "sprite_front": "pokemon/998.png",
+      "sprite_back": "pokemon/998_back.png",
+      "abilities": [
+        "thermal-exchange"
+      ]
     },
     {
       "id": 1000,
@@ -16092,6 +17486,347 @@
       "emoji": "🎒",
       "desc": "지니게 한 포켓몬이 상대보다도 행동하는 것이 늦을 때 기술이 명중하기 쉬워진다.",
       "sprite": "https://pkmnchamps.github.io/images/items/zoom-lens.png"
+    },
+    {
+      "id": "absolite_z",
+      "slug": "absolite-z",
+      "name": "앱솔나이트Z",
+      "nameEn": "Absolite Z",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "앱솔에게 지니게 하면 특성 「예리함」을 가진 메가앱솔Z로 메가진화한다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/absolite-z.png"
+    },
+    {
+      "id": "lucarionite_z",
+      "slug": "lucarionite-z",
+      "name": "루카리오나이트Z",
+      "nameEn": "Lucarionite Z",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "루카리오에게 지니게 하면 특성 「파동의 방호」를 가진 메가루카리오Z로 메가진화한다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/lucarionite-z.png"
+    },
+    {
+      "id": "garchompite_z",
+      "slug": "garchompite-z",
+      "name": "한카리아스나이트Z",
+      "nameEn": "Garchompite Z",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "한카리아스에게 지니게 하면 특성 「부유」를 가진 메가한카리아스Z로 메가진화한다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/garchompite-z.png"
+    },
+    {
+      "id": "golisopodite",
+      "slug": "golisopodite",
+      "name": "갑주무사나이트",
+      "nameEn": "Golisopodite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "갑주무사에게 지니게 하면 특성 「단단한발톱」을 가진 메가갑주무사로 메가진화한다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/golisopodite.png"
+    },
+    {
+      "id": "baxcaliburite",
+      "slug": "baxcaliburite",
+      "name": "드닐레이브나이트",
+      "nameEn": "Baxcaliburite",
+      "category": "mega-stones",
+      "categoryKo": "메가돌",
+      "emoji": "💎",
+      "desc": "드닐레이브에게 지니게 하면 특성 「열교환」을 가진 메가드닐레이브로 메가진화한다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/baxcaliburite.png"
+    },
+    {
+      "id": "rocky_helmet",
+      "slug": "rocky-helmet",
+      "name": "울퉁불퉁멧",
+      "nameEn": "Rocky Helmet",
+      "category": "held-items",
+      "categoryKo": "배틀 도구",
+      "emoji": "🪖",
+      "desc": "지니게 한 포켓몬이 직접 공격을 받았을 때 상대에게 최대 HP의 1/6의 데미지를 준다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/rocky-helmet.png"
+    },
+    {
+      "id": "air_balloon",
+      "slug": "air-balloon",
+      "name": "풍선",
+      "nameEn": "Air Balloon",
+      "category": "held-items",
+      "categoryKo": "배틀 도구",
+      "emoji": "🎈",
+      "desc": "지니게 하면 공중에 떠서 땅타입 기술을 받지 않는다. 공격을 받으면 터져서 없어진다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/air-balloon.png"
+    },
+    {
+      "id": "eject_button",
+      "slug": "eject-button",
+      "name": "탈출버튼",
+      "nameEn": "Eject Button",
+      "category": "held-items",
+      "categoryKo": "배틀 도구",
+      "emoji": "🔘",
+      "desc": "지니게 한 포켓몬이 공격을 받아 데미지를 입으면 1회에 한해 자동으로 벤치의 포켓몬과 교체된다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/eject-button.png"
+    },
+    {
+      "id": "red_card",
+      "slug": "red-card",
+      "name": "레드카드",
+      "nameEn": "Red Card",
+      "category": "held-items",
+      "categoryKo": "배틀 도구",
+      "emoji": "🟥",
+      "desc": "지니게 한 포켓몬을 공격한 상대 포켓몬을 강제로 다른 벤치 포켓몬으로 교체시킨다 (1회용).",
+      "sprite": "https://pkmnchamps.github.io/images/items/red-card.png"
+    },
+    {
+      "id": "grassy_seed",
+      "slug": "grassy-seed",
+      "name": "그래스시드",
+      "nameEn": "Grassy Seed",
+      "category": "held-items",
+      "categoryKo": "필드 시드",
+      "emoji": "🌱",
+      "desc": "그래스필드 상태일 때 지니고 있으면 방어가 1랭크 올라간다 (1회용).",
+      "sprite": "https://pkmnchamps.github.io/images/items/grassy-seed.png"
+    },
+    {
+      "id": "psychic_seed",
+      "slug": "psychic-seed",
+      "name": "사이코시드",
+      "nameEn": "Psychic Seed",
+      "category": "held-items",
+      "categoryKo": "필드 시드",
+      "emoji": "🔮",
+      "desc": "사이코필드 상태일 때 지니고 있으면 특수방어가 1랭크 올라간다 (1회용).",
+      "sprite": "https://pkmnchamps.github.io/images/items/psychic-seed.png"
+    },
+    {
+      "id": "electric_seed",
+      "slug": "electric-seed",
+      "name": "일렉트릭시드",
+      "nameEn": "Electric Seed",
+      "category": "held-items",
+      "categoryKo": "필드 시드",
+      "emoji": "⚡",
+      "desc": "일렉트릭필드 상태일 때 지니고 있으면 방어가 1랭크 올라간다 (1회용).",
+      "sprite": "https://pkmnchamps.github.io/images/items/electric-seed.png"
+    },
+    {
+      "id": "misty_seed",
+      "slug": "misty-seed",
+      "name": "미스트시드",
+      "nameEn": "Misty Seed",
+      "category": "held-items",
+      "categoryKo": "필드 시드",
+      "emoji": "🌫️",
+      "desc": "미스트필드 상태일 때 지니고 있으면 특수방어가 1랭크 올라간다 (1회용).",
+      "sprite": "https://pkmnchamps.github.io/images/items/misty-seed.png"
+    },
+    {
+      "id": "normal_gem",
+      "slug": "normal-gem",
+      "name": "노말주얼",
+      "nameEn": "Normal Gem",
+      "category": "type-enhancement",
+      "categoryKo": "주얼",
+      "emoji": "💎",
+      "desc": "노말타입 기술을 사용할 때 1회에 한해 위력이 1.3배 상승하고 소모된다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/normal-gem.png"
+    },
+    {
+      "id": "fire_gem",
+      "slug": "fire-gem",
+      "name": "불꽃주얼",
+      "nameEn": "Fire Gem",
+      "category": "type-enhancement",
+      "categoryKo": "주얼",
+      "emoji": "💎",
+      "desc": "불꽃타입 기술을 사용할 때 1회에 한해 위력이 1.3배 상승하고 소모된다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/fire-gem.png"
+    },
+    {
+      "id": "water_gem",
+      "slug": "water-gem",
+      "name": "물주얼",
+      "nameEn": "Water Gem",
+      "category": "type-enhancement",
+      "categoryKo": "주얼",
+      "emoji": "💎",
+      "desc": "물타입 기술을 사용할 때 1회에 한해 위력이 1.3배 상승하고 소모된다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/water-gem.png"
+    },
+    {
+      "id": "electric_gem",
+      "slug": "electric-gem",
+      "name": "전기주얼",
+      "nameEn": "Electric Gem",
+      "category": "type-enhancement",
+      "categoryKo": "주얼",
+      "emoji": "💎",
+      "desc": "전기타입 기술을 사용할 때 1회에 한해 위력이 1.3배 상승하고 소모된다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/electric-gem.png"
+    },
+    {
+      "id": "grass_gem",
+      "slug": "grass-gem",
+      "name": "풀주얼",
+      "nameEn": "Grass Gem",
+      "category": "type-enhancement",
+      "categoryKo": "주얼",
+      "emoji": "💎",
+      "desc": "풀타입 기술을 사용할 때 1회에 한해 위력이 1.3배 상승하고 소모된다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/grass-gem.png"
+    },
+    {
+      "id": "ice_gem",
+      "slug": "ice-gem",
+      "name": "얼음주얼",
+      "nameEn": "Ice Gem",
+      "category": "type-enhancement",
+      "categoryKo": "주얼",
+      "emoji": "💎",
+      "desc": "얼음타입 기술을 사용할 때 1회에 한해 위력이 1.3배 상승하고 소모된다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/ice-gem.png"
+    },
+    {
+      "id": "fighting_gem",
+      "slug": "fighting-gem",
+      "name": "격투주얼",
+      "nameEn": "Fighting Gem",
+      "category": "type-enhancement",
+      "categoryKo": "주얼",
+      "emoji": "💎",
+      "desc": "격투타입 기술을 사용할 때 1회에 한해 위력이 1.3배 상승하고 소모된다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/fighting-gem.png"
+    },
+    {
+      "id": "poison_gem",
+      "slug": "poison-gem",
+      "name": "독주얼",
+      "nameEn": "Poison Gem",
+      "category": "type-enhancement",
+      "categoryKo": "주얼",
+      "emoji": "💎",
+      "desc": "독타입 기술을 사용할 때 1회에 한해 위력이 1.3배 상승하고 소모된다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/poison-gem.png"
+    },
+    {
+      "id": "ground_gem",
+      "slug": "ground-gem",
+      "name": "땅주얼",
+      "nameEn": "Ground Gem",
+      "category": "type-enhancement",
+      "categoryKo": "주얼",
+      "emoji": "💎",
+      "desc": "땅타입 기술을 사용할 때 1회에 한해 위력이 1.3배 상승하고 소모된다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/ground-gem.png"
+    },
+    {
+      "id": "flying_gem",
+      "slug": "flying-gem",
+      "name": "비행주얼",
+      "nameEn": "Flying Gem",
+      "category": "type-enhancement",
+      "categoryKo": "주얼",
+      "emoji": "💎",
+      "desc": "비행타입 기술을 사용할 때 1회에 한해 위력이 1.3배 상승하고 소모된다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/flying-gem.png"
+    },
+    {
+      "id": "psychic_gem",
+      "slug": "psychic-gem",
+      "name": "에스퍼주얼",
+      "nameEn": "Psychic Gem",
+      "category": "type-enhancement",
+      "categoryKo": "주얼",
+      "emoji": "💎",
+      "desc": "에스퍼타입 기술을 사용할 때 1회에 한해 위력이 1.3배 상승하고 소모된다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/psychic-gem.png"
+    },
+    {
+      "id": "bug_gem",
+      "slug": "bug-gem",
+      "name": "벌레주얼",
+      "nameEn": "Bug Gem",
+      "category": "type-enhancement",
+      "categoryKo": "주얼",
+      "emoji": "💎",
+      "desc": "벌레타입 기술을 사용할 때 1회에 한해 위력이 1.3배 상승하고 소모된다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/bug-gem.png"
+    },
+    {
+      "id": "rock_gem",
+      "slug": "rock-gem",
+      "name": "바위주얼",
+      "nameEn": "Rock Gem",
+      "category": "type-enhancement",
+      "categoryKo": "주얼",
+      "emoji": "💎",
+      "desc": "바위타입 기술을 사용할 때 1회에 한해 위력이 1.3배 상승하고 소모된다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/rock-gem.png"
+    },
+    {
+      "id": "ghost_gem",
+      "slug": "ghost-gem",
+      "name": "고스트주얼",
+      "nameEn": "Ghost Gem",
+      "category": "type-enhancement",
+      "categoryKo": "주얼",
+      "emoji": "💎",
+      "desc": "고스트타입 기술을 사용할 때 1회에 한해 위력이 1.3배 상승하고 소모된다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/ghost-gem.png"
+    },
+    {
+      "id": "dragon_gem",
+      "slug": "dragon-gem",
+      "name": "드래곤주얼",
+      "nameEn": "Dragon Gem",
+      "category": "type-enhancement",
+      "categoryKo": "주얼",
+      "emoji": "💎",
+      "desc": "드래곤타입 기술을 사용할 때 1회에 한해 위력이 1.3배 상승하고 소모된다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/dragon-gem.png"
+    },
+    {
+      "id": "dark_gem",
+      "slug": "dark-gem",
+      "name": "악주얼",
+      "nameEn": "Dark Gem",
+      "category": "type-enhancement",
+      "categoryKo": "주얼",
+      "emoji": "💎",
+      "desc": "악타입 기술을 사용할 때 1회에 한해 위력이 1.3배 상승하고 소모된다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/dark-gem.png"
+    },
+    {
+      "id": "steel_gem",
+      "slug": "steel-gem",
+      "name": "강철주얼",
+      "nameEn": "Steel Gem",
+      "category": "type-enhancement",
+      "categoryKo": "주얼",
+      "emoji": "💎",
+      "desc": "강철타입 기술을 사용할 때 1회에 한해 위력이 1.3배 상승하고 소모된다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/steel-gem.png"
+    },
+    {
+      "id": "fairy_gem",
+      "slug": "fairy-gem",
+      "name": "페어리주얼",
+      "nameEn": "Fairy Gem",
+      "category": "type-enhancement",
+      "categoryKo": "주얼",
+      "emoji": "💎",
+      "desc": "페어리타입 기술을 사용할 때 1회에 한해 위력이 1.3배 상승하고 소모된다.",
+      "sprite": "https://pkmnchamps.github.io/images/items/fairy-gem.png"
     }
   ],
   "mega_evolutions": [
@@ -17474,6 +19209,38 @@
       "requiredStoneId": "absolite"
     },
     {
+      "basePokeId": 359,
+      "formSlug": "absol-mega-z",
+      "nameKo": "메가앱솔Z",
+      "nameJa": "メガアブソルZ",
+      "nameEn": "absol-mega-z",
+      "types": [
+        "악"
+      ],
+      "stats": {
+        "hp": 65,
+        "atk": 150,
+        "def": 60,
+        "spa": 115,
+        "spd": 60,
+        "spe": 115
+      },
+      "realStats": {
+        "hp": 140,
+        "atk": 170,
+        "def": 80,
+        "spa": 135,
+        "spd": 80,
+        "spe": 135
+      },
+      "abilities": [
+        "sharpness"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/absol-mega-z.png",
+      "backSprite": "/pokemon/mega_back_absol-mega-z.png",
+      "requiredStoneId": "absolite-z"
+    },
+    {
       "basePokeId": 362,
       "formSlug": "glalie-mega",
       "nameKo": "메가얼음귀신",
@@ -17770,6 +19537,39 @@
       "requiredStoneId": "garchompite"
     },
     {
+      "basePokeId": 445,
+      "formSlug": "garchomp-mega-z",
+      "nameKo": "메가한카리아스Z",
+      "nameJa": "メガガブリアスZ",
+      "nameEn": "garchomp-mega-z",
+      "types": [
+        "드래곤",
+        "땅"
+      ],
+      "stats": {
+        "hp": 108,
+        "atk": 170,
+        "def": 115,
+        "spa": 120,
+        "spd": 95,
+        "spe": 92
+      },
+      "realStats": {
+        "hp": 183,
+        "atk": 190,
+        "def": 135,
+        "spa": 140,
+        "spd": 115,
+        "spe": 112
+      },
+      "abilities": [
+        "levitate"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/garchomp-mega-z.png",
+      "backSprite": "/pokemon/mega_back_garchomp-mega-z.png",
+      "requiredStoneId": "garchompite-z"
+    },
+    {
       "basePokeId": 448,
       "formSlug": "lucario-mega",
       "nameKo": "메가루카리오",
@@ -17801,6 +19601,39 @@
       "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/lucario-mega.png",
       "backSprite": "/pokemon/mega_back_lucario-mega.png",
       "requiredStoneId": "lucarionite"
+    },
+    {
+      "basePokeId": 448,
+      "formSlug": "lucario-mega-z",
+      "nameKo": "메가루카리오Z",
+      "nameJa": "メガルカリオZ",
+      "nameEn": "lucario-mega-z",
+      "types": [
+        "격투",
+        "강철"
+      ],
+      "stats": {
+        "hp": 70,
+        "atk": 145,
+        "def": 88,
+        "spa": 140,
+        "spd": 70,
+        "spe": 112
+      },
+      "realStats": {
+        "hp": 145,
+        "atk": 165,
+        "def": 108,
+        "spa": 160,
+        "spd": 90,
+        "spe": 132
+      },
+      "abilities": [
+        "aura-shield"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/lucario-mega-z.png",
+      "backSprite": "/pokemon/mega_back_lucario-mega-z.png",
+      "requiredStoneId": "lucarionite-z"
     },
     {
       "basePokeId": 460,
@@ -18527,6 +20360,39 @@
       "requiredStoneId": "crabominite"
     },
     {
+      "basePokeId": 768,
+      "formSlug": "golisopod-mega",
+      "nameKo": "메가갑주무사",
+      "nameJa": "メガグソクムシャ",
+      "nameEn": "golisopod-mega",
+      "types": [
+        "벌레",
+        "물"
+      ],
+      "stats": {
+        "hp": 75,
+        "atk": 155,
+        "def": 160,
+        "spa": 60,
+        "spd": 100,
+        "spe": 40
+      },
+      "realStats": {
+        "hp": 150,
+        "atk": 175,
+        "def": 180,
+        "spa": 80,
+        "spd": 120,
+        "spe": 60
+      },
+      "abilities": [
+        "tough-claws"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/golisopod-mega.png",
+      "backSprite": "/pokemon/mega_back_golisopod-mega.png",
+      "requiredStoneId": "golisopodite"
+    },
+    {
       "basePokeId": 780,
       "formSlug": "drampa-mega",
       "nameKo": "메가할비롱",
@@ -18656,6 +20522,39 @@
       "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/glimmora-mega.png",
       "backSprite": "/pokemon/mega_back_glimmora-mega.png",
       "requiredStoneId": "glimmorite"
+    },
+    {
+      "basePokeId": 998,
+      "formSlug": "baxcalibur-mega",
+      "nameKo": "메가드닐레이브",
+      "nameJa": "メガセグレイ브",
+      "nameEn": "baxcalibur-mega",
+      "types": [
+        "드래곤",
+        "얼음"
+      ],
+      "stats": {
+        "hp": 115,
+        "atk": 175,
+        "def": 112,
+        "spa": 85,
+        "spd": 96,
+        "spe": 87
+      },
+      "realStats": {
+        "hp": 190,
+        "atk": 195,
+        "def": 132,
+        "spa": 105,
+        "spd": 116,
+        "spe": 107
+      },
+      "abilities": [
+        "thermal-exchange"
+      ],
+      "frontSprite": "https://pkmnchamps.github.io/images/sprites/forms/baxcalibur-mega.png",
+      "backSprite": "/pokemon/mega_back_baxcalibur-mega.png",
+      "requiredStoneId": "baxcaliburite"
     }
   ]
 }
