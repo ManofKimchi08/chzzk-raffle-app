@@ -116,6 +116,62 @@ class ChzzkProxyHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_json({'error': f'채널 검색 오류: {str(e)}', 'channels': []}, status=500)
                 return
 
+        # Lightweight dedicated live-status polling endpoint (no access-token fetch)
+        elif parsed.path.startswith('/api/chzzk/live-status'):
+            qs = parse_qs(parsed.query)
+            raw_channel_id = qs.get('channelId', [''])[0]
+            nid_auth = qs.get('nidAuth', [''])[0].strip()
+            nid_ses = qs.get('nidSes', [''])[0].strip()
+            channel_id = extract_channel_id(raw_channel_id)
+
+            if not channel_id:
+                self.send_json({'error': '유효한 채널 ID가 필요합니다.'}, status=400)
+                return
+
+            api_headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
+            }
+            if nid_auth and nid_ses:
+                api_headers['Cookie'] = f"NID_AUT={nid_auth}; NID_SES={nid_ses}"
+
+            try:
+                # Primary: Chzzk polling endpoint
+                poll_url = f"https://api.chzzk.naver.com/polling/v2/channels/{channel_id}/live-status"
+                req = urllib.request.Request(poll_url, headers=api_headers)
+                try:
+                    with urllib.request.urlopen(req, timeout=6) as resp:
+                        poll_data = json.loads(resp.read().decode('utf-8'))
+                except Exception:
+                    # Fallback to service/v2/channels/{channel_id}/live-detail
+                    detail_url = f"https://api.chzzk.naver.com/service/v2/channels/{channel_id}/live-detail"
+                    req2 = urllib.request.Request(detail_url, headers=api_headers)
+                    with urllib.request.urlopen(req2, timeout=6) as resp2:
+                        poll_data = json.loads(resp2.read().decode('utf-8'))
+
+                content_obj = poll_data.get('content') or {}
+                status_str = str(content_obj.get('status', 'CLOSE') or 'CLOSE').upper()
+                concurrent = int(content_obj.get('concurrentUserCount', 0) or 0)
+                has_live_id = bool(content_obj.get('liveId'))
+                open_live = bool(content_obj.get('openLive') or (content_obj.get('channel', {}) or {}).get('openLive'))
+                is_live = (
+                    status_str in ['OPEN', 'LIVE', 'STARTED']
+                    or open_live
+                    or concurrent > 0
+                    or has_live_id
+                )
+                self.send_json({
+                    'isLive': is_live,
+                    'status': status_str,
+                    'liveTitle': content_obj.get('liveTitle', ''),
+                    'concurrentUserCount': concurrent,
+                    'channelName': (content_obj.get('channel') or {}).get('channelName', ''),
+                    'channelImageUrl': (content_obj.get('channel') or {}).get('channelImageUrl', '')
+                })
+                return
+            except Exception as e:
+                self.send_json({'error': f'상태 조회 오류: {str(e)}', 'isLive': False}, status=500)
+                return
+
         # Proxy Chzzk API requests to avoid browser CORS issues
         elif parsed.path.startswith('/api/chzzk/'):
             qs = parse_qs(parsed.query)
@@ -151,24 +207,30 @@ class ChzzkProxyHandler(http.server.SimpleHTTPRequestHandler):
                     raise he
 
                 res_code = detail_data.get('code')
-                res_msg = detail_data.get('message', '')
+                res_msg = str(detail_data.get('message', '') or '')
                 content_obj = detail_data.get('content') or {}
 
-                # Detect 19+ restrictions from response payload
-                if res_code == 4001 or '연령' in str(res_msg) or '성인' in str(res_msg) or (not content_obj and not nid_auth):
-                    if not content_obj:
-                        self.send_json({
-                            'error': '🔞 19세(연령 제한) 방송입니다. 방송 연결 창 하단의 [19세 방송 설정]에 NID_AUT와 NID_SES 쿠키를 입력해주세요.',
-                            'isAdult': True
-                        }, status=403)
-                        return
+                # Detect 19+ restrictions strictly when signaled by code or message
+                if res_code == 4001 or '연령' in res_msg or '성인' in res_msg:
+                    self.send_json({
+                        'error': '🔞 19세(연령 제한) 방송입니다. 방송 연결 창 하단의 [19세 방송 설정]에 NID_AUT와 NID_SES 쿠키를 입력해주세요.',
+                        'isAdult': True
+                    }, status=403)
+                    return
 
                 chat_cid = content_obj.get('chatChannelId')
-                status = content_obj.get('status', 'CLOSE')
-                is_live = (status == 'OPEN') or (content_obj.get('openLive') is True) or (content_obj.get('channel', {}).get('openLive') is True)
+                status = str(content_obj.get('status', 'CLOSE') or 'CLOSE').upper()
+                concurrent_user_count = int(content_obj.get('concurrentUserCount', 0) or 0)
+                has_live_id = bool(content_obj.get('liveId'))
+                open_live = bool(content_obj.get('openLive') or (content_obj.get('channel', {}) or {}).get('openLive'))
+                is_live = (
+                    status in ['OPEN', 'LIVE', 'STARTED']
+                    or open_live
+                    or concurrent_user_count > 0
+                    or has_live_id
+                )
                 live_title = content_obj.get('liveTitle', '')
                 channel_name = content_obj.get('channel', {}).get('channelName', '')
-                concurrent_user_count = int(content_obj.get('concurrentUserCount', 0) or 0)
                 category = content_obj.get('liveCategoryValue', '')
                 open_date = content_obj.get('openDate', '')
                 channel_image = content_obj.get('channel', {}).get('channelImageUrl', '')
