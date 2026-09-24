@@ -37,6 +37,11 @@
       font-family: 'Pretendard', sans-serif;
     }
 
+    html {
+      overflow-y: scroll;
+      scrollbar-gutter: stable;
+    }
+
     body {
       background-color: var(--bg-dark);
       color: var(--text-main);
@@ -98,22 +103,27 @@
       z-index: 1;
     }
 
-    /* Modern Top Header */
+    /* Modern Top Header - Fixed Height & Non-Wrapping to prevent screen bounce */
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 16px;
+      padding-bottom: 12px;
       border-bottom: 1px solid var(--border-color);
-      margin-bottom: 20px;
-      gap: 16px;
-      flex-wrap: wrap;
+      margin-bottom: 18px;
+      gap: 12px;
+      flex-wrap: nowrap;
+      min-height: 56px;
+      max-height: 56px;
+      height: 56px;
+      box-sizing: border-box;
     }
 
     .logo-group {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
+      flex-shrink: 0;
     }
 
     .logo-badge {
@@ -121,43 +131,47 @@
       color: #000;
       font-family: 'Outfit', sans-serif;
       font-weight: 800;
-      font-size: 13px;
-      padding: 4px 10px;
+      font-size: 12px;
+      padding: 3px 8px;
       border-radius: 6px;
       letter-spacing: 1px;
+      flex-shrink: 0;
     }
 
     h1 {
-      font-size: 20px;
+      font-size: 17px;
       font-weight: 700;
       background: linear-gradient(to right, #ffffff, #cbd5e1);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      white-space: nowrap;
     }
 
     /* Center Mode Nav Tabs */
     .nav-tabs {
       display: flex;
-      gap: 8px;
+      gap: 4px;
       background: rgba(18, 22, 32, 0.75);
-      padding: 5px;
-      border-radius: 12px;
+      padding: 3px;
+      border-radius: 10px;
       border: 1px solid var(--border-color);
+      flex-shrink: 0;
     }
 
     .nav-tab-btn {
-      padding: 8px 18px;
-      font-size: 13px;
+      padding: 6px 12px;
+      font-size: 12px;
       font-weight: 700;
-      border-radius: 8px;
+      border-radius: 7px;
       border: 1px solid transparent;
       background: transparent;
       color: var(--text-sub);
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       transition: all 0.2s ease;
+      white-space: nowrap;
     }
 
     .nav-tab-btn:hover {
@@ -176,18 +190,43 @@
     .header-right {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
+      flex-shrink: 0;
     }
 
     .smart-connection-chip {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
-      padding: 6px 12px;
+      gap: 7px;
+      padding: 4px 10px;
       border-radius: 10px;
       background: #121826;
       border: 1px solid var(--border-color);
-      font-size: 12px;
+      font-size: 11.5px;
+      height: 36px;
+      box-sizing: border-box;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    #statusText {
+      font-weight: 700;
+      color: #fff;
+      max-width: 115px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    #statusViewerInfo {
+      font-size: 11px;
+      color: var(--text-sub);
+      white-space: nowrap;
+      display: inline-block;
+      vertical-align: middle;
+      font-family: 'Outfit', sans-serif;
     }
 
     .status-dot {
@@ -195,6 +234,7 @@
       height: 8px;
       border-radius: 50%;
       background: #ef4444;
+      flex-shrink: 0;
     }
 
     .status-dot.connected {
@@ -465,19 +505,35 @@
       padding: 12px 14px;
       animation: fadeIn 0.15s ease-out;
     }
-    .history-table-container::-webkit-scrollbar {
+    .history-table-container::-webkit-scrollbar,
+    #donationFeedList::-webkit-scrollbar,
+    #removedDonationFeedList::-webkit-scrollbar {
       width: 6px;
     }
-    .history-table-container::-webkit-scrollbar-track {
+    .history-table-container::-webkit-scrollbar-track,
+    #donationFeedList::-webkit-scrollbar-track,
+    #removedDonationFeedList::-webkit-scrollbar-track {
       background: rgba(0, 0, 0, 0.2);
       border-radius: 3px;
     }
-    .history-table-container::-webkit-scrollbar-thumb {
+    .history-table-container::-webkit-scrollbar-thumb,
+    #donationFeedList::-webkit-scrollbar-thumb,
+    #removedDonationFeedList::-webkit-scrollbar-thumb {
       background: rgba(255, 255, 255, 0.15);
       border-radius: 3px;
     }
-    .history-table-container::-webkit-scrollbar-thumb:hover {
+    .history-table-container::-webkit-scrollbar-thumb:hover,
+    #donationFeedList::-webkit-scrollbar-thumb:hover,
+    #removedDonationFeedList::-webkit-scrollbar-thumb:hover {
       background: var(--chzzk-green);
+    }
+    .donation-edit-amount-input::-webkit-outer-spin-button,
+    .donation-edit-amount-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .donation-edit-amount-input {
+      -moz-appearance: textfield;
     }
 
     @keyframes fadeIn {
@@ -1169,12 +1225,12 @@
       }
     }
 
-    /* 🔔 Toast Notification */
+    /* 🔔 Toast Notification (Bottom Floating) */
     .app-toast {
       position: fixed;
-      top: 24px;
+      bottom: 28px;
       left: 50%;
-      transform: translateX(-50%) translateY(-20px);
+      transform: translateX(-50%) translateY(20px);
       background: rgba(15, 23, 42, 0.95);
       border: 1px solid var(--chzzk-green);
       box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 15px var(--chzzk-green-glow);
@@ -2678,8 +2734,18 @@
     }
 
     /* ========================================================= */
-    /* 💬 Overlay Floating Chat Sidebar (오버레이 플로팅 실시간 채팅창) */
+    /* 💬 Docked Chat Sidebar & Responsive Workspace Area */
     /* ========================================================= */
+    .app-workspace-area {
+      transition: padding-right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @media (min-width: 1300px) {
+      .app-workspace-area.has-docked-sidebar,
+      .app-workspace-area:has(#appMainLayout:not(.sidebar-collapsed)) {
+        padding-right: var(--chat-sidebar-w, 390px);
+      }
+    }
+
     .app-main-layout {
       width: 100%;
       position: relative;
@@ -2830,12 +2896,12 @@
     }
     .docked-chat-feed {
       flex: 1;
+      min-height: 0;
       overflow-y: auto;
       padding: 10px;
       display: flex;
       flex-direction: column;
       gap: 6px;
-      scroll-behavior: smooth;
     }
     .docked-chat-empty-guide {
       margin: auto;
@@ -2953,8 +3019,8 @@
       to { transform: translateX(-50%) translateY(-4px); }
     }
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
     @keyframes fadeInDown {
       from { opacity: 0; transform: translateY(-8px); }
@@ -2995,15 +3061,7 @@
       padding-left: 18px;
     }
     .floating-chat-tab-btn.is-open {
-      right: var(--chat-sidebar-w, 390px);
-      border-color: rgba(255, 107, 129, 0.85);
-      background: linear-gradient(135deg, rgba(30, 18, 24, 0.96), rgba(16, 8, 12, 0.98));
-      box-shadow: -6px 0 24px rgba(255, 107, 129, 0.35), 0 8px 24px rgba(0, 0, 0, 0.6);
-    }
-    .floating-chat-tab-btn.is-open:hover {
-      background: linear-gradient(135deg, rgba(255, 107, 129, 0.25), rgba(30, 18, 24, 0.98));
-      box-shadow: -8px 0 32px rgba(255, 107, 129, 0.6), 0 10px 28px rgba(0, 0, 0, 0.7);
-      padding-left: 18px;
+      display: none !important;
     }
     .floating-chat-tab-icon {
       font-size: 30px;
@@ -5681,6 +5739,9 @@
                 <button type="button" id="addRouletteRowBtn" class="btn btn-secondary" style="flex: 1; padding: 6px 10px; font-size: 12px;">
                   ➕ 새 항목 칸 추가 (Enter)
                 </button>
+                <button type="button" id="restoreManualRowBtn" class="btn-chip" style="display: none; padding: 6px 10px; font-size: 11px; background: rgba(0, 255, 163, 0.12); color: var(--chzzk-green); border-color: rgba(0, 255, 163, 0.35); font-weight: 700;" title="최근 제거된 수동 항목 복구">
+                  ↩️ 복구 (<span id="removedManualCountBadge">0</span>)
+                </button>
                 <button type="button" id="clearAllRouletteRowsBtn" class="btn-chip btn-chip-danger" style="padding: 6px 10px; font-size: 12px;">
                   🗑️ 전체 삭제
                 </button>
@@ -5748,6 +5809,11 @@
                 <input type="checkbox" id="donationMergeDuplicateToggle" checked style="width: 16px; height: 16px; cursor: pointer;">
               </div>
 
+              <div class="toggle-row" style="margin-bottom: 8px;">
+                <span class="toggle-label" style="font-size: 11px;">🏷️ 원판에 후원자 닉네임 함께 표시</span>
+                <input type="checkbox" id="donationShowNicknameToggle" style="width: 16px; height: 16px; cursor: pointer;">
+              </div>
+
               <div style="display: flex; gap: 6px;">
                 <button type="button" id="startRouletteDonationBtn" class="btn btn-primary" style="flex: 1; padding: 7px 12px; font-size: 12px; font-weight: 800;">
                   ▶️ 수집 시작
@@ -5765,21 +5831,89 @@
             </div>
           </div>
 
-          <!-- Card 2-B: Collected Donations Feed -->
+          <!-- Card 2-B: Collected Donations Feed & Manual Adjustments -->
           <div class="drawer-card-section" id="rouletteDonationFeedCard">
             <div class="drawer-card-header" onclick="toggleDrawerCardSection('rouletteDonationFeedCard')">
               <div class="drawer-card-title">
                 <span>📋</span>
-                <span>수집된 후원 목록 (<span id="donationItemCount" style="color: var(--chzzk-green);">0</span>건)</span>
+                <span>수집된 후원 목록 (<span id="donationItemCount" style="color: var(--chzzk-green);">0</span>건 / <span id="donationTotalCheeseBadge" style="color: #ffd700;">🧀 0</span>)</span>
               </div>
               <div style="display: flex; align-items: center; gap: 8px;">
                 <span id="rouletteDonationTimerDisplay" style="font-family: 'Outfit'; font-weight: 700; color: #ffd700; font-size: 11px; display: none;">남은 시간: 00:00</span>
                 <span class="drawer-collapse-chevron">▼</span>
               </div>
             </div>
-            <div class="drawer-card-body" style="padding: 8px 10px;">
-              <div id="donationFeedList" style="max-height: 100px; overflow-y: auto; background: #080c14; border: 1px solid var(--border-color); border-radius: 8px; padding: 6px; font-size: 11px;">
-                <div style="text-align: center; color: var(--text-sub); padding: 12px 0;">도네 수집 시작 버튼을 누르면 실시간 후원이 수집됩니다.</div>
+            <div class="drawer-card-body" style="padding: 10px;">
+              <!-- Manual Item Input Box in Cheese Mode (No Presets) -->
+              <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 8px 10px; margin-bottom: 8px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                  <span style="font-size: 11px; font-weight: 700; color: #cbd5e1;">✍️ 항목 수동 직접 추가</span>
+                  <span style="font-size: 10px; color: var(--text-sub);">직접 입력하여 룰렛에 등록</span>
+                </div>
+                <div style="display: flex; gap: 6px;">
+                  <input type="text" id="manualDonationMsgInput" placeholder="추가할 항목명 (예: 꽝, 꿀밤, 치킨, 보너스)" style="flex: 1; padding: 6px 10px; font-size: 11px; background: #080c14; border: 1px solid var(--border-color); border-radius: 6px; color: #fff; outline: none;">
+                  <div style="display: flex; align-items: center; background: #080c14; border: 1px solid var(--border-color); border-radius: 6px; padding: 0 6px; width: 105px;">
+                    <span style="font-size: 11px; color: #ffd700; margin-right: 4px;">🧀</span>
+                    <input type="number" id="manualDonationAmountInput" value="1000" min="1" step="500" style="width: 100%; background: transparent; border: none; color: #fff; font-size: 11px; font-weight: 700; outline: none; text-align: right;" title="치즈 금액 (가중치)">
+                  </div>
+                  <button type="button" id="addManualDonationBtn" class="btn btn-primary" style="padding: 6px 12px; font-size: 11px; font-weight: 700; white-space: nowrap;">
+                    ➕ 추가
+                  </button>
+                </div>
+              </div>
+
+              <!-- Sub-tabs: Active vs Removed / Trash Items -->
+              <div style="display: flex; gap: 4px; margin-bottom: 8px; background: rgba(0, 0, 0, 0.25); padding: 3px; border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.06);">
+                <button type="button" id="donationFeedTabActiveBtn" class="sub-tab-btn active" style="flex: 1; padding: 5px 8px; font-size: 11px; font-weight: 700; border-radius: 4px;">
+                  🟢 룰렛 등록 (<span id="donationActiveTabCount">0</span>)
+                </button>
+                <button type="button" id="donationFeedTabRemovedBtn" class="sub-tab-btn" style="flex: 1; padding: 5px 8px; font-size: 11px; font-weight: 700; border-radius: 4px; color: #94a3b8;">
+                  🗑️ 제거된 항목 (<span id="donationRemovedTabCount">0</span>)
+                </button>
+              </div>
+
+              <!-- Action Bar for Active Items -->
+              <div id="donationActiveActionBar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; gap: 6px; flex-wrap: wrap;">
+                <div style="display: flex; gap: 4px; align-items: center;">
+                  <button type="button" id="equalizeDonationsBtn" class="btn-chip" style="padding: 3px 8px; font-size: 10px; background: rgba(255,255,255,0.06); color: #cbd5e1;" title="모든 후원의 치즈를 1,000으로 균등 통일">
+                    ⚖️ 1,000 통일
+                  </button>
+                  <button type="button" id="copyDonationsBtn" class="btn-chip" style="padding: 3px 8px; font-size: 10px; background: rgba(255,255,255,0.06); color: #cbd5e1;" title="수집된 후원 목록을 클립보드로 복사">
+                    📋 목록 복사
+                  </button>
+                  <button type="button" id="restoreLastDonationBtn" class="btn-chip" style="display: none; padding: 3px 8px; font-size: 10px; background: rgba(0, 255, 163, 0.12); color: var(--chzzk-green); border-color: rgba(0, 255, 163, 0.3); font-weight: 700;" title="가장 최근에 제거된 항목 1건을 즉시 복구합니다">
+                    ↩️ 최근 삭제 복구
+                  </button>
+                </div>
+                <div style="display: flex; gap: 4px; align-items: center;">
+                  <button type="button" id="clearDonationsFeedBtn" class="btn-chip btn-chip-danger" style="padding: 3px 8px; font-size: 10px;">
+                    🗑️ 전체 비우기
+                  </button>
+                </div>
+              </div>
+
+              <!-- Action Bar for Removed Items -->
+              <div id="donationRemovedActionBar" style="display: none; justify-content: space-between; align-items: center; margin-bottom: 6px; gap: 6px;">
+                <div style="display: flex; gap: 4px; align-items: center;">
+                  <button type="button" id="restoreAllRemovedDonationsBtn" class="btn-chip btn-chip-primary" style="padding: 3px 8px; font-size: 10px; font-weight: 700;" title="제거된 모든 항목을 룰렛으로 일괄 복구합니다">
+                    ↩️ 제거 항목 전체 복구
+                  </button>
+                </div>
+                <div style="display: flex; gap: 4px; align-items: center;">
+                  <button type="button" id="purgeAllRemovedDonationsBtn" class="btn-chip btn-chip-danger" style="padding: 3px 8px; font-size: 10px;" title="제거된 항목 보관함을 완전히 비웁니다">
+                    💥 보관함 영구 비우기
+                  </button>
+                </div>
+              </div>
+
+              <!-- Active Feed List (5x Height: min 280px ~ max 500px) -->
+              <div id="donationFeedList" style="min-height: 280px; max-height: 500px; overflow-y: auto; background: #080c14; border: 1px solid var(--border-color); border-radius: 8px; padding: 6px; font-size: 11px;">
+                <div style="text-align: center; color: var(--text-sub); padding: 40px 0;">도네 수집 시작 버튼을 누르거나 위에서 항목을 수동 추가해 주세요.</div>
+              </div>
+
+              <!-- Removed Feed List (5x Height: min 280px ~ max 500px, hidden by default) -->
+              <div id="removedDonationFeedList" style="min-height: 280px; max-height: 500px; overflow-y: auto; background: #080c14; border: 1px solid var(--border-color); border-radius: 8px; padding: 6px; font-size: 11px; display: none;">
+                <div style="text-align: center; color: var(--text-sub); padding: 40px 0;">제거된 항목이 없습니다.</div>
               </div>
             </div>
           </div>
@@ -7991,19 +8125,16 @@
         isCollapsed = layout ? layout.classList.contains('sidebar-collapsed') : false;
       }
 
-      floatingBtn.style.display = 'flex';
       if (isCollapsed) {
+        floatingBtn.style.display = 'flex';
         floatingBtn.classList.remove('is-open');
         floatingBtn.title = '실시간 채팅창 펼치기';
         if (tabIcon) tabIcon.innerText = '💬';
         if (tabText) tabText.innerText = '채팅창';
         if (badge) badge.style.display = 'inline-block';
       } else {
+        floatingBtn.style.display = 'none';
         floatingBtn.classList.add('is-open');
-        floatingBtn.title = '실시간 채팅창 닫기';
-        if (tabIcon) tabIcon.innerText = '✕';
-        if (tabText) tabText.innerText = '닫기';
-        if (badge) badge.style.display = 'none';
       }
 
       const openDrawerBtn = document.getElementById('openChatDrawerBtn');
@@ -8020,12 +8151,17 @@
       // Restore user sidebar preference
       const savedCollapsed = localStorage.getItem('chat_sidebar_collapsed');
       const layout = document.getElementById('appMainLayout');
+      const workspace = document.getElementById('appWorkspaceArea');
       const stateText = document.getElementById('quickChatSidebarStateText');
 
       const isCollapsed = (savedCollapsed === 'true');
       if (layout) {
         if (isCollapsed) layout.classList.add('sidebar-collapsed');
         else layout.classList.remove('sidebar-collapsed');
+      }
+      if (workspace) {
+        if (isCollapsed) workspace.classList.remove('has-docked-sidebar');
+        else workspace.classList.add('has-docked-sidebar');
       }
       if (stateText) stateText.innerText = isCollapsed ? '펼치기' : '접기';
       updateFloatingChatTabUI(isCollapsed);
@@ -8071,6 +8207,11 @@
       }
 
       const isCollapsed = layout.classList.contains('sidebar-collapsed');
+      const workspace = document.getElementById('appWorkspaceArea');
+      if (workspace) {
+        if (isCollapsed) workspace.classList.remove('has-docked-sidebar');
+        else workspace.classList.add('has-docked-sidebar');
+      }
       const stateText = document.getElementById('quickChatSidebarStateText');
 
       updateFloatingChatTabUI(isCollapsed);
@@ -8932,9 +9073,33 @@
     const minDonationCheeseSelect = document.getElementById('minDonationCheeseSelect');
     const donationWeightToggle = document.getElementById('donationWeightToggle');
     const donationMergeDuplicateToggle = document.getElementById('donationMergeDuplicateToggle');
+    const donationShowNicknameToggle = document.getElementById('donationShowNicknameToggle');
     const donationItemCountEl = document.getElementById('donationItemCount');
+    const donationTotalCheeseBadge = document.getElementById('donationTotalCheeseBadge');
     const donationFeedList = document.getElementById('donationFeedList');
+    const removedDonationFeedList = document.getElementById('removedDonationFeedList');
+    const donationFeedTabActiveBtn = document.getElementById('donationFeedTabActiveBtn');
+    const donationFeedTabRemovedBtn = document.getElementById('donationFeedTabRemovedBtn');
+    const donationActiveActionBar = document.getElementById('donationActiveActionBar');
+    const donationRemovedActionBar = document.getElementById('donationRemovedActionBar');
+    const donationActiveTabCount = document.getElementById('donationActiveTabCount');
+    const donationRemovedTabCount = document.getElementById('donationRemovedTabCount');
+    const restoreLastDonationBtn = document.getElementById('restoreLastDonationBtn');
+    const restoreAllRemovedDonationsBtn = document.getElementById('restoreAllRemovedDonationsBtn');
+    const purgeAllRemovedDonationsBtn = document.getElementById('purgeAllRemovedDonationsBtn');
     const clearDonationsBtn = document.getElementById('clearDonationsBtn');
+    const clearDonationsFeedBtn = document.getElementById('clearDonationsFeedBtn');
+    const manualDonationMsgInput = document.getElementById('manualDonationMsgInput');
+    const manualDonationAmountInput = document.getElementById('manualDonationAmountInput');
+    const addManualDonationBtn = document.getElementById('addManualDonationBtn');
+    const equalizeDonationsBtn = document.getElementById('equalizeDonationsBtn');
+    const copyDonationsBtn = document.getElementById('copyDonationsBtn');
+    const restoreManualRowBtn = document.getElementById('restoreManualRowBtn');
+    const removedManualCountBadge = document.getElementById('removedManualCountBadge');
+
+    let removedDonationRouletteList = [];
+    let removedManualRouletteRows = [];
+    let currentDonationFeedView = 'active';
 
     const startRouletteDonationBtn = document.getElementById('startRouletteDonationBtn');
     const pauseRouletteDonationBtn = document.getElementById('pauseRouletteDonationBtn');
@@ -9546,21 +9711,53 @@
       }
     }
 
+    function updateManualRestoreBadge() {
+      if (restoreManualRowBtn && removedManualCountBadge) {
+        removedManualCountBadge.innerText = removedManualRouletteRows.length;
+        restoreManualRowBtn.style.display = removedManualRouletteRows.length > 0 ? 'inline-flex' : 'none';
+      }
+    }
+
     function removeManualRouletteRow(idx) {
-      manualRouletteRows.splice(idx, 1);
-      renderManualRouletteRows();
+      if (idx >= 0 && idx < manualRouletteRows.length) {
+        const removed = manualRouletteRows.splice(idx, 1)[0];
+        if (removed && removed.text && removed.text.trim()) {
+          removedManualRouletteRows.push(removed);
+          updateManualRestoreBadge();
+        }
+        renderManualRouletteRows();
+      }
     }
 
     function clearAllManualRouletteRows() {
       if (manualRouletteRows.length === 0) return;
-      if (confirm('모든 룰렛 항목 칸을 삭제하시겠습니까?')) {
+      if (confirm('모든 룰렛 항목 칸을 삭제하시겠습니까? (삭제 후 복구 가능)')) {
+        const valid = manualRouletteRows.filter(r => r.text && r.text.trim());
+        if (valid.length > 0) {
+          removedManualRouletteRows.push(...valid);
+          updateManualRestoreBadge();
+        }
         manualRouletteRows = [];
         renderManualRouletteRows();
+        showToast('모든 수동 항목이 삭제되었습니다. (복구 가능)', '🗑️');
       }
     }
 
     addRouletteRowBtn.addEventListener('click', () => addManualRouletteRow('', 1, true));
     clearAllRouletteRowsBtn.addEventListener('click', clearAllManualRouletteRows);
+
+    if (restoreManualRowBtn) {
+      restoreManualRowBtn.addEventListener('click', () => {
+        if (removedManualRouletteRows.length === 0) return;
+        const restored = removedManualRouletteRows.pop();
+        if (restored) {
+          manualRouletteRows.push(restored);
+          renderManualRouletteRows();
+          updateManualRestoreBadge();
+          showToast(`'${restored.text}' 항목이 복구되었습니다.`, '↩️');
+        }
+      });
+    }
 
     // ==========================================
     // 🔔 TOAST NOTIFICATION UTILITY
@@ -9895,37 +10092,366 @@
     if (pauseRouletteDonationBtn) pauseRouletteDonationBtn.addEventListener('click', pauseRouletteDonation);
     if (stopRouletteDonationBtn) stopRouletteDonationBtn.addEventListener('click', () => stopRouletteDonation(false));
 
+    function updateDonationFeedHeaderBadges() {
+      const activeItems = donationRouletteList.filter(d => !d.excluded);
+      if (donationItemCountEl) {
+        donationItemCountEl.innerText = activeItems.length.toLocaleString();
+      }
+      if (donationActiveTabCount) {
+        donationActiveTabCount.innerText = donationRouletteList.length.toLocaleString();
+      }
+      if (donationRemovedTabCount) {
+        donationRemovedTabCount.innerText = removedDonationRouletteList.length.toLocaleString();
+      }
+      if (donationTotalCheeseBadge) {
+        const total = activeItems.reduce((sum, d) => sum + (Number(d.amount) || 0), 0);
+        donationTotalCheeseBadge.innerText = `🧀 ${total.toLocaleString()}`;
+      }
+      if (restoreLastDonationBtn) {
+        restoreLastDonationBtn.style.display = removedDonationRouletteList.length > 0 ? 'inline-flex' : 'none';
+      }
+    }
+
     function renderDonationFeed() {
-      donationItemCountEl.innerText = donationRouletteList.length.toLocaleString();
+      updateDonationFeedHeaderBadges();
+      if (!donationFeedList || !removedDonationFeedList) return;
+
+      // 1. Render Active Items List
       if (donationRouletteList.length === 0) {
-        donationFeedList.innerHTML = '<div style="text-align: center; color: var(--text-sub); padding: 16px 0;">아직 수집된 도네이션이 없습니다.</div>';
-        return;
+        donationFeedList.innerHTML = '<div style="text-align: center; color: var(--text-sub); padding: 50px 0;"><div style="font-size: 26px; margin-bottom: 6px;">📋</div><div style="font-weight: 700; color: #94a3b8;">아직 수집된 도네이션이 없습니다.</div><div style="font-size: 11px; color: #64748b; margin-top: 4px;">도네 수집 시작 버튼을 누르거나 위에서 항목을 수동 추가해 주세요.</div></div>';
+      } else {
+        const activeEl = document.activeElement;
+        const activeIdx = activeEl && activeEl.dataset ? activeEl.dataset.idx : null;
+        const isMsgFocus = activeEl && activeEl.classList.contains('donation-edit-msg-input');
+        const isAmtFocus = activeEl && activeEl.classList.contains('donation-edit-amount-input');
+
+        donationFeedList.innerHTML = '';
+        donationRouletteList.forEach((d, idx) => {
+          const div = document.createElement('div');
+          div.className = 'donation-feed-row' + (d.excluded ? ' is-excluded' : '');
+          const isManual = d.isManual || d.nickname === '수동 추가' || d.nickname === '스트리머(수동)';
+          const nickBadgeStyle = isManual
+            ? 'background: rgba(0, 255, 163, 0.15); color: var(--chzzk-green); border: 1px solid rgba(0, 255, 163, 0.35); font-weight: 700;'
+            : 'background: rgba(255, 255, 255, 0.08); color: #cbd5e1; border: 1px solid rgba(255, 255, 255, 0.1);';
+          
+          const rowBg = d.excluded 
+            ? 'background: rgba(255, 255, 255, 0.02); opacity: 0.55; border: 1px dashed rgba(255,255,255,0.18);' 
+            : (isManual ? 'background: rgba(0, 255, 163, 0.03); border: 1px solid rgba(0, 255, 163, 0.15);' : 'background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255,255,255,0.06);');
+          
+          div.style.cssText = `padding: 5px 8px; display: flex; align-items: center; gap: 6px; border-radius: 4px; margin-bottom: 3px; ${rowBg} transition: all 0.15s;`;
+          
+          const excludedBadge = d.excluded ? '<span style="font-size: 9px; padding: 1px 4px; background: rgba(239, 68, 68, 0.2); color: #fca5a5; border-radius: 3px; font-weight: 700;">제외됨</span>' : '';
+
+          div.innerHTML = `
+            <span style="font-size: 10px; color: #64748b; font-family: 'Outfit'; font-weight: 700; width: 22px; text-align: center; flex-shrink: 0;">#${idx + 1}</span>
+            <span style="font-size: 10px; padding: 2px 5px; border-radius: 4px; ${nickBadgeStyle} max-width: 65px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-shrink: 0;" title="${escapeHtml(d.nickname || '익명')}">
+              ${escapeHtml(d.nickname || '익명')}
+            </span>
+            ${excludedBadge}
+            <input type="text" class="donation-edit-msg-input" data-idx="${idx}" value="${escapeHtml(d.msg)}" style="flex: 1; min-width: 75px; background: rgba(0,0,0,0.45); border: 1px solid rgba(255,255,255,0.12); border-radius: 4px; padding: 3px 6px; color: ${d.excluded ? '#94a3b8' : '#fff'}; text-decoration: ${d.excluded ? 'line-through' : 'none'}; font-size: 11px; outline: none;" placeholder="항목 내용">
+            <div style="display: flex; align-items: center; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.12); border-radius: 4px; padding: 0 4px; width: 78px; flex-shrink: 0; box-sizing: border-box;">
+              <span style="color: #ffd700; font-size: 10px; margin-right: 2px;">🧀</span>
+              <input type="number" class="donation-edit-amount-input" data-idx="${idx}" value="${d.amount}" min="1" step="100" style="width: 100%; background: transparent; border: none; color: ${d.excluded ? '#94a3b8' : 'var(--chzzk-green)'}; font-size: 11px; font-weight: 700; text-align: right; outline: none; padding: 2px 0;" title="후원 금액 / 가중치">
+            </div>
+            <button type="button" class="btn-chip" style="padding: 2px 6px; font-size: 10px; flex-shrink: 0; ${d.excluded ? 'background: rgba(0, 255, 163, 0.15); color: var(--chzzk-green); border-color: rgba(0, 255, 163, 0.35); font-weight: 700;' : 'background: rgba(255,255,255,0.06); color: #94a3b8;'}" onclick="toggleExcludeDonation(${idx})" title="${d.excluded ? '원판에 다시 포함' : '원판에서 일시 제외'}">
+              ${d.excluded ? '↩️ 포함' : '제외'}
+            </button>
+            <button type="button" class="btn-chip btn-chip-danger" style="padding: 2px 6px; font-size: 10px; flex-shrink: 0;" onclick="removeDonationEntry(${idx})" title="이 항목 제거 (보관함으로 이동)">✕</button>
+          `;
+
+          const msgInput = div.querySelector('.donation-edit-msg-input');
+          const amtInput = div.querySelector('.donation-edit-amount-input');
+
+          msgInput.addEventListener('change', function() {
+            const i = parseInt(this.dataset.idx, 10);
+            if (donationRouletteList[i]) {
+              donationRouletteList[i].msg = this.value.trim() || '(메시지 없음)';
+              if (currentRouletteMode === 'donation') drawRouletteWheel();
+              if (typeof updateSettingsSummaryBadges === 'function') updateSettingsSummaryBadges();
+            }
+          });
+          msgInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') this.blur();
+          });
+
+          amtInput.addEventListener('change', function() {
+            const i = parseInt(this.dataset.idx, 10);
+            if (donationRouletteList[i]) {
+              const val = Math.max(1, parseInt(this.value, 10) || 1000);
+              donationRouletteList[i].amount = val;
+              this.value = val;
+              updateDonationFeedHeaderBadges();
+              if (currentRouletteMode === 'donation') drawRouletteWheel();
+              if (typeof updateSettingsSummaryBadges === 'function') updateSettingsSummaryBadges();
+            }
+          });
+          amtInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') this.blur();
+          });
+
+          donationFeedList.appendChild(div);
+        });
+
+        // Restore focus if user was editing
+        if (activeIdx !== null) {
+          const selector = isMsgFocus ? `.donation-edit-msg-input[data-idx="${activeIdx}"]` : (isAmtFocus ? `.donation-edit-amount-input[data-idx="${activeIdx}"]` : null);
+          if (selector) {
+            const target = donationFeedList.querySelector(selector);
+            if (target) {
+              target.focus();
+              const len = target.value.length;
+              target.setSelectionRange(len, len);
+            }
+          }
+        }
       }
 
-      donationFeedList.innerHTML = '';
-      donationRouletteList.slice(-20).reverse().forEach((d, idx) => {
-        const div = document.createElement('div');
-        div.style.cssText = 'padding: 4px 6px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center;';
-        div.innerHTML = `
-          <div>
-            <span style="color: var(--chzzk-green); font-weight: 700;">🧀 ${d.amount.toLocaleString()}</span>
-            <span style="color: #fff; font-weight: 600; margin-left: 6px;">${escapeHtml(d.msg)}</span>
-          </div>
-          <button type="button" class="btn-chip btn-chip-danger" style="padding: 1px 4px; font-size: 9px;" onclick="removeDonationEntry(${donationRouletteList.length - 1 - idx})">✕</button>
-        `;
-        donationFeedList.appendChild(div);
-      });
+      // 2. Render Removed Items List (Trash / Archive)
+      if (removedDonationRouletteList.length === 0) {
+        removedDonationFeedList.innerHTML = '<div style="text-align: center; color: var(--text-sub); padding: 50px 0;"><div style="font-size: 26px; margin-bottom: 6px;">🗑️</div><div style="font-weight: 700; color: #94a3b8;">제거된 항목이 없습니다.</div><div style="font-size: 11px; color: #64748b; margin-top: 4px;">등록된 항목을 삭제하거나 룰렛에서 당첨되어 빠진 항목이 여기에 보관됩니다.</div></div>';
+      } else {
+        removedDonationFeedList.innerHTML = '';
+        removedDonationRouletteList.forEach((d, idx) => {
+          const div = document.createElement('div');
+          div.className = 'donation-feed-row is-removed';
+          const isManual = d.isManual || d.nickname === '수동 추가' || d.nickname === '스트리머(수동)';
+          const nickBadgeStyle = isManual
+            ? 'background: rgba(0, 255, 163, 0.15); color: var(--chzzk-green); border: 1px solid rgba(0, 255, 163, 0.35); font-weight: 700;'
+            : 'background: rgba(255, 255, 255, 0.08); color: #cbd5e1; border: 1px solid rgba(255, 255, 255, 0.1);';
+          
+          div.style.cssText = 'padding: 5px 8px; display: flex; align-items: center; gap: 6px; border-radius: 4px; margin-bottom: 3px; background: rgba(239, 68, 68, 0.04); border: 1px solid rgba(239, 68, 68, 0.12);';
+
+          div.innerHTML = `
+            <span style="font-size: 10px; color: #64748b; font-family: 'Outfit'; font-weight: 700; width: 22px; text-align: center; flex-shrink: 0;">#${idx + 1}</span>
+            <span style="font-size: 10px; padding: 2px 5px; border-radius: 4px; ${nickBadgeStyle} max-width: 65px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-shrink: 0;" title="${escapeHtml(d.nickname || '익명')}">
+              ${escapeHtml(d.nickname || '익명')}
+            </span>
+            <span style="flex: 1; min-width: 80px; color: #94a3b8; font-size: 11px; text-decoration: line-through; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${escapeHtml(d.msg)}">
+              ${escapeHtml(d.msg)}
+            </span>
+            <div style="display: flex; align-items: center; padding: 0 4px; flex-shrink: 0;">
+              <span style="color: #ffd700; font-size: 10px; margin-right: 2px;">🧀</span>
+              <span style="color: #94a3b8; font-size: 11px; font-weight: 700;">${(d.amount || 1000).toLocaleString()}</span>
+            </div>
+            <button type="button" class="btn-chip" style="padding: 2px 8px; font-size: 10px; background: rgba(0, 255, 163, 0.15); color: var(--chzzk-green); border-color: rgba(0, 255, 163, 0.35); font-weight: 700; flex-shrink: 0;" onclick="restoreSingleRemovedDonation(${idx})" title="이 항목을 룰렛으로 복구">
+              ↩️ 복구
+            </button>
+            <button type="button" class="btn-chip btn-chip-danger" style="padding: 2px 6px; font-size: 10px; flex-shrink: 0;" onclick="purgeSingleRemovedDonation(${idx})" title="영구 삭제">✕</button>
+          `;
+          removedDonationFeedList.appendChild(div);
+        });
+      }
+    }
+
+    function toggleExcludeDonation(idx) {
+      if (idx >= 0 && idx < donationRouletteList.length) {
+        donationRouletteList[idx].excluded = !donationRouletteList[idx].excluded;
+        renderDonationFeed();
+        if (currentRouletteMode === 'donation') drawRouletteWheel();
+        if (typeof updateSettingsSummaryBadges === 'function') updateSettingsSummaryBadges();
+        const isEx = donationRouletteList[idx].excluded;
+        showToast(isEx ? `'${donationRouletteList[idx].msg}' 항목이 원판에서 일시 제외되었습니다.` : `'${donationRouletteList[idx].msg}' 항목이 원판에 다시 포함되었습니다.`, isEx ? '⏸️' : '▶️');
+      }
     }
 
     function removeDonationEntry(idx) {
       if (idx >= 0 && idx < donationRouletteList.length) {
-        donationRouletteList.splice(idx, 1);
+        const removed = donationRouletteList.splice(idx, 1)[0];
+        if (removed) {
+          removedDonationRouletteList.push(removed);
+        }
         renderDonationFeed();
-        drawRouletteWheel();
+        if (currentRouletteMode === 'donation') drawRouletteWheel();
+        if (typeof updateSettingsSummaryBadges === 'function') updateSettingsSummaryBadges();
+        if (removed) {
+          showToast(`'${removed.msg}' 항목이 제거되었습니다. (언제든 복구 가능)`, '🗑️');
+        }
       }
     }
 
-    clearDonationsBtn.addEventListener('click', () => {
+    function restoreSingleRemovedDonation(idx) {
+      if (idx >= 0 && idx < removedDonationRouletteList.length) {
+        const restored = removedDonationRouletteList.splice(idx, 1)[0];
+        if (restored) {
+          restored.excluded = false;
+          donationRouletteList.push(restored);
+        }
+        renderDonationFeed();
+        if (currentRouletteMode === 'donation') drawRouletteWheel();
+        if (typeof updateSettingsSummaryBadges === 'function') updateSettingsSummaryBadges();
+        if (restored) {
+          showToast(`'${restored.msg}' 항목이 룰렛으로 복구되었습니다.`, '↩️');
+        }
+      }
+    }
+
+    function purgeSingleRemovedDonation(idx) {
+      if (idx >= 0 && idx < removedDonationRouletteList.length) {
+        removedDonationRouletteList.splice(idx, 1);
+        renderDonationFeed();
+        showToast('항목이 보관함에서 영구 삭제되었습니다.', '🗑️');
+      }
+    }
+
+    function restoreLastDonation() {
+      if (removedDonationRouletteList.length === 0) {
+        showToast('복구할 최근 제거 항목이 없습니다.', '⚠️');
+        return;
+      }
+      const restored = removedDonationRouletteList.pop();
+      if (restored) {
+        restored.excluded = false;
+        donationRouletteList.push(restored);
+        renderDonationFeed();
+        if (currentRouletteMode === 'donation') drawRouletteWheel();
+        if (typeof updateSettingsSummaryBadges === 'function') updateSettingsSummaryBadges();
+        showToast(`'${restored.msg}' 항목이 룰렛으로 복구되었습니다.`, '↩️');
+      }
+    }
+
+    function restoreAllRemovedDonations() {
+      if (removedDonationRouletteList.length === 0) {
+        showToast('복구할 제거된 항목이 없습니다.', '⚠️');
+        return;
+      }
+      const count = removedDonationRouletteList.length;
+      removedDonationRouletteList.forEach(d => { d.excluded = false; });
+      donationRouletteList.push(...removedDonationRouletteList);
+      removedDonationRouletteList = [];
+      renderDonationFeed();
+      if (currentRouletteMode === 'donation') drawRouletteWheel();
+      if (typeof updateSettingsSummaryBadges === 'function') updateSettingsSummaryBadges();
+      showToast(`제거되었던 ${count}개 항목이 모두 룰렛으로 복구되었습니다!`, '↩️');
+    }
+
+    function purgeAllRemovedDonations() {
+      if (removedDonationRouletteList.length === 0) {
+        showToast('비울 보관함 내역이 없습니다.', '⚠️');
+        return;
+      }
+      if (confirm('제거된 항목 보관함을 완전히 비우시겠습니까? 영구 삭제되어 복구할 수 없습니다.')) {
+        removedDonationRouletteList = [];
+        renderDonationFeed();
+        showToast('제거 항목 보관함이 완전히 비워졌습니다.', '🗑️');
+      }
+    }
+
+    function switchDonationFeedView(view) {
+      currentDonationFeedView = view;
+      if (view === 'active') {
+        if (donationFeedTabActiveBtn) {
+          donationFeedTabActiveBtn.classList.add('active');
+          donationFeedTabActiveBtn.style.color = '#fff';
+        }
+        if (donationFeedTabRemovedBtn) {
+          donationFeedTabRemovedBtn.classList.remove('active');
+          donationFeedTabRemovedBtn.style.color = '#94a3b8';
+        }
+        if (donationActiveActionBar) donationActiveActionBar.style.display = 'flex';
+        if (donationRemovedActionBar) donationRemovedActionBar.style.display = 'none';
+        if (donationFeedList) donationFeedList.style.display = 'block';
+        if (removedDonationFeedList) removedDonationFeedList.style.display = 'none';
+      } else {
+        if (donationFeedTabActiveBtn) {
+          donationFeedTabActiveBtn.classList.remove('active');
+          donationFeedTabActiveBtn.style.color = '#94a3b8';
+        }
+        if (donationFeedTabRemovedBtn) {
+          donationFeedTabRemovedBtn.classList.add('active');
+          donationFeedTabRemovedBtn.style.color = '#fff';
+        }
+        if (donationActiveActionBar) donationActiveActionBar.style.display = 'none';
+        if (donationRemovedActionBar) donationRemovedActionBar.style.display = 'flex';
+        if (donationFeedList) donationFeedList.style.display = 'none';
+        if (removedDonationFeedList) removedDonationFeedList.style.display = 'block';
+      }
+    }
+
+    if (donationFeedTabActiveBtn) donationFeedTabActiveBtn.addEventListener('click', () => switchDonationFeedView('active'));
+    if (donationFeedTabRemovedBtn) donationFeedTabRemovedBtn.addEventListener('click', () => switchDonationFeedView('removed'));
+    if (restoreLastDonationBtn) restoreLastDonationBtn.addEventListener('click', restoreLastDonation);
+    if (restoreAllRemovedDonationsBtn) restoreAllRemovedDonationsBtn.addEventListener('click', restoreAllRemovedDonations);
+    if (purgeAllRemovedDonationsBtn) purgeAllRemovedDonationsBtn.addEventListener('click', purgeAllRemovedDonations);
+
+    function addManualDonationItem(text, amount) {
+      const trimmed = (text || '').trim();
+      if (!trimmed) {
+        showToast('추가할 항목명을 입력해 주세요.', '⚠️');
+        return;
+      }
+      const cheeseAmt = Math.max(1, parseInt(amount, 10) || 1000);
+      donationRouletteList.push({
+        nickname: '수동 추가',
+        msg: trimmed,
+        amount: cheeseAmt,
+        time: new Date().toLocaleTimeString(),
+        uid: 'manual_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+        isManual: true,
+        excluded: false
+      });
+      renderDonationFeed();
+      if (currentRouletteMode === 'donation') {
+        drawRouletteWheel();
+      }
+      if (typeof updateSettingsSummaryBadges === 'function') updateSettingsSummaryBadges();
+      showToast(`'${trimmed}' 항목(🧀 ${cheeseAmt.toLocaleString()})이 추가되었습니다.`, '➕');
+      if (donationFeedList) {
+        donationFeedList.scrollTop = donationFeedList.scrollHeight;
+      }
+    }
+
+    if (addManualDonationBtn) {
+      addManualDonationBtn.addEventListener('click', () => {
+        const msg = manualDonationMsgInput ? manualDonationMsgInput.value : '';
+        const amt = manualDonationAmountInput ? manualDonationAmountInput.value : 1000;
+        addManualDonationItem(msg, amt);
+        if (manualDonationMsgInput) {
+          manualDonationMsgInput.value = '';
+          manualDonationMsgInput.focus();
+        }
+      });
+    }
+    if (manualDonationMsgInput) {
+      manualDonationMsgInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          if (addManualDonationBtn) addManualDonationBtn.click();
+        }
+      });
+    }
+
+    if (equalizeDonationsBtn) {
+      equalizeDonationsBtn.addEventListener('click', () => {
+        if (donationRouletteList.length === 0) {
+          showToast('균등화할 도네이션 항목이 없습니다.', '⚠️');
+          return;
+        }
+        if (confirm('모든 수집된 항목의 치즈 금액을 1,000으로 동일하게 통일하시겠습니까? (1/N 균등 확률)')) {
+          donationRouletteList.forEach(d => { d.amount = 1000; });
+          renderDonationFeed();
+          if (currentRouletteMode === 'donation') drawRouletteWheel();
+          if (typeof updateSettingsSummaryBadges === 'function') updateSettingsSummaryBadges();
+          showToast('모든 항목의 가중치가 1,000으로 균등 통일되었습니다.', '⚖️');
+        }
+      });
+    }
+
+    if (copyDonationsBtn) {
+      copyDonationsBtn.addEventListener('click', () => {
+        if (donationRouletteList.length === 0) {
+          showToast('복사할 도네이션 내역이 없습니다.', '⚠️');
+          return;
+        }
+        const text = donationRouletteList.map((d, i) => `${i + 1}. [${d.nickname || '익명'}] ${d.msg} (🧀 ${d.amount.toLocaleString()})${d.excluded ? ' [제외]' : ''}`).join('\n');
+        navigator.clipboard.writeText(text).then(() => {
+          showToast('수집된 목록이 클립보드에 복사되었습니다.', '📋');
+        }).catch(() => {
+          showToast('클립보드 복사에 실패했습니다.', '⚠️');
+        });
+      });
+    }
+
+    function handleClearAllDonations() {
       if (isRouletteDonationCollecting) {
         showToast('수집 진행 중에는 초기화할 수 없습니다. 먼저 수집을 마감해 주세요.', '⚠️');
         return;
@@ -9934,27 +10460,41 @@
         showToast('비울 도네이션 내역이 없습니다.', '⚠️');
         return;
       }
-      if (confirm('수집된 도네이션 룰렛 목록을 모두 비우시겠습니까?')) {
+      if (confirm('수집된 도네이션 룰렛 목록을 모두 비우시겠습니까? (제거 보관함으로 이동되어 복구 가능합니다)')) {
+        removedDonationRouletteList.push(...donationRouletteList);
         donationRouletteList = [];
         stopRouletteDonation(false);
         renderDonationFeed();
         drawRouletteWheel();
-        showToast('수집된 도네이션 목록이 초기화되었습니다.', '🗑️');
+        if (typeof updateSettingsSummaryBadges === 'function') updateSettingsSummaryBadges();
+        showToast('수집된 도네이션 목록이 비워졌습니다. (복구 가능)', '🗑️');
       }
-    });
+    }
 
-    donationWeightToggle.addEventListener('change', () => {
-      if (currentRouletteMode === 'donation') drawRouletteWheel();
-    });
+    if (clearDonationsBtn) clearDonationsBtn.addEventListener('click', handleClearAllDonations);
+    if (clearDonationsFeedBtn) clearDonationsFeedBtn.addEventListener('click', handleClearAllDonations);
+
+    if (donationWeightToggle) {
+      donationWeightToggle.addEventListener('change', () => {
+        if (currentRouletteMode === 'donation') drawRouletteWheel();
+      });
+    }
     if (donationMergeDuplicateToggle) {
       donationMergeDuplicateToggle.addEventListener('change', () => {
         if (currentRouletteMode === 'donation') drawRouletteWheel();
         if (typeof updateSettingsSummaryBadges === 'function') updateSettingsSummaryBadges();
       });
     }
-    minDonationCheeseSelect.addEventListener('change', () => {
-      if (currentRouletteMode === 'donation') drawRouletteWheel();
-    });
+    if (donationShowNicknameToggle) {
+      donationShowNicknameToggle.addEventListener('change', () => {
+        if (currentRouletteMode === 'donation') drawRouletteWheel();
+      });
+    }
+    if (minDonationCheeseSelect) {
+      minDonationCheeseSelect.addEventListener('change', () => {
+        if (currentRouletteMode === 'donation') drawRouletteWheel();
+      });
+    }
 
     function getActiveRouletteItems() {
       if (currentRouletteMode === 'manual') {
@@ -9970,18 +10510,20 @@
       } else {
         const useWeight = donationWeightToggle ? donationWeightToggle.checked : true;
         const mergeDuplicate = donationMergeDuplicateToggle ? donationMergeDuplicateToggle.checked : true;
+        const showNickname = donationShowNicknameToggle ? donationShowNicknameToggle.checked : false;
         const minReq = Number(minDonationCheeseSelect ? minDonationCheeseSelect.value : 1) || 1;
 
-        const filtered = donationRouletteList.filter(d => d.amount >= minReq);
+        const filtered = donationRouletteList.filter(d => !d.excluded && d.amount >= minReq);
 
         if (!mergeDuplicate) {
           return filtered.map((d, idx) => {
-            let text = d.msg && d.msg.trim().length > 0 ? d.msg.trim() : '(메시지 없음)';
+            let rawText = d.msg && d.msg.trim().length > 0 ? d.msg.trim() : '(메시지 없음)';
+            let text = showNickname ? `${rawText} (${d.nickname || '익명'})` : rawText;
             let weight = useWeight ? Math.max(1, Math.round(d.amount / 1000)) : 1;
             return {
               id: idx,
               text: text,
-              rawText: text,
+              rawText: rawText,
               weight: weight,
               count: 1,
               totalAmount: d.amount,
@@ -10020,7 +10562,15 @@
           }
 
           let displayText = text;
-          if (entry.count > 1) {
+          if (showNickname) {
+            if (entry.count === 1) {
+              displayText = `${text} (${entry.donors[0]?.nickname || '익명'})`;
+            } else {
+              const uniqueNicks = Array.from(new Set(entry.donors.map(dn => dn.nickname || '익명')));
+              const nickSummary = uniqueNicks.slice(0, 2).join(', ') + (uniqueNicks.length > 2 ? ' 외' : '');
+              displayText = `${text} (${nickSummary} · x${entry.count})`;
+            }
+          } else if (entry.count > 1) {
             displayText = `${text} (x${entry.count})`;
           }
 
@@ -10388,14 +10938,17 @@
           return t === targetText;
         });
         if (removeIdx !== -1) {
-          donationRouletteList.splice(removeIdx, 1);
+          const removed = donationRouletteList.splice(removeIdx, 1)[0];
+          if (removed) {
+            removedDonationRouletteList.push(removed);
+          }
           renderDonationFeed();
           drawRouletteWheel();
           if (typeof updateSettingsSummaryBadges === 'function') updateSettingsSummaryBadges();
           if (winner.count && winner.count > 1) {
-            showToast(`'${targetText}' 1건 제거 완료 (남은 수량: ${winner.count - 1}건)`, '🗑️');
+            showToast(`'${targetText}' 1건 제거 보관함 이동 (남은 수량: ${winner.count - 1}건)`, '🗑️');
           } else {
-            showToast(`'${targetText}' 항목이 룰렛에서 제거되었습니다.`, '🗑️');
+            showToast(`'${targetText}' 항목이 제거 보관함으로 이동되었습니다. (언제든 복구 가능)`, '🗑️');
           }
         }
       }
