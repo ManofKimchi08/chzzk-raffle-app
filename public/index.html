@@ -5788,8 +5788,9 @@
                 <div class="form-group" style="margin-bottom: 0;">
                   <label>최소 후원 치즈 기준</label>
                   <select id="minDonationCheeseSelect">
-                    <option value="1">전체 후원 (1치즈+)</option>
                     <option value="1000" selected>1,000 치즈 이상</option>
+                    <option value="2000">2,000 치즈 이상</option>
+                    <option value="3000">3,000 치즈 이상</option>
                     <option value="5000">5,000 치즈 이상</option>
                     <option value="10000">10,000 치즈 이상</option>
                     <option value="50000">50,000 치즈 이상</option>
@@ -5822,11 +5823,6 @@
               <div class="toggle-row" style="margin-bottom: 8px;">
                 <span class="toggle-label" style="font-size: 11px;">🔗 동일 메시지 자동 합산 (병합)</span>
                 <input type="checkbox" id="donationMergeDuplicateToggle" checked style="width: 16px; height: 16px; cursor: pointer;">
-              </div>
-
-              <div class="toggle-row" style="margin-bottom: 8px;">
-                <span class="toggle-label" style="font-size: 11px;">🏷️ 원판에 후원자 닉네임 함께 표시</span>
-                <input type="checkbox" id="donationShowNicknameToggle" style="width: 16px; height: 16px; cursor: pointer;">
               </div>
 
               <div style="display: flex; gap: 6px;">
@@ -5887,12 +5883,15 @@
                 </button>
               </div>
 
+              <!-- 🔍 Search Bar for Collected Donations -->
+              <div class="donation-search-wrap" style="margin-bottom: 8px; position: relative; display: flex; align-items: center;">
+                <input type="text" id="donationSearchInput" placeholder="🔍 후원자 닉네임 또는 항목명 검색..." style="width: 100%; padding: 6px 30px 6px 10px; font-size: 11px; background: #080c14; border: 1px solid var(--border-color); border-radius: 6px; color: #fff; outline: none;" oninput="handleDonationSearchInput(this.value)">
+                <button type="button" id="clearDonationSearchBtn" style="position: absolute; right: 8px; background: transparent; border: none; color: var(--text-sub); cursor: pointer; font-size: 13px; display: none; line-height: 1; padding: 2px;" onclick="clearDonationSearch()" title="검색어 지우기">✕</button>
+              </div>
+
               <!-- Action Bar for Active Items -->
               <div id="donationActiveActionBar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; gap: 6px; flex-wrap: wrap;">
                 <div style="display: flex; gap: 4px; align-items: center;">
-                  <button type="button" id="equalizeDonationsBtn" class="btn-chip" style="padding: 3px 8px; font-size: 10px; background: rgba(255,255,255,0.06); color: #cbd5e1;" title="모든 후원의 치즈를 1,000으로 균등 통일">
-                    ⚖️ 1,000 통일
-                  </button>
                   <button type="button" id="copyDonationsBtn" class="btn-chip" style="padding: 3px 8px; font-size: 10px; background: rgba(255,255,255,0.06); color: #cbd5e1;" title="수집된 후원 목록을 클립보드로 복사">
                     📋 목록 복사
                   </button>
@@ -6114,8 +6113,9 @@
             <div class="form-group" style="margin-bottom: 0;">
               <label>최소 후원 치즈</label>
               <select id="pollMinCheeseSelect">
-                <option value="1">전체 (1치즈+)</option>
                 <option value="1000" selected>1,000 치즈 이상</option>
+                <option value="2000">2,000 치즈 이상</option>
+                <option value="3000">3,000 치즈 이상</option>
                 <option value="5000">5,000 치즈 이상</option>
                 <option value="10000">10,000 치즈 이상</option>
               </select>
@@ -7804,9 +7804,12 @@
             return;
           }
 
-          // Live Chat / Donation / Sub Messages (93101, 93102, 93103, 93104)
-          if ((data.cmd === 93101 || data.cmd === 93102 || data.cmd === 93103 || data.cmd === 93104) && Array.isArray(data.bdy)) {
-            data.bdy.forEach(item => processChatMessage(item, data.cmd));
+          // Live Chat / Donation / Sub Messages (93101, 93102, 93103, 93104, 93105, 93106, etc.)
+          if (data && ((data.cmd >= 93000 && data.cmd <= 93999) || data.cmd === 93101 || data.cmd === 93102 || data.cmd === 93103 || data.cmd === 93104 || data.cmd === 93105 || data.cmd === 93106)) {
+            const bdyList = Array.isArray(data.bdy) ? data.bdy : (data.bdy ? [data.bdy] : (Array.isArray(data.body) ? data.body : (data.body ? [data.body] : [])));
+            bdyList.forEach(item => {
+              if (item) processChatMessage(item, data.cmd);
+            });
           }
         } catch (e) {
           console.error('Error parsing WS message:', e);
@@ -7899,19 +7902,54 @@
     }
 
     function processChatMessage(item, cmd = 0) {
+      if (!item) return;
       lastChatReceivedTime = Date.now();
       chatLogCount++;
       if (chatBadgeCount) chatBadgeCount.innerText = chatLogCount.toLocaleString();
-      drawerChatCount.innerText = `${chatLogCount.toLocaleString()}개`;
+      if (drawerChatCount) drawerChatCount.innerText = `${chatLogCount.toLocaleString()}개`;
 
       let profileData = {};
-      try {
-        profileData = JSON.parse(item.profile);
-      } catch (e) {}
+      if (item.profile) {
+        if (typeof item.profile === 'object') {
+          profileData = item.profile;
+        } else if (typeof item.profile === 'string') {
+          try { profileData = JSON.parse(item.profile); } catch (e) {}
+        }
+      }
 
-      const nickname = profileData.nickname || item.uid.substring(0, 8);
-      const msgText = item.msg || profileData.msg || '';
-      const uid = item.uid;
+      // Safe extraction of extras with regex fallback
+      let extras = null;
+      if (item.extras) {
+        if (typeof item.extras === 'object') {
+          extras = item.extras;
+        } else if (typeof item.extras === 'string') {
+          try {
+            extras = JSON.parse(item.extras);
+          } catch (e) {
+            try {
+              const amtMatch = item.extras.match(/"(?:payAmount|donationAmount|cheeseAmount|amount|pay_amount|cheese)":\s*"?(\d+)"?/i);
+              const msgMatch = item.extras.match(/"(?:message|msg|text)":\s*"([^"]+)"/i);
+              extras = {
+                payAmount: amtMatch ? parseInt(amtMatch[1], 10) : 0,
+                message: msgMatch ? msgMatch[1] : ''
+              };
+            } catch (err2) {}
+          }
+        }
+      }
+
+      // Safe UID extraction (never crash on undefined/anonymous)
+      const rawUid = String(item.uid || (profileData && profileData.userIdHash) || (item.userId) || '').trim();
+      const uid = rawUid || ('anon_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7));
+
+      // Safe nickname extraction
+      let nickname = profileData.nickname || (rawUid ? rawUid.substring(0, 8) : '익명');
+      if (extras && extras.isAnonymous) {
+        nickname = '익명 후원자';
+      }
+
+      // Safe message text extraction (check extras.message if item.msg is empty)
+      const msgText = String(item.msg || (extras && (extras.message || extras.msg || extras.text)) || profileData.msg || item.content || '').trim();
 
       const sp = profileData.streamingProperty || {};
       const subInfo = sp.subscription || null;
@@ -7990,8 +8028,8 @@
       handleLivePokeQuizChat(nickname, msgText, uid, now);
 
       // Parse and Handle Live Cheese Donation for Roulette & Cheese Poll
-      const donationInfo = parseLiveDonation(item, profileData, cmd);
-      if (donationInfo.isDonation) {
+      const donationInfo = parseLiveDonation(item, profileData, cmd, extras);
+      if (donationInfo.isDonation && donationInfo.payAmount > 0) {
         handleLiveDonation(nickname, msgText, uid, donationInfo.payAmount, now);
         handleLivePollDonation(nickname, msgText, uid, donationInfo.payAmount, now);
       }
@@ -8001,28 +8039,60 @@
       if (quickChatCountEl) quickChatCountEl.innerText = chatLogCount.toLocaleString();
     }
 
-    function parseLiveDonation(item, profileData, cmd = 0) {
-      let isDonation = (cmd === 93102) || (item.cmd === 93102) || item.msgTypeCode === 10 || item.msgTypeCode === '10' || item.msgTypeCode === 11 || item.msgTypeCode === '11';
+    function parseLiveDonation(item, profileData, cmd = 0, preParsedExtras = null) {
+      const msgType = Number(item.msgTypeCode);
+      let isDonation = (cmd === 93102) || (cmd === 93105) || (cmd === 93106) || 
+                       (item.cmd === 93102) || (item.cmd === 93105) ||
+                       msgType === 10 || msgType === 11 || msgType === 12 || msgType === 13 || msgType === 14 || msgType === 15;
       let payAmount = 0;
       let donationType = 'CHAT';
 
-      if (item.extras) {
-        try {
-          const extras = typeof item.extras === 'string' ? JSON.parse(item.extras) : item.extras;
-          if (extras.payAmount || extras.donationAmount || extras.cheeseAmount || extras.amount || extras.pay_amount) {
-            isDonation = true;
-            payAmount = Number(extras.payAmount || extras.donationAmount || extras.cheeseAmount || extras.amount || extras.pay_amount || 0);
-            donationType = extras.donationType || 'CHAT';
+      let extras = preParsedExtras;
+      if (!extras && item.extras) {
+        if (typeof item.extras === 'object') {
+          extras = item.extras;
+        } else if (typeof item.extras === 'string') {
+          try {
+            extras = JSON.parse(item.extras);
+          } catch (e) {
+            try {
+              const amtMatch = item.extras.match(/"(?:payAmount|donationAmount|cheeseAmount|amount|pay_amount|cheese)":\s*"?(\d+)"?/i);
+              const msgMatch = item.extras.match(/"(?:message|msg|text)":\s*"([^"]+)"/i);
+              extras = {
+                payAmount: amtMatch ? parseInt(amtMatch[1], 10) : 0,
+                message: msgMatch ? msgMatch[1] : ''
+              };
+            } catch (err2) {}
           }
-        } catch (e) {}
+        }
       }
 
-      if (!isDonation && profileData && profileData.streamingProperty && profileData.streamingProperty.donation) {
+      if (extras) {
+        const rawAmt = extras.payAmount ?? extras.donationAmount ?? extras.cheeseAmount ?? extras.amount ?? extras.pay_amount ?? extras.cheese ?? extras.totalPayAmount;
+        if (rawAmt !== undefined && rawAmt !== null && Number(rawAmt) > 0) {
+          isDonation = true;
+          payAmount = Number(rawAmt);
+        }
+        if (extras.donationType) {
+          isDonation = true;
+          donationType = extras.donationType;
+        }
+      }
+
+      if (!payAmount && item.payAmount) {
+        isDonation = true;
+        payAmount = Number(item.payAmount) || 0;
+      }
+      if (!payAmount && item.amount) {
+        isDonation = true;
+        payAmount = Number(item.amount) || 0;
+      }
+      if (!payAmount && profileData && profileData.streamingProperty && profileData.streamingProperty.donation) {
         isDonation = true;
         payAmount = Number(profileData.streamingProperty.donation.amount || 0);
       }
 
-      return { isDonation, payAmount, donationType };
+      return { isDonation, payAmount, donationType, extras };
     }
 
     function isExcluded(p) {
@@ -9091,9 +9161,11 @@
     const minDonationCheeseSelect = document.getElementById('minDonationCheeseSelect');
     const donationWeightToggle = document.getElementById('donationWeightToggle');
     const donationMergeDuplicateToggle = document.getElementById('donationMergeDuplicateToggle');
-    const donationShowNicknameToggle = document.getElementById('donationShowNicknameToggle');
     const donationItemCountEl = document.getElementById('donationItemCount');
     const donationTotalCheeseBadge = document.getElementById('donationTotalCheeseBadge');
+    const donationSearchInput = document.getElementById('donationSearchInput');
+    const clearDonationSearchBtn = document.getElementById('clearDonationSearchBtn');
+    let donationSearchQuery = '';
     const donationFeedList = document.getElementById('donationFeedList');
     const removedDonationFeedList = document.getElementById('removedDonationFeedList');
     const donationFeedTabActiveBtn = document.getElementById('donationFeedTabActiveBtn');
@@ -9110,7 +9182,6 @@
     const manualDonationMsgInput = document.getElementById('manualDonationMsgInput');
     const manualDonationAmountInput = document.getElementById('manualDonationAmountInput');
     const addManualDonationBtn = document.getElementById('addManualDonationBtn');
-    const equalizeDonationsBtn = document.getElementById('equalizeDonationsBtn');
     const copyDonationsBtn = document.getElementById('copyDonationsBtn');
     const restoreManualRowBtn = document.getElementById('restoreManualRowBtn');
     const removedManualCountBadge = document.getElementById('removedManualCountBadge');
@@ -9988,23 +10059,25 @@
 
     function handleLiveDonation(nickname, msg, uid, amount, timeStr) {
       if (!isRouletteDonationCollecting) return; // ONLY collect when actively started!
-      const minReqCheese = Number(minDonationCheeseSelect.value) || 1;
-      if (amount < minReqCheese) return;
+      const minReqCheese = Number(minDonationCheeseSelect ? minDonationCheeseSelect.value : 1000) || 1000;
+      const cheeseAmt = Number(amount) || 0;
+      if (cheeseAmt < minReqCheese) return;
 
-      const trimmedMsg = msg && msg.trim().length > 0 ? msg.trim() : '(메시지 없음)';
+      const trimmedMsg = msg && String(msg).trim().length > 0 ? String(msg).trim() : '(메시지 없음)';
 
       donationRouletteList.push({
-        nickname: nickname,
+        nickname: nickname || '익명',
         msg: trimmedMsg,
-        amount: amount,
-        time: timeStr,
-        uid: uid
+        amount: cheeseAmt,
+        time: timeStr || new Date().toLocaleTimeString('ko-KR'),
+        uid: uid || ('anon_' + Date.now())
       });
       renderDonationFeed();
 
       if (currentRouletteMode === 'donation') {
         drawRouletteWheel();
       }
+      showToast(`🧀 [${nickname || '익명'}] ${trimmedMsg} (${cheeseAmt.toLocaleString()} 치즈 수집됨)`, '🎉');
     }
 
     function startRouletteDonation() {
@@ -10110,16 +10183,55 @@
     if (pauseRouletteDonationBtn) pauseRouletteDonationBtn.addEventListener('click', pauseRouletteDonation);
     if (stopRouletteDonationBtn) stopRouletteDonationBtn.addEventListener('click', () => stopRouletteDonation(false));
 
+    function handleDonationSearchInput(val) {
+      donationSearchQuery = (val || '').trim().toLowerCase();
+      if (clearDonationSearchBtn) {
+        clearDonationSearchBtn.style.display = donationSearchQuery.length > 0 ? 'block' : 'none';
+      }
+      renderDonationFeed();
+    }
+
+    function clearDonationSearch() {
+      donationSearchQuery = '';
+      if (donationSearchInput) {
+        donationSearchInput.value = '';
+        donationSearchInput.focus();
+      }
+      if (clearDonationSearchBtn) {
+        clearDonationSearchBtn.style.display = 'none';
+      }
+      renderDonationFeed();
+    }
+
     function updateDonationFeedHeaderBadges() {
       const activeItems = donationRouletteList.filter(d => !d.excluded);
       if (donationItemCountEl) {
         donationItemCountEl.innerText = activeItems.length.toLocaleString();
       }
+      const query = (donationSearchQuery || '').trim().toLowerCase();
       if (donationActiveTabCount) {
-        donationActiveTabCount.innerText = donationRouletteList.length.toLocaleString();
+        if (query) {
+          const matchCount = donationRouletteList.filter(d => 
+            (d.nickname || '').toLowerCase().includes(query) ||
+            (d.msg || '').toLowerCase().includes(query) ||
+            String(d.amount || '').includes(query)
+          ).length;
+          donationActiveTabCount.innerText = `${matchCount}/${donationRouletteList.length}`;
+        } else {
+          donationActiveTabCount.innerText = donationRouletteList.length.toLocaleString();
+        }
       }
       if (donationRemovedTabCount) {
-        donationRemovedTabCount.innerText = removedDonationRouletteList.length.toLocaleString();
+        if (query) {
+          const matchCount = removedDonationRouletteList.filter(d => 
+            (d.nickname || '').toLowerCase().includes(query) ||
+            (d.msg || '').toLowerCase().includes(query) ||
+            String(d.amount || '').includes(query)
+          ).length;
+          donationRemovedTabCount.innerText = `${matchCount}/${removedDonationRouletteList.length}`;
+        } else {
+          donationRemovedTabCount.innerText = removedDonationRouletteList.length.toLocaleString();
+        }
       }
       if (donationTotalCheeseBadge) {
         const total = activeItems.reduce((sum, d) => sum + (Number(d.amount) || 0), 0);
@@ -10134,91 +10246,107 @@
       updateDonationFeedHeaderBadges();
       if (!donationFeedList || !removedDonationFeedList) return;
 
+      const query = (donationSearchQuery || '').trim().toLowerCase();
+
       // 1. Render Active Items List
       if (donationRouletteList.length === 0) {
         donationFeedList.innerHTML = '<div style="text-align: center; color: var(--text-sub); padding: 50px 0;"><div style="font-size: 26px; margin-bottom: 6px;">📋</div><div style="font-weight: 700; color: #94a3b8;">아직 수집된 도네이션이 없습니다.</div><div style="font-size: 11px; color: #64748b; margin-top: 4px;">도네 수집 시작 버튼을 누르거나 위에서 항목을 수동 추가해 주세요.</div></div>';
       } else {
-        const activeEl = document.activeElement;
-        const activeIdx = activeEl && activeEl.dataset ? activeEl.dataset.idx : null;
-        const isMsgFocus = activeEl && activeEl.classList.contains('donation-edit-msg-input');
-        const isAmtFocus = activeEl && activeEl.classList.contains('donation-edit-amount-input');
+        let displayList = donationRouletteList.map((d, originalIdx) => ({ d, originalIdx }));
+        if (query) {
+          displayList = displayList.filter(({ d }) => 
+            (d.nickname || '').toLowerCase().includes(query) ||
+            (d.msg || '').toLowerCase().includes(query) ||
+            String(d.amount || '').includes(query)
+          );
+        }
 
-        donationFeedList.innerHTML = '';
-        donationRouletteList.forEach((d, idx) => {
-          const div = document.createElement('div');
-          div.className = 'donation-feed-row' + (d.excluded ? ' is-excluded' : '');
-          const isManual = d.isManual || d.nickname === '수동 추가' || d.nickname === '스트리머(수동)';
-          const nickBadgeStyle = isManual
-            ? 'background: rgba(0, 255, 163, 0.15); color: var(--chzzk-green); border: 1px solid rgba(0, 255, 163, 0.35); font-weight: 700;'
-            : 'background: rgba(255, 255, 255, 0.08); color: #cbd5e1; border: 1px solid rgba(255, 255, 255, 0.1);';
-          
-          const rowBg = d.excluded 
-            ? 'background: rgba(255, 255, 255, 0.02); opacity: 0.55; border: 1px dashed rgba(255,255,255,0.18);' 
-            : (isManual ? 'background: rgba(0, 255, 163, 0.03); border: 1px solid rgba(0, 255, 163, 0.15);' : 'background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255,255,255,0.06);');
-          
-          div.style.cssText = `padding: 5px 8px; display: flex; align-items: center; gap: 6px; border-radius: 4px; margin-bottom: 3px; ${rowBg} transition: all 0.15s;`;
-          
-          const excludedBadge = d.excluded ? '<span style="font-size: 9px; padding: 1px 4px; background: rgba(239, 68, 68, 0.2); color: #fca5a5; border-radius: 3px; font-weight: 700;">제외됨</span>' : '';
+        if (displayList.length === 0) {
+          donationFeedList.innerHTML = `<div style="text-align: center; color: var(--text-sub); padding: 40px 0;"><div style="font-size: 24px; margin-bottom: 6px;">🔍</div><div style="font-weight: 700; color: #94a3b8;">'${escapeHtml(donationSearchQuery)}' 검색 결과가 없습니다.</div><div style="font-size: 11px; color: #64748b; margin-top: 4px;">검색어를 확인하거나 지워보세요.</div></div>`;
+        } else {
+          const activeEl = document.activeElement;
+          const activeIdx = activeEl && activeEl.dataset ? activeEl.dataset.idx : null;
+          const isMsgFocus = activeEl && activeEl.classList.contains('donation-edit-msg-input');
+          const isAmtFocus = activeEl && activeEl.classList.contains('donation-edit-amount-input');
 
-          div.innerHTML = `
-            <span style="font-size: 10px; color: #64748b; font-family: 'Outfit'; font-weight: 700; width: 22px; text-align: center; flex-shrink: 0;">#${idx + 1}</span>
-            <span style="font-size: 10px; padding: 2px 5px; border-radius: 4px; ${nickBadgeStyle} max-width: 65px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-shrink: 0;" title="${escapeHtml(d.nickname || '익명')}">
-              ${escapeHtml(d.nickname || '익명')}
-            </span>
-            ${excludedBadge}
-            <input type="text" class="donation-edit-msg-input" data-idx="${idx}" value="${escapeHtml(d.msg)}" style="flex: 1; min-width: 75px; background: rgba(0,0,0,0.45); border: 1px solid rgba(255,255,255,0.12); border-radius: 4px; padding: 3px 6px; color: ${d.excluded ? '#94a3b8' : '#fff'}; text-decoration: ${d.excluded ? 'line-through' : 'none'}; font-size: 11px; outline: none;" placeholder="항목 내용">
-            <div style="display: flex; align-items: center; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.12); border-radius: 4px; padding: 0 4px; width: 78px; flex-shrink: 0; box-sizing: border-box;">
-              <span style="color: #ffd700; font-size: 10px; margin-right: 2px;">🧀</span>
-              <input type="number" class="donation-edit-amount-input" data-idx="${idx}" value="${d.amount}" min="1" step="100" style="width: 100%; background: transparent; border: none; color: ${d.excluded ? '#94a3b8' : 'var(--chzzk-green)'}; font-size: 11px; font-weight: 700; text-align: right; outline: none; padding: 2px 0;" title="후원 금액 / 가중치">
-            </div>
-            <button type="button" class="btn-chip" style="padding: 2px 6px; font-size: 10px; flex-shrink: 0; ${d.excluded ? 'background: rgba(0, 255, 163, 0.15); color: var(--chzzk-green); border-color: rgba(0, 255, 163, 0.35); font-weight: 700;' : 'background: rgba(255,255,255,0.06); color: #94a3b8;'}" onclick="toggleExcludeDonation(${idx})" title="${d.excluded ? '원판에 다시 포함' : '원판에서 일시 제외'}">
-              ${d.excluded ? '↩️ 포함' : '제외'}
-            </button>
-            <button type="button" class="btn-chip btn-chip-danger" style="padding: 2px 6px; font-size: 10px; flex-shrink: 0;" onclick="removeDonationEntry(${idx})" title="이 항목 제거 (보관함으로 이동)">✕</button>
-          `;
+          donationFeedList.innerHTML = '';
+          displayList.forEach(({ d, originalIdx }) => {
+            const idx = originalIdx;
+            const div = document.createElement('div');
+            div.className = 'donation-feed-row' + (d.excluded ? ' is-excluded' : '');
+            const isManual = d.isManual || d.nickname === '수동 추가' || d.nickname === '스트리머(수동)';
+            const nickBadgeStyle = isManual
+              ? 'background: rgba(0, 255, 163, 0.15); color: var(--chzzk-green); border: 1px solid rgba(0, 255, 163, 0.35); font-weight: 700;'
+              : 'background: rgba(255, 255, 255, 0.08); color: #cbd5e1; border: 1px solid rgba(255, 255, 255, 0.1);';
+            
+            const rowBg = d.excluded 
+              ? 'background: rgba(255, 255, 255, 0.02); opacity: 0.55; border: 1px dashed rgba(255,255,255,0.18);' 
+              : (isManual ? 'background: rgba(0, 255, 163, 0.03); border: 1px solid rgba(0, 255, 163, 0.15);' : 'background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255,255,255,0.06);');
+            
+            div.style.cssText = `padding: 5px 8px; display: flex; align-items: center; gap: 6px; border-radius: 4px; margin-bottom: 3px; ${rowBg} transition: all 0.15s;`;
+            
+            const excludedBadge = d.excluded ? '<span style="font-size: 9px; padding: 1px 4px; background: rgba(239, 68, 68, 0.2); color: #fca5a5; border-radius: 3px; font-weight: 700;">제외됨</span>' : '';
 
-          const msgInput = div.querySelector('.donation-edit-msg-input');
-          const amtInput = div.querySelector('.donation-edit-amount-input');
+            div.innerHTML = `
+              <span style="font-size: 10px; color: #64748b; font-family: 'Outfit'; font-weight: 700; width: 22px; text-align: center; flex-shrink: 0;">#${idx + 1}</span>
+              <span style="font-size: 10px; padding: 2px 5px; border-radius: 4px; ${nickBadgeStyle} max-width: 65px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-shrink: 0;" title="${escapeHtml(d.nickname || '익명')}">
+                ${escapeHtml(d.nickname || '익명')}
+              </span>
+              ${excludedBadge}
+              <input type="text" class="donation-edit-msg-input" data-idx="${idx}" value="${escapeHtml(d.msg)}" style="flex: 1; min-width: 75px; background: rgba(0,0,0,0.45); border: 1px solid rgba(255,255,255,0.12); border-radius: 4px; padding: 3px 6px; color: ${d.excluded ? '#94a3b8' : '#fff'}; text-decoration: ${d.excluded ? 'line-through' : 'none'}; font-size: 11px; outline: none;" placeholder="항목 내용">
+              <div style="display: flex; align-items: center; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.12); border-radius: 4px; padding: 0 4px; width: 78px; flex-shrink: 0; box-sizing: border-box;">
+                <span style="color: #ffd700; font-size: 10px; margin-right: 2px;">🧀</span>
+                <input type="number" class="donation-edit-amount-input" data-idx="${idx}" value="${d.amount}" min="1" step="100" style="width: 100%; background: transparent; border: none; color: ${d.excluded ? '#94a3b8' : 'var(--chzzk-green)'}; font-size: 11px; font-weight: 700; text-align: right; outline: none; padding: 2px 0;" title="후원 금액 / 가중치">
+              </div>
+              <button type="button" class="btn-chip" style="padding: 2px 6px; font-size: 10px; flex-shrink: 0; ${d.excluded ? 'background: rgba(0, 255, 163, 0.15); color: var(--chzzk-green); border-color: rgba(0, 255, 163, 0.35); font-weight: 700;' : 'background: rgba(255,255,255,0.06); color: #94a3b8;'}" onclick="toggleExcludeDonation(${idx})" title="${d.excluded ? '원판에 다시 포함' : '원판에서 일시 제외'}">
+                ${d.excluded ? '↩️ 포함' : '제외'}
+              </button>
+              <button type="button" class="btn-chip btn-chip-danger" style="padding: 2px 6px; font-size: 10px; flex-shrink: 0;" onclick="removeDonationEntry(${idx})" title="이 항목 제거 (보관함으로 이동)">✕</button>
+            `;
 
-          msgInput.addEventListener('change', function() {
-            const i = parseInt(this.dataset.idx, 10);
-            if (donationRouletteList[i]) {
-              donationRouletteList[i].msg = this.value.trim() || '(메시지 없음)';
-              if (currentRouletteMode === 'donation') drawRouletteWheel();
-              if (typeof updateSettingsSummaryBadges === 'function') updateSettingsSummaryBadges();
-            }
+            const msgInput = div.querySelector('.donation-edit-msg-input');
+            const amtInput = div.querySelector('.donation-edit-amount-input');
+
+            msgInput.addEventListener('change', function() {
+              const i = parseInt(this.dataset.idx, 10);
+              if (donationRouletteList[i]) {
+                donationRouletteList[i].msg = this.value.trim() || '(메시지 없음)';
+                if (currentRouletteMode === 'donation') drawRouletteWheel();
+                if (typeof updateSettingsSummaryBadges === 'function') updateSettingsSummaryBadges();
+              }
+            });
+            msgInput.addEventListener('keydown', function(e) {
+              if (e.key === 'Enter') this.blur();
+            });
+
+            amtInput.addEventListener('change', function() {
+              const i = parseInt(this.dataset.idx, 10);
+              if (donationRouletteList[i]) {
+                const val = Math.max(1, parseInt(this.value, 10) || 1000);
+                donationRouletteList[i].amount = val;
+                this.value = val;
+                updateDonationFeedHeaderBadges();
+                if (currentRouletteMode === 'donation') drawRouletteWheel();
+                if (typeof updateSettingsSummaryBadges === 'function') updateSettingsSummaryBadges();
+              }
+            });
+            amtInput.addEventListener('keydown', function(e) {
+              if (e.key === 'Enter') this.blur();
+            });
+
+            donationFeedList.appendChild(div);
           });
-          msgInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') this.blur();
-          });
 
-          amtInput.addEventListener('change', function() {
-            const i = parseInt(this.dataset.idx, 10);
-            if (donationRouletteList[i]) {
-              const val = Math.max(1, parseInt(this.value, 10) || 1000);
-              donationRouletteList[i].amount = val;
-              this.value = val;
-              updateDonationFeedHeaderBadges();
-              if (currentRouletteMode === 'donation') drawRouletteWheel();
-              if (typeof updateSettingsSummaryBadges === 'function') updateSettingsSummaryBadges();
-            }
-          });
-          amtInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') this.blur();
-          });
-
-          donationFeedList.appendChild(div);
-        });
-
-        // Restore focus if user was editing
-        if (activeIdx !== null) {
-          const selector = isMsgFocus ? `.donation-edit-msg-input[data-idx="${activeIdx}"]` : (isAmtFocus ? `.donation-edit-amount-input[data-idx="${activeIdx}"]` : null);
-          if (selector) {
-            const target = donationFeedList.querySelector(selector);
-            if (target) {
-              target.focus();
-              const len = target.value.length;
-              target.setSelectionRange(len, len);
+          // Restore focus if user was editing
+          if (activeIdx !== null) {
+            const selector = isMsgFocus ? `.donation-edit-msg-input[data-idx="${activeIdx}"]` : (isAmtFocus ? `.donation-edit-amount-input[data-idx="${activeIdx}"]` : null);
+            if (selector) {
+              const target = donationFeedList.querySelector(selector);
+              if (target) {
+                target.focus();
+                const len = target.value.length;
+                target.setSelectionRange(len, len);
+              }
             }
           }
         }
@@ -10228,36 +10356,50 @@
       if (removedDonationRouletteList.length === 0) {
         removedDonationFeedList.innerHTML = '<div style="text-align: center; color: var(--text-sub); padding: 50px 0;"><div style="font-size: 26px; margin-bottom: 6px;">🗑️</div><div style="font-weight: 700; color: #94a3b8;">제거된 항목이 없습니다.</div><div style="font-size: 11px; color: #64748b; margin-top: 4px;">등록된 항목을 삭제하거나 룰렛에서 당첨되어 빠진 항목이 여기에 보관됩니다.</div></div>';
       } else {
-        removedDonationFeedList.innerHTML = '';
-        removedDonationRouletteList.forEach((d, idx) => {
-          const div = document.createElement('div');
-          div.className = 'donation-feed-row is-removed';
-          const isManual = d.isManual || d.nickname === '수동 추가' || d.nickname === '스트리머(수동)';
-          const nickBadgeStyle = isManual
-            ? 'background: rgba(0, 255, 163, 0.15); color: var(--chzzk-green); border: 1px solid rgba(0, 255, 163, 0.35); font-weight: 700;'
-            : 'background: rgba(255, 255, 255, 0.08); color: #cbd5e1; border: 1px solid rgba(255, 255, 255, 0.1);';
-          
-          div.style.cssText = 'padding: 5px 8px; display: flex; align-items: center; gap: 6px; border-radius: 4px; margin-bottom: 3px; background: rgba(239, 68, 68, 0.04); border: 1px solid rgba(239, 68, 68, 0.12);';
+        let displayList = removedDonationRouletteList.map((d, originalIdx) => ({ d, originalIdx }));
+        if (query) {
+          displayList = displayList.filter(({ d }) => 
+            (d.nickname || '').toLowerCase().includes(query) ||
+            (d.msg || '').toLowerCase().includes(query) ||
+            String(d.amount || '').includes(query)
+          );
+        }
 
-          div.innerHTML = `
-            <span style="font-size: 10px; color: #64748b; font-family: 'Outfit'; font-weight: 700; width: 22px; text-align: center; flex-shrink: 0;">#${idx + 1}</span>
-            <span style="font-size: 10px; padding: 2px 5px; border-radius: 4px; ${nickBadgeStyle} max-width: 65px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-shrink: 0;" title="${escapeHtml(d.nickname || '익명')}">
-              ${escapeHtml(d.nickname || '익명')}
-            </span>
-            <span style="flex: 1; min-width: 80px; color: #94a3b8; font-size: 11px; text-decoration: line-through; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${escapeHtml(d.msg)}">
-              ${escapeHtml(d.msg)}
-            </span>
-            <div style="display: flex; align-items: center; padding: 0 4px; flex-shrink: 0;">
-              <span style="color: #ffd700; font-size: 10px; margin-right: 2px;">🧀</span>
-              <span style="color: #94a3b8; font-size: 11px; font-weight: 700;">${(d.amount || 1000).toLocaleString()}</span>
-            </div>
-            <button type="button" class="btn-chip" style="padding: 2px 8px; font-size: 10px; background: rgba(0, 255, 163, 0.15); color: var(--chzzk-green); border-color: rgba(0, 255, 163, 0.35); font-weight: 700; flex-shrink: 0;" onclick="restoreSingleRemovedDonation(${idx})" title="이 항목을 룰렛으로 복구">
-              ↩️ 복구
-            </button>
-            <button type="button" class="btn-chip btn-chip-danger" style="padding: 2px 6px; font-size: 10px; flex-shrink: 0;" onclick="purgeSingleRemovedDonation(${idx})" title="영구 삭제">✕</button>
-          `;
-          removedDonationFeedList.appendChild(div);
-        });
+        if (displayList.length === 0) {
+          removedDonationFeedList.innerHTML = `<div style="text-align: center; color: var(--text-sub); padding: 40px 0;"><div style="font-size: 24px; margin-bottom: 6px;">🔍</div><div style="font-weight: 700; color: #94a3b8;">'${escapeHtml(donationSearchQuery)}' 검색 결과가 없습니다.</div><div style="font-size: 11px; color: #64748b; margin-top: 4px;">검색어를 확인하거나 지워보세요.</div></div>`;
+        } else {
+          removedDonationFeedList.innerHTML = '';
+          displayList.forEach(({ d, originalIdx }) => {
+            const idx = originalIdx;
+            const div = document.createElement('div');
+            div.className = 'donation-feed-row is-removed';
+            const isManual = d.isManual || d.nickname === '수동 추가' || d.nickname === '스트리머(수동)';
+            const nickBadgeStyle = isManual
+              ? 'background: rgba(0, 255, 163, 0.15); color: var(--chzzk-green); border: 1px solid rgba(0, 255, 163, 0.35); font-weight: 700;'
+              : 'background: rgba(255, 255, 255, 0.08); color: #cbd5e1; border: 1px solid rgba(255, 255, 255, 0.1);';
+            
+            div.style.cssText = 'padding: 5px 8px; display: flex; align-items: center; gap: 6px; border-radius: 4px; margin-bottom: 3px; background: rgba(239, 68, 68, 0.04); border: 1px solid rgba(239, 68, 68, 0.12);';
+
+            div.innerHTML = `
+              <span style="font-size: 10px; color: #64748b; font-family: 'Outfit'; font-weight: 700; width: 22px; text-align: center; flex-shrink: 0;">#${idx + 1}</span>
+              <span style="font-size: 10px; padding: 2px 5px; border-radius: 4px; ${nickBadgeStyle} max-width: 65px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-shrink: 0;" title="${escapeHtml(d.nickname || '익명')}">
+                ${escapeHtml(d.nickname || '익명')}
+              </span>
+              <span style="flex: 1; min-width: 80px; color: #94a3b8; font-size: 11px; text-decoration: line-through; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${escapeHtml(d.msg)}">
+                ${escapeHtml(d.msg)}
+              </span>
+              <div style="display: flex; align-items: center; padding: 0 4px; flex-shrink: 0;">
+                <span style="color: #ffd700; font-size: 10px; margin-right: 2px;">🧀</span>
+                <span style="color: #94a3b8; font-size: 11px; font-weight: 700;">${(d.amount || 1000).toLocaleString()}</span>
+              </div>
+              <button type="button" class="btn-chip" style="padding: 2px 8px; font-size: 10px; background: rgba(0, 255, 163, 0.15); color: var(--chzzk-green); border-color: rgba(0, 255, 163, 0.35); font-weight: 700; flex-shrink: 0;" onclick="restoreSingleRemovedDonation(${idx})" title="이 항목을 룰렛으로 복구">
+                ↩️ 복구
+              </button>
+              <button type="button" class="btn-chip btn-chip-danger" style="padding: 2px 6px; font-size: 10px; flex-shrink: 0;" onclick="purgeSingleRemovedDonation(${idx})" title="영구 삭제">✕</button>
+            `;
+            removedDonationFeedList.appendChild(div);
+          });
+        }
       }
     }
 
@@ -10438,22 +10580,6 @@
       });
     }
 
-    if (equalizeDonationsBtn) {
-      equalizeDonationsBtn.addEventListener('click', () => {
-        if (donationRouletteList.length === 0) {
-          showToast('균등화할 도네이션 항목이 없습니다.', '⚠️');
-          return;
-        }
-        if (confirm('모든 수집된 항목의 치즈 금액을 1,000으로 동일하게 통일하시겠습니까? (1/N 균등 확률)')) {
-          donationRouletteList.forEach(d => { d.amount = 1000; });
-          renderDonationFeed();
-          if (currentRouletteMode === 'donation') drawRouletteWheel();
-          if (typeof updateSettingsSummaryBadges === 'function') updateSettingsSummaryBadges();
-          showToast('모든 항목의 가중치가 1,000으로 균등 통일되었습니다.', '⚖️');
-        }
-      });
-    }
-
     if (copyDonationsBtn) {
       copyDonationsBtn.addEventListener('click', () => {
         if (donationRouletteList.length === 0) {
@@ -10503,11 +10629,6 @@
         if (typeof updateSettingsSummaryBadges === 'function') updateSettingsSummaryBadges();
       });
     }
-    if (donationShowNicknameToggle) {
-      donationShowNicknameToggle.addEventListener('change', () => {
-        if (currentRouletteMode === 'donation') drawRouletteWheel();
-      });
-    }
     if (minDonationCheeseSelect) {
       minDonationCheeseSelect.addEventListener('change', () => {
         if (currentRouletteMode === 'donation') drawRouletteWheel();
@@ -10528,15 +10649,14 @@
       } else {
         const useWeight = donationWeightToggle ? donationWeightToggle.checked : true;
         const mergeDuplicate = donationMergeDuplicateToggle ? donationMergeDuplicateToggle.checked : true;
-        const showNickname = donationShowNicknameToggle ? donationShowNicknameToggle.checked : false;
-        const minReq = Number(minDonationCheeseSelect ? minDonationCheeseSelect.value : 1) || 1;
+        const minReq = Number(minDonationCheeseSelect ? minDonationCheeseSelect.value : 1000) || 1000;
 
         const filtered = donationRouletteList.filter(d => !d.excluded && d.amount >= minReq);
 
         if (!mergeDuplicate) {
           return filtered.map((d, idx) => {
             let rawText = d.msg && d.msg.trim().length > 0 ? d.msg.trim() : '(메시지 없음)';
-            let text = showNickname ? `${rawText} (${d.nickname || '익명'})` : rawText;
+            let text = rawText;
             let weight = useWeight ? Math.max(1, Math.round(d.amount / 1000)) : 1;
             return {
               id: idx,
@@ -10580,15 +10700,7 @@
           }
 
           let displayText = text;
-          if (showNickname) {
-            if (entry.count === 1) {
-              displayText = `${text} (${entry.donors[0]?.nickname || '익명'})`;
-            } else {
-              const uniqueNicks = Array.from(new Set(entry.donors.map(dn => dn.nickname || '익명')));
-              const nickSummary = uniqueNicks.slice(0, 2).join(', ') + (uniqueNicks.length > 2 ? ' 외' : '');
-              displayText = `${text} (${nickSummary} · x${entry.count})`;
-            }
-          } else if (entry.count > 1) {
+          if (entry.count > 1) {
             displayText = `${text} (x${entry.count})`;
           }
 
@@ -10603,9 +10715,22 @@
             donor: entry.donors[0]
           });
         });
+
         return items;
       }
     }
+
+    window.handleDonationSearchInput = handleDonationSearchInput;
+    window.clearDonationSearch = clearDonationSearch;
+    window.toggleExcludeDonation = toggleExcludeDonation;
+    window.removeDonationEntry = removeDonationEntry;
+    window.restoreSingleRemovedDonation = restoreSingleRemovedDonation;
+    window.purgeSingleRemovedDonation = purgeSingleRemovedDonation;
+    window.restoreLastDonation = restoreLastDonation;
+    window.restoreAllRemovedDonations = restoreAllRemovedDonations;
+    window.purgeAllRemovedDonations = purgeAllRemovedDonations;
+    window.handleClearAllDonations = handleClearAllDonations;
+    window.addManualDonationItem = addManualDonationItem;
 
     // Audio SFX Synthesizer
     let audioCtx = null;
