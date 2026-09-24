@@ -1,7 +1,7 @@
-# 🎮 치지직 대규모 시청자 추첨 & 룰렛 & 실시간 투표 & 포켓몬 배틀/퀴즈 쇼 플랫폼 (Chzzk Interactive Hub) v5.2.0
+# 🎮 치지직 대규모 시청자 추첨 & 룰렛 & 실시간 투표 & 포켓몬 배틀/퀴즈 쇼 플랫폼 (Chzzk Interactive Hub) v5.2.1
 
 ![Chzzk WebSocket Live](https://img.shields.io/badge/Chzzk-WebSocket%20Live-00ffa3?style=for-the-badge&logo=naver)
-![Version](https://img.shields.io/badge/Release-v5.2.0-purple?style=for-the-badge)
+![Version](https://img.shields.io/badge/Release-v5.2.1-purple?style=for-the-badge)
 ![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![HTML5 Canvas](https://img.shields.io/badge/HTML5-Canvas%20%26%20Audio-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
@@ -28,6 +28,16 @@
 | **10. v5.0.0 릴리즈 노트** | 5세대 BGM 엔진 & 위기 동적 전환, 옵션창 복구, 기술 연출 스튜디오 설정 서랍 이전 | [🚀 v5.0.0 릴리즈 노트 바로가기](docs/10_release_notes_v5.0.0_ko.md) |
 | **11. v5.1.0 릴리즈 노트** | 포챔스 레귤레이션 M-C 공식 로스터(258마리) 100% 동기화, SFX 독립 볼륨, 기술 효과음 전수 개편 | [🚀 v5.1.0 릴리즈 노트 바로가기](docs/11_release_notes_v5.1.0_ko.md) |
 | **12. v5.2.0 릴리즈 노트** | 시청자 진영 대항전(레드 vs 블루), 자유 채팅 자동 편입, 양측 영화 크레딧 롤링 전광판, 실시간 투표 네온 발광 | [🚀 v5.2.0 릴리즈 노트 바로가기](docs/12_release_notes_v5.2.0_ko.md) |
+| **13. v5.2.1 릴리즈 노트** | 치즈 연동 룰렛 동일 메시지 자동 합산(병합), 금액/확률 누적, 당첨 시 1건 차감 및 잔여 수량 안내 | [🚀 v5.2.1 릴리즈 노트 바로가기](docs/13_release_notes_v5.2.1_ko.md) |
+
+## 🌟 v5.2.1 주요 신규 및 개선 사항 (What's New in v5.2.1)
+
+### 1. 🔗 치즈 연동 룰렛 「동일 메시지 자동 합산 (병합)」 지원
+- **동일 후원 메시지 스마트 병합**: 여러 명의 시청자가 같은 내용(예: `"치킨 🍗"`)으로 치즈를 후원하면 룰렛 판에 중복 칸이 늘어나지 않고 1개의 칸(`치킨 🍗 (x2)`)으로 합쳐집니다.
+- **치즈 금액 및 가중치(확률) 자동 누적**: 후원 금액 비례 옵션이 켜져 있을 때 모든 치즈 금액이 합산되어 칸 각도가 넓어지며, 금액 비례 옵션을 꺼도 후원 횟수만큼 가중치가 적용됩니다.
+- **당첨 시 지능형 1건 차감**: `🗑️ 당첨 항목 자동 제거` 활성화 시 1건만 안전하게 차감되고 잔여 수량이 상단 토스트로 실시간 안내됩니다.
+
+![치즈 연동 룰렛 동일 메시지 자동 합산 설정 및 토스트](docs/images/roulette_cheese_merge_verified.png)
 
 ## 🌟 v5.2.0 주요 신규 및 개선 사항 (What's New in v5.2.0)
 
