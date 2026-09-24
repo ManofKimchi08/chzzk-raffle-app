@@ -10063,7 +10063,9 @@
       const cheeseAmt = Number(amount) || 0;
       if (cheeseAmt < minReqCheese) return;
 
-      const trimmedMsg = msg && String(msg).trim().length > 0 ? String(msg).trim() : '(메시지 없음)';
+      const trimmedMsg = msg && String(msg).trim().length > 0 ? String(msg).trim() : '';
+      // 메시지가 없는 단순 후원은 룰렛 항목으로 추가하지 않고 무시
+      if (!trimmedMsg || trimmedMsg === '(메시지 없음)') return;
 
       donationRouletteList.push({
         nickname: nickname || '익명',
