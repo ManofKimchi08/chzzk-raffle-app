@@ -11832,16 +11832,42 @@
       const weightMode = pollCheeseWeightSelect.value;
       const addScore = weightMode === 'amount' ? amount : 1;
 
-      pollUserVotes.set(`${uid}_${Date.now()}`, {
-        optionId: matchedOption.id,
-        optionText: matchedOption.text,
-        nickname: nickname,
-        time: timeStr,
-        uid: uid,
-        isSubscriber: false,
-        isDonator: true,
-        cheeseAmount: amount
-      });
+      if (weightMode === 'count' || weightMode === '1vote') {
+        const dupMode = pollDuplicateModeSelect ? pollDuplicateModeSelect.value : 'unlimited';
+        const hasVoted = pollUserVotes.has(uid);
+        if (dupMode === 'single' && hasVoted) {
+          return; // Ignore duplicate 1-vote donation from same user
+        }
+        if (dupMode === 'allowRevote' && hasVoted) {
+          const prevVote = pollUserVotes.get(uid);
+          if (prevVote && prevVote.optionId === matchedOption.id) return;
+          if (prevVote) {
+            const curPrev = pollOptionVotes.get(prevVote.optionId) || 0;
+            pollOptionVotes.set(prevVote.optionId, Math.max(0, curPrev - 1));
+          }
+        }
+        pollUserVotes.set(uid, {
+          optionId: matchedOption.id,
+          optionText: matchedOption.text,
+          nickname: nickname,
+          time: timeStr,
+          uid: uid,
+          isSubscriber: false,
+          isDonator: true,
+          cheeseAmount: amount
+        });
+      } else {
+        pollUserVotes.set(`${uid}_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`, {
+          optionId: matchedOption.id,
+          optionText: matchedOption.text,
+          nickname: nickname,
+          time: timeStr,
+          uid: uid,
+          isSubscriber: false,
+          isDonator: true,
+          cheeseAmount: amount
+        });
+      }
 
       const curScore = pollOptionVotes.get(matchedOption.id) || 0;
       pollOptionVotes.set(matchedOption.id, curScore + addScore);
@@ -12469,13 +12495,15 @@
         return;
       }
 
-      // Turn Alternation: Pass to the other player automatically!
+      // Turn Alternation: Lock phase during 1.2s transition to prevent multi-click race conditions!
       if (player === 'streamer') {
+        gamePhase = 'transition';
         showToast(`👑 ${getStreamerName()}: ${tile.coord} [${tile.val === 1 ? '1' : 'x' + tile.val}] 오픈! 시청자 턴으로 전환됩니다.`, '➡️');
         setTimeout(() => {
           if (gamePhase !== 'ended' && gamePhase !== 'idle') startViewersTurn();
         }, 1200);
       } else {
+        gamePhase = 'transition';
         showToast(`👥 시청자 연합: ${tile.coord} [${tile.val === 1 ? '1' : 'x' + tile.val}] 오픈! ${getStreamerName()} 턴으로 전환됩니다.`, '➡️');
         setTimeout(() => {
           if (gamePhase !== 'ended' && gamePhase !== 'idle') startStreamerTurn();
@@ -12746,9 +12774,16 @@
       }
     }
 
+    let voltorbInitialStarter = 'streamer';
+
     // Cash Out (그만둔다)
     function cashOutGame() {
-      if (gamePhase === 'ended' || gamePhase === 'idle') return;
+      if (gamePhase === 'ended' || gamePhase === 'idle' || gamePhase === 'transition') return;
+      if (gamePhase === 'streamer' && streamerResult.score < viewersResult.score) {
+        if (!confirm(`현재 점수(${streamerResult.score}점)가 시청자 연합(${viewersResult.score}점)보다 낮습니다.\n지금 그만두면 이번 세트는 패배 처리됩니다. 정말 마감하시겠습니까?`)) {
+          return;
+        }
+      }
       clearInterval(currentTurnTimerInterval);
       battleEndReason = 'cashed_out';
 
@@ -12858,7 +12893,8 @@
         gameModalNextRoundBtn.onclick = () => {
           gameResultModal.classList.remove('active');
           initNewMatch(true);
-          startStreamerTurn();
+          if (voltorbInitialStarter === 'viewers') startViewersTurn();
+          else startStreamerTurn();
         };
 
         launchConfetti();
@@ -12884,17 +12920,23 @@
           gameResultModal.classList.remove('active');
           matchCurrentRound++;
           initNewMatch(false);
-          startStreamerTurn();
+          // Alternate first player each set for fairness
+          const isOddSet = (matchCurrentRound % 2 === 1);
+          const nextStarter = isOddSet ? voltorbInitialStarter : (voltorbInitialStarter === 'streamer' ? 'viewers' : 'streamer');
+          if (nextStarter === 'viewers') startViewersTurn();
+          else startStreamerTurn();
         };
       }
     }
 
     // Event Listeners
     startGameStreamerBtn.addEventListener('click', () => {
+      voltorbInitialStarter = 'streamer';
       initNewMatch(true);
       startStreamerTurn();
     });
     startGameViewersBtn.addEventListener('click', () => {
+      voltorbInitialStarter = 'viewers';
       initNewMatch(true);
       startViewersTurn();
     });
@@ -14404,7 +14446,7 @@
       } else if (/^[1-4]$/.test(clean) || /^[1-4]번$/.test(clean)) {
         const num = parseInt(clean.replace('번', ''), 10);
         choiceKey = `move_${num}`;
-      } else if (/^[5-6]$/.test(clean) || /^[5-6]번$/.test(clean)) {
+      } else if (pokeBattleMode === '3v3' && (/^[5-6]$/.test(clean) || /^[5-6]번$/.test(clean))) {
         const num = parseInt(clean.replace('번', ''), 10);
         choiceKey = `switch_${num}`;
       } else if (canMega && (/^[7-9]$/.test(clean) || clean === '10' || /^[7-9]번$/.test(clean) || clean === '10번')) {
@@ -14420,24 +14462,43 @@
         const activeIdx = team === 'red' ? streamerActiveIdx : viewersActiveIdx;
         let switchCounter = 5;
         for (let i = 0; i < 3; i++) {
-          if (i !== activeIdx && !teamArr[i].fainted) {
-            const slotNum = i + 1;
-            const pName = teamArr[i].pokemon.name.toUpperCase().replace(/\s+/g, '');
-            if (
-              clean === String(switchCounter) ||
-              clean === `교체${slotNum}` ||
-              clean === `${slotNum}번교체` ||
-              clean === `${slotNum}번` ||
-              clean === `${slotNum}교체` ||
-              clean === `교체${pName}` ||
-              clean === pName
-            ) {
-              choiceKey = `switch_${switchCounter}`;
-              break;
+          if (i !== activeIdx) {
+            if (!teamArr[i].fainted && teamArr[i].currentHP > 0) {
+              const slotNum = i + 1;
+              const pName = teamArr[i].pokemon.name.toUpperCase().replace(/\s+/g, '');
+              if (
+                clean === String(switchCounter) ||
+                clean === `교체${slotNum}` ||
+                clean === `${slotNum}번교체` ||
+                clean === `${slotNum}번` ||
+                clean === `${slotNum}교체` ||
+                clean === `교체${pName}` ||
+                clean === pName
+              ) {
+                choiceKey = `switch_${switchCounter}`;
+                break;
+              }
             }
             switchCounter++;
           }
         }
+      }
+
+      // Reject switch_5 / switch_6 if that bench slot is fainted
+      if (choiceKey && choiceKey.startsWith('switch_') && pokeBattleMode === '3v3') {
+        const teamArr = team === 'red' ? streamerTeam : viewersTeam;
+        const activeIdx = team === 'red' ? streamerActiveIdx : viewersActiveIdx;
+        let switchCounter = 5;
+        let validSwitch = false;
+        for (let i = 0; i < 3; i++) {
+          if (i !== activeIdx) {
+            if (`switch_${switchCounter}` === choiceKey && !teamArr[i].fainted && teamArr[i].currentHP > 0) {
+              validSwitch = true;
+            }
+            switchCounter++;
+          }
+        }
+        if (!validSwitch) choiceKey = null;
       }
 
       if (!choiceKey) {
@@ -14456,16 +14517,19 @@
         choiceKey = 'struggle';
       }
 
-      if (choiceKey && choiceKey.startsWith('move_')) {
-        const mIdx = parseInt(choiceKey.replace('move_', ''), 10) - 1;
-        if (slot.movesPP && slot.movesPP[mIdx] && slot.movesPP[mIdx].currentPP <= 0) {
+      if (choiceKey && (choiceKey.startsWith('move_') || choiceKey.startsWith('mega_'))) {
+        const mIdx = parseInt(choiceKey.replace(/^(move_|mega_)/, ''), 10) - 1;
+        const m = slot.pokemon.moves[mIdx];
+        if (!m) {
           choiceKey = null;
-        }
-      }
-      if (choiceKey && choiceKey.startsWith('mega_')) {
-        const mIdx = parseInt(choiceKey.replace('mega_', ''), 10) - 1;
-        if (slot.movesPP && slot.movesPP[mIdx] && slot.movesPP[mIdx].currentPP <= 0) {
-          choiceKey = null;
+        } else {
+          const isOutOfPP = slot.movesPP && slot.movesPP[mIdx] && slot.movesPP[mIdx].currentPP <= 0;
+          const isLocked = slot.choiceMove && slot.choiceMove.name !== m.name;
+          const isAV = normalizePokeItemId(slot.item) === 'assault_vest' && m.category === '변화';
+          const isBanned = (slot.pokemon.name === '왕구리' && m.name === '막치기') || (slot.pokemon.name === '브리두라스' && (m.name === '미러코트' || m.name === '메탈버스트'));
+          if (isOutOfPP || isLocked || isAV || isBanned) {
+            choiceKey = null;
+          }
         }
       }
 
@@ -15053,11 +15117,58 @@
       return `<span style="font-size: 9px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); border-radius: 4px; padding: 1px 4px; color: #ffd700; margin-left: 4px;">${badges.join(' ')}</span>`;
     }
 
+    function normalizePokeItemId(itemId) {
+      if (!itemId) return 'none';
+      return String(itemId).trim().toLowerCase().replace(/-/g, '_');
+    }
+
+    function calculateLevel50Stat(baseStat) {
+      // Official Level 50 Flat Stat Formula (31 IV, 80 EV / +20 constant offset): floor(((2 * Base + 31 + 10) * 50) / 100) + 5 = Base + 20
+      return Math.floor(((2 * (baseStat || 50) + 31) * 50) / 100) + 5;
+    }
+
+    function getPokeMovePriority(move, slot) {
+      if (!move || !move.name) return 0;
+      const name = move.name;
+      if (name === '방어' || name === '판별' || name === '니들가드' || name === '킹실드') return 4;
+      if (name === '속이기') return 3;
+      if (name === '신속' || name === '만나자마자' || name === '페인트') return 2;
+      const plus1Moves = [
+        '전광석화', '야습', '기습', '얼음뭉치', '불릿펀치', '아쿠아제트',
+        '그래스슬라이더', '마하펀치', '진공파', '물수리검', '그림자치기', '록액셀', '초롱초롱눈동자'
+      ];
+      if (plus1Moves.includes(name)) return 1;
+      if (name === '날려버리기' || name === '울부짖기' || name === '드래곤테일' || name === '배대뒤치기') return -6;
+      if (name === '트릭룸') return -7;
+      // Ability-based priority: Gale Wings (질풍날개) at full HP or Prankster (짓궂은마음) on status moves
+      const abilities = (slot && slot.pokemon && slot.pokemon.abilities) ? slot.pokemon.abilities : [];
+      if (abilities.includes('gale-wings') && move.type === '비행' && slot.currentHP >= slot.maxHP) return 1;
+      if (abilities.includes('prankster') && (move.category === '변화' || move.power === 0)) return 1;
+      return 0;
+    }
+
+    function resetSlotOnSwitchOut(slot) {
+      if (!slot) return;
+      slot.choiceMove = null;
+      slot.rankAtk = 0;
+      slot.rankDef = 0;
+      slot.rankSpA = 0;
+      slot.rankSpD = 0;
+      slot.rankSpe = 0;
+      slot.flinched = false;
+      slot.destinyBond = false;
+      slot.protected = false;
+      slot.protectCount = 0;
+      if (slot.status === 'tox') {
+        slot.toxicTurns = 1;
+      }
+    }
+
     function calculateBattleSpeed(slot) {
       if (!slot || !slot.pokemon) return 50;
-      let spe = slot.pokemon.stats.spe;
+      let spe = calculateLevel50Stat(slot.pokemon.stats.spe);
       if (slot.rankSpe) spe = getPokeStatWithRank(spe, slot.rankSpe);
-      if (slot.item === 'choice_scarf') spe = Math.floor(spe * 1.5);
+      if (normalizePokeItemId(slot.item) === 'choice_scarf') spe = Math.floor(spe * 1.5);
       if (slot.status === 'par') spe = Math.floor(spe * 0.5); // 마비 시 스피드 50%
       return Math.max(1, spe);
     }
@@ -16308,8 +16419,9 @@
                 const isOutOfPP = currentPP <= 0;
 
                 const isChoiceLocked = sSlot.choiceMove && sSlot.choiceMove.name !== m.name;
-                const isAssaultVestBlocked = sSlot.item === 'assault_vest' && m.category === '변화';
-                const disabled = isChoiceLocked || isAssaultVestBlocked || isOutOfPP || isFaintPhase;
+                const isAssaultVestBlocked = normalizePokeItemId(sSlot.item) === 'assault_vest' && m.category === '변화';
+                const isBanned = (sSlot.pokemon.name === '왕구리' && m.name === '막치기') || (sSlot.pokemon.name === '브리두라스' && (m.name === '미러코트' || m.name === '메탈버스트'));
+                const disabled = isChoiceLocked || isAssaultVestBlocked || isOutOfPP || isBanned || isFaintPhase;
                 const isSelected = pokeBattleState.streamerAction && pokeBattleState.streamerAction.type === 'move' && pokeBattleState.streamerAction.moveIdx === i;
 
                 let effectTag = '';
@@ -16481,7 +16593,10 @@
           } else {
             const available = sSlot.pokemon.moves
               .map((m, idx) => ({ m, idx, pp: sSlot.movesPP ? sSlot.movesPP[idx].currentPP : (m.pp || 15) }))
-              .filter(x => x.pp > 0 && !(sSlot.item === 'assault_vest' && x.m.category === '변화'));
+              .filter(x => {
+                const isBanned = (sSlot.pokemon.name === '왕구리' && x.m.name === '막치기') || (sSlot.pokemon.name === '브리두라스' && (x.m.name === '미러코트' || x.m.name === '메탈버스트'));
+                return x.pp > 0 && !isBanned && !(normalizePokeItemId(sSlot.item) === 'assault_vest' && x.m.category === '변화');
+              });
             if (available.length > 0) {
               validMoveIdx = available[Math.floor(Math.random() * available.length)].idx;
             }
@@ -16706,24 +16821,41 @@
         if (!choiceKey && pokeBattleMode === '3v3') {
           let switchCounter = 5;
           for (let i = 0; i < 3; i++) {
-            if (i !== viewersActiveIdx && !viewersTeam[i].fainted) {
-              const slotNum = i + 1; // 1, 2, or 3
-              const pName = viewersTeam[i].pokemon.name.toUpperCase().replace(/\s+/g, '');
-              if (
-                clean === String(switchCounter) ||
-                clean === `교체${slotNum}` ||
-                clean === `${slotNum}번교체` ||
-                clean === `${slotNum}번` ||
-                clean === `${slotNum}교체` ||
-                clean === `교체${pName}` ||
-                clean === pName
-              ) {
-                choiceKey = `switch_${switchCounter}`;
-                break;
+            if (i !== viewersActiveIdx) {
+              if (!viewersTeam[i].fainted && viewersTeam[i].currentHP > 0) {
+                const slotNum = i + 1; // 1, 2, or 3
+                const pName = viewersTeam[i].pokemon.name.toUpperCase().replace(/\s+/g, '');
+                if (
+                  clean === String(switchCounter) ||
+                  clean === `교체${slotNum}` ||
+                  clean === `${slotNum}번교체` ||
+                  clean === `${slotNum}번` ||
+                  clean === `${slotNum}교체` ||
+                  clean === `교체${pName}` ||
+                  clean === pName
+                ) {
+                  choiceKey = `switch_${switchCounter}`;
+                  break;
+                }
               }
               switchCounter++;
             }
           }
+        }
+
+        // Reject switch_5 / switch_6 if that bench slot is fainted
+        if (choiceKey && choiceKey.startsWith('switch_') && pokeBattleMode === '3v3') {
+          let switchCounter = 5;
+          let validSwitch = false;
+          for (let i = 0; i < 3; i++) {
+            if (i !== viewersActiveIdx) {
+              if (`switch_${switchCounter}` === choiceKey && !viewersTeam[i].fainted && viewersTeam[i].currentHP > 0) {
+                validSwitch = true;
+              }
+              switchCounter++;
+            }
+          }
+          if (!validSwitch) choiceKey = null;
         }
 
         // Match move names
@@ -16744,17 +16876,20 @@
           choiceKey = 'struggle';
         }
 
-        // Reject vote if move is out of PP
-        if (choiceKey && choiceKey.startsWith('move_')) {
-          const mIdx = parseInt(choiceKey.replace('move_', ''), 10) - 1;
-          if (vSlot.movesPP && vSlot.movesPP[mIdx] && vSlot.movesPP[mIdx].currentPP <= 0) {
+        // Reject vote if move is out of PP, Choice-locked, Assault-Vest-blocked, or Regulation M-C Banned
+        if (choiceKey && (choiceKey.startsWith('move_') || choiceKey.startsWith('mega_'))) {
+          const mIdx = parseInt(choiceKey.replace(/^(move_|mega_)/, ''), 10) - 1;
+          const m = vSlot.pokemon.moves[mIdx];
+          if (!m) {
             choiceKey = null;
-          }
-        }
-        if (choiceKey && choiceKey.startsWith('mega_')) {
-          const mIdx = parseInt(choiceKey.replace('mega_', ''), 10) - 1;
-          if (vSlot.movesPP && vSlot.movesPP[mIdx] && vSlot.movesPP[mIdx].currentPP <= 0) {
-            choiceKey = null;
+          } else {
+            const isOutOfPP = vSlot.movesPP && vSlot.movesPP[mIdx] && vSlot.movesPP[mIdx].currentPP <= 0;
+            const isLocked = vSlot.choiceMove && vSlot.choiceMove.name !== m.name;
+            const isAV = normalizePokeItemId(vSlot.item) === 'assault_vest' && m.category === '변화';
+            const isBanned = (vSlot.pokemon.name === '왕구리' && m.name === '막치기') || (vSlot.pokemon.name === '브리두라스' && (m.name === '미러코트' || m.name === '메탈버스트'));
+            if (isOutOfPP || isLocked || isAV || isBanned) {
+              choiceKey = null;
+            }
           }
         }
 
@@ -16861,11 +16996,13 @@
           const isOutOfPP = currentPP <= 0;
 
           const isLocked = vSlot.choiceMove && vSlot.choiceMove.name !== m.name;
-          const isAV = vSlot.item === 'assault_vest' && m.category === '변화';
-          const disabled = isLocked || isAV || isOutOfPP;
+          const isAV = normalizePokeItemId(vSlot.item) === 'assault_vest' && m.category === '변화';
+          const isBanned = (vSlot.pokemon.name === '왕구리' && m.name === '막치기') || (vSlot.pokemon.name === '브리두라스' && (m.name === '미러코트' || m.name === '메탈버스트'));
+          const disabled = isLocked || isAV || isOutOfPP || isBanned;
           
           let note = '';
           if (isOutOfPP) note = 'PP 0 소진';
+          else if (isBanned) note = '규정 금지';
           else if (isLocked) note = '구애 고정';
           else if (isAV) note = '돌격조끼';
 
@@ -16980,9 +17117,17 @@
         // 1. Handle Switches First (Priority +6)
         if (sAct.type === 'switch') {
           await executeSwitchAnimation('streamer', sAct.targetIdx);
+          if (streamerTeam[streamerActiveIdx].currentHP <= 0 || streamerTeam[streamerActiveIdx].fainted) {
+            await handleFaintPhase('streamer');
+            return;
+          }
         }
         if (vAct.type === 'switch') {
           await executeSwitchAnimation('viewers', vAct.targetIdx);
+          if (viewersTeam[viewersActiveIdx].currentHP <= 0 || viewersTeam[viewersActiveIdx].fainted) {
+            await handleFaintPhase('viewers');
+            return;
+          }
         }
 
         // If both switched, round ends immediately
@@ -16991,17 +17136,39 @@
           return;
         }
 
-        // 2. Determine Action Order for Attacks
+        // 2. Authentic Gen 7+ / Champions Rule: Mega Evolution occurs BEFORE moves and immediately updates turn speed!
         const sSlot = streamerTeam[streamerActiveIdx];
         const vSlot = viewersTeam[viewersActiveIdx];
+        const sWillMega = sAct.type === 'move' && sAct.isMega && !sSlot.isMega;
+        const vWillMega = vAct.type === 'move' && vAct.isMega && !vSlot.isMega;
+        if (sWillMega && vWillMega) {
+          const preSSpeed = calculateBattleSpeed(sSlot);
+          const preVSpeed = calculateBattleSpeed(vSlot);
+          const sMegaFirst = preSSpeed > preVSpeed ? true : (preVSpeed > preSSpeed ? false : Math.random() < 0.5);
+          if (sMegaFirst) {
+            await executeMegaEvolution('streamer');
+            await executeMegaEvolution('viewers');
+          } else {
+            await executeMegaEvolution('viewers');
+            await executeMegaEvolution('streamer');
+          }
+          sAct.isMega = false;
+          vAct.isMega = false;
+        } else if (sWillMega) {
+          await executeMegaEvolution('streamer');
+          sAct.isMega = false;
+        } else if (vWillMega) {
+          await executeMegaEvolution('viewers');
+          vAct.isMega = false;
+        }
 
+        // 3. Determine Action Order for Attacks (with full priority table & 50:50 Speed Tie)
         if (sAct.type === 'move' && vAct.type === 'move') {
           const sMove = sAct.move;
           const vMove = vAct.move;
 
-          const priorityMoves = ['전광석화', '신속', '야습', '기습', '얼음뭉치'];
-          const sPriority = (sMove && priorityMoves.includes(sMove.name)) ? 1 : 0;
-          const vPriority = (vMove && priorityMoves.includes(vMove.name)) ? 1 : 0;
+          const sPriority = getPokeMovePriority(sMove, sSlot);
+          const vPriority = getPokeMovePriority(vMove, vSlot);
 
           let sSpeed = calculateBattleSpeed(sSlot);
           let vSpeed = calculateBattleSpeed(vSlot);
@@ -17009,7 +17176,9 @@
           let streamerFirst = true;
           if (sPriority > vPriority) streamerFirst = true;
           else if (vPriority > sPriority) streamerFirst = false;
-          else streamerFirst = sSpeed >= vSpeed;
+          else if (sSpeed > vSpeed) streamerFirst = true;
+          else if (vSpeed > sSpeed) streamerFirst = false;
+          else streamerFirst = Math.random() < 0.5; // Fair 50:50 Speed Tie
 
           const firstActor = streamerFirst ? 'streamer' : 'viewers';
           const secondActor = streamerFirst ? 'viewers' : 'streamer';
@@ -17161,9 +17330,10 @@
 
     async function executeSwitchAnimation(side, targetIdx) {
       if (side === 'streamer') {
-        streamerTeam[streamerActiveIdx].choiceMove = null;
+        resetSlotOnSwitchOut(streamerTeam[streamerActiveIdx]);
         streamerActiveIdx = targetIdx;
-        const sP = streamerTeam[targetIdx].pokemon;
+        const sSlot = streamerTeam[targetIdx];
+        const sP = sSlot.pokemon;
         setBattleDialogue(`👑 <b>[${getStreamerName()}]</b>은(는) <b>[${sP.name}]</b>(으)로 교체했다!`);
         updateArenaActivePokemonUI();
         renderArenaTeamBallsHUD();
@@ -17173,28 +17343,29 @@
           spr.style.transform = 'scale(0.5)';
           setTimeout(() => { spr.style.transform = 'scale(1)'; }, 300);
         }
-        // Stealth rock check
-        if (pokeBattleState.streamerStealthRock && streamerTeam[targetIdx].currentHP > 0) {
+        // Stealth rock check (Heavy-Duty Boots negates entry hazards)
+        if (pokeBattleState.streamerStealthRock && sSlot.currentHP > 0 && normalizePokeItemId(sSlot.item) !== 'heavy_duty_boots') {
           let rockMult = 1.0;
           sP.types.forEach(t => {
             if (pokeTypeChart['바위'] && pokeTypeChart['바위'][t] !== undefined) rockMult *= pokeTypeChart['바위'][t];
           });
-          const rockDmg = Math.max(1, Math.floor(streamerTeam[targetIdx].maxHP * 0.125 * rockMult));
-          streamerTeam[targetIdx].currentHP = Math.max(0, streamerTeam[targetIdx].currentHP - rockDmg);
+          const rockDmg = Math.max(1, Math.floor(sSlot.maxHP * 0.125 * rockMult));
+          sSlot.currentHP = Math.max(0, sSlot.currentHP - rockDmg);
           updateArenaHPBars();
           setBattleDialogue(`🪨 날카로운 바위(스텔스록)가 <b>[${sP.name}]</b>에게 꽂혔다! (-${rockDmg})`);
           await new Promise(r => setTimeout(r, 800));
-          if (streamerTeam[targetIdx].currentHP <= 0) {
-            streamerTeam[targetIdx].fainted = true;
+          if (sSlot.currentHP <= 0) {
+            sSlot.fainted = true;
             renderArenaTeamBallsHUD();
             setBattleDialogue(`💀 <b>[${sP.name}]</b>은(는) 스텔스록 데미지로 쓰러졌다!`);
             await new Promise(r => setTimeout(r, 800));
           }
         }
       } else {
-        viewersTeam[viewersActiveIdx].choiceMove = null;
+        resetSlotOnSwitchOut(viewersTeam[viewersActiveIdx]);
         viewersActiveIdx = targetIdx;
-        const vP = viewersTeam[targetIdx].pokemon;
+        const vSlot = viewersTeam[targetIdx];
+        const vP = vSlot.pokemon;
         setBattleDialogue(`👥 <b>시청자 연합</b>은 <b>[${vP.name}]</b>(으)로 교체했다!`);
         updateArenaActivePokemonUI();
         renderArenaTeamBallsHUD();
@@ -17204,19 +17375,19 @@
           spr.style.transform = 'scale(0.5)';
           setTimeout(() => spr.style.transform = 'scale(1)', 300);
         }
-        // Stealth rock check
-        if (pokeBattleState.viewersStealthRock && viewersTeam[targetIdx].currentHP > 0) {
+        // Stealth rock check (Heavy-Duty Boots negates entry hazards)
+        if (pokeBattleState.viewersStealthRock && vSlot.currentHP > 0 && normalizePokeItemId(vSlot.item) !== 'heavy_duty_boots') {
           let rockMult = 1.0;
           vP.types.forEach(t => {
             if (pokeTypeChart['바위'] && pokeTypeChart['바위'][t] !== undefined) rockMult *= pokeTypeChart['바위'][t];
           });
-          const rockDmg = Math.max(1, Math.floor(viewersTeam[targetIdx].maxHP * 0.125 * rockMult));
-          viewersTeam[targetIdx].currentHP = Math.max(0, viewersTeam[targetIdx].currentHP - rockDmg);
+          const rockDmg = Math.max(1, Math.floor(vSlot.maxHP * 0.125 * rockMult));
+          vSlot.currentHP = Math.max(0, vSlot.currentHP - rockDmg);
           updateArenaHPBars();
           setBattleDialogue(`🪨 날카로운 바위(스텔스록)가 <b>[${vP.name}]</b>에게 꽂혔다! (-${rockDmg})`);
           await new Promise(r => setTimeout(r, 800));
-          if (viewersTeam[targetIdx].currentHP <= 0) {
-            viewersTeam[targetIdx].fainted = true;
+          if (vSlot.currentHP <= 0) {
+            vSlot.fainted = true;
             renderArenaTeamBallsHUD();
             setBattleDialogue(`💀 <b>[${vP.name}]</b>은(는) 스텔스록 데미지로 쓰러졌다!`);
             await new Promise(r => setTimeout(r, 800));
@@ -20584,6 +20755,13 @@
       const attackerSpr = isStreamer ? document.getElementById('arenaStreamerSprite') : document.getElementById('arenaViewersSprite');
       const defenderSpr = isStreamer ? document.getElementById('arenaViewersSprite') : document.getElementById('arenaStreamerSprite');
 
+      // Authentic Destiny Bond rule: clears at the start of the user's next action
+      attackerSlot.destinyBond = false;
+      const isProtectMove = (move.name === '방어' || move.name === '판별' || move.name === '니들가드' || move.name === '킹실드');
+      if (!isProtectMove) {
+        attackerSlot.protectCount = 0;
+      }
+
       // 1. Flinch (풀죽음) Check
       if (attackerSlot.flinched) {
         attackerSlot.flinched = false;
@@ -20592,9 +20770,10 @@
         return false;
       }
 
-      // 2. Freeze (얼음) Check
+      // 2. Freeze (얼음) Check & Self-Thaw Moves (플레어드라이브, 열탕 등)
+      const selfThawMoves = ['플레어드라이브', '화염바퀴', '신성한불꽃', '열탕', '스팀버스트', '불꽃의춤'];
       if (attackerSlot.status === 'frz') {
-        if (Math.random() < 0.2) {
+        if (selfThawMoves.includes(move.name) || Math.random() < 0.2) {
           attackerSlot.status = null;
           updateArenaActivePokemonUI();
           setBattleDialogue(`❄️ <b>${attacker.name}</b>의 얼음이 녹았다!`);
@@ -20613,19 +20792,11 @@
         return false;
       }
 
-      // 4. Sucker Punch (기습: 상대가 공격기를 쓰지 않으면 실패) Check
-      if (move.name === '기습') {
-        const opponentAct = isStreamer ? pokeBattleState.viewersAction : pokeBattleState.streamerAction;
-        const isOpponentAttacking = opponentAct && opponentAct.type === 'move' && opponentAct.move && opponentAct.move.category !== '변화';
-        if (!isOpponentAttacking) {
-          setBattleDialogue(`💨 하지만 기습은 실패했다!`);
-          await new Promise(r => setTimeout(r, 800));
-          return false;
-        }
-      }
+      const atkItemNorm = normalizePokeItemId(attackerSlot.item);
+      const defItemNorm = normalizePokeItemId(defenderSlot.item);
 
       // Choice Item Lock
-      if (attackerSlot.item === 'choice_band' || attackerSlot.item === 'choice_specs' || attackerSlot.item === 'choice_scarf') {
+      if (atkItemNorm === 'choice_band' || atkItemNorm === 'choice_specs' || atkItemNorm === 'choice_scarf') {
         attackerSlot.choiceMove = move;
       }
 
@@ -20643,12 +20814,58 @@
       // Announce attack
       setBattleDialogue(`${isStreamer ? '👑' : '👥'} <b>${attacker.name}</b>의 <b>[${move.name}]</b>! ${ppRemainingText}`);
 
-      // Accuracy check (Struggle never misses)
-      const hit = isStruggle || (Math.random() * 100 <= move.acc);
+      // 4. Sucker Punch (기습: 상대가 공격기를 쓰지 않거나 이미 행동했으면 실패) Check
+      if (move.name === '기습') {
+        const opponentAct = isStreamer ? pokeBattleState.viewersAction : pokeBattleState.streamerAction;
+        const isOpponentAttacking = opponentAct && opponentAct.type === 'move' && opponentAct.move && opponentAct.move.category !== '변화';
+        if (!isOpponentAttacking) {
+          await new Promise(r => setTimeout(r, 500));
+          setBattleDialogue(`💨 하지만 기습은 실패했다!`);
+          await new Promise(r => setTimeout(r, 800));
+          return false;
+        }
+      }
+
+      // 5. Protect / Detect (방어/판별) Activation & Block Check
+      if (isProtectMove) {
+        const pCount = attackerSlot.protectCount || 0;
+        const successRate = Math.pow(1 / 3, pCount);
+        if (Math.random() < successRate) {
+          attackerSlot.protected = true;
+          attackerSlot.protectCount = pCount + 1;
+          await new Promise(r => setTimeout(r, 500));
+          setBattleDialogue(`🛡️ <b>${attacker.name}</b>은(는) 방어 태세에 들어갔다!`);
+        } else {
+          attackerSlot.protected = false;
+          attackerSlot.protectCount = 0;
+          await new Promise(r => setTimeout(r, 500));
+          setBattleDialogue(`💨 하지만 <b>${attacker.name}</b>의 방어는 실패했다!`);
+        }
+        await new Promise(r => setTimeout(r, 800));
+        return false;
+      }
+
+      // If Defender is Protected (unless attacker has Unseen Fist on contact move)
+      const isSpecial = move.category === '특수';
+      const hasUnseenFist = !isSpecial && (attacker.abilities || []).includes('unseen-fist');
+      if (defenderSlot.protected && !isStruggle && !hasUnseenFist && move.target !== 'self') {
+        const selfBuffMoves = ['칼춤', '철벽', '록커트', '용의춤', '나비춤', '명상', '벌크업', '날개쉬기', '달의불빛', '스텔스록', '길동무'];
+        if (!selfBuffMoves.includes(move.name)) {
+          await new Promise(r => setTimeout(r, 500));
+          setBattleDialogue(`🛡️ <b>${defender.name}</b>은(는) 공격으로부터 몸을 지켰다!`);
+          await new Promise(r => setTimeout(r, 800));
+          return false;
+        }
+      }
+
+      // Accuracy check (Struggle never misses, No Guard ability never misses)
+      const hasNoGuard = (attacker.abilities || []).includes('no-guard') || (defender.abilities || []).includes('no-guard');
+      let effectiveAcc = move.acc || 100;
+      if (atkItemNorm === 'wide_lens') effectiveAcc = Math.floor(effectiveAcc * 1.1);
+      const hit = isStruggle || hasNoGuard || (Math.random() * 100 <= effectiveAcc);
 
       // Status / Buff moves check
       const isStatusMove = !isStruggle && (move.category === '변화' || move.power === 0);
-      const isSpecial = move.category === '특수';
 
       // Damage calculation
       let isCrit = false;
@@ -20657,60 +20874,98 @@
       let effectiveMoveType = move ? move.type : '노말';
 
       if (hit && !isStatusMove) {
-        let atkStat = isSpecial ? attacker.stats.spa : attacker.stats.atk;
-        let defStat = isSpecial ? defender.stats.spd : defender.stats.def;
+        // Psyshock / Psystrike / Secret Sword target physical Defense even though they are Special moves!
+        const targetsPhysicalDef = !isSpecial || (move.name === '사이코쇼크' || move.name === '사이코브레이크' || move.name === '신비의칼');
+        let atkStat = calculateLevel50Stat(isSpecial ? attacker.stats.spa : attacker.stats.atk);
+        let defStat = calculateLevel50Stat(targetsPhysicalDef ? defender.stats.def : defender.stats.spd);
 
-        // Rank modifiers
+        // Critical Hit (High critical moves like Stone Edge, Shadow Claw have higher rate)
+        const isHighCritMove = (move.name === '스톤에지' || move.name === '섀도크루' || move.name === '깜짝베기' || move.name === '하이드로스나이프' || move.name === '리프블레이드' || move.name === '크로스촙');
+        let critChance = 0.0625;
+        if (atkItemNorm === 'scope_lens') critChance = 0.125;
+        if (isHighCritMove) critChance = (atkItemNorm === 'scope_lens') ? 0.5 : 0.25;
+        if ((defender.abilities || []).includes('shell-armor') || (defender.abilities || []).includes('battle-armor')) {
+          critChance = 0; // 조가비갑옷 / 전투무장 급소 면역
+        }
+        isCrit = Math.random() < critChance;
+
+        // Rank modifiers (Authentic rule: Critical hits ignore negative attack ranks and positive defense ranks!)
         if (isSpecial) {
-          if (attackerSlot.rankSpA) atkStat = getPokeStatWithRank(atkStat, attackerSlot.rankSpA);
-          if (defenderSlot.rankSpD) defStat = getPokeStatWithRank(defStat, defenderSlot.rankSpD);
+          const effAtkRank = (isCrit && (attackerSlot.rankSpA || 0) < 0) ? 0 : (attackerSlot.rankSpA || 0);
+          if (effAtkRank) atkStat = getPokeStatWithRank(atkStat, effAtkRank);
         } else {
-          if (attackerSlot.rankAtk) atkStat = getPokeStatWithRank(atkStat, attackerSlot.rankAtk);
-          if (defenderSlot.rankDef) defStat = getPokeStatWithRank(defStat, defenderSlot.rankDef);
-          // Burn halves physical attack power!
-          if (attackerSlot.status === 'brn') atkStat = Math.floor(atkStat * 0.5);
+          const effAtkRank = (isCrit && (attackerSlot.rankAtk || 0) < 0) ? 0 : (attackerSlot.rankAtk || 0);
+          if (effAtkRank) atkStat = getPokeStatWithRank(atkStat, effAtkRank);
+          // Burn halves physical attack power (unless Facade 객기)
+          if (attackerSlot.status === 'brn' && move.name !== '객기') atkStat = Math.floor(atkStat * 0.5);
+          // Huge Power / Pure Power (천하장사 / 순수한힘) doubles physical attack
+          if ((attacker.abilities || []).includes('huge-power') || (attacker.abilities || []).includes('pure-power')) {
+            atkStat = Math.floor(atkStat * 2.0);
+          }
+        }
+
+        if (targetsPhysicalDef) {
+          const effDefRank = (isCrit && (defenderSlot.rankDef || 0) > 0) ? 0 : (defenderSlot.rankDef || 0);
+          if (effDefRank) defStat = getPokeStatWithRank(defStat, effDefRank);
+        } else {
+          const effDefRank = (isCrit && (defenderSlot.rankSpD || 0) > 0) ? 0 : (defenderSlot.rankSpD || 0);
+          if (effDefRank) defStat = getPokeStatWithRank(defStat, effDefRank);
         }
 
         // Item offensive buffs
-        if (!isSpecial && attackerSlot.item === 'choice_band') atkStat = Math.floor(atkStat * 1.5);
-        if (isSpecial && attackerSlot.item === 'choice_specs') atkStat = Math.floor(atkStat * 1.5);
+        if (!isSpecial && atkItemNorm === 'choice_band') atkStat = Math.floor(atkStat * 1.5);
+        if (isSpecial && atkItemNorm === 'choice_specs') atkStat = Math.floor(atkStat * 1.5);
+        if (!isSpecial && atkItemNorm === 'muscle_band') atkStat = Math.floor(atkStat * 1.1);
+        if (isSpecial && atkItemNorm === 'wise_glasses') atkStat = Math.floor(atkStat * 1.1);
 
         // Item defensive buffs
-        if (isSpecial && defenderSlot.item === 'assault_vest') defStat = Math.floor(defStat * 1.5);
-        if (defenderSlot.item === 'eviolite' && defender.name === '피카츄') {
+        if (!targetsPhysicalDef && defItemNorm === 'assault_vest') defStat = Math.floor(defStat * 1.5);
+        if (defItemNorm === 'eviolite') {
           defStat = Math.floor(defStat * 1.5);
         }
 
-        // Effective move type & Aerilate (비행스킨 - 메가보만다)
+        // Effective move type & Aerilate/Pixilate (비행스킨/페어리스킨)
         let aerilateBoost = 1.0;
         if (!isStruggle && (attacker.abilities || []).includes('aerilate') && move.type === '노말') {
           effectiveMoveType = '비행';
           aerilateBoost = 1.2;
+        } else if (!isStruggle && (attacker.abilities || []).includes('pixilate') && move.type === '노말') {
+          effectiveMoveType = '페어리';
+          aerilateBoost = 1.2;
         }
 
-        // STAB (자속 보정)
-        const stab = (!isStruggle && attacker.types.includes(effectiveMoveType)) ? 1.5 : 1.0;
+        // STAB (자속 보정: 적응력 Adaptability 시 2.0배)
+        const hasAdaptability = (attacker.abilities || []).includes('adaptability');
+        const stab = (!isStruggle && attacker.types.includes(effectiveMoveType)) ? (hasAdaptability ? 2.0 : 1.5) : 1.0;
 
-        // Type Effectiveness (Struggle deals neutral damage)
+        // Type Effectiveness (Struggle deals neutral damage; Freeze-Dry hits Water for 2x!)
         if (!isStruggle) {
           defender.types.forEach(defType => {
-            if (pokeTypeChart[effectiveMoveType] && pokeTypeChart[effectiveMoveType][defType] !== undefined) {
+            if (move.name === '프리즈드라이' && defType === '물') {
+              typeMult *= 2.0;
+            } else if (pokeTypeChart[effectiveMoveType] && pokeTypeChart[effectiveMoveType][defType] !== undefined) {
               typeMult *= pokeTypeChart[effectiveMoveType][defType];
             }
           });
         }
 
-        // Levitate & Air Balloon (부유 & 풍선 - 땅타입 공격 무효)
+        // Levitate & Air Balloon (부유 & 풍선 - 땅타입 공격 무효, 단 틀깨기 Mold Breaker는 부유 무시)
         if (!isStruggle && effectiveMoveType === '땅') {
-          const hasLevitate = (defender.abilities || []).includes('levitate');
-          const hasBalloon = (defenderSlot.item === 'air_balloon' || defenderSlot.item === 'air-balloon') && !defenderSlot.itemUsed;
+          const hasMoldBreaker = (attacker.abilities || []).includes('mold-breaker');
+          const hasLevitate = !hasMoldBreaker && (defender.abilities || []).includes('levitate');
+          const hasBalloon = defItemNorm === 'air_balloon' && !defenderSlot.itemUsed;
           if (hasLevitate || hasBalloon) {
             typeMult = 0;
           }
         }
 
+        // Thick Fat (두꺼운지방 - 불꽃/얼음 데미지 반감)
+        if (!isStruggle && (defender.abilities || []).includes('thick-fat') && (effectiveMoveType === '불꽃' || effectiveMoveType === '얼음')) {
+          typeMult *= 0.5;
+        }
+
         // Item: Expert Belt
-        if (!isStruggle && attackerSlot.item === 'expert_belt' && typeMult >= 2.0) {
+        if (!isStruggle && atkItemNorm === 'expert_belt' && typeMult >= 2.0) {
           typeMult *= 1.2;
         }
 
@@ -20732,19 +20987,12 @@
           attackerSlot.item = 'none';
         }
 
-        // Critical Hit (High critical moves like Stone Edge, Shadow Claw have higher rate)
-        const isHighCritMove = (move.name === '스톤에지' || move.name === '섀도크루' || move.name === '깜짝베기' || move.name === '하이드로스나이프');
-        let critChance = 0.0625;
-        if (attackerSlot.item === 'scope_lens') critChance = 0.125;
-        if (isHighCritMove) critChance = (attackerSlot.item === 'scope_lens') ? 0.5 : 0.25;
-
-        isCrit = Math.random() < critChance;
         const critMult = isCrit ? 1.5 : 1.0;
         if (isCrit) pokeBattleState.stats.crits++;
         if (typeMult >= 2.0) pokeBattleState.stats.superEffective++;
 
         // Life Orb bonus
-        const itemDmgMult = attackerSlot.item === 'life_orb' ? 1.3 : 1.0;
+        const itemDmgMult = atkItemNorm === 'life_orb' ? 1.3 : 1.0;
 
         // Ability: Sharpness (예리함 - 메가앱솔Z 베기 기술 1.5배)
         let sharpnessMult = 1.0;
@@ -20866,6 +21114,15 @@
           updateArenaActivePokemonUI();
           setBattleDialogue(`✨ <b>${attacker.name}</b>의 랭크가 상승했다!`);
         }
+        // Check Lum Berry after status move (도깨비불/전기자석파/맹독)
+        if (defenderSlot.status && normalizePokeItemId(defenderSlot.item) === 'lum_berry' && !defenderSlot.itemUsed) {
+          await new Promise(r => setTimeout(r, 500));
+          defenderSlot.status = null;
+          defenderSlot.itemUsed = true;
+          defenderSlot.item = 'none';
+          updateArenaActivePokemonUI();
+          setBattleDialogue(`🍒 <b>${defender.name}</b>은(는) <b>리샘열매</b>를 먹고 상태이상을 즉시 회복했다!`);
+        }
         await new Promise(r => setTimeout(r, 800));
         return false;
       }
@@ -20875,14 +21132,14 @@
       let remainingHP = Math.max(0, prevHP - finalDamage);
 
       // Item: Focus Sash (기합의띠)
-      if (prevHP === defenderSlot.maxHP && remainingHP === 0 && defenderSlot.item === 'focus_sash' && !defenderSlot.itemUsed) {
+      if (prevHP === defenderSlot.maxHP && remainingHP === 0 && defItemNorm === 'focus_sash' && !defenderSlot.itemUsed) {
         remainingHP = 1;
         defenderSlot.itemUsed = true;
         setBattleDialogue(`🥋 <b>[${defender.name}]</b>은(는) <b>기합의띠</b>로 버텼다! (HP 1 남음)`);
       }
 
       // Item: Focus Band (기합의머리띠 10%)
-      if (remainingHP === 0 && defenderSlot.item === 'focus_band' && Math.random() < 0.1) {
+      if (remainingHP === 0 && defItemNorm === 'focus_band' && Math.random() < 0.1) {
         remainingHP = 1;
         setBattleDialogue(`🎗️ <b>[${defender.name}]</b>은(는) <b>기합의머리띠</b>로 버텼다! (HP 1 남음)`);
       }
@@ -20906,9 +21163,18 @@
       setBattleDialogue(feedback);
       await new Promise(r => setTimeout(r, 800));
 
-      // 1. Drain Leech (기가드레인, 드레인펀치: 데미지의 50% 흡수)
-      if ((move.name === '기가드레인' || move.name === '드레인펀치') && attackerSlot.currentHP > 0) {
-        const drainHeal = Math.max(1, Math.floor(finalDamage * 0.5));
+      // Fire-type damaging moves thaw frozen defender!
+      if (finalDamage > 0 && defenderSlot.currentHP > 0 && defenderSlot.status === 'frz' && (effectiveMoveType === '불꽃' || move.name === '열탕' || move.name === '스팀버스트')) {
+        defenderSlot.status = null;
+        updateArenaActivePokemonUI();
+        setBattleDialogue(`🔥 불꽃 열기로 인해 <b>${defender.name}</b>의 얼음이 녹았다!`);
+        await new Promise(r => setTimeout(r, 600));
+      }
+
+      // 1. Drain Leech (기가드레인, 드레인펀치: 데미지의 50% 흡수, 큰뿌리 Big Root 착용 시 1.3배)
+      if ((move.name === '기가드레인' || move.name === '드레인펀치' || move.name === '흡혈' || move.name === '드레인키스') && attackerSlot.currentHP > 0 && finalDamage > 0) {
+        const rootMult = atkItemNorm === 'big_root' ? 1.3 : 1.0;
+        const drainHeal = Math.max(1, Math.floor(finalDamage * 0.5 * rootMult));
         attackerSlot.currentHP = Math.min(attackerSlot.maxHP, attackerSlot.currentHP + drainHeal);
         updateArenaHPBars();
         setBattleDialogue(`💚 <b>${attacker.name}</b>은(는) 상대의 체력을 흡수했다! (+${drainHeal})`);
@@ -20916,7 +21182,7 @@
       }
 
       // 2. Recoil Moves (플레어드라이브, 볼트태클, 브레이브버드, 이판사판태클: 데미지의 33% 반동)
-      if ((move.name === '플레어드라이브' || move.name === '볼트태클' || move.name === '브레이브버드' || move.name === '이판사판태클') && attackerSlot.currentHP > 0) {
+      if ((move.name === '플레어드라이브' || move.name === '볼트태클' || move.name === '브레이브버드' || move.name === '이판사판태클' || move.name === '우드해머' || move.name === '양날박치기') && attackerSlot.currentHP > 0 && finalDamage > 0) {
         const recoilDmg = Math.max(1, Math.floor(finalDamage / 3));
         attackerSlot.currentHP = Math.max(0, attackerSlot.currentHP - recoilDmg);
         updateArenaHPBars();
@@ -20924,13 +21190,40 @@
         await new Promise(r => setTimeout(r, 600));
       }
 
-      // 3. Self Stat Drops (인파이트: 방어/특방 1랭크 하락)
-      if (move.name === '인파이트' && attackerSlot.currentHP > 0) {
-        attackerSlot.rankDef = Math.max(-6, (attackerSlot.rankDef || 0) - 1);
-        attackerSlot.rankSpD = Math.max(-6, (attackerSlot.rankSpD || 0) - 1);
-        updateArenaActivePokemonUI();
-        setBattleDialogue(`💥 <b>${attacker.name}</b>의 방어와 특수방어가 떨어졌다! (-1랭크)`);
-        await new Promise(r => setTimeout(r, 600));
+      // 3. Self Stat Drops (인파이트, 오버히트, 용성군, 사이코부스트 등) & White Herb (하양허브)
+      if (attackerSlot.currentHP > 0 && finalDamage > 0) {
+        let statDropped = false;
+        if (move.name === '인파이트' || move.name === '드래곤어센트') {
+          attackerSlot.rankDef = Math.max(-6, (attackerSlot.rankDef || 0) - 1);
+          attackerSlot.rankSpD = Math.max(-6, (attackerSlot.rankSpD || 0) - 1);
+          statDropped = true;
+          setBattleDialogue(`💥 <b>${attacker.name}</b>의 방어와 특수방어가 떨어졌다! (-1랭크)`);
+        } else if (move.name === '오버히트' || move.name === '용성군' || move.name === '리프스톰' || move.name === '플뢰르캐논') {
+          attackerSlot.rankSpA = Math.max(-6, (attackerSlot.rankSpA || 0) - 2);
+          statDropped = true;
+          setBattleDialogue(`💥 <b>${attacker.name}</b>의 특수공격이 크게 떨어졌다! (-2랭크)`);
+        } else if (move.name === '엄청난힘') {
+          attackerSlot.rankAtk = Math.max(-6, (attackerSlot.rankAtk || 0) - 1);
+          attackerSlot.rankDef = Math.max(-6, (attackerSlot.rankDef || 0) - 1);
+          statDropped = true;
+          setBattleDialogue(`💥 <b>${attacker.name}</b>의 공격과 방어가 떨어졌다! (-1랭크)`);
+        }
+        if (statDropped) {
+          updateArenaActivePokemonUI();
+          await new Promise(r => setTimeout(r, 600));
+          if (atkItemNorm === 'white_herb' && !attackerSlot.itemUsed) {
+            attackerSlot.itemUsed = true;
+            attackerSlot.item = 'none';
+            if ((attackerSlot.rankAtk || 0) < 0) attackerSlot.rankAtk = 0;
+            if ((attackerSlot.rankDef || 0) < 0) attackerSlot.rankDef = 0;
+            if ((attackerSlot.rankSpA || 0) < 0) attackerSlot.rankSpA = 0;
+            if ((attackerSlot.rankSpD || 0) < 0) attackerSlot.rankSpD = 0;
+            if ((attackerSlot.rankSpe || 0) < 0) attackerSlot.rankSpe = 0;
+            updateArenaActivePokemonUI();
+            setBattleDialogue(`🌿 <b>${attacker.name}</b>은(는) <b>하양허브</b>로 떨어진 능력을 원래대로 되돌렸다!`);
+            await new Promise(r => setTimeout(r, 600));
+          }
+        }
       }
 
       // 4. Struggle Recoil Damage (25% max HP)
@@ -20943,7 +21236,7 @@
       }
 
       // 5. Post-hit Item Effects
-      if (attackerSlot.item === 'life_orb' && attackerSlot.currentHP > 0) {
+      if (atkItemNorm === 'life_orb' && attackerSlot.currentHP > 0 && finalDamage > 0) {
         const recoil = Math.max(1, Math.floor(attackerSlot.maxHP * 0.1));
         attackerSlot.currentHP = Math.max(0, attackerSlot.currentHP - recoil);
         updateArenaHPBars();
@@ -20951,8 +21244,8 @@
         await new Promise(r => setTimeout(r, 600));
       }
 
-      // Rocky Helmet (울퉁불퉁멧)
-      if (!isSpecial && (defenderSlot.item === 'rocky_helmet' || defenderSlot.item === 'rocky-helmet') && attackerSlot.currentHP > 0) {
+      // Rocky Helmet (울퉁불퉁멧 - 펀치글러브 착용 시 비접촉 보호)
+      if (!isSpecial && defItemNorm === 'rocky_helmet' && atkItemNorm !== 'punching_glove' && attackerSlot.currentHP > 0 && finalDamage > 0) {
         const recoil = Math.max(1, Math.floor(attackerSlot.maxHP / 6));
         attackerSlot.currentHP = Math.max(0, attackerSlot.currentHP - recoil);
         updateArenaHPBars();
@@ -20961,7 +21254,7 @@
       }
 
       // Air Balloon (풍선 터짐)
-      if (finalDamage > 0 && (defenderSlot.item === 'air_balloon' || defenderSlot.item === 'air-balloon') && !defenderSlot.itemUsed) {
+      if (finalDamage > 0 && defItemNorm === 'air_balloon' && !defenderSlot.itemUsed) {
         defenderSlot.itemUsed = true;
         defenderSlot.item = 'none';
         setBattleDialogue(`🎈 <b>${defender.name}</b>의 <b>풍선</b>이 공격을 받아 펑 터졌다!`);
@@ -20977,7 +21270,7 @@
       }
 
       // Eject Button (탈출버튼 - 피격 시 벤치로 자동 교체)
-      if (finalDamage > 0 && defenderSlot.currentHP > 0 && (defenderSlot.item === 'eject_button' || defenderSlot.item === 'eject-button') && !defenderSlot.itemUsed) {
+      if (finalDamage > 0 && defenderSlot.currentHP > 0 && defItemNorm === 'eject_button' && !defenderSlot.itemUsed) {
         defenderSlot.itemUsed = true;
         defenderSlot.item = 'none';
         const defTeam = isStreamer ? viewersTeam : streamerTeam;
@@ -20992,7 +21285,7 @@
       }
 
       // Red Card (레드카드 - 피격 시 공격자를 벤치로 강제 교체)
-      if (finalDamage > 0 && (defenderSlot.item === 'red_card' || defenderSlot.item === 'red-card') && !defenderSlot.itemUsed && attackerSlot.currentHP > 0) {
+      if (finalDamage > 0 && defItemNorm === 'red_card' && !defenderSlot.itemUsed && attackerSlot.currentHP > 0) {
         defenderSlot.itemUsed = true;
         defenderSlot.item = 'none';
         const atkTeam = isStreamer ? streamerTeam : viewersTeam;
@@ -21007,15 +21300,16 @@
         }
       }
 
-      if (typeMult >= 2.0 && defenderSlot.item === 'weakness_policy' && !defenderSlot.itemUsed && defenderSlot.currentHP > 0) {
+      if (typeMult >= 2.0 && defItemNorm === 'weakness_policy' && !defenderSlot.itemUsed && defenderSlot.currentHP > 0) {
         defenderSlot.itemUsed = true;
-        defenderSlot.rankAtk += 2;
-        defenderSlot.rankSpA += 2;
+        defenderSlot.rankAtk = Math.min(6, (defenderSlot.rankAtk || 0) + 2);
+        defenderSlot.rankSpA = Math.min(6, (defenderSlot.rankSpA || 0) + 2);
+        updateArenaActivePokemonUI();
         setBattleDialogue(`🛡️ <b>${defender.name}</b>은(는) 약점보험이 발동하여 공격/특수공격이 크게 상승했다!`);
         await new Promise(r => setTimeout(r, 800));
       }
 
-      if (defenderSlot.item === 'sitrus_berry' && !defenderSlot.itemUsed && defenderSlot.currentHP > 0 && defenderSlot.currentHP <= defenderSlot.maxHP * 0.5) {
+      if (defItemNorm === 'sitrus_berry' && !defenderSlot.itemUsed && defenderSlot.currentHP > 0 && defenderSlot.currentHP <= defenderSlot.maxHP * 0.5) {
         const heal = Math.max(1, Math.round(defenderSlot.maxHP * 0.25));
         defenderSlot.currentHP = Math.min(defenderSlot.maxHP, defenderSlot.currentHP + heal);
         defenderSlot.itemUsed = true;
@@ -21074,10 +21368,35 @@
           setBattleDialogue(`✨ <b>${defender.name}</b>의 특수공격력이 떨어졌다! (-1랭크)`);
           await new Promise(r => setTimeout(r, 600));
         }
-        // Flinch
-        const flinchChance = (move.name === '악의파동') ? 0.2 : ((move.name === '에어슬래시' || move.name === '아이언헤드' || move.name === '스톤샤워') ? 0.3 : 0);
-        if (flinchChance > 0 && Math.random() < flinchChance) {
-          defenderSlot.flinched = true;
+        // Flinch (Covert Cloak 은밀망토 착용 시 부가효과 면역, King's Rock 왕의징표석 10% 추가)
+        if (defItemNorm !== 'covert_cloak') {
+          let flinchChance = (move.name === '악의파동') ? 0.2 : ((move.name === '에어슬래시' || move.name === '아이언헤드' || move.name === '스톤샤워' || move.name === '고드름떨구기' || move.name === '사념의박치기') ? 0.3 : 0);
+          if (flinchChance === 0 && atkItemNorm === 'kings_rock' && finalDamage > 0) flinchChance = 0.1;
+          if (flinchChance > 0 && Math.random() < flinchChance) {
+            defenderSlot.flinched = true;
+          }
+        }
+        // Lum Berry (리샘열매 - 상태이상 즉시 1회 치료)
+        if (defenderSlot.status && defItemNorm === 'lum_berry' && !defenderSlot.itemUsed) {
+          defenderSlot.status = null;
+          defenderSlot.itemUsed = true;
+          defenderSlot.item = 'none';
+          updateArenaActivePokemonUI();
+          setBattleDialogue(`🍒 <b>${defender.name}</b>은(는) <b>리샘열매</b>를 먹고 상태이상을 회복했다!`);
+          await new Promise(r => setTimeout(r, 600));
+        }
+        // White Herb (하양허브 - 능력치 하락 시 1회 복구)
+        if (defItemNorm === 'white_herb' && !defenderSlot.itemUsed && ((defenderSlot.rankAtk || 0) < 0 || (defenderSlot.rankDef || 0) < 0 || (defenderSlot.rankSpA || 0) < 0 || (defenderSlot.rankSpD || 0) < 0 || (defenderSlot.rankSpe || 0) < 0)) {
+          defenderSlot.itemUsed = true;
+          defenderSlot.item = 'none';
+          if ((defenderSlot.rankAtk || 0) < 0) defenderSlot.rankAtk = 0;
+          if ((defenderSlot.rankDef || 0) < 0) defenderSlot.rankDef = 0;
+          if ((defenderSlot.rankSpA || 0) < 0) defenderSlot.rankSpA = 0;
+          if ((defenderSlot.rankSpD || 0) < 0) defenderSlot.rankSpD = 0;
+          if ((defenderSlot.rankSpe || 0) < 0) defenderSlot.rankSpe = 0;
+          updateArenaActivePokemonUI();
+          setBattleDialogue(`🌿 <b>${defender.name}</b>은(는) <b>하양허브</b>로 떨어진 능력을 원래대로 되돌렸다!`);
+          await new Promise(r => setTimeout(r, 600));
         }
       }
 
@@ -21176,10 +21495,11 @@
           }
         }
 
-        // Toxic damage: cumulative 1/16 per turn
+        // Toxic damage: cumulative 1/16 per turn (Turn 1 = 1/16, Turn 2 = 2/16, ...)
         if (sl.status === 'tox') {
-          sl.toxicTurns = (sl.toxicTurns || 1) + 1;
-          const dmg = Math.max(1, Math.floor(sl.maxHP * Math.min(8, sl.toxicTurns) / 16));
+          const curToxTurn = sl.toxicTurns || 1;
+          const dmg = Math.max(1, Math.floor(sl.maxHP * Math.min(15, curToxTurn) / 16));
+          sl.toxicTurns = curToxTurn + 1;
           sl.currentHP = Math.max(0, sl.currentHP - dmg);
           updateArenaHPBars();
           setBattleDialogue(`💀 <b>${sl.pokemon.name}</b>은(는) 맹독 데미지를 입었다! (-${dmg})`);
@@ -21195,21 +21515,40 @@
         }
       }
 
-      // Leftovers & Black Sludge recovery
-      if (sSlot.item === 'leftovers' && sSlot.currentHP > 0 && sSlot.currentHP < sSlot.maxHP) {
-        const heal = Math.max(1, Math.round(sSlot.maxHP / 16));
-        sSlot.currentHP = Math.min(sSlot.maxHP, sSlot.currentHP + heal);
-        updateArenaHPBars();
-        setBattleDialogue(`🍎 <b>${sSlot.pokemon.name}</b>은(는) 먹어남은음식으로 체력을 조금 회복했다!`);
-        await new Promise(r => setTimeout(r, 600));
-      }
-
-      if (vSlot.item === 'leftovers' && vSlot.currentHP > 0 && vSlot.currentHP < vSlot.maxHP) {
-        const heal = Math.max(1, Math.round(vSlot.maxHP / 16));
-        vSlot.currentHP = Math.min(vSlot.maxHP, vSlot.currentHP + heal);
-        updateArenaHPBars();
-        setBattleDialogue(`🍎 <b>${vSlot.pokemon.name}</b>은(는) 먹어남은음식으로 체력을 조금 회복했다!`);
-        await new Promise(r => setTimeout(r, 600));
+      // Leftovers & Black Sludge recovery/damage
+      for (const item of slots) {
+        const sl = item.slot;
+        if (!sl || sl.fainted || sl.currentHP <= 0) continue;
+        const normIt = normalizePokeItemId(sl.item);
+        if (normIt === 'leftovers' && sl.currentHP < sl.maxHP) {
+          const heal = Math.max(1, Math.round(sl.maxHP / 16));
+          sl.currentHP = Math.min(sl.maxHP, sl.currentHP + heal);
+          updateArenaHPBars();
+          setBattleDialogue(`🍎 <b>${sl.pokemon.name}</b>은(는) 먹다남은음식으로 체력을 조금 회복했다! (+${heal})`);
+          await new Promise(r => setTimeout(r, 600));
+        } else if (normIt === 'black_sludge') {
+          if (sl.pokemon.types.includes('독')) {
+            if (sl.currentHP < sl.maxHP) {
+              const heal = Math.max(1, Math.round(sl.maxHP / 16));
+              sl.currentHP = Math.min(sl.maxHP, sl.currentHP + heal);
+              updateArenaHPBars();
+              setBattleDialogue(`🟣 <b>${sl.pokemon.name}</b>은(는) 검은진흙으로 체력을 조금 회복했다! (+${heal})`);
+              await new Promise(r => setTimeout(r, 600));
+            }
+          } else {
+            const dmg = Math.max(1, Math.floor(sl.maxHP / 8));
+            sl.currentHP = Math.max(0, sl.currentHP - dmg);
+            updateArenaHPBars();
+            setBattleDialogue(`🟣 <b>${sl.pokemon.name}</b>은(는) 검은진흙 때문에 데미지를 입었다! (-${dmg})`);
+            await new Promise(r => setTimeout(r, 600));
+            if (sl.currentHP <= 0) {
+              sl.fainted = true;
+              renderArenaTeamBallsHUD();
+              await handleFaintPhase(item.side);
+              return;
+            }
+          }
+        }
       }
 
       // Field Seeds activation (그래스시드, 사이코시드, 일렉트릭시드, 미스트시드)
@@ -21243,11 +21582,11 @@
         }
       }
 
-      // Reset 1-turn effects
-      sSlot.destinyBond = false;
+      // Reset 1-turn effects (Note: Destiny Bond persists until the user's next action)
       sSlot.flinched = false;
-      vSlot.destinyBond = false;
+      sSlot.protected = false;
       vSlot.flinched = false;
+      vSlot.protected = false;
 
       pokeBattleState.round++;
       pokeBattleState.stats.totalRounds++;
@@ -22334,7 +22673,7 @@
             item.style.background = 'rgba(0, 255, 163, 0.15)';
             item.style.border = '1px solid rgba(0, 255, 163, 0.35)';
             item.style.marginBottom = '4px';
-            item.innerHTML = `<span><b style="color:#00ffa3;">${nickname}</b>: ${msg}</span><span style="font-size:10px; color:#00ffa3; font-weight:800;">정답 수신됨</span>`;
+            item.innerHTML = `<span><b style="color:#00ffa3;">${escapeHtml(nickname)}</b>: ${escapeHtml(msg)}</span><span style="font-size:10px; color:#00ffa3; font-weight:800;">정답 수신됨</span>`;
             feedBox.prepend(item);
           }
         } else {
@@ -22349,7 +22688,7 @@
             item.style.borderRadius = '4px';
             item.style.background = 'rgba(255,255,255,0.02)';
             item.style.marginBottom = '3px';
-            item.innerHTML = `<span><b>${nickname}</b>: ${msg}</span>`;
+            item.innerHTML = `<span><b>${escapeHtml(nickname)}</b>: ${escapeHtml(msg)}</span>`;
             feedBox.prepend(item);
           }
         }
@@ -22358,7 +22697,10 @@
       // --- Mode 2: Collective Intelligence Voting ---
       else if (quizMatchState.viewerMode === 'voting') {
         const cleanAnswer = msg.trim();
-        quizMatchState.votingUsers.set(uid, cleanAnswer);
+        // Consolidate answers that match the target Pokemon (e.g. chosung/alias) under the official Pokemon name
+        const matchCheck = checkQuizAnswerMatch(cleanAnswer, p);
+        const canonicalAnswer = matchCheck.isMatch ? p.name : cleanAnswer;
+        quizMatchState.votingUsers.set(uid, canonicalAnswer);
 
         // Recompute vote counts
         quizMatchState.voteCounts = {};
@@ -22415,7 +22757,7 @@
         return `
           <div style="display: flex; flex-direction: column; gap: 2px;">
             <div style="display: flex; justify-content: space-between; font-weight: ${isLeader ? '800' : '600'}; color: ${isLeader ? '#ffd700' : '#fff'};">
-              <span>${idx + 1}. ${ans} ${isLeader ? '<span class="badge-tag" style="background:#ffd700; color:#000; font-size:9px; font-weight:900; margin-left:4px;">👑 1위 당선</span>' : ''}</span>
+              <span>${idx + 1}. ${escapeHtml(ans)} ${isLeader ? '<span class="badge-tag" style="background:#ffd700; color:#000; font-size:9px; font-weight:900; margin-left:4px;">👑 1위 당선</span>' : ''}</span>
               <span>${count}표 (${pct}%)</span>
             </div>
             <div style="width: 100%; height: 5px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden;">
@@ -22660,11 +23002,16 @@
       if (silImg) silImg.classList.add('revealed');
 
       const streamerAns = quizMatchState.streamerSubmittedAnswer;
+      const safeStreamerAns = escapeHtml(streamerAns || '미제출');
+      const safeSName = escapeHtml(getStreamerName());
       const streamerMatch = streamerAns && p ? checkQuizAnswerMatch(streamerAns, p) : { isMatch: false };
       const totalVotes = quizMatchState.votingUsers.size;
       const entries = Object.entries(quizMatchState.voteCounts).sort((a, b) => b[1] - a[1]);
       const topVote = entries.length > 0 ? entries[0] : null;
+      const safeTopVote = topVote ? escapeHtml(topVote[0]) : '';
       const firstViewer = quizMatchState.firstCorrectUser;
+      const safeFirstNick = firstViewer ? escapeHtml(firstViewer.nickname) : '';
+      const safeFirstMsg = firstViewer ? escapeHtml(firstViewer.msg) : '';
 
       if (winner === 'both') {
         if (winTitle) { winTitle.innerText = '🎉 스트리머 & 시청자 공동 정답! (양측 +1점)'; winTitle.style.color = '#00ffa3'; }
@@ -22672,15 +23019,15 @@
           if (quizMatchState.viewerMode === 'voting') {
             winDetail.innerHTML = `
               <div style="display:flex; flex-direction:column; gap:4px; text-align:left; font-size:12px;">
-                <div>👑 <b>${getStreamerName()}</b>: <span style="color:#ffd700;">"${streamerAns}"</span> (✅ 정답 +1점)</div>
-                <div>👥 <b>시청자 1위</b>: <span style="color:#38bdf8;">"${topVote ? topVote[0] : ''}"</span> (${topVote ? Math.round((topVote[1]/Math.max(1,totalVotes))*100) : 0}% 득표, ✅ 정답 +1점)</div>
+                <div>👑 <b>${safeSName}</b>: <span style="color:#ffd700;">"${safeStreamerAns}"</span> (✅ 정답 +1점)</div>
+                <div>👥 <b>시청자 1위</b>: <span style="color:#38bdf8;">"${safeTopVote}"</span> (${topVote ? Math.round((topVote[1]/Math.max(1,totalVotes))*100) : 0}% 득표, ✅ 정답 +1점)</div>
               </div>
             `;
           } else {
             winDetail.innerHTML = `
               <div style="display:flex; flex-direction:column; gap:4px; text-align:left; font-size:12px;">
-                <div>👑 <b>${getStreamerName()}</b>: <span style="color:#ffd700;">"${streamerAns}"</span> (✅ 정답 +1점)</div>
-                <div>👥 <b>최초 정답 시청자</b>: <span style="color:#38bdf8;">${firstViewer ? firstViewer.nickname : ''}</span> ("${firstViewer ? firstViewer.msg : ''}", ✅ 정답 +1점)</div>
+                <div>👑 <b>${safeSName}</b>: <span style="color:#ffd700;">"${safeStreamerAns}"</span> (✅ 정답 +1점)</div>
+                <div>👥 <b>최초 정답 시청자</b>: <span style="color:#38bdf8;">${safeFirstNick}</span> ("${safeFirstMsg}", ✅ 정답 +1점)</div>
               </div>
             `;
           }
@@ -22697,15 +23044,15 @@
           if (quizMatchState.viewerMode === 'voting') {
             winDetail.innerHTML = `
               <div style="display:flex; flex-direction:column; gap:4px; text-align:left; font-size:12px;">
-                <div>👑 <b>${getStreamerName()}</b>: <span style="color:#f87171;">"${streamerAns || '미제출'}"</span> (❌ 오답)</div>
-                <div>👥 <b>시청자 1위</b>: <span style="color:#38bdf8;">"${topVote ? topVote[0] : ''}"</span> (${topVote ? Math.round((topVote[1]/Math.max(1,totalVotes))*100) : 0}% 득표, ✅ 정답 +1점)</div>
+                <div>👑 <b>${safeSName}</b>: <span style="color:#f87171;">"${safeStreamerAns}"</span> (❌ 오답)</div>
+                <div>👥 <b>시청자 1위</b>: <span style="color:#38bdf8;">"${safeTopVote}"</span> (${topVote ? Math.round((topVote[1]/Math.max(1,totalVotes))*100) : 0}% 득표, ✅ 정답 +1점)</div>
               </div>
             `;
           } else {
             winDetail.innerHTML = `
               <div style="display:flex; flex-direction:column; gap:4px; text-align:left; font-size:12px;">
-                <div>👑 <b>${getStreamerName()}</b>: <span style="color:${streamerMatch.isMatch ? '#ffd700' : '#f87171'};">"${streamerAns || '미제출'}"</span> (${streamerMatch.isMatch ? '시청자가 더 빠름' : '❌ 오답'})</div>
-                <div>👥 <b>최초 정답 시청자</b>: <b style="color:#38bdf8;">${firstViewer ? firstViewer.nickname : ''}</b> ("${firstViewer ? firstViewer.msg : ''}", ✅ 승리)</div>
+                <div>👑 <b>${safeSName}</b>: <span style="color:${streamerMatch.isMatch ? '#ffd700' : '#f87171'};">"${safeStreamerAns}"</span> (${streamerMatch.isMatch ? '시청자가 더 빠름' : '❌ 오답'})</div>
+                <div>👥 <b>최초 정답 시청자</b>: <b style="color:#38bdf8;">${safeFirstNick}</b> ("${safeFirstMsg}", ✅ 승리)</div>
               </div>
             `;
           }
@@ -22717,15 +23064,15 @@
           if (quizMatchState.viewerMode === 'voting') {
             winDetail.innerHTML = `
               <div style="display:flex; flex-direction:column; gap:4px; text-align:left; font-size:12px;">
-                <div>👑 <b>${getStreamerName()}</b>: <span style="color:#ffd700;">"${streamerAns}"</span> (✅ 정답 +1점)</div>
-                <div>👥 <b>시청자 1위</b>: <span style="color:#f87171;">"${topVote ? topVote[0] : '미참여'}"</span> (❌ 오답)</div>
+                <div>👑 <b>${safeSName}</b>: <span style="color:#ffd700;">"${safeStreamerAns}"</span> (✅ 정답 +1점)</div>
+                <div>👥 <b>시청자 1위</b>: <span style="color:#f87171;">"${safeTopVote || '미참여'}"</span> (❌ 오답)</div>
               </div>
             `;
           } else {
             winDetail.innerHTML = `
               <div style="display:flex; flex-direction:column; gap:4px; text-align:left; font-size:12px;">
-                <div>👑 <b>${getStreamerName()}</b>: <span style="color:#ffd700;">"${streamerAns}"</span> (✅ 정답 +1점)</div>
-                <div>👥 <b>시청자</b>: <span style="color:${firstViewer ? '#38bdf8' : '#f87171'};">${firstViewer ? firstViewer.nickname + ' ("' + firstViewer.msg + '", 스트리머가 더 빠름)' : '정답자 없음'}</span></div>
+                <div>👑 <b>${safeSName}</b>: <span style="color:#ffd700;">"${safeStreamerAns}"</span> (✅ 정답 +1점)</div>
+                <div>👥 <b>시청자</b>: <span style="color:${firstViewer ? '#38bdf8' : '#f87171'};">${firstViewer ? safeFirstNick + ' ("' + safeFirstMsg + '", 스트리머가 더 빠름)' : '정답자 없음'}</span></div>
               </div>
             `;
           }
@@ -22737,17 +23084,17 @@
           if (quizMatchState.viewerMode === 'voting') {
             winDetail.innerHTML = `
               <div style="display:flex; flex-direction:column; gap:4px; text-align:left; font-size:12px;">
-                <div>👑 <b>${getStreamerName()}</b>: <span style="color:#f87171;">"${streamerAns || '미제출'}"</span> (❌ 오답)</div>
-                <div>👥 <b>시청자 1위</b>: <span style="color:#f87171;">"${topVote ? topVote[0] : '미참여'}"</span> (❌ 오답)</div>
-                <div style="margin-top:2px; color:#ffd700;">정답: <b>${p ? p.name : '-'}</b></div>
+                <div>👑 <b>${safeSName}</b>: <span style="color:#f87171;">"${safeStreamerAns}"</span> (❌ 오답)</div>
+                <div>👥 <b>시청자 1위</b>: <span style="color:#f87171;">"${safeTopVote || '미참여'}"</span> (❌ 오답)</div>
+                <div style="margin-top:2px; color:#ffd700;">정답: <b>${p ? escapeHtml(p.name) : '-'}</b></div>
               </div>
             `;
           } else {
             winDetail.innerHTML = `
               <div style="display:flex; flex-direction:column; gap:4px; text-align:left; font-size:12px;">
-                <div>👑 <b>${getStreamerName()}</b>: <span style="color:#f87171;">"${streamerAns || '미제출'}"</span> (❌ 오답)</div>
+                <div>👑 <b>${safeSName}</b>: <span style="color:#f87171;">"${safeStreamerAns}"</span> (❌ 오답)</div>
                 <div>👥 <b>시청자</b>: <span style="color:#f87171;">정답자 없음</span></div>
-                <div style="margin-top:2px; color:#ffd700;">정답: <b>${p ? p.name : '-'}</b></div>
+                <div style="margin-top:2px; color:#ffd700;">정답: <b>${p ? escapeHtml(p.name) : '-'}</b></div>
               </div>
             `;
           }
@@ -22772,17 +23119,18 @@
 
     function finishQuizMatch() {
       quizMatchState.phase = 'ended';
+      const isDraw = quizMatchState.streamerScore === quizMatchState.viewersScore;
       const isStreamerWinner = quizMatchState.streamerScore > quizMatchState.viewersScore;
-      const winnerName = isStreamerWinner ? getStreamerName() : '시청자 연합';
+      const winnerName = isDraw ? '공동 우승 (무승부)' : (isStreamerWinner ? getStreamerName() : '시청자 연합');
 
       const winTitle = document.getElementById('quizAnswerWinnerTitle');
       if (winTitle) {
-        winTitle.innerText = `🏆 최종 매치 우승: ${winnerName}! 🏆`;
-        winTitle.style.color = isStreamerWinner ? '#ffd700' : '#38bdf8';
+        winTitle.innerText = isDraw ? `🏆 최종 매치 공동 우승 (무승부)! 🏆` : `🏆 최종 매치 우승: ${winnerName}! 🏆`;
+        winTitle.style.color = isDraw ? '#00ffa3' : (isStreamerWinner ? '#ffd700' : '#38bdf8');
       }
       const winDetail = document.getElementById('quizAnswerWinnerDetail');
       if (winDetail) {
-        winDetail.innerHTML = `최종 스코어: 👑 ${getStreamerName()} ${quizMatchState.streamerScore}점 vs 👥 시청자 ${quizMatchState.viewersScore}점`;
+        winDetail.innerHTML = `최종 스코어: 👑 ${escapeHtml(getStreamerName())} ${quizMatchState.streamerScore}점 vs 👥 시청자 ${quizMatchState.viewersScore}점`;
       }
       launchConfetti();
     }
@@ -22891,8 +23239,12 @@
       if (!p) return;
 
       // Update active card in list
+      const pKey = p.code || String(p.id);
       const cards = document.querySelectorAll('.quiz-inspector-card');
-      cards.forEach(c => c.classList.remove('active'));
+      cards.forEach(c => {
+        const oc = c.getAttribute('onclick') || '';
+        c.classList.toggle('active', oc.includes(`'${pKey}'`) || oc.includes(`'${p.id}'`));
+      });
 
       // Header Card
       const sImg = document.getElementById('quizInspSprite');
@@ -22947,8 +23299,13 @@
       }
     }
 
+    function getSelectedInspectorPokemon() {
+      const idOrCode = quizInspectorSelectedPokeId;
+      return allPokemonQuizData.find(x => x.code === idOrCode || x.id === idOrCode || x.name === idOrCode || String(x.id) === String(idOrCode)) || allPokemonQuizData[0];
+    }
+
     function renderInspFlavorText(isMasked) {
-      const p = allPokemonQuizData.find(x => x.id === quizInspectorSelectedPokeId);
+      const p = getSelectedInspectorPokemon();
       if (!p) return;
 
       const maskToggle = document.getElementById('quizInspMaskToggle');
@@ -22982,14 +23339,14 @@
     }
 
     function playInspectorCry() {
-      const p = allPokemonQuizData.find(x => x.id === quizInspectorSelectedPokeId);
+      const p = getSelectedInspectorPokemon();
       if (p) {
         playPokemonCry(p.id, p.cry_url);
       }
     }
 
     function testQuizAnswerMatcher(input) {
-      const p = allPokemonQuizData.find(x => x.id === quizInspectorSelectedPokeId);
+      const p = getSelectedInspectorPokemon();
       const badge = document.getElementById('quizInspTestResultBadge');
       const detail = document.getElementById('quizInspTestDetail');
       if (!p || !badge || !detail) return;

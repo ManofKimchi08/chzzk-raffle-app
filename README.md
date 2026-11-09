@@ -1,7 +1,7 @@
-# 🎮 치지직 대규모 시청자 추첨 & 룰렛 & 실시간 투표 & 포켓몬 배틀/퀴즈 쇼 플랫폼 (Chzzk Interactive Hub) v5.2.1
+# 🎮 치지직 대규모 시청자 추첨 & 룰렛 & 실시간 투표 & 포켓몬 배틀/퀴즈 쇼 플랫폼 (Chzzk Interactive Hub) v5.3.0
 
 ![Chzzk WebSocket Live](https://img.shields.io/badge/Chzzk-WebSocket%20Live-00ffa3?style=for-the-badge&logo=naver)
-![Version](https://img.shields.io/badge/Release-v5.2.1-purple?style=for-the-badge)
+![Version](https://img.shields.io/badge/Release-v5.3.0-purple?style=for-the-badge)
 ![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![HTML5 Canvas](https://img.shields.io/badge/HTML5-Canvas%20%26%20Audio-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
@@ -29,6 +29,19 @@
 | **11. v5.1.0 릴리즈 노트** | 포챔스 레귤레이션 M-C 공식 로스터(258마리) 100% 동기화, SFX 독립 볼륨, 기술 효과음 전수 개편 | [🚀 v5.1.0 릴리즈 노트 바로가기](docs/11_release_notes_v5.1.0_ko.md) |
 | **12. v5.2.0 릴리즈 노트** | 시청자 진영 대항전(레드 vs 블루), 자유 채팅 자동 편입, 양측 영화 크레딧 롤링 전광판, 실시간 투표 네온 발광 | [🚀 v5.2.0 릴리즈 노트 바로가기](docs/12_release_notes_v5.2.0_ko.md) |
 | **13. v5.2.1 릴리즈 노트** | 치즈 연동 룰렛 동일 메시지 자동 합산(병합), 금액/확률 누적, 당첨 시 1건 차감 및 잔여 수량 안내 | [🚀 v5.2.1 릴리즈 노트 바로가기](docs/13_release_notes_v5.2.1_ko.md) |
+| **14. v5.3.0 릴리즈 노트** | 전 메뉴(포켓몬 배틀/찌리리공/포켓몬 퀴즈/실시간 투표/룰렛/채팅창) 정밀 검수 패치 및 포켓몬 본가 공식 배틀 룰 동기화 | [🚀 v5.3.0 릴리즈 노트 바로가기](docs/14_release_notes_v5.3.0_ko.md) |
+
+## 🌟 v5.3.0 주요 신규 및 개선 사항 (What's New in v5.3.0)
+
+### 1. ⚔️ 포켓몬 배틀 본가(7세대+ / 챔피언스) 공식 룰 완벽 동기화 및 3v3 교체 버그 수정
+- **3v3 벤치 기절 시 교체 번호(5, 6) 고정 매핑**: 벤치 포켓몬이 기절해도 시청자 교체 번호가 밀리지 않으며 기절 슬롯 및 금지 기술 투표를 원천 차단합니다.
+- **기술 우선도(-7 ~ +4) & 메가진화 선행 발동 & 동속 50:50 난수**: 방어(+4), 속이기(+3), 신속/만나자마자(+2), 선공기/짓궂은마음/질풍날개(+1), 강제교체(-6), 트릭룸(-7) 우선도를 적용하고, 메가진화가 공격 전에 선행 발동되어 해당 턴 스피드에 즉시 반영됩니다.
+- **Lv.50 실능치 공식 & 특수 판정 & 도구/특성 확충**: Lv.50 실능치(+20) 변환, 교체 퇴장 시 랭크/길동무/맹독 카운트 초기화, 사이코쇼크(물리방어 참조), 프리즈드라이(물 2배), 급소 유리 랭크 판정, 맹독 첫 턴 1/16 데미지, 통굽부츠·리샘열매·하양허브·검은진흙·큰뿌리·은밀망토·펀치글러브·왕의징표석 등 누락 도구/특성을 전면 구현했습니다.
+
+### 2. 💣 찌리리공 뒤집기 & ❓ 포켓몬 퀴즈 쇼 & 📊 실시간 투표 & 🎡 룰렛 안정화
+- **찌리리공 뒤집기**: 타일 오픈 후 1.2초 전환 중 연속 클릭(다중 오픈) 레이스 컨디션 차단, 점수 열세 시 STOP 안전 확인창, 다전제 세트별 선공 교대 적용.
+- **포켓몬 퀴즈 쇼**: 개발자 인스펙터(quizInspectorModal) 포켓몬 프리뷰/매처 복구, 다수결 모드 정답 표기(정식명/초성/별명) 단일 합산, 동점자 공동 우승 처리 및 XSS 방어.
+- **실시간 투표 & 치즈 룰렛**: 치즈 투표 건수 기준(1도네=1표) 중복 투표 규정 연동, 메시지 없는 단순 치즈 후원 무시, 수집된 후원 목록 실시간 검색 및 채팅창 오버레이(Drawer) 전환.
 
 ## 🌟 v5.2.1 주요 신규 및 개선 사항 (What's New in v5.2.1)
 
