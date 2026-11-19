@@ -1,7 +1,7 @@
-# 🎮 치지직 대규모 시청자 추첨 & 룰렛 & 실시간 투표 & 포켓몬 배틀/퀴즈 쇼 플랫폼 (Chzzk Interactive Hub) v5.3.0
+# 🎮 치지직 대규모 시청자 추첨 & 룰렛 & 실시간 투표 & 포켓몬 배틀/퀴즈 쇼 플랫폼 (Chzzk Interactive Hub) v5.4.0
 
 ![Chzzk WebSocket Live](https://img.shields.io/badge/Chzzk-WebSocket%20Live-00ffa3?style=for-the-badge&logo=naver)
-![Version](https://img.shields.io/badge/Release-v5.3.0-purple?style=for-the-badge)
+![Version](https://img.shields.io/badge/Release-v5.4.0-purple?style=for-the-badge)
 ![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![HTML5 Canvas](https://img.shields.io/badge/HTML5-Canvas%20%26%20Audio-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
@@ -30,6 +30,20 @@
 | **12. v5.2.0 릴리즈 노트** | 시청자 진영 대항전(레드 vs 블루), 자유 채팅 자동 편입, 양측 영화 크레딧 롤링 전광판, 실시간 투표 네온 발광 | [🚀 v5.2.0 릴리즈 노트 바로가기](docs/12_release_notes_v5.2.0_ko.md) |
 | **13. v5.2.1 릴리즈 노트** | 치즈 연동 룰렛 동일 메시지 자동 합산(병합), 금액/확률 누적, 당첨 시 1건 차감 및 잔여 수량 안내 | [🚀 v5.2.1 릴리즈 노트 바로가기](docs/13_release_notes_v5.2.1_ko.md) |
 | **14. v5.3.0 릴리즈 노트** | 전 메뉴(포켓몬 배틀/찌리리공/포켓몬 퀴즈/실시간 투표/룰렛/채팅창) 정밀 검수 패치 및 포켓몬 본가 공식 배틀 룰 동기화 | [🚀 v5.3.0 릴리즈 노트 바로가기](docs/14_release_notes_v5.3.0_ko.md) |
+| **15. v5.4.0 릴리즈 노트** | 모듈 아키텍처 분리, 보안·공정성·웹소켓 하드닝, 비동기 모달/세션 복구/OBS 크로마키/전역 음소거, rAF 배치 렌더링 & Gzip 캐싱 | [🚀 v5.4.0 릴리즈 노트 바로가기](docs/15_release_notes_v5.4.0_ko.md) |
+
+## 🌟 v5.4.0 주요 신규 및 개선 사항 (What's New in v5.4.0)
+
+### 1. 🛡️ 공정성 · 보안 · 웹소켓 신뢰성 대폭 강화 (Phase 1)
+- **키워드 추첨 탈락 버그 해결**: 시청자가 참여 키워드 입력 후 일반 채팅을 쳐도 탈락하지 않도록 최근 메시지 이력 보존 및 대소문자 무시 매칭을 적용했습니다.
+- **치즈 룰렛 회전 중 스냅샷 고정**: 회전 중 신규 치즈 후원이 도착해도 원판과 당첨 모달이 어긋나지 않으며, 회전 종료 직후 새 후원이 반영됩니다.
+- **CSPRNG & 보안 하드닝**: 추첨/룰렛에 `crypto.getRandomValues` 기반 공정 난수를 도입했고, DOM XSS·CSV 수식 인젝션 차단, `127.0.0.1` 바인딩 및 출처 제한 CORS, `POST` JSON 쿠키 전송, Pretendard 웹폰트 로드를 복구했습니다.
+- **웹소켓 자동 토큰 갱신·좀비 감지**: 50초 무응답 좀비 연결 감지 및 재접속 2회마다 접근 토큰을 자동 재발급합니다.
+
+### 2. 🎮 실방송 UX & 스트리머 편의 기능 & 아키텍처 모듈화 (Phase 2 & Phase 3)
+- **비동기 커스텀 모달 & 실수 방지**: 브라우저 블로킹 `alert`/`confirm`을 100% 제거하고, `beforeunload` + 24시간 세션 자동 복구 배너, 추첨 모집 마감 토글, 당첨자 명단 복사, 최근/즐겨찾기 채널, 전역 `Esc` 모달 닫기를 추가했습니다.
+- **방송 송출 도구**: 헤더 전역 음소거(`🔊`), OBS 그린/블루 크로마키 배경 순환(`🎥 OBS`), 수동 룰렛·실시간 투표 사용자 프리셋 저장을 지원합니다.
+- **모듈화 & 대규모 최적화**: 23,411줄 모놀리스를 `public/css/styles.css`와 6개 `public/js/*.js` 모듈로 분리했고, `server.py` Gzip 압축/스마트 캐싱, `rAF` 배치 채팅 렌더링, `userChatHistory` 2,000명 LRU 상한을 적용했습니다.
 
 ## 🌟 v5.3.0 주요 신규 및 개선 사항 (What's New in v5.3.0)
 
@@ -322,7 +336,7 @@ pyinstaller 치지직추첨기.spec --noconfirm
 | **미니게임 규칙** | **Pokémon HeartGold / SoulSilver** | 5×5 찌리리공 뒤집기 (Voltorb Flip) 미니게임 규칙 및 코인/지뢰 계산 알고리즘 |
 | **오디오 엔진** | **[Web Audio API (MDN)](https://developer.mozilla.org/ko/docs/Web/API/Web_Audio_API)** | 외부 음원 파일 의존성 없는 브라우저 내장 오디오 신디사이저 (룰렛 틱틱 사운드, 당첨 팡파레 효과음 실시간 합성) |
 | **렌더링 엔진** | **HTML5 Canvas 2D Context** | 비주얼 룰렛 원판 물리 감속 렌더링, 찌리리공 보드, Confetti 파티클 폭죽 애니메이션 |
-| **타이포그래피** | **[Google Fonts](https://fonts.google.com/)** | `Outfit`, `Pretendard`, `Noto Sans KR` 웹 폰트 |
+| **타이포그래피** | **[Google Fonts](https://fonts.google.com/) / [jsDelivr](https://www.jsdelivr.com/)** | `Outfit` 및 `Pretendard Variable` 웹 폰트 |
 | **패키징 도구** | **[PyInstaller](https://pyinstaller.org/)** | Windows 무설치 단일 독립 실행 파일(`.exe`) 빌드 |
 
 ---
