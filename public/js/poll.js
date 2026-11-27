@@ -383,6 +383,8 @@
       clearAllPollOptionsBtn.disabled = true;
 
       // Status
+      pollStatusBadge.style.background = '';
+      pollStatusBadge.style.color = '';
       pollStatusBadge.className = 'live-badge-pill live';
       pollStatusBadge.innerText = '🔴 투표 진행 중';
       pollActiveQuestionText.innerText = pollTitleInput.value.trim() || '실시간 시청자 투표 진행 중';
@@ -439,11 +441,15 @@
       isPollPaused = !isPollPaused;
       if (isPollPaused) {
         pausePollBtn.innerText = '▶️ 이어서 진행';
+        pollStatusBadge.style.background = '';
+        pollStatusBadge.style.color = '';
         pollStatusBadge.className = 'live-badge-pill offline';
         pollStatusBadge.innerText = '⏸️ 일시 정지';
         showToast('투표가 일시 정지되었습니다.', '⏸️');
       } else {
         pausePollBtn.innerText = '⏸️ 일시 정지';
+        pollStatusBadge.style.background = '';
+        pollStatusBadge.style.color = '';
         pollStatusBadge.className = 'live-badge-pill live';
         pollStatusBadge.innerText = '🔴 투표 진행 중';
         showToast('투표가 다시 시작되었습니다.', '▶️');
@@ -543,6 +549,8 @@
         addPollOptionBtn.disabled = false;
         clearAllPollOptionsBtn.disabled = false;
 
+        pollStatusBadge.style.background = '';
+        pollStatusBadge.style.color = '';
         pollStatusBadge.className = 'live-badge-pill offline';
         pollStatusBadge.innerText = '대기 중';
         pollActiveQuestionText.innerText = '투표를 시작하면 주제가 여기에 표시됩니다.';
@@ -777,7 +785,8 @@
       sorted.forEach((opt, idx) => {
         const sc = pollOptionVotes.get(opt.id) || 0;
         const p = totalVotes > 0 ? ((sc / totalVotes) * 100).toFixed(1) : '0.0';
-        csv += `${idx + 1}위,${opt.id}번,${sanitizeCsvCell(opt.text)},${sc},${p}%\n`;
+        const displayNum = validOptions.indexOf(opt) + 1;
+        csv += `${idx + 1}위,${displayNum}번,${sanitizeCsvCell(opt.text)},${sc},${p}%\n`;
       });
 
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });

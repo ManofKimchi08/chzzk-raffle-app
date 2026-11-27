@@ -2066,6 +2066,11 @@
 
       if (autoRemoveWonItemToggle.checked) {
         removeWinningItem(winner);
+        winner._alreadyAutoRemoved = true;
+        if (removeAndCloseRouletteModalBtn) removeAndCloseRouletteModalBtn.style.display = 'none';
+      } else {
+        winner._alreadyAutoRemoved = false;
+        if (removeAndCloseRouletteModalBtn) removeAndCloseRouletteModalBtn.style.display = '';
       }
       scheduleSessionBackup();
     }
@@ -2143,6 +2148,7 @@
       } else {
         const targetText = winner.rawText || (winner.text ? winner.text.replace(/\s*\(x\d+\)$/, '') : '');
         const removeIdx = donationRouletteList.findIndex(d => {
+          if (d.excluded) return false;
           const t = d.msg && d.msg.trim().length > 0 ? d.msg.trim() : (d.nickname || '(메시지 없음)');
           return t === targetText;
         });
@@ -2168,7 +2174,8 @@
     });
 
     removeAndCloseRouletteModalBtn.addEventListener('click', () => {
-      if (currentWinnerObject) {
+      if (currentWinnerObject && !currentWinnerObject._alreadyAutoRemoved) {
+        currentWinnerObject._alreadyAutoRemoved = true;
         removeWinningItem(currentWinnerObject);
       }
       rouletteWinnerModal.classList.remove('active');

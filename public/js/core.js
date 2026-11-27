@@ -263,7 +263,7 @@
         ['quizInspectorModal', () => typeof closeQuizInspectorModal === 'function' ? closeQuizInspectorModal() : document.getElementById('quizInspectorModal')?.classList.remove('active')],
         ['factionRosterModal', () => typeof closeFactionRosterModal === 'function' ? closeFactionRosterModal() : document.getElementById('factionRosterModal')?.classList.remove('active')],
         ['factionRevealModal', () => typeof closeFactionRevealModal === 'function' ? closeFactionRevealModal() : document.getElementById('factionRevealModal')?.classList.remove('active')],
-        ['factionRecruitModal', () => document.getElementById('factionRecruitModal')?.classList.remove('active')],
+        ['factionRecruitModal', () => typeof cancelFactionRecruitment === 'function' ? cancelFactionRecruitment() : document.getElementById('factionRecruitModal')?.classList.remove('active')],
         ['pokeBattleResultModal', () => typeof closePokeResultModal === 'function' ? closePokeResultModal() : document.getElementById('pokeBattleResultModal')?.classList.remove('active')],
         ['rouletteWinnerModal', () => document.getElementById('rouletteWinnerModal')?.classList.remove('active')],
         ['pollResultModal', () => document.getElementById('pollResultModal')?.classList.remove('active')],
@@ -291,9 +291,10 @@
       const hasDonations = typeof donationRouletteList !== 'undefined' && Array.isArray(donationRouletteList) && donationRouletteList.length > 0;
       const hasHistory = typeof rouletteHistory !== 'undefined' && Array.isArray(rouletteHistory) && rouletteHistory.length > 0;
       const hasPollRunning = typeof isPollRunning !== 'undefined' && !!isPollRunning;
+      const hasVoltorbActive = typeof gamePhase !== 'undefined' && gamePhase !== 'idle' && gamePhase !== 'ended';
       const hasPokeActive = typeof pokeBattleState !== 'undefined' && !!pokeBattleState.active;
-      const hasQuizActive = typeof quizMatchState !== 'undefined' && !!quizMatchState.active;
-      return hasDrawn || hasDonations || hasHistory || hasPollRunning || hasPokeActive || hasQuizActive;
+      const hasQuizActive = typeof quizMatchState !== 'undefined' && (!!quizMatchState.active || (quizMatchState.phase !== 'idle' && quizMatchState.phase !== 'ended'));
+      return hasDrawn || hasDonations || hasHistory || hasPollRunning || hasVoltorbActive || hasPokeActive || hasQuizActive;
     }
 
     function saveSessionBackupNow() {
@@ -320,12 +321,18 @@
           donationRouletteList: donList,
           removedDonationRouletteList: removedDonList,
           rouletteHistory: rHist,
+          rouletteRound: (typeof rouletteRound !== 'undefined' ? rouletteRound : 0),
           pollTitle: document.getElementById('pollTitleInput')?.value || '',
           pollOptions: (typeof pollOptions !== 'undefined' && Array.isArray(pollOptions)) ? pollOptions.slice(0, 10) : []
         };
         const hasMeaningful = payload.drawnWinners.length > 0 || payload.donationRouletteList.length > 0 || payload.rouletteHistory.length > 0;
         if (hasMeaningful) {
           localStorage.setItem(SESSION_BACKUP_STORAGE_KEY, JSON.stringify(payload));
+        } else {
+          const banner = document.getElementById('sessionRestoreBanner');
+          if (!banner || banner.style.display === 'none') {
+            localStorage.removeItem(SESSION_BACKUP_STORAGE_KEY);
+          }
         }
       } catch (e) {}
     }
@@ -399,6 +406,10 @@
         }
         if (typeof rouletteHistory !== 'undefined' && Array.isArray(data.rouletteHistory)) {
           rouletteHistory = data.rouletteHistory;
+          if (typeof rouletteRound !== 'undefined') {
+            const maxHistRound = rouletteHistory.reduce((mx, h) => Math.max(mx, Number(h && h.round) || 0), 0);
+            rouletteRound = Math.max(Number(data.rouletteRound) || 0, maxHistRound);
+          }
           if (typeof renderRouletteHistory === 'function') renderRouletteHistory();
         }
         if (typeof renderDonationFeed === 'function') renderDonationFeed();
@@ -411,6 +422,10 @@
           if (typeof renderPollOptionsList === 'function') renderPollOptionsList();
           if (typeof renderPollVisualBars === 'function') renderPollVisualBars();
         }
+
+        if (typeof updateFilteredStats === 'function') updateFilteredStats();
+        if (typeof updateExcludeBadge === 'function') updateExcludeBadge();
+        if (typeof updateSettingsSummaryBadges === 'function') updateSettingsSummaryBadges();
 
         const banner = document.getElementById('sessionRestoreBanner');
         if (banner) banner.style.display = 'none';
@@ -2990,14 +3005,28 @@
         cumulativeDrawnUIDs.clear();
         fileExcludedTokens.clear();
         manualExcludePairs = [];
+        if (excludeFileInput) excludeFileInput.value = '';
+        if (fileExcludeStatus) fileExcludeStatus.innerText = '';
+        if (fileExcludeToggle) fileExcludeToggle.checked = false;
+        if (fileExcludeBox) fileExcludeBox.style.display = 'none';
+        if (manualExcludeToggle) manualExcludeToggle.checked = false;
+        if (manualExcludeBox) manualExcludeBox.style.display = 'none';
+        renderManualRules();
+        updateExcludeBadge();
+
         drawnWinners = [];
         currentDrawRound = 0;
         chatLogCount = 0;
         if (chatBadgeCount) chatBadgeCount.innerText = '0';
         drawerChatCount.innerText = '0';
+        const dockedCountBadge = document.getElementById('dockedChatCountBadge');
+        if (dockedCountBadge) dockedCountBadge.innerText = '0';
+        const floatingCountBadge = document.getElementById('floatingChatBadgeCount');
+        if (floatingCountBadge) floatingCountBadge.innerText = '0';
         participantCountEl.innerText = '0';
         filteredCountEl.innerText = '0';
         excludedCountEl.innerText = '0';
+        updateFilteredStats();
         userChatHistory.clear();
         activeTrackingUserUID = null;
         drawnWinnerCountEl.innerText = '0';

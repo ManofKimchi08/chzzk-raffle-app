@@ -43,6 +43,21 @@ COMPRESSIBLE_MIME_MAP = {
 
 LOCAL_ORIGIN_RE = re.compile(r'^https?://(localhost|127\.0\.0\.1)(:\d+)?$', re.IGNORECASE)
 MAX_POST_BODY_BYTES = 65536
+_GZIP_CACHE = {}
+_GZIP_CACHE_LOCK = threading.Lock()
+_GZIP_CACHE_MAX_ENTRIES = 64
+
+
+def _sanitize_cookie_value(raw_val, key_name):
+    if not raw_val:
+        return ''
+    val = re.sub(r'[\r\n\x00-\x1f\x7f]', '', str(raw_val)).strip()
+    prefix = f'{key_name}='
+    if val.lower().startswith(prefix.lower()):
+        val = val[len(prefix):].strip()
+    if ';' in val:
+        val = val.split(';', 1)[0].strip()
+    return val.encode('latin-1', errors='ignore').decode('latin-1')
 
 
 def extract_channel_id(raw_input):
@@ -112,7 +127,7 @@ class ChzzkProxyHandler(http.server.SimpleHTTPRequestHandler):
         if allowed_origin:
             self.send_header('Access-Control-Allow-Origin', allowed_origin)
             self.send_header('Vary', 'Origin')
-        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+        self.send_header('Access-Control-Allow-Methods', 'GET, HEAD, POST, OPTIONS')
         self.send_header('Access-Control-Allow-Headers', 'Content-Type, X-Chzzk-Auth, X-Chzzk-Ses')
 
         parsed_path = urlparse(getattr(self, 'path', '') or '/').path.lower()
@@ -158,8 +173,10 @@ class ChzzkProxyHandler(http.server.SimpleHTTPRequestHandler):
         api_headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
         }
-        if nid_auth and nid_ses:
-            api_headers['Cookie'] = f"NID_AUT={nid_auth}; NID_SES={nid_ses}"
+        clean_auth = _sanitize_cookie_value(nid_auth, 'NID_AUT')
+        clean_ses = _sanitize_cookie_value(nid_ses, 'NID_SES')
+        if clean_auth and clean_ses:
+            api_headers['Cookie'] = f"NID_AUT={clean_auth}; NID_SES={clean_ses}"
         return api_headers
 
     def _handle_search(self, keyword):
@@ -385,7 +402,7 @@ class ChzzkProxyHandler(http.server.SimpleHTTPRequestHandler):
             self._handle_channel_detail(raw_channel_id, nid_auth, nid_ses)
             return
 
-    def _try_serve_gzip_static(self, req_path):
+    def _try_serve_gzip_static(self, req_path, send_body=True):
         if not self._accepts_gzip():
             return False
 
@@ -410,25 +427,64 @@ class ChzzkProxyHandler(http.server.SimpleHTTPRequestHandler):
             return False
 
         try:
-            file_size = os.path.getsize(file_abs)
-            if file_size <= 1024:
+            st = os.stat(file_abs)
+            if st.st_size <= 1024:
                 return False
-            with open(file_abs, 'rb') as f:
-                raw_bytes = f.read()
-            gz_bytes = gzip.compress(raw_bytes, compresslevel=6)
+
+            cache_entry = None
+            with _GZIP_CACHE_LOCK:
+                cached = _GZIP_CACHE.get(file_abs)
+                if cached and cached[0] == st.st_mtime_ns and cached[1] == st.st_size:
+                    cache_entry = cached
+
+            if cache_entry is None:
+                with open(file_abs, 'rb') as f:
+                    raw_bytes = f.read()
+                gz_bytes = gzip.compress(raw_bytes, compresslevel=6)
+                etag = f'W/"{st.st_mtime_ns:x}-{st.st_size:x}-gz"'
+                last_mod_str = self.date_time_string(st.st_mtime)
+                cache_entry = (st.st_mtime_ns, st.st_size, gz_bytes, etag, last_mod_str)
+                with _GZIP_CACHE_LOCK:
+                    if len(_GZIP_CACHE) >= _GZIP_CACHE_MAX_ENTRIES:
+                        _GZIP_CACHE.clear()
+                    _GZIP_CACHE[file_abs] = cache_entry
+
+            _, _, gz_bytes, etag, last_mod_str = cache_entry
+            inm = (self.headers.get('If-None-Match') or '').strip() if self.headers else ''
+            if inm and (inm == etag or etag in [t.strip() for t in inm.split(',')]):
+                self.send_response(304)
+                self.send_header('ETag', etag)
+                self.send_header('Vary', 'Accept-Encoding')
+                self.end_headers()
+                return True
+
             ctype = COMPRESSIBLE_MIME_MAP.get(ext_lower) or mimetypes.guess_type(file_abs)[0] or 'application/octet-stream'
 
             self.send_response(200)
             self.send_header('Content-Type', ctype)
             self.send_header('Content-Encoding', 'gzip')
             self.send_header('Vary', 'Accept-Encoding')
+            self.send_header('ETag', etag)
             self.send_header('Content-Length', str(len(gz_bytes)))
-            self.send_header('Last-Modified', self.date_time_string(os.path.getmtime(file_abs)))
+            self.send_header('Last-Modified', last_mod_str)
             self.end_headers()
-            self.wfile.write(gz_bytes)
+            if send_body:
+                self.wfile.write(gz_bytes)
             return True
         except Exception:
             return False
+
+    def do_HEAD(self):
+        parsed = urlparse(self.path)
+        if parsed.path.startswith('/api/'):
+            self.send_response(405)
+            self.send_header('Content-Type', 'application/json; charset=utf-8')
+            self.send_header('Content-Length', '0')
+            self.end_headers()
+            return
+        if self._try_serve_gzip_static(parsed.path, send_body=False):
+            return
+        return super().do_HEAD()
 
     def do_GET(self):
         parsed = urlparse(self.path)

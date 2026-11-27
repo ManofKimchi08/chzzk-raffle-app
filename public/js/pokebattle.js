@@ -130,7 +130,7 @@
 
     async function loadPokemonDataset() {
       try {
-        const res = await fetch('/pokemon_data.json?v=5.4.0');
+        const res = await fetch('pokemon_data.json?v=5.4.1');
         const data = await res.json();
         allPokemonData = data.pokemons || [];
         allPokemonData.sort((a, b) => (a.id - b.id) || (a.code || '').localeCompare(b.code || ''));
@@ -1368,7 +1368,10 @@
 
     function triggerBillboardVoteGlow(team, uid, choiceKey) {
       if (pokeBattleSubMode !== 'faction_battle') return;
-      const chips = document.querySelectorAll(`.billboard-user-chip[data-uid="${uid}"]`);
+      const safeUid = (typeof CSS !== 'undefined' && typeof CSS.escape === 'function')
+        ? CSS.escape(String(uid || ''))
+        : String(uid || '').replace(/["\\]/g, '\\$&');
+      const chips = document.querySelectorAll(`.billboard-user-chip[data-uid="${safeUid}"]`);
       chips.forEach(chip => {
         chip.classList.remove('vote-glow');
         void chip.offsetWidth;
@@ -1658,7 +1661,7 @@
           const currentPP = ppObj ? ppObj.currentPP : (m.pp || 15);
           const isOutOfPP = currentPP <= 0;
           const isLocked = slot.choiceMove && slot.choiceMove.name !== m.name;
-          const isAV = slot.item === 'assault_vest' && m.category === '변화';
+          const isAV = normalizePokeItemId(slot.item) === 'assault_vest' && m.category === '변화';
           const isBanned = (slot.pokemon.name === '왕구리' && m.name === '막치기') || (slot.pokemon.name === '브리두라스' && (m.name === '미러코트' || m.name === '메탈버스트'));
           const disabled = isOutOfPP || isLocked || isAV || isBanned;
 
@@ -1762,7 +1765,7 @@
           const currentPP = ppObj ? ppObj.currentPP : (m.pp || 15);
           const isOutOfPP = currentPP <= 0;
           const isLocked = slot.choiceMove && slot.choiceMove.name !== m.name;
-          const isAV = slot.item === 'assault_vest' && m.category === '변화';
+          const isAV = normalizePokeItemId(slot.item) === 'assault_vest' && m.category === '변화';
           const isBanned = (slot.pokemon.name === '왕구리' && m.name === '막치기') || (slot.pokemon.name === '브리두라스' && (m.name === '미러코트' || m.name === '메탈버스트'));
           if (!isLocked && !isAV && !isOutOfPP && !isBanned) {
             validCandidateKeys.push(`move_${i + 1}`);
@@ -1834,7 +1837,7 @@
       const teamIcon = side === 'red' ? '🔴' : '🔵';
 
       if (title) {
-        title.innerHTML = `${teamIcon} <span style="color: ${teamColor};">${teamName}</span>: 다음 출전 포켓몬 선택`;
+        title.innerHTML = `${teamIcon} <span style="color: ${teamColor};">${escapeHtml(teamName)}</span>: 다음 출전 포켓몬 선택`;
       }
       if (subTitle) {
         subTitle.innerText = `${teamName}의 포켓몬이 쓰러졌습니다! 소속 시청자들은 채팅에 번호나 이름을 입력하세요. (15초)`;
@@ -1922,6 +1925,7 @@
 
     async function finishFactionFaintSwitchVote(aliveSlots) {
       clearInterval(pokeBattleState.faintTimerInterval);
+      if (!pokeBattleState.active) return;
       const isRed = factionFaintSide === 'red';
       const teamArr = isRed ? streamerTeam : viewersTeam;
       const teamName = isRed ? factionTeamNames.red : factionTeamNames.blue;
@@ -1947,6 +1951,7 @@
 
       renderFactionFaintVoteCandidatesUI(aliveSlots, true, chosenSlotIdx);
       await new Promise(r => setTimeout(r, 1300));
+      if (!pokeBattleState.active) return;
 
       const modal = document.getElementById('pokeFaintSwitchModal');
       if (modal) modal.classList.remove('active');
@@ -1965,8 +1970,17 @@
       renderArenaTeamBallsHUD();
       updateArenaHPBars();
 
-      setBattleDialogue(`${isRed ? '🔴' : '🔵'} <b>${teamName}</b>은 <b>[${teamArr[chosenSlotIdx].pokemon.name}]</b>(을)를 출전시켰다!`);
+      setBattleDialogue(`${isRed ? '🔴' : '🔵'} <b>${escapeHtml(teamName)}</b>은 <b>[${escapeHtml(teamArr[chosenSlotIdx].pokemon.name)}]</b>(을)를 출전시켰다!`);
       await new Promise(r => setTimeout(r, 1000));
+      if (!pokeBattleState.active) return;
+
+      const sideKey = isRed ? 'streamer' : 'viewers';
+      const hazardRes = await applySwitchInEntryHazards(sideKey);
+      if (!pokeBattleState.active) return;
+      if (hazardRes && hazardRes.fainted) {
+        await handleFaintPhase(sideKey);
+        return;
+      }
 
       pokeBattleState.round++;
       pokeBattleState.stats.totalRounds++;
@@ -2529,6 +2543,7 @@
 
     // --- Simultaneous Turn Selection Engine ---
     function startSimultaneousPokeTurn() {
+      if (!pokeBattleState.active) return;
       const sActive = streamerTeam[streamerActiveIdx];
       const vActive = viewersTeam[viewersActiveIdx];
       if (sActive && (sActive.fainted || sActive.currentHP <= 0)) {
@@ -2620,7 +2635,7 @@
         factionBlueVoteUsers.clear();
         factionBlueVoteCounts = {};
 
-        setBattleDialogue(`⚔️ <b>Round ${pokeBattleState.round}</b>: 🔴 ${factionTeamNames.red}와 🔵 ${factionTeamNames.blue}가 행동을 동시에 선택합니다! (실시간 채팅 투표)`);
+        setBattleDialogue(`⚔️ <b>Round ${pokeBattleState.round}</b>: 🔴 ${escapeHtml(factionTeamNames.red)}와 🔵 ${escapeHtml(factionTeamNames.blue)}가 행동을 동시에 선택합니다! (실시간 채팅 투표)`);
 
         const casterStatus = document.getElementById('casterMatchStatusText');
         if (casterStatus) {
@@ -2716,7 +2731,7 @@
           const isOutOfPP = currentPP <= 0;
 
           const isChoiceLocked = sSlot.choiceMove && sSlot.choiceMove.name !== m.name;
-          const isAssaultVestBlocked = sSlot.item === 'assault_vest' && m.category === '변화';
+          const isAssaultVestBlocked = normalizePokeItemId(sSlot.item) === 'assault_vest' && m.category === '변화';
           const isBanned = (sSlot.pokemon.name === '왕구리' && m.name === '막치기') || (sSlot.pokemon.name === '브리두라스' && (m.name === '미러코트' || m.name === '메탈버스트'));
           const disabled = isChoiceLocked || isAssaultVestBlocked || isOutOfPP || isBanned;
           const isSelected = pokeBattleState.streamerAction && pokeBattleState.streamerAction.type === 'move' && pokeBattleState.streamerAction.moveIdx === i;
@@ -3562,6 +3577,7 @@
     }
 
     function finishSimultaneousPokeTurn() {
+      if (!pokeBattleState.active) return;
       if (pokeBattleState.phase !== 'simultaneous_turn' && pokeBattleState.phase !== 'viewers_vote') return;
       clearInterval(pokeBattleState.turnTimerInterval);
       pokeBattleState.phase = 'turn_revealing';
@@ -3581,9 +3597,10 @@
         const rLabel = redAction.type === 'switch' ? `[교체 ➡️ ${streamerTeam[redAction.targetIdx].pokemon.name}]` : `[${redAction.move.name}]`;
         const bLabel = blueAction.type === 'switch' ? `[교체 ➡️ ${viewersTeam[blueAction.targetIdx].pokemon.name}]` : `[${blueAction.move.name}]`;
 
-        setBattleDialogue(`⚔️ <b>Round ${pokeBattleState.round}</b>: 🔴 ${factionTeamNames.red} <b>${rLabel}</b> vs 🔵 ${factionTeamNames.blue} <b>${bLabel}</b>!`);
+        setBattleDialogue(`⚔️ <b>Round ${pokeBattleState.round}</b>: 🔴 ${escapeHtml(factionTeamNames.red)} <b>${escapeHtml(rLabel)}</b> vs 🔵 ${escapeHtml(factionTeamNames.blue)} <b>${escapeHtml(bLabel)}</b>!`);
 
         setTimeout(() => {
+          if (!pokeBattleState.active) return;
           executeBattleTurnSequence();
         }, 1200);
         return;
@@ -3637,7 +3654,7 @@
           const isOutOfPP = currentPP <= 0;
 
           const isLocked = vSlot.choiceMove && vSlot.choiceMove.name !== m.name;
-          const isAV = vSlot.item === 'assault_vest' && m.category === '변화';
+          const isAV = normalizePokeItemId(vSlot.item) === 'assault_vest' && m.category === '변화';
           const isBanned = (vSlot.pokemon.name === '왕구리' && m.name === '막치기') || (vSlot.pokemon.name === '브리두라스' && (m.name === '미러코트' || m.name === '메탈버스트'));
           if (!isLocked && !isAV && !isOutOfPP && !isBanned) {
             validCandidateKeys.push(`move_${i + 1}`);
@@ -3711,6 +3728,7 @@
 
       // 4. Delay 2.0s so everyone sees the revealed votes before attacking
       setTimeout(() => {
+        if (!pokeBattleState.active) return;
         executeBattleTurnSequence();
       }, 2000);
     }
@@ -4119,7 +4137,9 @@
 
     // --- Turn Sequence Execution (Switching Priority +6 & Attack Ordering) ---
     async function executeBattleTurnSequence() {
+      if (!pokeBattleState.active) return;
       pokeBattleState.phase = 'executing';
+      pokeBattleState.forcedSwitchedThisTurn = null;
       document.getElementById('arenaViewersVoteHud').style.display = 'none';
 
       try {
@@ -4129,6 +4149,7 @@
         // 1. Handle Switches First (Priority +6)
         if (sAct.type === 'switch') {
           await executeSwitchAnimation('streamer', sAct.targetIdx);
+          if (!pokeBattleState.active) return;
           if (streamerTeam[streamerActiveIdx].currentHP <= 0 || streamerTeam[streamerActiveIdx].fainted) {
             await handleFaintPhase('streamer');
             return;
@@ -4136,6 +4157,7 @@
         }
         if (vAct.type === 'switch') {
           await executeSwitchAnimation('viewers', vAct.targetIdx);
+          if (!pokeBattleState.active) return;
           if (viewersTeam[viewersActiveIdx].currentHP <= 0 || viewersTeam[viewersActiveIdx].fainted) {
             await handleFaintPhase('viewers');
             return;
@@ -4159,18 +4181,23 @@
           const sMegaFirst = preSSpeed > preVSpeed ? true : (preVSpeed > preSSpeed ? false : Math.random() < 0.5);
           if (sMegaFirst) {
             await executeMegaEvolution('streamer');
+            if (!pokeBattleState.active) return;
             await executeMegaEvolution('viewers');
           } else {
             await executeMegaEvolution('viewers');
+            if (!pokeBattleState.active) return;
             await executeMegaEvolution('streamer');
           }
+          if (!pokeBattleState.active) return;
           sAct.isMega = false;
           vAct.isMega = false;
         } else if (sWillMega) {
           await executeMegaEvolution('streamer');
+          if (!pokeBattleState.active) return;
           sAct.isMega = false;
         } else if (vWillMega) {
           await executeMegaEvolution('viewers');
+          if (!pokeBattleState.active) return;
           vAct.isMega = false;
         }
 
@@ -4199,6 +4226,7 @@
 
           // Attack 1
           const firstFainted = await executeSingleAttack(firstActor, firstAct.move, firstAct.isMega);
+          if (!pokeBattleState.active) return;
           if (firstFainted) {
             const sSlotNow = streamerTeam[streamerActiveIdx];
             const vSlotNow = viewersTeam[viewersActiveIdx];
@@ -4213,23 +4241,28 @@
           }
 
           await new Promise(r => setTimeout(r, 1000));
+          if (!pokeBattleState.active) return;
 
-          // Attack 2 (if defender didn't faint)
-          const secondFainted = await executeSingleAttack(secondActor, secondAct.move, secondAct.isMega);
-          if (secondFainted) {
-            const sSlotNow = streamerTeam[streamerActiveIdx];
-            const vSlotNow = viewersTeam[viewersActiveIdx];
-            if (sSlotNow.currentHP <= 0) {
-              await handleFaintPhase('streamer');
-              return;
-            }
-            if (vSlotNow.currentHP <= 0) {
-              await handleFaintPhase('viewers');
-              return;
+          // Attack 2 (if defender didn't faint and wasn't forced out mid-turn by Eject Button)
+          if (pokeBattleState.forcedSwitchedThisTurn !== secondActor) {
+            const secondFainted = await executeSingleAttack(secondActor, secondAct.move, secondAct.isMega);
+            if (!pokeBattleState.active) return;
+            if (secondFainted) {
+              const sSlotNow = streamerTeam[streamerActiveIdx];
+              const vSlotNow = viewersTeam[viewersActiveIdx];
+              if (sSlotNow.currentHP <= 0) {
+                await handleFaintPhase('streamer');
+                return;
+              }
+              if (vSlotNow.currentHP <= 0) {
+                await handleFaintPhase('viewers');
+                return;
+              }
             }
           }
         } else if (sAct.type === 'move' && vAct.type === 'switch') {
           const fainted = await executeSingleAttack('streamer', sAct.move, sAct.isMega);
+          if (!pokeBattleState.active) return;
           if (fainted) {
             const sSlotNow = streamerTeam[streamerActiveIdx];
             const vSlotNow = viewersTeam[viewersActiveIdx];
@@ -4244,6 +4277,7 @@
           }
         } else if (sAct.type === 'switch' && vAct.type === 'move') {
           const fainted = await executeSingleAttack('viewers', vAct.move, vAct.isMega);
+          if (!pokeBattleState.active) return;
           if (fainted) {
             const sSlotNow = streamerTeam[streamerActiveIdx];
             const vSlotNow = viewersTeam[viewersActiveIdx];
@@ -4258,9 +4292,11 @@
           }
         }
 
+        if (!pokeBattleState.active) return;
         await handleRoundEndEffects();
       } catch (seqErr) {
         console.error('Unexpected error in executeBattleTurnSequence:', seqErr);
+        if (!pokeBattleState.active) return;
         const sSlotNow = streamerTeam[streamerActiveIdx];
         const vSlotNow = viewersTeam[viewersActiveIdx];
         if (sSlotNow.currentHP <= 0) {
@@ -4340,13 +4376,45 @@
       await new Promise(r => setTimeout(r, 1300));
     }
 
+    async function applySwitchInEntryHazards(side) {
+      const isStreamer = side === 'streamer';
+      const slot = isStreamer ? streamerTeam[streamerActiveIdx] : viewersTeam[viewersActiveIdx];
+      const hasStealthRock = isStreamer ? pokeBattleState.streamerStealthRock : pokeBattleState.viewersStealthRock;
+      if (!hasStealthRock || !slot || slot.fainted || slot.currentHP <= 0 || normalizePokeItemId(slot.item) === 'heavy_duty_boots') {
+        return { fainted: false };
+      }
+
+      const poke = slot.pokemon;
+      let rockMult = 1.0;
+      (poke.types || []).forEach(t => {
+        if (pokeTypeChart['바위'] && pokeTypeChart['바위'][t] !== undefined) rockMult *= pokeTypeChart['바위'][t];
+      });
+      const rockDmg = Math.max(1, Math.floor(slot.maxHP * 0.125 * rockMult));
+      slot.currentHP = Math.max(0, slot.currentHP - rockDmg);
+      updateArenaHPBars();
+      setBattleDialogue(`🪨 날카로운 바위(스텔스록)가 <b>[${escapeHtml(poke.name)}]</b>에게 꽂혔다! (-${rockDmg})`);
+      await new Promise(r => setTimeout(r, 800));
+      if (!pokeBattleState.active) return { fainted: slot.currentHP <= 0 };
+
+      if (slot.currentHP <= 0) {
+        slot.fainted = true;
+        const spr = document.getElementById(isStreamer ? 'arenaStreamerSprite' : 'arenaViewersSprite');
+        if (spr) spr.classList.add('poke-sprite-fainted');
+        renderArenaTeamBallsHUD();
+        setBattleDialogue(`💀 <b>[${escapeHtml(poke.name)}]</b>은(는) 스텔스록 데미지로 쓰러졌다!`);
+        await new Promise(r => setTimeout(r, 800));
+        return { fainted: true };
+      }
+      return { fainted: false };
+    }
+
     async function executeSwitchAnimation(side, targetIdx) {
       if (side === 'streamer') {
         resetSlotOnSwitchOut(streamerTeam[streamerActiveIdx]);
         streamerActiveIdx = targetIdx;
         const sSlot = streamerTeam[targetIdx];
         const sP = sSlot.pokemon;
-        setBattleDialogue(`👑 <b>[${getStreamerName()}]</b>은(는) <b>[${sP.name}]</b>(으)로 교체했다!`);
+        setBattleDialogue(`👑 <b>[${escapeHtml(getStreamerName())}]</b>은(는) <b>[${escapeHtml(sP.name)}]</b>(으)로 교체했다!`);
         updateArenaActivePokemonUI();
         renderArenaTeamBallsHUD();
         updateArenaHPBars();
@@ -4355,56 +4423,22 @@
           spr.style.transform = 'scale(0.5)';
           setTimeout(() => { spr.style.transform = 'scale(1)'; }, 300);
         }
-        // Stealth rock check (Heavy-Duty Boots negates entry hazards)
-        if (pokeBattleState.streamerStealthRock && sSlot.currentHP > 0 && normalizePokeItemId(sSlot.item) !== 'heavy_duty_boots') {
-          let rockMult = 1.0;
-          sP.types.forEach(t => {
-            if (pokeTypeChart['바위'] && pokeTypeChart['바위'][t] !== undefined) rockMult *= pokeTypeChart['바위'][t];
-          });
-          const rockDmg = Math.max(1, Math.floor(sSlot.maxHP * 0.125 * rockMult));
-          sSlot.currentHP = Math.max(0, sSlot.currentHP - rockDmg);
-          updateArenaHPBars();
-          setBattleDialogue(`🪨 날카로운 바위(스텔스록)가 <b>[${sP.name}]</b>에게 꽂혔다! (-${rockDmg})`);
-          await new Promise(r => setTimeout(r, 800));
-          if (sSlot.currentHP <= 0) {
-            sSlot.fainted = true;
-            renderArenaTeamBallsHUD();
-            setBattleDialogue(`💀 <b>[${sP.name}]</b>은(는) 스텔스록 데미지로 쓰러졌다!`);
-            await new Promise(r => setTimeout(r, 800));
-          }
-        }
+        await applySwitchInEntryHazards('streamer');
       } else {
         resetSlotOnSwitchOut(viewersTeam[viewersActiveIdx]);
         viewersActiveIdx = targetIdx;
         const vSlot = viewersTeam[targetIdx];
         const vP = vSlot.pokemon;
-        setBattleDialogue(`👥 <b>시청자 연합</b>은 <b>[${vP.name}]</b>(으)로 교체했다!`);
+        setBattleDialogue(`👥 <b>시청자 연합</b>은 <b>[${escapeHtml(vP.name)}]</b>(으)로 교체했다!`);
         updateArenaActivePokemonUI();
         renderArenaTeamBallsHUD();
         updateArenaHPBars();
         const spr = document.getElementById('arenaViewersSprite');
         if (spr) {
           spr.style.transform = 'scale(0.5)';
-          setTimeout(() => spr.style.transform = 'scale(1)', 300);
+          setTimeout(() => { spr.style.transform = 'scale(1)'; }, 300);
         }
-        // Stealth rock check (Heavy-Duty Boots negates entry hazards)
-        if (pokeBattleState.viewersStealthRock && vSlot.currentHP > 0 && normalizePokeItemId(vSlot.item) !== 'heavy_duty_boots') {
-          let rockMult = 1.0;
-          vP.types.forEach(t => {
-            if (pokeTypeChart['바위'] && pokeTypeChart['바위'][t] !== undefined) rockMult *= pokeTypeChart['바위'][t];
-          });
-          const rockDmg = Math.max(1, Math.floor(vSlot.maxHP * 0.125 * rockMult));
-          vSlot.currentHP = Math.max(0, vSlot.currentHP - rockDmg);
-          updateArenaHPBars();
-          setBattleDialogue(`🪨 날카로운 바위(스텔스록)가 <b>[${vP.name}]</b>에게 꽂혔다! (-${rockDmg})`);
-          await new Promise(r => setTimeout(r, 800));
-          if (vSlot.currentHP <= 0) {
-            vSlot.fainted = true;
-            renderArenaTeamBallsHUD();
-            setBattleDialogue(`💀 <b>[${vP.name}]</b>은(는) 스텔스록 데미지로 쓰러졌다!`);
-            await new Promise(r => setTimeout(r, 800));
-          }
-        }
+        await applySwitchInEntryHazards('viewers');
       }
       await new Promise(r => setTimeout(r, 900));
     }
@@ -8283,37 +8317,6 @@
         await new Promise(r => setTimeout(r, 600));
       }
 
-      // Eject Button (탈출버튼 - 피격 시 벤치로 자동 교체)
-      if (finalDamage > 0 && defenderSlot.currentHP > 0 && defItemNorm === 'eject_button' && !defenderSlot.itemUsed) {
-        defenderSlot.itemUsed = true;
-        defenderSlot.item = 'none';
-        const defTeam = isStreamer ? viewersTeam : streamerTeam;
-        const defSide = isStreamer ? 'viewers' : 'streamer';
-        const defActive = isStreamer ? viewersActiveIdx : streamerActiveIdx;
-        const benchAvailable = defTeam.findIndex((p, idx) => idx !== defActive && p.currentHP > 0);
-        if (benchAvailable >= 0) {
-          setBattleDialogue(`🔘 <b>${defender.name}</b>의 <b>탈출버튼</b>이 작동했다!`);
-          await new Promise(r => setTimeout(r, 600));
-          await executeSwitchAnimation(defSide, benchAvailable);
-        }
-      }
-
-      // Red Card (레드카드 - 피격 시 공격자를 벤치로 강제 교체)
-      if (finalDamage > 0 && defItemNorm === 'red_card' && !defenderSlot.itemUsed && attackerSlot.currentHP > 0) {
-        defenderSlot.itemUsed = true;
-        defenderSlot.item = 'none';
-        const atkTeam = isStreamer ? streamerTeam : viewersTeam;
-        const atkSide = isStreamer ? 'streamer' : 'viewers';
-        const atkActive = isStreamer ? streamerActiveIdx : viewersActiveIdx;
-        const benchCandidates = atkTeam.map((p, idx) => (idx !== atkActive && p.currentHP > 0) ? idx : -1).filter(i => i >= 0);
-        if (benchCandidates.length > 0) {
-          const forcedIdx = benchCandidates[Math.floor(Math.random() * benchCandidates.length)];
-          setBattleDialogue(`🟥 <b>${defender.name}</b>의 <b>레드카드</b> 발동! <b>${attacker.name}</b>을(를) 강제 퇴장시켰다!`);
-          await new Promise(r => setTimeout(r, 600));
-          await executeSwitchAnimation(atkSide, forcedIdx);
-        }
-      }
-
       if (typeMult >= 2.0 && defItemNorm === 'weakness_policy' && !defenderSlot.itemUsed && defenderSlot.currentHP > 0) {
         defenderSlot.itemUsed = true;
         defenderSlot.rankAtk = Math.min(6, (defenderSlot.rankAtk || 0) + 2);
@@ -8414,6 +8417,41 @@
         }
       }
 
+      // Eject Button (탈출버튼 - 피격 후 부가효과 처리 뒤 벤치로 자동 교체)
+      if (finalDamage > 0 && defenderSlot.currentHP > 0 && defItemNorm === 'eject_button' && !defenderSlot.itemUsed) {
+        defenderSlot.itemUsed = true;
+        defenderSlot.item = 'none';
+        const defTeam = isStreamer ? viewersTeam : streamerTeam;
+        const defSide = isStreamer ? 'viewers' : 'streamer';
+        const defActive = isStreamer ? viewersActiveIdx : streamerActiveIdx;
+        const benchAvailable = defTeam.findIndex((p, idx) => idx !== defActive && p.currentHP > 0);
+        if (benchAvailable >= 0) {
+          setBattleDialogue(`🔘 <b>${escapeHtml(defender.name)}</b>의 <b>탈출버튼</b>이 작동했다!`);
+          await new Promise(r => setTimeout(r, 600));
+          if (!pokeBattleState.active) return false;
+          pokeBattleState.forcedSwitchedThisTurn = defSide;
+          await executeSwitchAnimation(defSide, benchAvailable);
+        }
+      }
+
+      // Red Card (레드카드 - 피격 시 공격자를 벤치로 강제 교체)
+      if (finalDamage > 0 && defItemNorm === 'red_card' && !defenderSlot.itemUsed && attackerSlot.currentHP > 0) {
+        defenderSlot.itemUsed = true;
+        defenderSlot.item = 'none';
+        const atkTeam = isStreamer ? streamerTeam : viewersTeam;
+        const atkSide = isStreamer ? 'streamer' : 'viewers';
+        const atkActive = isStreamer ? streamerActiveIdx : viewersActiveIdx;
+        const benchCandidates = atkTeam.map((p, idx) => (idx !== atkActive && p.currentHP > 0) ? idx : -1).filter(i => i >= 0);
+        if (benchCandidates.length > 0) {
+          const forcedIdx = benchCandidates[Math.floor(Math.random() * benchCandidates.length)];
+          setBattleDialogue(`🟥 <b>${escapeHtml(defender.name)}</b>의 <b>레드카드</b> 발동! <b>${escapeHtml(attacker.name)}</b>을(를) 강제 퇴장시켰다!`);
+          await new Promise(r => setTimeout(r, 600));
+          if (!pokeBattleState.active) return false;
+          pokeBattleState.forcedSwitchedThisTurn = atkSide;
+          await executeSwitchAnimation(atkSide, forcedIdx);
+        }
+      }
+
       // 7. Faint Check & Destiny Bond Trigger
       if (defenderSlot.currentHP <= 0) {
         defenderSlot.fainted = true;
@@ -8447,10 +8485,17 @@
         return true;
       }
 
+      const curSNow = streamerTeam[streamerActiveIdx];
+      const curVNow = viewersTeam[viewersActiveIdx];
+      if ((curSNow && curSNow.currentHP <= 0) || (curVNow && curVNow.currentHP <= 0)) {
+        return true;
+      }
+
       return false;
     }
 
     async function handleRoundEndEffects() {
+      if (!pokeBattleState.active) return;
       const sSlot = streamerTeam[streamerActiveIdx];
       const vSlot = viewersTeam[viewersActiveIdx];
 
@@ -8602,6 +8647,7 @@
       vSlot.flinched = false;
       vSlot.protected = false;
 
+      if (!pokeBattleState.active) return;
       pokeBattleState.round++;
       pokeBattleState.stats.totalRounds++;
       updateArenaHPBars();
@@ -8611,6 +8657,7 @@
 
     // --- Faint Phase & Replacement Selection ---
     async function handleFaintPhase(faintedSide) {
+      if (!pokeBattleState.active) return;
       const teamSize = pokeBattleMode === '3v3' ? 3 : 1;
       const team = faintedSide === 'streamer' ? streamerTeam : viewersTeam;
       const aliveSlots = [];
@@ -8716,6 +8763,7 @@
 
     async function handleStreamerFaintSelect(idx) {
       clearInterval(pokeBattleState.faintTimerInterval);
+      if (!pokeBattleState.active) return;
       const modal = document.getElementById('pokeFaintSwitchModal');
       if (modal) modal.classList.remove('active');
 
@@ -8728,8 +8776,16 @@
       const spr = document.getElementById('arenaStreamerSprite');
       if (spr) spr.classList.remove('poke-sprite-fainted');
 
-      setBattleDialogue(`👑 <b>[${getStreamerName()}]</b>은(는) <b>[${streamerTeam[idx].pokemon.name}]</b>(을)를 출전시켰다!`);
+      setBattleDialogue(`👑 <b>[${escapeHtml(getStreamerName())}]</b>은(는) <b>[${escapeHtml(streamerTeam[idx].pokemon.name)}]</b>(을)를 출전시켰다!`);
       await new Promise(r => setTimeout(r, 1000));
+      if (!pokeBattleState.active) return;
+
+      const hazardRes = await applySwitchInEntryHazards('streamer');
+      if (!pokeBattleState.active) return;
+      if (hazardRes && hazardRes.fainted) {
+        await handleFaintPhase('streamer');
+        return;
+      }
 
       pokeBattleState.round++;
       pokeBattleState.stats.totalRounds++;
@@ -8849,6 +8905,7 @@
 
     async function finishViewersFaintVote(aliveSlots) {
       clearInterval(pokeBattleState.faintTimerInterval);
+      if (!pokeBattleState.active) return;
 
       let maxVotes = 0;
       let topChoices = [];
@@ -8872,6 +8929,7 @@
       // 1. Reveal final vote results and winning Pokemon for 1.3 seconds
       renderFaintVoteCandidatesUI(aliveSlots, true, chosenSlotIdx);
       await new Promise(r => setTimeout(r, 1300));
+      if (!pokeBattleState.active) return;
 
       const modal = document.getElementById('pokeFaintSwitchModal');
       if (modal) modal.classList.remove('active');
@@ -8884,8 +8942,16 @@
       const spr = document.getElementById('arenaViewersSprite');
       if (spr) spr.classList.remove('poke-sprite-fainted');
 
-      setBattleDialogue(`👥 <b>시청자 연합</b>은 <b>[${viewersTeam[chosenSlotIdx].pokemon.name}]</b>(을)를 출전시켰다!`);
+      setBattleDialogue(`👥 <b>시청자 연합</b>은 <b>[${escapeHtml(viewersTeam[chosenSlotIdx].pokemon.name)}]</b>(을)를 출전시켰다!`);
       await new Promise(r => setTimeout(r, 1000));
+      if (!pokeBattleState.active) return;
+
+      const hazardRes = await applySwitchInEntryHazards('viewers');
+      if (!pokeBattleState.active) return;
+      if (hazardRes && hazardRes.fainted) {
+        await handleFaintPhase('viewers');
+        return;
+      }
 
       pokeBattleState.round++;
       pokeBattleState.stats.totalRounds++;
@@ -8916,7 +8982,7 @@
         const winMembers = isRedWinner ? factionRedMembers : factionBlueMembers;
 
         if (title) {
-          title.innerHTML = `${winIcon} <span style="color: ${winColor};">${winName}</span>의 대승리!`;
+          title.innerHTML = `${winIcon} <span style="color: ${winColor};">${escapeHtml(winName)}</span>의 대승리!`;
           title.style.color = winColor;
         }
         if (subTitle) {
@@ -8955,8 +9021,8 @@
           statsBox.innerHTML = `
             <div>⚔️ 배틀 모드: <b>시청자 진영 대항전 (${pokeBattleMode === '3v3' ? '3v3 팀 엔트리 교체' : '1v1 에이스'})</b></div>
             <div>⚔️ 총 진행 라운드: <b>${pokeBattleState.round}라운드</b></div>
-            <div>🔴 ${factionTeamNames.red} 참가자: <b>${factionRedMembers.length}명</b> / 총 데미지: <b style="color: #f87171;">${pokeBattleState.stats.streamerDamage}</b></div>
-            <div>🔵 ${factionTeamNames.blue} 참가자: <b>${factionBlueMembers.length}명</b> / 총 데미지: <b style="color: #38bdf8;">${pokeBattleState.stats.viewersDamage}</b></div>
+            <div>🔴 ${escapeHtml(factionTeamNames.red)} 참가자: <b>${factionRedMembers.length}명</b> / 총 데미지: <b style="color: #f87171;">${pokeBattleState.stats.streamerDamage}</b></div>
+            <div>🔵 ${escapeHtml(factionTeamNames.blue)} 참가자: <b>${factionBlueMembers.length}명</b> / 총 데미지: <b style="color: #38bdf8;">${pokeBattleState.stats.viewersDamage}</b></div>
             <div>💥 급소(크리티컬) 발생: <b>${pokeBattleState.stats.crits}회</b> / 약점 강타: <b>${pokeBattleState.stats.superEffective}회</b></div>
             <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.12); text-align: left;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
@@ -9017,10 +9083,13 @@
 
     function quitPokeBattle() {
       pokeBattleState.active = false;
+      pokeBattleState.phase = 'idle';
       stopPokeBattleBgm(300);
+      clearInterval(pokeBattleState.turnTimerInterval);
       clearInterval(pokeBattleState.streamerTimerInterval);
       clearInterval(pokeBattleState.viewersTimerInterval);
       clearInterval(pokeBattleState.faintTimerInterval);
+      updateStreamerControllerPopout();
       const faintModal = document.getElementById('pokeFaintSwitchModal');
       if (faintModal) faintModal.classList.remove('active');
 

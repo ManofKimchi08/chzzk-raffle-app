@@ -37,7 +37,7 @@ pyinstaller 치지직추첨기.spec --noconfirm
 - `datas`: `public/` 폴더 내의 `index.html`, `pokemon_data.json`, 이미지, 오디오 파일들을 가상 경로로 포함.
 - `icon`: `public/icon.ico`를 윈도우 실행 파일 아이콘으로 지정.
 - `console=False`: 백그라운드에서 조용히 실행되며 검은색 콘솔 창이 뜨지 않음.
-- 실행 파일 생성 위치: `dist/치지직추첨기.exe` (약 11.47 MB).
+- 실행 파일 생성 위치: `dist/치지직추첨기.exe` (약 20 MB).
 
 ---
 
@@ -48,8 +48,8 @@ pyinstaller 치지직추첨기.spec --noconfirm
 ```bash
 python server.py
 ```
-- 기본 포트: `18934` (사용 중일 경우 18935, 18936 등으로 자동 순차 증가).
-- 서버 구동과 동시에 기본 웹 브라우저에서 `http://127.0.0.1:18934`가 자동으로 열립니다.
+- 기본 포트: `8000` (사용 중일 경우 8001, 8002 등으로 자동 순차 증가).
+- 서버 구동과 동시에 기본 웹 브라우저에서 `http://localhost:8000`이 자동으로 열립니다.
 
 ---
 

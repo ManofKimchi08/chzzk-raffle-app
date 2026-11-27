@@ -20,7 +20,7 @@ graph LR
     end
 
     subgraph Local_Server [로컬 내장 프록시 서버 : server.py]
-        Proxy[ChzzkProxyHandler : port 18934+]
+        Proxy[ChzzkProxyHandler : port 8000+]
         Static[Static File HTTP Server]
     end
 

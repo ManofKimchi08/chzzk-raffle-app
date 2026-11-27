@@ -1,7 +1,7 @@
-# 🎮 치지직 대규모 시청자 추첨 & 룰렛 & 실시간 투표 & 포켓몬 배틀/퀴즈 쇼 플랫폼 (Chzzk Interactive Hub) v5.4.0
+# 🎮 치지직 대규모 시청자 추첨 & 룰렛 & 실시간 투표 & 포켓몬 배틀/퀴즈 쇼 플랫폼 (Chzzk Interactive Hub) v5.4.1
 
 ![Chzzk WebSocket Live](https://img.shields.io/badge/Chzzk-WebSocket%20Live-00ffa3?style=for-the-badge&logo=naver)
-![Version](https://img.shields.io/badge/Release-v5.4.0-purple?style=for-the-badge)
+![Version](https://img.shields.io/badge/Release-v5.4.1-purple?style=for-the-badge)
 ![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![HTML5 Canvas](https://img.shields.io/badge/HTML5-Canvas%20%26%20Audio-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
@@ -31,6 +31,14 @@
 | **13. v5.2.1 릴리즈 노트** | 치즈 연동 룰렛 동일 메시지 자동 합산(병합), 금액/확률 누적, 당첨 시 1건 차감 및 잔여 수량 안내 | [🚀 v5.2.1 릴리즈 노트 바로가기](docs/13_release_notes_v5.2.1_ko.md) |
 | **14. v5.3.0 릴리즈 노트** | 전 메뉴(포켓몬 배틀/찌리리공/포켓몬 퀴즈/실시간 투표/룰렛/채팅창) 정밀 검수 패치 및 포켓몬 본가 공식 배틀 룰 동기화 | [🚀 v5.3.0 릴리즈 노트 바로가기](docs/14_release_notes_v5.3.0_ko.md) |
 | **15. v5.4.0 릴리즈 노트** | 모듈 아키텍처 분리, 보안·공정성·웹소켓 하드닝, 비동기 모달/세션 복구/OBS 크로마키/전역 음소거, rAF 배치 렌더링 & Gzip 캐싱 | [🚀 v5.4.0 릴리즈 노트 바로가기](docs/15_release_notes_v5.4.0_ko.md) |
+| **16. v5.4.1 릴리즈 노트** | 전 모듈 정밀 코드 리뷰 및 재검수 패치 (퀴즈 스피드 판정·리전폼 마스킹, 배틀 스텔스록/돌격조끼/타이머 가드, 룰렛·투표·세션 정합성, Gzip ETag/304) | [🚀 v5.4.1 릴리즈 노트 바로가기](docs/16_release_notes_v5.4.1_ko.md) |
+
+## 🌟 v5.4.1 주요 신규 및 개선 사항 (What's New in v5.4.1)
+
+- **❓ 포켓몬 퀴즈 쇼 판정 및 도감 마스킹 수정**: 스피드 모드 스트리머 vs 시청자 시간 비교 시 문자열 타임스탬프(`NaN`) 대신 숫자 밀리초(`timestamp: Date.now()`)를 비교하도록 교정했고, 시청자 상태 배지 오타 수정 및 리전폼/폼체인지 기본 종명·별칭 정규식 이스케이프 마스킹을 적용했습니다.
+- **⚔️ 포켓몬 배틀 타이머 누수 차단 및 공식 룰 보강**: 중도 종료(`quitPokeBattle`) 및 `Esc` 진영 모집 취소에 비동기 턴/라운드/기절 가드를 적용했고, 돌격조끼 하이픈 ID 정규화 4곳 누락 보완, 기절 후 교체 투입 시 스텔스록 데미지(전 모드 공통) 및 진입 즉시 기절 연쇄, 탈출버튼/레드카드 발동 순서 및 후공 취소 처리를 완료했습니다.
+- **🎰 룰렛 · 📊 투표 · 💾 세션 백업 UX 정합성**: 자동 제거 ON 시 모달 2중 삭제 방지 및 제외 항목 보호, 세션 복구 `rouletteRound`/배지 동기화 및 명시적 초기화 시 잔류 백업 제거, 퀴즈/찌리리공 `beforeunload` 가드, 투표 상태 배지 인라인 색상 초기화 및 CSV 선택지 순번 일치를 반영했습니다.
+- **🛡️ 백엔드 캐싱 & 쿠키 정제 & 서브경로 호환성**: 쿠키 입력 제어문자/접두사 정제(`_sanitize_cookie_value`), 스레드 안전 Gzip 메모리 캐시, `ETag`/`304 Not Modified`, `do_HEAD()`, 서브경로 호환 JSON 상대경로(`pokemon_data.json`, `pokemon_quiz_data.json`) 및 문서 기본 포트(`8000`) 동기화를 적용했습니다.
 
 ## 🌟 v5.4.0 주요 신규 및 개선 사항 (What's New in v5.4.0)
 
@@ -309,7 +317,7 @@ git clone https://github.com/ManofKimchi08/chzzk-raffle-app.git
 cd chzzk-raffle-app
 python server.py
 ```
-브라우저에서 `http://127.0.0.1:18934`에 접속합니다.
+브라우저에서 `http://127.0.0.1:8000`에 접속합니다.
 
 ---
 

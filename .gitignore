@@ -16,4 +16,5 @@ ENV/
 # System files
 .DS_Store
 Thumbs.db
+scratch/
 scratch_chrome_user_data*/

@@ -36,7 +36,7 @@
     async function loadPokemonQuizDataset() {
       if (allPokemonQuizData.length > 0) return allPokemonQuizData;
       try {
-        const res = await fetch('/pokemon_quiz_data.json?v=5.4.0');
+        const res = await fetch('pokemon_quiz_data.json?v=5.4.1');
         const data = await res.json();
         allPokemonQuizData = data.pokemons || [];
         allPokemonQuizData.sort((a, b) => (a.id - b.id) || (a.code || '').localeCompare(b.code || ''));
@@ -227,10 +227,12 @@
         qType = types[Math.floor(Math.random() * types.length)];
       }
       quizMatchState.currentQuestionType = qType;
+      quizMatchState.active = true;
       quizMatchState.phase = 'question';
       quizMatchState.hintsRevealed = 0;
       quizMatchState.firstCorrectUser = null;
       quizMatchState.streamerSubmittedAnswer = null;
+      quizMatchState.streamerSubmittedTime = null;
       quizMatchState.votingUsers.clear();
       quizMatchState.voteCounts = {};
 
@@ -259,7 +261,7 @@
       const sTag = document.getElementById('quizStreamerStatusTag');
       const vTag = document.getElementById('quizViewersStatusTag');
       if (sTag) { sTag.innerText = '응답 대기'; sTag.style.color = '#ffd700'; }
-      if (vTag) { sTag.innerText = quizMatchState.viewerMode === 'voting' ? '투표 수집 중' : '채팅 수신 중'; vTag.style.color = '#38bdf8'; }
+      if (vTag) { vTag.innerText = quizMatchState.viewerMode === 'voting' ? '투표 수집 중' : '채팅 수신 중'; vTag.style.color = '#38bdf8'; }
 
       const feedTitle = document.getElementById('quizLiveFeedTitle');
       if (feedTitle) {
@@ -320,14 +322,16 @@
         const entry = flavors.length > 0 ? flavors[Math.floor(Math.random() * flavors.length)] : { text: `${p.name}은(는) 강력한 포켓몬이다.`, version: '공식' };
         quizMatchState.currentFlavorEntry = entry;
 
-        let maskedText = entry.text;
-        // Mask name
-        const nameRegex = new RegExp(p.name, 'g');
-        maskedText = maskedText.replace(nameRegex, '<span style="color:#ffd700; font-weight:900; background:rgba(255,215,0,0.18); padding:2px 8px; border-radius:6px; border:1px dashed #ffd700;">[ ??? ]</span>');
-        
+        const maskedHtml = formatQuizFlavorTextHtml(
+          entry.text,
+          p,
+          true,
+          '<span style="color:#ffd700; font-weight:900; background:rgba(255,215,0,0.18); padding:2px 8px; border-radius:6px; border:1px dashed #ffd700;">[ ??? ]</span>'
+        );
+
         const fTextElem = document.getElementById('quizPokedexFlavorText');
         const vBadgeElem = document.getElementById('quizPokedexVersionBadge');
-        if (fTextElem) fTextElem.innerHTML = `"${maskedText}"`;
+        if (fTextElem) fTextElem.innerHTML = `"${maskedHtml}"`;
         if (vBadgeElem) vBadgeElem.innerText = `${p.generation || 1}세대 공식 도감`;
       }
 
@@ -605,7 +609,7 @@
 
         if (matchRes.isMatch) {
           if (!quizMatchState.firstCorrectUser) {
-            quizMatchState.firstCorrectUser = { nickname, uid, msg, time: now };
+            quizMatchState.firstCorrectUser = { nickname, uid, msg, time: now, timestamp: Date.now() };
           }
           if (feedBox) {
             if (feedBox.children.length > 20) feedBox.lastElementChild.remove();
@@ -764,9 +768,9 @@
       const viewerMatch = !!viewerUser;
 
       if (streamerMatch.isMatch && viewerMatch) {
-        const sTime = quizMatchState.streamerSubmittedTime || 0;
-        const vTime = viewerUser.time || 0;
-        if (sTime <= vTime) {
+        const sTime = Number(quizMatchState.streamerSubmittedTime) || 0;
+        const vTime = Number(viewerUser.timestamp) || 0;
+        if (sTime > 0 && (vTime === 0 || sTime <= vTime)) {
           quizMatchState.streamerScore++;
           revealQuizAnswer('streamer', 'speed_streamer_faster');
         } else {
@@ -1063,6 +1067,7 @@
     }
 
     function finishQuizMatch() {
+      quizMatchState.active = false;
       quizMatchState.phase = 'ended';
       const isDraw = quizMatchState.streamerScore === quizMatchState.viewersScore;
       const isStreamerWinner = quizMatchState.streamerScore > quizMatchState.viewersScore;
@@ -1160,18 +1165,22 @@
       listContainer.innerHTML = filtered.map(p => {
         const pKey = p.code || String(p.id);
         const isSelected = pKey === quizInspectorSelectedPokeId || p.id === quizInspectorSelectedPokeId;
+        const safeKeyArg = escapeJsArg(pKey);
+        const safeName = escapeHtml(p.name);
+        const safeSprite = escapeHtml(p.sprite_front);
+        const safeChosung = escapeHtml(p.chosung || getChosungText(p.name));
         return `
-          <div class="quiz-inspector-card ${isSelected ? 'active' : ''}" onclick="selectQuizInspectorPokemon('${pKey}')">
+          <div class="quiz-inspector-card ${isSelected ? 'active' : ''}" data-poke-key="${escapeHtml(pKey)}" onclick="selectQuizInspectorPokemon('${safeKeyArg}')">
             <div style="display: flex; align-items: center; justify-content: space-between;">
               <div style="display: flex; align-items: center; gap: 8px;">
-                <img src="${p.sprite_front}" alt="${p.name}" style="width: 32px; height: 32px; object-fit: contain;">
+                <img src="${safeSprite}" alt="${safeName}" style="width: 32px; height: 32px; object-fit: contain;">
                 <div>
-                  <div style="font-weight: 800; color: #fff; font-size: 12px;">${p.name} <span style="font-size: 10px; color: var(--text-sub);">#${p.id}</span></div>
-                  <div style="font-size: 10px; color: #ffd700;">초성: ${p.chosung || getChosungText(p.name)}</div>
+                  <div style="font-weight: 800; color: #fff; font-size: 12px;">${safeName} <span style="font-size: 10px; color: var(--text-sub);">#${p.id}</span></div>
+                  <div style="font-size: 10px; color: #ffd700;">초성: ${safeChosung}</div>
                 </div>
               </div>
               <div style="display: flex; gap: 2px;">
-                ${p.types.map(t => `<span class="type-badge type-${t}" style="font-size: 8px; padding: 1px 4px;">${t}</span>`).join('')}
+                ${p.types.map(t => `<span class="type-badge type-${escapeHtml(t)}" style="font-size: 8px; padding: 1px 4px;">${escapeHtml(t)}</span>`).join('')}
               </div>
             </div>
           </div>
@@ -1188,8 +1197,8 @@
       const pKey = p.code || String(p.id);
       const cards = document.querySelectorAll('.quiz-inspector-card');
       cards.forEach(c => {
-        const oc = c.getAttribute('onclick') || '';
-        c.classList.toggle('active', oc.includes(`'${pKey}'`) || oc.includes(`'${p.id}'`));
+        const cardKey = c.dataset ? c.dataset.pokeKey : '';
+        c.classList.toggle('active', cardKey === pKey || cardKey === String(p.id));
       });
 
       // Header Card
@@ -1206,7 +1215,7 @@
       if (genElem) genElem.innerText = `${p.generation || 1}세대`;
       if (genusElem) genusElem.innerText = p.genus || '포켓몬';
       if (typesElem) {
-        typesElem.innerHTML = p.types.map(t => `<span class="type-badge type-${t}" style="font-size: 10px; padding: 2px 6px;">${t}</span>`).join('');
+        typesElem.innerHTML = p.types.map(t => `<span class="type-badge type-${escapeHtml(t)}" style="font-size: 10px; padding: 2px 6px;">${escapeHtml(t)}</span>`).join('');
       }
 
       // Preview 1: Silhouette
@@ -1250,6 +1259,38 @@
       return allPokemonQuizData.find(x => x.code === idOrCode || x.id === idOrCode || x.name === idOrCode || String(x.id) === String(idOrCode)) || allPokemonQuizData[0];
     }
 
+    function escapeQuizRegExp(str) {
+      return String(str || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    function formatQuizFlavorTextHtml(rawText, pokemon, shouldMask, maskBadgeHtml) {
+      let safeText = escapeHtml(rawText || '');
+      if (!shouldMask || !pokemon) return safeText;
+
+      const rawName = String(pokemon.name || '').trim();
+      const baseSpecies = rawName.replace(/\s*\(.*?\)\s*/g, '').trim();
+      const candidates = [rawName, baseSpecies];
+      if (Array.isArray(pokemon.aliases)) {
+        pokemon.aliases.forEach(a => {
+          const al = String(a || '').trim();
+          if (al.length >= 2 && !/^[ㄱ-ㅎ\s]+$/.test(al)) {
+            candidates.push(al);
+          }
+        });
+      }
+
+      const uniqueEscaped = Array.from(new Set(
+        candidates
+          .map(c => escapeHtml(c.trim()))
+          .filter(Boolean)
+      )).sort((a, b) => b.length - a.length);
+
+      if (uniqueEscaped.length === 0) return safeText;
+      const pattern = uniqueEscaped.map(escapeQuizRegExp).join('|');
+      const regex = new RegExp(pattern, 'g');
+      return safeText.replace(regex, maskBadgeHtml);
+    }
+
     function renderInspFlavorText(isMasked) {
       const p = getSelectedInspectorPokemon();
       if (!p) return;
@@ -1270,14 +1311,15 @@
       }
 
       listElem.innerHTML = flavors.map((f, idx) => {
-        let txt = f.text;
-        if (shouldMask) {
-          const nameRegex = new RegExp(p.name, 'g');
-          txt = txt.replace(nameRegex, '<b style="color:#ffd700; background:rgba(255,215,0,0.18); padding:1px 6px; border-radius:4px;">[ ??? ]</b>');
-        }
+        const txt = formatQuizFlavorTextHtml(
+          f.text,
+          p,
+          shouldMask,
+          '<b style="color:#ffd700; background:rgba(255,215,0,0.18); padding:1px 6px; border-radius:4px;">[ ??? ]</b>'
+        );
         return `
           <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 6px; padding: 8px 10px;">
-            <div style="font-size: 10px; color: var(--chzzk-green); font-weight: 700; margin-bottom: 2px;">#${idx + 1} (${f.version || '공식'})</div>
+            <div style="font-size: 10px; color: var(--chzzk-green); font-weight: 700; margin-bottom: 2px;">#${idx + 1} (${escapeHtml(f.version || '공식')})</div>
             <div>${txt}</div>
           </div>
         `;
